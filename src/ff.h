@@ -62,11 +62,9 @@ typedef struct {
     BYTE pt;    /* Partition: 0:Auto detect, 1-4:Forced partition) */
 } PARTITION;
 extern PARTITION VolToPart[];   /* Volume - Partition resolution table */
-#define LD2PD(vol) (VolToPart[vol].pd)  /* Get physical drive number */
 #define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition index */
 
 #else                           /* Single partition configuration */
-#define LD2PD(vol) (BYTE)(vol)  /* Each logical drive is bound to the same physical drive number */
 #define LD2PT(vol) 0            /* Find first valid partition or in SFD */
 
 #endif
@@ -110,8 +108,8 @@ typedef DWORD FSIZE_t;
 /* File system object structure (FATFS) */
 
 typedef struct {
+    void    *drv;           // block device underlying this filesystem
     BYTE    fs_type;        /* File system type (0:N/A) */
-    BYTE    drv;            /* Physical drive number */
     BYTE    n_fats;         /* Number of FATs (1 or 2) */
     BYTE    wflag;          /* win[] flag (b0:dirty) */
     BYTE    fsi_flag;       /* FSINFO flags (b7:disabled, b0:dirty) */
@@ -293,7 +291,7 @@ FRESULT f_forward (FIL* fp, UINT(*func)(const BYTE*,UINT), UINT btf, UINT* bf); 
 FRESULT f_expand (FIL* fp, FSIZE_t szf, BYTE opt);                  /* Allocate a contiguous block to the file */
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
 FRESULT f_mkfs (const TCHAR* path, BYTE opt, DWORD au, void* work, UINT len);   /* Create a FAT volume */
-FRESULT f_fdisk (BYTE pdrv, const DWORD* szt, void* work);          /* Divide a physical drive into some partitions */
+FRESULT f_fdisk (void *pdrv, const DWORD* szt, void* work);         /* Divide a physical drive into some partitions */
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->obj.objsize))
 #define f_error(fp) ((fp)->err)
