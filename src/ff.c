@@ -2981,7 +2981,6 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     /* Following code attempts to mount the volume. (analyze BPB and initialize the fs object) */
 
     fs->fs_type = 0;                    /* Clear the file system object */
-    fs->drv = LD2PD(vol);               /* Bind the logical drive and a physical drive */
     stat = disk_initialize(fs->drv);    /* Initialize the physical drive */
     if (stat & STA_NOINIT) {            /* Check if the initialization succeeded */
         return FR_NOT_READY;            /* Failed to initialize due to no medium or hard error */
@@ -5220,7 +5219,7 @@ FRESULT f_mkfs (
     const UINT n_rootdir = 512; /* Number of root directory entries for FAT12/16 volume */
     static const WORD cst[] = {1, 4, 16, 64, 256, 512, 0};  /* Cluster size boundary for FAT12/16 volume (4Ks unit) */
     static const WORD cst32[] = {1, 2, 4, 8, 16, 32, 0};    /* Cluster size boundary for FAT32 volume (128Ks unit) */
-    BYTE fmt, sys, *buf, *pte, pdrv, part;
+    BYTE fmt, sys, *buf, *pte, part; void *pdrv;
     WORD ss;
     DWORD szb_buf, sz_buf, sz_blk, n_clst, pau, sect, nsect, n;
     DWORD b_vol, b_fat, b_data;             /* Base LBA for volume, fat, data */
@@ -5237,7 +5236,7 @@ FRESULT f_mkfs (
     vol = get_ldnumber(&path);                  /* Get target logical drive */
     if (vol < 0) return FR_INVALID_DRIVE;
     if (FatFs[vol]) FatFs[vol]->fs_type = 0;    /* Clear mounted volume */
-    pdrv = LD2PD(vol);  /* Physical drive */
+    pdrv = fs->drv;     /* Physical drive */
     part = LD2PT(vol);  /* Partition (0:create as new, 1-4:get from partition table) */
 
     /* Check physical drive status */
@@ -5665,7 +5664,7 @@ FRESULT f_mkfs (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_fdisk (
-    BYTE pdrv,          /* Physical drive number */
+    void *pdrv,         /* Physical drive number */
     const DWORD* szt,   /* Pointer to the size table for each partitions */
     void* work          /* Pointer to the working buffer */
 )
