@@ -2228,7 +2228,7 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     *rfs = fs;                          /* Return pointer to the file system object */
 
     if (fs->fs_type) {                  /* If the volume has been mounted */
-        stat = disk_status(fs->drv);
+        disk_ioctl(fs->drv, IOCTL_STATUS, &stat);
         if (!(stat & STA_NOINIT)) {     /* and the physical drive is kept initialized */
             if (!_FS_READONLY && wmode && (stat & STA_PROTECT)) /* Check write protection if needed */
                 return FR_WRITE_PROTECTED;
@@ -2240,7 +2240,7 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     /* Following code attempts to mount the volume. (analyze BPB and initialize the fs object) */
 
     fs->fs_type = 0;                    /* Clear the file system object */
-    stat = disk_initialize(fs->drv);    /* Initialize the physical drive */
+    disk_ioctl(fs->drv, IOCTL_INIT, &stat); /* Initialize the physical drive */
     if (stat & STA_NOINIT)              /* Check if the initialization succeeded */
         return FR_NOT_READY;            /* Failed to initialize due to no medium or hard error */
     if (!_FS_READONLY && wmode && (stat & STA_PROTECT)) /* Check disk write protection if needed */
@@ -2372,10 +2372,15 @@ FRESULT validate (  /* FR_OK(0): The object is valid, !=0: Invalid */
     void* obj       /* Pointer to the object FIL/DIR to check validity */
 )
 {
+    DSTATUS stat;
     FIL *fil = (FIL*)obj;   /* Assuming offset of .fs and .id in the FIL/DIR structure is identical */
 
 
-    if (!fil || !fil->fs || !fil->fs->fs_type || fil->fs->id != fil->id || (disk_status(fil->fs->drv) & STA_NOINIT))
+    if (!fil || !fil->fs || !fil->fs->fs_type || fil->fs->id != fil->id)
+        return FR_INVALID_OBJECT;
+
+    disk_ioctl(fil->fs->drv, IOCTL_STATUS, &stat);
+    if (stat & STA_NOINIT)
         return FR_INVALID_OBJECT;
 
     ENTER_FF(fil->fs);      /* Lock file system */
@@ -4091,7 +4096,7 @@ FRESULT f_mkfs (
     part = LD2PT(vol);  /* Partition (0:auto detect, 1-4:get from partition table)*/
 
     /* Get disk statics */
-    stat = disk_initialize(pdrv);
+    disk_ioctl(pdrv, IOCTL_INIT, &stat);
     if (stat & STA_NOINIT) return FR_NOT_READY;
     if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
 #if _MAX_SS != _MIN_SS      /* Get disk sector size */
@@ -4317,7 +4322,7 @@ FRESULT f_fdisk (
     DWORD sz_disk, sz_part, s_part;
 
 
-    stat = disk_initialize(pdrv);
+    disk_ioctl(pdrv, IOCTL_INIT, &stat);
     if (stat & STA_NOINIT) return FR_NOT_READY;
     if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
     if (disk_ioctl(pdrv, GET_SECTOR_COUNT, &sz_disk)) return FR_DISK_ERR;
