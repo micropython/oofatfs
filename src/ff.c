@@ -2240,7 +2240,6 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     /* Following code attempts to mount the volume. (analyze BPB and initialize the fs object) */
 
     fs->fs_type = 0;                    /* Clear the file system object */
-    fs->drv = LD2PD(vol);               /* Bind the logical drive and a physical drive */
     stat = disk_initialize(fs->drv);    /* Initialize the physical drive */
     if (stat & STA_NOINIT)              /* Check if the initialization succeeded */
         return FR_NOT_READY;            /* Failed to initialize due to no medium or hard error */
@@ -4069,7 +4068,7 @@ FRESULT f_mkfs (
     static const WORD vst[] = { 1024,   512,  256,  128,   64,    32,   16,    8,    4,    2,   0};
     static const WORD cst[] = {32768, 16384, 8192, 4096, 2048, 16384, 8192, 4096, 2048, 1024, 512};
     int vol;
-    BYTE fmt, md, sys, *tbl, pdrv, part;
+    BYTE fmt, md, sys, *tbl, part; void *pdrv;
     DWORD n_clst, vs, n, wsect;
     UINT i;
     DWORD b_vol, b_fat, b_dir, b_data;  /* LBA */
@@ -4088,7 +4087,7 @@ FRESULT f_mkfs (
     fs = FatFs[vol];
     if (!fs) return FR_NOT_ENABLED;
     fs->fs_type = 0;
-    pdrv = LD2PD(vol);  /* Physical drive */
+    pdrv = fs->drv;     /* Physical drive */
     part = LD2PT(vol);  /* Partition (0:auto detect, 1-4:get from partition table)*/
 
     /* Get disk statics */
@@ -4307,7 +4306,7 @@ FRESULT f_mkfs (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_fdisk (
-    BYTE pdrv,          /* Physical drive number */
+    void *pdrv,         /* Physical drive */
     const DWORD szt[],  /* Pointer to the size table for each partitions */
     void* work          /* Pointer to the working buffer */
 )
