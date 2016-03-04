@@ -12,7 +12,6 @@ extern "C" {
 #define _USE_WRITE  1   /* 1: Enable disk_write function */
 #define _USE_IOCTL  1   /* 1: Enable disk_ioctl fucntion */
 
-#include "integer.h"
 
 
 /* Status of Disk Functions */
