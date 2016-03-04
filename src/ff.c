@@ -3237,7 +3237,7 @@ static FRESULT find_volume (    /* FR_OK(0): successful, !=0: an error occurred 
 
     mode &= (BYTE)~FA_READ;             /* Desired access mode, write access or not */
     if (fs->fs_type != 0) {             /* If the volume has been mounted */
-        stat = disk_status(fs->pdrv);
+        disk_ioctl(fs->drv, IOCTL_STATUS, &stat);
         if (!(stat & STA_NOINIT)) {     /* and the physical drive is kept initialized */
             if (!FF_FS_READONLY && mode && (stat & STA_PROTECT)) {  /* Check write protection if needed */
                 return FR_WRITE_PROTECTED;
@@ -3250,7 +3250,7 @@ static FRESULT find_volume (    /* FR_OK(0): successful, !=0: an error occurred 
     /* Following code attempts to mount the volume. (analyze BPB and initialize the filesystem object) */
 
     fs->fs_type = 0;                    /* Clear the filesystem object */
-    stat = disk_initialize(fs->pdrv);   /* Initialize the physical drive */
+    disk_ioctl(fs->drv, IOCTL_INIT, &stat); /* Initialize the physical drive */
     if (stat & STA_NOINIT) {            /* Check if the initialization succeeded */
         return FR_NOT_READY;            /* Failed to initialize due to no medium or hard error */
     }
@@ -3453,12 +3453,13 @@ static FRESULT validate (   /* Returns FR_OK or FR_INVALID_OBJECT */
 )
 {
     FRESULT res = FR_INVALID_OBJECT;
+    DSTATUS stat;
 
 
     if (obj && obj->fs && obj->fs->fs_type && obj->id == obj->fs->id) { /* Test if the object is valid */
 #if FF_FS_REENTRANT
         if (lock_fs(obj->fs)) { /* Obtain the filesystem object */
-            if (!(disk_status(obj->fs->pdrv) & STA_NOINIT)) { /* Test if the phsical drive is kept initialized */
+            if (disk_ioctl(obj->fs->drv, IOCTL_STATUS, &stat) == RES_OK && !(stat & STA_NOINIT)) { /* Test if the phsical drive is kept initialized */
                 res = FR_OK;
             } else {
                 unlock_fs(obj->fs, FR_OK);
@@ -3467,7 +3468,7 @@ static FRESULT validate (   /* Returns FR_OK or FR_INVALID_OBJECT */
             res = FR_TIMEOUT;
         }
 #else
-        if (!(disk_status(obj->fs->pdrv) & STA_NOINIT)) { /* Test if the phsical drive is kept initialized */
+        if (disk_ioctl(obj->fs->drv, IOCTL_STATUS, &stat) == RES_OK && (!stat & STA_NOINIT)) { /* Test if the phsical drive is kept initialized */
             res = FR_OK;
         }
 #endif
@@ -5556,7 +5557,7 @@ FRESULT f_mkfs (
     part = LD2PT(vol);  /* Partition (0:create as new, 1-4:get from partition table) */
 
     /* Check physical drive status */
-    stat = disk_initialize(pdrv);
+    disk_ioctl(pdrv, IOCTL_INIT, &stat);
     if (stat & STA_NOINIT) return FR_NOT_READY;
     if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
     if (disk_ioctl(pdrv, GET_BLOCK_SIZE, &sz_blk) != RES_OK || !sz_blk || sz_blk > 32768 || (sz_blk & (sz_blk - 1))) sz_blk = 1;    /* Erase block to align data area */
@@ -6001,7 +6002,7 @@ FRESULT f_fdisk (
     FRESULT res;
 
 
-    stat = disk_initialize(pdrv);
+    disk_ioctl(pdrv, IOCTL_INIT, &stat);
     if (stat & STA_NOINIT) return FR_NOT_READY;
     if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
     if (disk_ioctl(pdrv, GET_SECTOR_COUNT, &sz_disk)) return FR_DISK_ERR;
