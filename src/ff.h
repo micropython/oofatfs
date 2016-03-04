@@ -41,7 +41,7 @@ typedef unsigned int UINT;
 typedef int32_t LONG;
 typedef uint32_t DWORD;
 
-#include "ffconf.h"     /* FatFs configuration options */
+#include FFCONF_H          /* FatFs configuration options */
 #if _FATFS != _FFCONF
 #error Wrong configuration file (ffconf.h).
 #endif
