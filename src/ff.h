@@ -25,7 +25,27 @@
 extern "C" {
 #endif
 
-#include "integer.h"    /* Basic integer types */
+#include <stdint.h>
+
+/* This type MUST be 8-bit */
+typedef uint8_t BYTE;
+
+/* These types MUST be 16-bit */
+typedef int16_t SHORT;
+typedef uint16_t WORD;
+typedef uint16_t WCHAR;
+
+/* These types MUST be 16-bit or 32-bit */
+typedef int INT;
+typedef unsigned int UINT;
+
+/* These types MUST be 32-bit */
+typedef int32_t LONG;
+typedef uint32_t DWORD;
+
+/* This type MUST be 64-bit (Remove this for C89 compatibility) */
+typedef uint64_t QWORD;
+
 #include "ffconf.h"     /* FatFs configuration options */
 
 #if _FATFS != _FFCONF
