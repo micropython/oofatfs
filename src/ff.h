@@ -294,10 +294,6 @@ FRESULT f_expand (FIL* fp, FSIZE_t szf, BYTE opt);                  /* Allocate 
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
 FRESULT f_mkfs (const TCHAR* path, BYTE opt, DWORD au, void* work, UINT len);   /* Create a FAT volume */
 FRESULT f_fdisk (BYTE pdrv, const DWORD* szt, void* work);          /* Divide a physical drive into some partitions */
-int f_putc (TCHAR c, FIL* fp);                                      /* Put a character to the file */
-int f_puts (const TCHAR* str, FIL* cp);                             /* Put a string to the file */
-int f_printf (FIL* fp, const TCHAR* str, ...);                      /* Put a formatted string to the file */
-TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);                      /* Get a string from the file */
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->obj.objsize))
 #define f_error(fp) ((fp)->err)
