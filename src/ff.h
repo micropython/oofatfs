@@ -53,17 +53,10 @@ typedef uint64_t QWORD;
 
 /* Definitions of volume management */
 
-#if _MULTI_PARTITION        /* Multiple partition configuration */
-typedef struct {
-    BYTE pd;    /* Physical drive number */
-    BYTE pt;    /* Partition: 0:Auto detect, 1-4:Forced partition) */
-} PARTITION;
-extern PARTITION VolToPart[];   /* Volume - Partition resolution table */
-#define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition index */
-
+#if _MULTI_PARTITION            /* Multiple partition configuration */
+#define LD2PT(fs) (fs->part)    /* Get partition index */
 #else                           /* Single partition configuration */
-#define LD2PT(vol) 0            /* Find first valid partition or in SFD */
-
+#define LD2PT(fs) 0             /* Find first valid partition or in SFD */
 #endif
 
 
@@ -95,6 +88,9 @@ typedef char TCHAR;
 
 typedef struct {
     void    *drv;           // block device underlying this filesystem
+#if _MULTI_PARTITION        /* Multiple partition configuration */
+    BYTE    part;           // Partition: 0:Auto detect, 1-4:Forced partition
+#endif
     BYTE    fs_type;        /* File system type (0:N/A) */
     BYTE    n_fats;         /* Number of FATs (1 or 2) */
     BYTE    wflag;          /* win[] flag (b0:dirty) */
@@ -287,7 +283,7 @@ FRESULT f_setlabel (const TCHAR* label);                            /* Set volum
 FRESULT f_forward (FIL* fp, UINT(*func)(const BYTE*,UINT), UINT btf, UINT* bf); /* Forward data to the stream */
 FRESULT f_expand (FIL* fp, FSIZE_t szf, BYTE opt);                  /* Allocate a contiguous block to the file */
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
-FRESULT f_mkfs (const TCHAR* path, BYTE sfd, UINT au);              /* Create a file system on the volume */
+FRESULT f_mkfs (FATFS* fs, BYTE sfd, UINT au);                      /* Create a file system on the volume */
 FRESULT f_fdisk (void *pdrv, const DWORD szt[], void* work);        /* Divide a physical drive into some partitions */
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->obj.objsize))

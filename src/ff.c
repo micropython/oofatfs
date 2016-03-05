@@ -2953,17 +2953,17 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     /* Find an FAT partition on the drive. Supports only generic partitioning, FDISK and SFD. */
     bsect = 0;
     fmt = check_fs(fs, bsect);          /* Load sector 0 and check if it is an FAT boot sector as SFD */
-    if (fmt == 2 || (fmt < 2 && LD2PT(vol))) {  /* Not an FAT boot sector or forced partition number */
+    if (fmt == 2 || (fmt < 2 && LD2PT(fs))) {   /* Not an FAT boot sector or forced partition number */
         for (i = 0; i < 4; i++) {           /* Get partition offset */
             pt = fs->win + MBR_Table + i * SZ_PTE;
             br[i] = pt[4] ? ld_dword(&pt[8]) : 0;
         }
-        i = LD2PT(vol);                     /* Partition number: 0:auto, 1-4:forced */
+        i = LD2PT(fs);                      /* Partition number: 0:auto, 1-4:forced */
         if (i) i--;
         do {                                /* Find an FAT volume */
             bsect = br[i];
             fmt = bsect ? check_fs(fs, bsect) : 3;  /* Check the partition */
-        } while (!LD2PT(vol) && fmt >= 2 && ++i < 4);
+        } while (!LD2PT(fs) && fmt >= 2 && ++i < 4);
     }
     if (fmt == 4) return FR_DISK_ERR;       /* An error occured in the disk I/O layer */
     if (fmt >= 2) return FR_NO_FILESYSTEM;  /* No FAT volume is found */
@@ -5149,20 +5149,18 @@ FRESULT f_forward (
 
 
 FRESULT f_mkfs (
-    const TCHAR* path,  /* Logical drive number */
+    FATFS *fs,
     BYTE sfd,           /* Partitioning rule 0:FDISK, 1:SFD */
     UINT au             /* Size of allocation unit in unit of byte or sector */
 )
 {
     static const WORD vst[] = { 1024,   512,  256,  128,   64,    32,   16,    8,    4,    2,   0};
     static const WORD cst[] = {32768, 16384, 8192, 4096, 2048, 16384, 8192, 4096, 2048, 1024, 512};
-    int vol;
     BYTE fmt, md, sys, *tbl, part; void *pdrv;
     DWORD n_clst, vs, n, wsect;
     UINT i;
     DWORD b_vol, b_fat, b_dir, b_data;  /* LBA */
     DWORD n_vol, n_rsv, n_fat, n_dir;   /* Size */
-    FATFS *fs;
     DSTATUS stat;
 #if _USE_TRIM
     DWORD eb[2];
@@ -5171,13 +5169,10 @@ FRESULT f_mkfs (
 
     /* Check mounted drive and clear work area */
     if (sfd > 1) return FR_INVALID_PARAMETER;
-    vol = get_ldnumber(&path);              /* Get target volume */
-    if (vol < 0) return FR_INVALID_DRIVE;
-    fs = FatFs[vol];                        /* Check if the volume has work area */
     if (!fs) return FR_NOT_ENABLED;
     fs->fs_type = 0;
     pdrv = fs->drv;     /* Physical drive */
-    part = LD2PT(vol);  /* Partition (0:auto detect, 1-4:get from partition table)*/
+    part = LD2PT(fs);   /* Partition (0:auto detect, 1-4:get from partition table)*/
 
     /* Get disk statics */
     disk_ioctl(pdrv, IOCTL_INIT, &stat);
