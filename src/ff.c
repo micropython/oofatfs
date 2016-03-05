@@ -2995,17 +2995,17 @@ FRESULT find_volume (   /* FR_OK(0): successful, !=0: any error occurred */
     /* Find an FAT partition on the drive. Supports only generic partitioning, FDISK and SFD. */
     bsect = 0;
     fmt = check_fs(fs, bsect);          /* Load sector 0 and check if it is an FAT-VBR as SFD */
-    if (fmt == 2 || (fmt < 2 && LD2PT(vol) != 0)) { /* Not an FAT-VBR or forced partition number */
+    if (fmt == 2 || (fmt < 2 && LD2PT(fs) != 0)) { /* Not an FAT-VBR or forced partition number */
         for (i = 0; i < 4; i++) {           /* Get partition offset */
             pt = fs->win + (MBR_Table + i * SZ_PTE);
             br[i] = pt[PTE_System] ? ld_dword(pt + PTE_StLba) : 0;
         }
-        i = LD2PT(vol);                     /* Partition number: 0:auto, 1-4:forced */
+        i = LD2PT(fs);                      /* Partition number: 0:auto, 1-4:forced */
         if (i) i--;
         do {                                /* Find an FAT volume */
             bsect = br[i];
             fmt = bsect ? check_fs(fs, bsect) : 3;  /* Check the partition */
-        } while (!LD2PT(vol) && fmt >= 2 && ++i < 4);
+        } while (!LD2PT(fs) && fmt >= 2 && ++i < 4);
     }
     if (fmt == 4) return FR_DISK_ERR;       /* An error occured in the disk I/O layer */
     if (fmt >= 2) return FR_NO_FILESYSTEM;  /* No FAT volume is found */
@@ -5209,7 +5209,7 @@ FRESULT f_forward (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_mkfs (
-    const TCHAR* path,  /* Logical drive number */
+    FATFS *fs,
     BYTE opt,           /* Format option */
     DWORD au,           /* Size of allocation unit [byte] */
     void* work,         /* Pointer to working buffer */
@@ -5226,7 +5226,6 @@ FRESULT f_mkfs (
     DWORD b_vol, b_fat, b_data;             /* Base LBA for volume, fat, data */
     DWORD sz_vol, sz_rsv, sz_fat, sz_dir;   /* Size for volume, fat, dir, data */
     UINT i;
-    int vol;
     DSTATUS stat;
 #if _USE_TRIM || _FS_EXFAT
     DWORD tbl[3];
@@ -5234,11 +5233,9 @@ FRESULT f_mkfs (
 
 
     /* Check mounted drive and clear work area */
-    vol = get_ldnumber(&path);                  /* Get target logical drive */
-    if (vol < 0) return FR_INVALID_DRIVE;
-    if (FatFs[vol]) FatFs[vol]->fs_type = 0;    /* Clear mounted volume */
+    fs->fs_type = 0;    /* Clear mounted volume */
     pdrv = fs->drv;     /* Physical drive */
-    part = LD2PT(vol);  /* Partition (0:create as new, 1-4:get from partition table) */
+    part = LD2PT(fs);   /* Partition (0:create as new, 1-4:get from partition table) */
 
     /* Check physical drive status */
     disk_ioctl(pdrv, IOCTL_INIT, &stat);
