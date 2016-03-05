@@ -50,17 +50,10 @@ typedef uint32_t DWORD;
 
 /* Definitions of volume management */
 
-#if _MULTI_PARTITION        /* Multiple partition configuration */
-typedef struct {
-    BYTE pd;    /* Physical drive number */
-    BYTE pt;    /* Partition: 0:Auto detect, 1-4:Forced partition) */
-} PARTITION;
-extern PARTITION VolToPart[];   /* Volume - Partition resolution table */
-#define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition index */
-
+#if _MULTI_PARTITION            /* Multiple partition configuration */
+#define LD2PT(fs) (fs->part)    /* Get partition index */
 #else                           /* Single partition configuration */
-#define LD2PT(vol) 0            /* Find first valid partition or in SFD */
-
+#define LD2PT(fs) 0             /* Find first valid partition or in SFD */
 #endif
 
 
@@ -92,6 +85,9 @@ typedef char TCHAR;
 
 typedef struct {
     void    *drv;           // block device underlying this filesystem
+#if _MULTI_PARTITION        /* Multiple partition configuration */
+    BYTE    part;           // Partition: 0:Auto detect, 1-4:Forced partition
+#endif
     BYTE    fs_type;        /* FAT sub-type (0:Not mounted) */
     BYTE    csize;          /* Sectors per cluster (1,2,4...128) */
     BYTE    n_fats;         /* Number of FAT copies (1 or 2) */
@@ -250,7 +246,7 @@ FRESULT f_getfree (const TCHAR* path, DWORD* nclst, FATFS** fatfs); /* Get numbe
 FRESULT f_getlabel (const TCHAR* path, TCHAR* label, DWORD* vsn);   /* Get volume label */
 FRESULT f_setlabel (const TCHAR* label);                            /* Set volume label */
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
-FRESULT f_mkfs (const TCHAR* path, BYTE sfd, UINT au);              /* Create a file system on the volume */
+FRESULT f_mkfs (FATFS* fs, BYTE sfd, UINT au);                      /* Create a file system on the volume */
 FRESULT f_fdisk (void *pdrv, const DWORD szt[], void* work);        /* Divide a physical drive into some partitions */
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->fsize))
