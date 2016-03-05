@@ -60,14 +60,6 @@ typedef unsigned long   DWORD;  /* 32-bit unsigned integer */
 
 /* Definitions of volume management */
 
-#if FF_MULTI_PARTITION      /* Multiple partition configuration */
-typedef struct {
-    BYTE pd;    /* Physical drive number */
-    BYTE pt;    /* Partition: 0:Auto detect, 1-4:Forced partition) */
-} PARTITION;
-extern PARTITION VolToPart[];   /* Volume - Partition resolution table */
-#endif
-
 #if FF_STR_VOLUME_ID
 #ifndef FF_VOLUME_STRS
 extern const char* VolumeStr[FF_VOLUMES];   /* User defied volume ID */
@@ -122,6 +114,9 @@ typedef DWORD FSIZE_t;
 
 typedef struct {
     void    *drv;           // block device underlying this filesystem
+#if FF_MULTI_PARTITION      /* Multiple partition configuration */
+    BYTE    part;           // Partition: 0:Auto detect, 1-4:Forced partition
+#endif
     BYTE    fs_type;        /* Filesystem type (0:not mounted) */
     BYTE    n_fats;         /* Number of FATs (1 or 2) */
     BYTE    wflag;          /* win[] flag (b0:dirty) */
@@ -307,7 +302,7 @@ FRESULT f_setlabel (const TCHAR* label);                            /* Set volum
 FRESULT f_forward (FIL* fp, UINT(*func)(const BYTE*,UINT), UINT btf, UINT* bf); /* Forward data to the stream */
 FRESULT f_expand (FIL* fp, FSIZE_t szf, BYTE opt);                  /* Allocate a contiguous block to the file */
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
-FRESULT f_mkfs (const TCHAR* path, BYTE opt, DWORD au, void* work, UINT len);   /* Create a FAT volume */
+FRESULT f_mkfs (FATFS *fs, BYTE opt, DWORD au, void* work, UINT len); /* Create a FAT volume */
 FRESULT f_fdisk (void *pdrv, const DWORD* szt, void* work);         /* Divide a physical drive into some partitions */
 FRESULT f_setcp (WORD cp);                                          /* Set current code page */
 
