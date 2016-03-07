@@ -302,6 +302,7 @@ FRESULT f_setlabel (const TCHAR* label);                            /* Set volum
 FRESULT f_forward (FIL* fp, UINT(*func)(const BYTE*,UINT), UINT btf, UINT* bf); /* Forward data to the stream */
 FRESULT f_expand (FIL* fp, FSIZE_t szf, BYTE opt);                  /* Allocate a contiguous block to the file */
 FRESULT f_mount (FATFS* fs, const TCHAR* path, BYTE opt);           /* Mount/Unmount a logical drive */
+FRESULT f_umount (FATFS* fs);                                       /* Unmount a logical drive */
 FRESULT f_mkfs (FATFS *fs, BYTE opt, DWORD au, void* work, UINT len); /* Create a FAT volume */
 FRESULT f_fdisk (void *pdrv, const DWORD* szt, void* work);         /* Divide a physical drive into some partitions */
 FRESULT f_setcp (WORD cp);                                          /* Set current code page */

@@ -3493,7 +3493,7 @@ static FRESULT validate (   /* Returns FR_OK or FR_INVALID_OBJECT */
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_mount (
-    FATFS* fs,          /* Pointer to the filesystem object (NULL:unmount)*/
+    FATFS* fs,          /* Pointer to the file system object to mount */
     const TCHAR* path,  /* Logical drive number to be mounted/unmounted */
     BYTE opt            /* Mode option 0:Do not mount (delayed mount), 1:Mount immediately */
 )
@@ -3519,12 +3519,10 @@ FRESULT f_mount (
         cfs->fs_type = 0;               /* Clear old fs object */
     }
 
-    if (fs) {
-        fs->fs_type = 0;                /* Clear new fs object */
+    fs->fs_type = 0;                    /* Clear new fs object */
 #if FF_FS_REENTRANT                     /* Create sync object for the new volume */
-        if (!ff_cre_syncobj((BYTE)vol, &fs->sobj)) return FR_INT_ERR;
+    if (!ff_cre_syncobj((BYTE)vol, &fs->sobj)) return FR_INT_ERR;
 #endif
-    }
     FatFs[vol] = fs;                    /* Register new fs object */
 
     if (opt == 0) return FR_OK;         /* Do not mount now, it will be mounted later */
@@ -3534,6 +3532,20 @@ FRESULT f_mount (
 }
 
 
+FRESULT f_umount (
+    FATFS* fs                   /* Pointer to the file system object to unmount */
+)
+{
+#if FF_FS_LOCK
+    clear_lock(fs);
+#endif
+#if FF_FS_REENTRANT             /* Discard sync object of the current volume */
+    if (!ff_del_syncobj(fs->sobj)) return FR_INT_ERR;
+#endif
+    fs->fs_type = 0;            /* Clear old fs object */
+
+    return FR_OK;
+}
 
 
 /*-----------------------------------------------------------------------*/
