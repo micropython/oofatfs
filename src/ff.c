@@ -524,10 +524,6 @@ typedef struct {
 #endif
 static WORD Fsid;               /* File system mount ID */
 
-#if _FS_RPATH != 0 && _VOLUMES >= 2
-static BYTE CurrVol;            /* Current drive */
-#endif
-
 #if _FS_LOCK != 0
 static FILESEM Files[_FS_LOCK]; /* Open object lock semaphores */
 #endif
@@ -2845,67 +2841,6 @@ FRESULT follow_path (   /* FR_OK(0): successful, !=0: error code */
 
 
 /*-----------------------------------------------------------------------*/
-/* Get logical drive number from path name                               */
-/*-----------------------------------------------------------------------*/
-
-static
-int get_ldnumber (      /* Returns logical drive number (-1:invalid drive) */
-    const TCHAR** path  /* Pointer to pointer to the path name */
-)
-{
-    const TCHAR *tp, *tt;
-    UINT i;
-    int vol = -1;
-#if _STR_VOLUME_ID      /* Find string drive id */
-    static const char* const str[] = {_VOLUME_STRS};
-    const char *sp;
-    char c;
-    TCHAR tc;
-#endif
-
-
-    if (*path) {    /* If the pointer is not a null */
-        for (tt = *path; (UINT)*tt >= (_USE_LFN ? ' ' : '!') && *tt != ':'; tt++) ; /* Find ':' in the path */
-        if (*tt == ':') {   /* If a ':' is exist in the path name */
-            tp = *path;
-            i = *tp++ - '0';
-            if (i < 10 && tp == tt) {   /* Is there a numeric drive id? */
-                if (i < _VOLUMES) { /* If a drive id is found, get the value and strip it */
-                    vol = (int)i;
-                    *path = ++tt;
-                }
-            }
-#if _STR_VOLUME_ID
-             else { /* No numeric drive number, find string drive id */
-                i = 0; tt++;
-                do {
-                    sp = str[i]; tp = *path;
-                    do {    /* Compare a string drive id with path name */
-                        c = *sp++; tc = *tp++;
-                        if (IsLower(tc)) tc -= 0x20;
-                    } while (c && (TCHAR)c == tc);
-                } while ((c || tp != tt) && ++i < _VOLUMES);    /* Repeat for each id until pattern match */
-                if (i < _VOLUMES) { /* If a drive id is found, get the value and strip it */
-                    vol = (int)i;
-                    *path = tt;
-                }
-            }
-#endif
-            return vol;
-        }
-#if _FS_RPATH != 0 && _VOLUMES >= 2
-        vol = CurrVol;  /* Current drive */
-#else
-        vol = 0;        /* Drive 0 */
-#endif
-    }
-    return vol;
-}
-
-
-
-
-/*-----------------------------------------------------------------------*/
 /* Load a sector and check if it is an FAT boot sector                   */
 /*-----------------------------------------------------------------------*/
 
@@ -3753,25 +3688,6 @@ FRESULT f_close (
 /* Change Current Directory or Current Drive, Get Current Directory      */
 /*-----------------------------------------------------------------------*/
 
-#if _VOLUMES >= 2
-FRESULT f_chdrive (
-    const TCHAR* path       /* Drive number */
-)
-{
-    int vol;
-
-
-    /* Get logical drive number */
-    vol = get_ldnumber(&path);
-    if (vol < 0) return FR_INVALID_DRIVE;
-
-    CurrVol = (BYTE)vol;    /* Set it as current volume */
-
-    return FR_OK;
-}
-#endif
-
-
 FRESULT f_chdir (
     FATFS *fs,
     const TCHAR* path   /* Pointer to the directory path */
@@ -3875,10 +3791,6 @@ FRESULT f_getcwd (
         }
         tp = buff;
         if (res == FR_OK) {
-#if _VOLUMES >= 2
-            *tp++ = '0' + CurrVol;          /* Put drive number */
-            *tp++ = ':';
-#endif
             if (i == len) {                 /* Root-directory */
                 *tp++ = '/';
             } else {                        /* Sub-directroy */
