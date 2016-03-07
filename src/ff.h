@@ -240,7 +240,6 @@ FRESULT f_stat (FATFS *fs, const TCHAR* path, FILINFO* fno);        /* Get file 
 FRESULT f_chmod (FATFS *fs, const TCHAR* path, BYTE attr, BYTE mask); /* Change attribute of the file/dir */
 FRESULT f_utime (FATFS *fs, const TCHAR* path, const FILINFO* fno); /* Change times-tamp of the file/dir */
 FRESULT f_chdir (FATFS *fs, const TCHAR* path);                     /* Change current directory */
-FRESULT f_chdrive (const TCHAR* path);                              /* Change current drive */
 FRESULT f_getcwd (FATFS *fs, TCHAR* buff, UINT len);                /* Get current directory */
 FRESULT f_getfree (FATFS *fs, DWORD* nclst);                        /* Get number of free clusters on the drive */
 FRESULT f_getlabel (FATFS *fs, TCHAR* label, DWORD* vsn);           /* Get volume label */
