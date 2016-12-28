@@ -64,7 +64,8 @@ int main() {
 
     printf("== MKFS ==\n");
     {
-        FRESULT res = f_mkfs(&fatfs, 1, 0);
+        uint8_t buf[SEC_SIZE];
+        FRESULT res = f_mkfs(&fatfs, FM_FAT | FM_SFD, 0, buf, sizeof(buf));
         printf("mkfs res=%d\n", res);
     }
 
