@@ -1,0 +1,196 @@
+== MKFS ==
+disk_ioctl(0, 5)
+disk_ioctl(0, 1)
+disk_ioctl(0, 3)
+get_fattime()
+disk_write(0, 0, 1, 0x56c0aabe)
+disk_write(0, 1, 1, 0x9ca634d5)
+disk_write(0, 2, 1, 0x082d5505)
+disk_write(0, 3, 1, 0x082d5505)
+disk_write(0, 4, 1, 0x082d5505)
+disk_write(0, 5, 1, 0x082d5505)
+disk_write(0, 6, 1, 0x082d5505)
+disk_write(0, 7, 1, 0x082d5505)
+disk_write(0, 8, 1, 0x082d5505)
+disk_write(0, 9, 1, 0x082d5505)
+disk_write(0, 10, 1, 0x082d5505)
+disk_write(0, 11, 1, 0x082d5505)
+disk_write(0, 12, 1, 0x082d5505)
+disk_write(0, 13, 1, 0x082d5505)
+disk_write(0, 14, 1, 0x082d5505)
+disk_write(0, 15, 1, 0x082d5505)
+disk_write(0, 16, 1, 0x082d5505)
+disk_write(0, 17, 1, 0x082d5505)
+disk_write(0, 18, 1, 0x082d5505)
+disk_write(0, 19, 1, 0x082d5505)
+disk_write(0, 20, 1, 0x082d5505)
+disk_write(0, 21, 1, 0x082d5505)
+disk_write(0, 22, 1, 0x082d5505)
+disk_write(0, 23, 1, 0x082d5505)
+disk_write(0, 24, 1, 0x082d5505)
+disk_write(0, 25, 1, 0x082d5505)
+disk_write(0, 26, 1, 0x082d5505)
+disk_write(0, 27, 1, 0x082d5505)
+disk_write(0, 28, 1, 0x082d5505)
+disk_write(0, 29, 1, 0x082d5505)
+disk_write(0, 30, 1, 0x082d5505)
+disk_write(0, 31, 1, 0x082d5505)
+disk_write(0, 32, 1, 0x082d5505)
+disk_write(0, 33, 1, 0x082d5505)
+disk_ioctl(0, 0)
+mkfs res=0
+== MOUNT ==
+disk_ioctl(0, 5)
+disk_read(0, 0, 1)
+mount res=0
+== SET LABEL ==
+disk_ioctl(0, 6)
+disk_read(0, 2, 1)
+get_fattime()
+disk_write(0, 2, 1, 0x0d96b58b)
+disk_ioctl(0, 0)
+setlabel res=0
+== GET LABEL ==
+disk_ioctl(0, 6)
+disk_read(0, 0, 1)
+getlabel res=0 label=LABEL vsn=0
+== FILE CREATION ==
+disk_ioctl(0, 6)
+disk_read(0, 2, 1)
+get_fattime()
+open res=0
+disk_ioctl(0, 6)
+disk_write(0, 2, 1, 0x236a437d)
+disk_read(0, 1, 1)
+write res=0 n=10
+disk_ioctl(0, 6)
+disk_write(0, 34, 1, <hash not shown>)
+disk_write(0, 1, 1, 0x5343a9c5)
+disk_read(0, 2, 1)
+get_fattime()
+disk_write(0, 2, 1, 0x6ae708d5)
+disk_ioctl(0, 0)
+disk_ioctl(0, 6)
+close res=0
+== FILE READ ==
+disk_ioctl(0, 6)
+open res=0
+disk_ioctl(0, 6)
+disk_read(0, 34, 1)
+read res=0 n=10
+0000 74 65 73 74 20 66 69 6c 65 0a                   test file.
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+close res=0
+== STAT ==
+disk_ioctl(0, 6)
+stat res=0 size=10 date=0 time=0 attrib=32
+== FILE CREATION, LONG NAME AND LOTS OF DATA ==
+disk_ioctl(0, 6)
+get_fattime()
+open res=0
+disk_ioctl(0, 6)
+disk_write(0, 2, 1, 0xf3dd04eb)
+disk_read(0, 1, 1)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+disk_write(0, 35, 1, 0x4049ed30)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+write res=0 n=100
+disk_ioctl(0, 6)
+disk_write(0, 36, 1, 0x37a6ca6c)
+disk_write(0, 1, 1, 0x7f57e755)
+disk_read(0, 2, 1)
+get_fattime()
+disk_write(0, 2, 1, 0xdd0a2fc3)
+disk_ioctl(0, 0)
+disk_ioctl(0, 6)
+close res=0
+== FILE SEEK AND READ ==
+disk_ioctl(0, 6)
+open res=0
+disk_ioctl(0, 6)
+disk_read(0, 1, 1)
+disk_read(0, 36, 1)
+lseek res=0
+tell 800
+disk_ioctl(0, 6)
+read res=0 n=100
+0000 4d 6f 72 65 20 64 61 74 61 20 66 6f 72 20 74 68 More data for th
+0010 65 20 74 65 73 74 20 66 69 6c 65 2e 20 20 4e 65 e test file.  Ne
+0020 65 64 20 74 6f 20 68 61 76 65 20 65 6e 6f 75 67 ed to have enoug
+0030 68 20 63 68 61 72 61 63 74 65 72 73 20 74 6f 20 h characters to 
+0040 66 69 6c 6c 20 6d 6f 72 65 20 74 68 61 6e 20 6f fill more than o
+0050 6e 65 20 35 31 32 2d 62 79 74 65 20 73 65 63 74 ne 512-byte sect
+0060 6f 72 2e 0a                                     or..
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+close res=0
+== MKDIR ==
+get_fattime()
+disk_ioctl(0, 6)
+disk_read(0, 2, 1)
+disk_read(0, 1, 1)
+disk_write(0, 1, 1, 0xa5c7187a)
+disk_write(0, 37, 1, 0x2953772e)
+disk_read(0, 2, 1)
+disk_write(0, 2, 1, 0x55944b21)
+disk_ioctl(0, 0)
+mkdir res=0
+== DIRECTORY LISTING ==
+disk_ioctl(0, 6)
+opendir res=0
+disk_ioctl(0, 6)
+readdir res=0 size=10 name=/test.txt/ lname=//
+disk_ioctl(0, 6)
+readdir res=0 size=1000 name=/FILENA~1.TXT/ lname=/filename-that-is-long.txt/
+disk_ioctl(0, 6)
+readdir res=0 size=0 name=/dir/ lname=//
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+closedir res=0
+== RENAME FILE ==
+disk_ioctl(0, 6)
+disk_write(0, 2, 1, 0xccafbc76)
+disk_ioctl(0, 0)
+unlink res=0
+== UNLINK FILE ==
+disk_ioctl(0, 6)
+disk_write(0, 2, 1, 0x76e9bdff)
+disk_read(0, 1, 1)
+disk_write(0, 1, 1, 0xd19f436a)
+disk_ioctl(0, 0)
+unlink res=0
+== RENAME DIR ==
+disk_ioctl(0, 6)
+disk_read(0, 2, 1)
+disk_write(0, 2, 1, 0x1ff9ac0d)
+disk_ioctl(0, 0)
+unlink res=0
+== UNLINK DIR ==
+disk_ioctl(0, 6)
+disk_read(0, 37, 1)
+disk_read(0, 2, 1)
+disk_write(0, 2, 1, 0x6ae11ad8)
+disk_read(0, 1, 1)
+disk_write(0, 1, 1, 0x61648e45)
+disk_ioctl(0, 0)
+unlink res=0
+== FREE SPACE ==
+disk_ioctl(0, 6)
+getfree res=0 nclst=92
