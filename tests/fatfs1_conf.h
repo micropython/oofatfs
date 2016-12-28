@@ -1,10 +1,12 @@
-#define _FFCONF         64180
+#define _FFCONF         88100
 #define _FS_READONLY    0
 #define _FS_MINIMIZE    0
 #define _USE_STRFUNC    0
 #define _USE_FIND       0
 #define _USE_MKFS       1
 #define _USE_FASTSEEK   0
+#define _USE_EXPAND     0
+#define _USE_CHMOD      1
 #define _USE_LABEL      1
 #define _USE_FORWARD    0
 #define _CODE_PAGE      437
@@ -22,6 +24,7 @@
 #define _USE_TRIM       0
 #define _FS_NOFSINFO    0
 #define _FS_TINY        0
+#define _FS_EXFAT       1
 #define _FS_NORTC       0
 #define _NORTC_MON      1
 #define _NORTC_MDAY     1
@@ -30,4 +33,3 @@
 #define _FS_REENTRANT   0
 #define _FS_TIMEOUT     1000
 #define _SYNC_t         HANDLE
-#define _WORD_ACCESS    0
