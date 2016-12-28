@@ -119,10 +119,6 @@ int main() {
     printf("== STAT ==\n");
     {
         FILINFO fno;
-        #if _USE_LFN
-        fno.lfname = NULL;
-        fno.lfsize = 0;
-        #endif
         FRESULT res = f_stat(&fatfs, "/test.txt", &fno);
         printf("stat res=%d size=%u date=%u time=%u attrib=%u\n", res, fno.fsize, fno.fdate, fno.ftime, fno.fattrib);
     }
@@ -170,11 +166,6 @@ int main() {
         FRESULT res = f_opendir(&fatfs, &dp, "/");
         printf("opendir res=%d\n", res);
         FILINFO fno;
-        #if _USE_LFN
-        char lfn[_MAX_LFN + 1];
-        fno.lfname = lfn;
-        fno.lfsize = sizeof(lfn);
-        #endif
         for (;;){
             res = f_readdir(&dp, &fno);
             if (res != FR_OK || fno.fname[0] == 0) {
@@ -182,7 +173,7 @@ int main() {
             }
             #if _USE_LFN
             // note: lfname is empty string if it fits in 12 chars in fname
-            printf("readdir res=%d size=%u name=/%s/ lname=/%s/\n", res, fno.fsize, fno.fname, fno.lfname);
+            printf("readdir res=%d size=%u name=/%s/ lname=/%s/\n", res, fno.fsize, fno.altname, fno.fname);
             #else
             printf("readdir res=%d size=%u name=/%s/\n", res, fno.fsize, fno.fname);
             #endif

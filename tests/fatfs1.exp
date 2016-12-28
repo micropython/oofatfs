@@ -46,7 +46,6 @@ mount res=0
 == SET LABEL ==
 disk_ioctl(0, 6)
 disk_read(0, 2, 1)
-get_fattime()
 disk_write(0, 2, 1, 0x0d96b58b)
 disk_ioctl(0, 0)
 setlabel res=0
@@ -60,14 +59,14 @@ disk_read(0, 2, 1)
 get_fattime()
 open res=0
 disk_ioctl(0, 6)
-disk_write(0, 2, 1, 0x236a437d)
+disk_write(0, 2, 1, 0xa8b3f35d)
 disk_read(0, 1, 1)
 write res=0 n=10
 disk_ioctl(0, 6)
 disk_write(0, 34, 1, <hash not shown>)
+get_fattime()
 disk_write(0, 1, 1, 0x5343a9c5)
 disk_read(0, 2, 1)
-get_fattime()
 disk_write(0, 2, 1, 0x6ae708d5)
 disk_ioctl(0, 0)
 disk_ioctl(0, 6)
@@ -90,7 +89,7 @@ disk_ioctl(0, 6)
 get_fattime()
 open res=0
 disk_ioctl(0, 6)
-disk_write(0, 2, 1, 0xf3dd04eb)
+disk_write(0, 2, 1, 0xb1d034cb)
 disk_read(0, 1, 1)
 write res=0 n=100
 disk_ioctl(0, 6)
@@ -114,9 +113,9 @@ disk_ioctl(0, 6)
 write res=0 n=100
 disk_ioctl(0, 6)
 disk_write(0, 36, 1, 0x37a6ca6c)
+get_fattime()
 disk_write(0, 1, 1, 0x7f57e755)
 disk_read(0, 2, 1)
-get_fattime()
 disk_write(0, 2, 1, 0xdd0a2fc3)
 disk_ioctl(0, 0)
 disk_ioctl(0, 6)
@@ -142,11 +141,11 @@ disk_ioctl(0, 6)
 disk_ioctl(0, 6)
 close res=0
 == MKDIR ==
-get_fattime()
 disk_ioctl(0, 6)
 disk_read(0, 2, 1)
 disk_read(0, 1, 1)
 disk_write(0, 1, 1, 0xa5c7187a)
+get_fattime()
 disk_write(0, 37, 1, 0x2953772e)
 disk_read(0, 2, 1)
 disk_write(0, 2, 1, 0x55944b21)
@@ -156,22 +155,22 @@ mkdir res=0
 disk_ioctl(0, 6)
 opendir res=0
 disk_ioctl(0, 6)
-readdir res=0 size=10 name=/test.txt/ lname=//
+readdir res=0 size=10 name=/TEST.TXT/ lname=/test.txt/
 disk_ioctl(0, 6)
 readdir res=0 size=1000 name=/FILENA~1.TXT/ lname=/filename-that-is-long.txt/
 disk_ioctl(0, 6)
-readdir res=0 size=0 name=/dir/ lname=//
+readdir res=0 size=0 name=/DIR/ lname=/dir/
 disk_ioctl(0, 6)
 disk_ioctl(0, 6)
 closedir res=0
 == RENAME FILE ==
 disk_ioctl(0, 6)
-disk_write(0, 2, 1, 0xccafbc76)
+disk_write(0, 2, 1, 0xcdb1e73c)
 disk_ioctl(0, 0)
 unlink res=0
 == UNLINK FILE ==
 disk_ioctl(0, 6)
-disk_write(0, 2, 1, 0x76e9bdff)
+disk_write(0, 2, 1, 0x12c8992d)
 disk_read(0, 1, 1)
 disk_write(0, 1, 1, 0xd19f436a)
 disk_ioctl(0, 0)
@@ -179,14 +178,14 @@ unlink res=0
 == RENAME DIR ==
 disk_ioctl(0, 6)
 disk_read(0, 2, 1)
-disk_write(0, 2, 1, 0x1ff9ac0d)
+disk_write(0, 2, 1, 0x2b759c33)
 disk_ioctl(0, 0)
 unlink res=0
 == UNLINK DIR ==
 disk_ioctl(0, 6)
 disk_read(0, 37, 1)
 disk_read(0, 2, 1)
-disk_write(0, 2, 1, 0x6ae11ad8)
+disk_write(0, 2, 1, 0x09922d72)
 disk_read(0, 1, 1)
 disk_write(0, 1, 1, 0x61648e45)
 disk_ioctl(0, 0)
