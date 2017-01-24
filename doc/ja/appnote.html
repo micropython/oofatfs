@@ -54,7 +54,7 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <tr><td>disk_ioctl (GET_SECTOR_COUNT)<br>disk_ioctl (GET_BLOCK_SIZE)</td><td>_USE_MKFS == 1</td></tr>
 <tr><td>disk_ioctl (GET_SECTOR_SIZE)</td><td>_MAX_SS != _MIN_SS</td></tr>
 <tr><td>disk_ioctl (CTRL_TRIM)</td><td>_USE_TRIM == 1</td></tr>
-<tr><td>ff_convert<br>ff_wtoupper</td><td>_USE_LFN &gt;= 1</td><td>option/unicode.c</td></tr>
+<tr><td>ff_convert<br>ff_wtoupper</td><td>_USE_LFN != 0</td><td>option/unicode.cをプロジェクトに<br>加えればよい</td></tr>
 <tr><td>ff_cre_syncobj<br>ff_rel_grant<br>ff_req_grant<br>ff_del_syncobj</td><td>_FS_REENTRANT == 1</td><td rowspan="2">option/syscall.c (サンプル)</td></tr>
 <tr><td>ff_mem_alloc<br>ff_mem_free</td><td>_USE_LFN == 3</td></tr>
 </table>
@@ -166,7 +166,7 @@ _WORD_ACCESS   0 or 1 (Set by processor architecture)
 <p>同じボリュームに対してはデフォルトではリエントラントではありませんが、<tt><a href="config.html#fs_reentrant">_FS_REENTRANT</a></tt>オプションでリエントラント(スレッド セーフ)にすることはできます。この場合、OS依存の同期オブジェクト操作関数<tt>ff_cre_syncobj, ff_del_syncobj, ff_req_grant, ff_rel_grant</tt>関数もまたプロジェクトに追加されなければなりません。サンプル コードと解説は<tt>option/syncobj.c</tt>にあります。</p>
 <p>この場合、あるタスクがボリュームを使用中に他のタスクからそのボリュームに対するファイル関数が呼び出されると、そのアクセスは先のタスクがファイル関数を抜けるまでサスペンドされます。待ち時間が<tt>_TIMEOUT</tt>で指定された期間を越えた場合、その関数は<tt>FR_TIMEOUT</tt>でアボートします。いくつかのRTOSではタイムアウト機能はサポートされないかも知れません。</p>
 <p>ひとつの例外が<tt>f_mount, f_mkfs, f_fdisk</tt>関数にあります。これらのボリューム制御関数は同じボリューム(または関連する物理ドライブ)に対してリエントラントではありません。これらの関数を使用するときは、アプリケーション レベルで排他制御しなければなりません。</p>
-<p>注: このセクションはFatFsモジュールそれ自体のリエントランシーについて説明しています。その下位のディスクI/Oモジュールについては、FatFs APIに再入を行う条件では少なくともスレッド セーフである必要があります。</p>
+<p>注: このセクションはFatFsモジュールそれ自体のリエントランシーについて説明しています。<tt>_FS_REENTRANT</tt>は、各ファイル システム オブジェクトの排他制御を行うのみで、下位のディスク関数への再入を防止するものではありません。たとえば、シングル ボリューム構成では<tt>disk_status</tt>関数のみ再入される可能性があり、マルチ ボリューム構成ではどのディスク関数も再入される可能性があります。このように、複数のタスクから同時にFatFs APIを使う条件では、ディスクI/Oモジュールはスレッド セーフである必要があります。</p>
 </div>
 
 <div class="para doc" id="dup">
