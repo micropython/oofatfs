@@ -13,7 +13,7 @@
 
 <div class="para func">
 <h2>f_getfree</h2>
-<p>論理ドライブ上の未使用クラスタ数を得ます。</p>
+<p>論理ドライブ上の未使用クラスタ数を取得します。</p>
 <pre>
 FRESULT f_getfree (
   const TCHAR* <span class="arg">path</span>,  <span class="c">/* [IN] 対象ドライブを指定します */</span>
@@ -53,7 +53,7 @@ FRESULT f_getfree (
 
 <div class="para desc">
 <h4>解説</h4>
-<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいては、FSINFOセクタの状態によっては不正確な値を返したり、処理に時間がかかったりする可能性があります。</p>
+<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいては、FSINFOが実際の状態と同期していない場合、不正確な空きサイズを返す可能性があります。この問題を避けるため、<tt>_FS_NOFSINFO</tt>オプションでFSINFOを無視して初回はフルFATスキャンをするように設定することもできます。</p>
 </div>
 
 
@@ -78,8 +78,8 @@ FRESULT f_getfree (
     tot_sect = (fs->n_fatent - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
-    <span class="c">/* ボリュームとと空きのサイズをKiB単位で表示 (512バイト/セクタと仮定) */</span>
-    printf("%lu KB total drive space.\n%lu KB available.\n",
+    <span class="c">/* ボリューム全体のサイズと空きのサイズを表示 (512バイト/セクタと仮定) */</span>
+    printf("%10lu KiB total drive space.\n%10lu KiB available.\n",
            tot_sect / 2, fre_sect / 2);
 </pre>
 </div>

@@ -19,7 +19,7 @@ DRESULT disk_write (
   BYTE <span class="arg">pdrv</span>,        <span class="c">/* [IN] 物理ドライブ番号 */</span>
   const BYTE* <span class="arg">buff</span>, <span class="c">/* [IN] 書き込むデータへのポインタ */</span>
   DWORD <span class="arg">sector</span>,     <span class="c">/* [IN] 書き込み開始セクタ番号 */</span>
-  BYTE <span class="arg">count</span>        <span class="c">/* [IN] 書き込みセクタ数 */</span>
+  UINT <span class="arg">count</span>        <span class="c">/* [IN] 書き込むセクタ数 */</span>
 );
 </pre>
 </div>
@@ -34,7 +34,7 @@ DRESULT disk_write (
 <dt>sector</dt>
 <dd>書き込みを開始するセクタ番号。LBAで指定されます。</dd>
 <dt>count</dt>
-<dd>書き込むセクタ数。 1～128の範囲で指定されます。一般的に、複数セクタの転送要求はデバイスに対して可能な限りマルチ・セクタ転送しなければなりません。複数のシングル・セクタ書き込みに分解した場合、スループットが極端に低下することがあります。</dd>
+<dd>書き込むセクタ数。 1～128の範囲の値で指定されます。一般的に、複数セクタの転送要求はデバイスに対して可能な限りマルチ・セクタ転送しなければなりません。複数のシングル・セクタ書き込みに分解した場合、スループットが極端に低下することがあります。</dd>
 </dl>
 </div>
 

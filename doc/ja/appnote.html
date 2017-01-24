@@ -43,7 +43,7 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 
 <h4>システム構成</h4>
 <p>下に示す依存関係図は、FatFsモジュール利用の組み込みシステムにおける代表的な構成を示します。</p>
-<p><img src="../img/modules.png" width="507" height="224" alt="システム構成図"></p>
+<p><img src="../img/modules.png" width="580" height="280" alt="システム構成図"></p>
 
 <h4>ユーザの作成する関数</h4>
 <p>必要なのは FatFsモジュールの要求するディスク関数を用意することだけで、それ以外にすることはありません。既に動作しているディスク関数があるなら、その APIを FatFsに合わせるかグルー関数でつなぐだけで済みますが、無い場合はほかから移植するか最初から書くかする必要があります。定義されている全ての関数が常に必要なわけではありません。例えば、リード・オンリー構成では書き込み系関数は必要ありません。次の表に構成オプションと要求される関数の対応を示します。</p>
@@ -80,17 +80,17 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>CM3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
 <tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
 <tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         RL78        *V850ES       *SH-2A       *RX600       *IA-32   -->
-<tr class="lst3"><td>text (Full, R/W)</td><td>10395</td><td>7037</td><td>6555</td><td>13362</td><td>10609</td><td>11364</td><td>12884</td><td>7814</td><td>8783</td><td>5826</td><td>7659</td></tr>
-<tr>             <td>text (Min, R/W)</td>  <td>6519</td><td>4747</td><td>4315</td> <td>8608</td> <td>7043</td> <td>7539</td> <td>8860</td><td>5070</td><td>5723</td><td>3821</td><td>5038</td></tr>
-<tr>             <td>text (Full, R/O)</td> <td>4563</td><td>3147</td><td>2911</td> <td>6174</td> <td>4925</td> <td>5340</td> <td>6136</td><td>3628</td><td>3863</td><td>2721</td><td>3534</td></tr>
-<tr>             <td>text (Min, R/O)</td>  <td>3311</td><td>2463</td><td>2209</td> <td>4610</td> <td>3817</td> <td>4029</td> <td>4641</td><td>2762</td><td>3003</td><td>2068</td><td>2722</td></tr>
+<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         *RL78       *V850ES       *SH-2A       *RX600       *IA-32   -->
+<tr class="lst3"><td>text (Full, R/W)</td><td>10591</td><td>7119</td><td>6565</td><td>13240</td><td>10864</td><td>11619</td><td>13192</td><td>8031</td><td>8960</td><td>5977</td><td>7856</td></tr>
+<tr>             <td>text (Min, R/W)</td>  <td>6671</td><td>4595</td><td>4293</td> <td>8512</td> <td>7232</td> <td>7674</td> <td>9033</td><td>5235</td><td>5768</td><td>3923</td><td>5129</td></tr>
+<tr>             <td>text (Full, R/O)</td> <td>4695</td><td>3121</td><td>2861</td> <td>6218</td> <td>5162</td> <td>5466</td> <td>6418</td><td>3799</td><td>3964</td><td>2847</td><td>3687</td></tr>
+<tr>             <td>text (Min, R/O)</td>  <td>3523</td><td>2463</td><td>2275</td> <td>4558</td> <td>4058</td> <td>4212</td> <td>4948</td><td>2959</td><td>3096</td><td>2199</td><td>2857</td></tr>
 <tr>             <td>bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
-<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td></tr>
+<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
+<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
 </table>
 <pre>
-FatFs R0.09b options:
+FatFs R0.10 options:
 _FS_READONLY     0 (R/W), 1 (R/O)
 _FS_MINIMIZE     0 (Full function), 3 (Minimized function)
 _USE_STRFUNC     0 (Disable string functions)
@@ -123,6 +123,7 @@ _FS_LOCK         0 (Disable file lock control)
 <tr><td>f_sync</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_lseek</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_opendir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_closedir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_readdir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_stat</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_getfree</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -161,7 +162,7 @@ _FS_LOCK         0 (Disable file lock control)
 <tr><td>950(Big5)</td><td>+111497</td></tr>
 </table>
 <p>LFN機能の上手な使い方は、それを使わないということです。実際、組み込み用途ではLFN機能がどうしても必要になるということはほとんど無いはずです。LFNを有効にすると、選択されたコード・ページに応じてモジュール・サイズが増大されます。右の表に各コード・ページにおけるLFNを有効にしたときのモジュール・サイズの違いを示します。特に、CJK地域では数万の文字が使われていますが、不幸なことにそれは巨大なOEM－Unicode相互変換テーブルを要求し、モジュール・サイズは劇的に増大されます。その結果、それらのコード・ページにおいてLFNを有効にしたFatFsモジュールは、AVRを含む殆どの8ビット・マイコンにインプリメントされることができません。</p>
-<p>注: マイクロソフト社はFATファイル・システムについていくつかの特許を保有しています。いずれもLFNの実装に関するもので、LFN機能に対して$0.25/unitのライセンス料を要求しています。最近のFAT32ドライバの多くはLFN機能を含んでいるため、それらの使用に当たってライセンスが必要になりますが、FatFsではLFN機能の有効・無効を任意に構成できます。このため、商用製品でLFN機能を有効にするときは、最終仕向地によってはライセンスが必要かも知れません。</p>
+<p>LFN機能のハードルはそれだけではありません。マイクロソフト社はFATファイル・システムについていくつかの特許を保有しています。いずれもLFN機能の実装に関するもので、その利用に対して$0.25/unitのライセンス料を要求しています。このため、商用製品でLFN機能を利用するときは、最終仕向地によってはライセンスが必要になります。最近のFAT32ドライバの多くはLFN機能を含んでいるため、それらの使用に当たってライセンスが必要になりますが、FatFsではLFN機能を構成オプションで任意にON/OFFできるため、無効にしてライセンス問題を回避することもできます。</p>
 </div>
 
 <div class="para" id="jap">
@@ -171,21 +172,21 @@ _FS_LOCK         0 (Disable file lock control)
 
 <div class="para" id="unicode">
 <h3>Unicode入出力への対応</h3>
-<p>API上におけるファイル名の入出力はデフォルトではANSI/OEMコードで行われますが、これをUnicodeに切り替えることもできます。つまり、これはFatFsがLFN機能に完全対応していることを意味します。Unicodeのファイル名に関する詳細は、<a href="filename.html">ファイル名</a>を参照してください。</p>
+<p>FatFs API上におけるファイル名等の文字列データの入出力は、デフォルトではANSI/OEMコードで行われますが、これをUnicode(UTF-16)に切り替えることもできます(<tt>_LFN_UNICODE</tt>オプションで設定)。つまり、これはFatFsがLFN機能に完全対応していることを意味します。Unicodeのファイル名に関する詳細は、<a href="filename.html">ファイル名</a>を参照してください。</p>
 </div>
 
 <div class="para" id="reentrant">
 <h3>リエントランシー</h3>
-<p>互いに異なるボリュームに対するファイル操作はリエントラントで、常に同時平行に動作できます。同じボリュームに対してはデフォルトではリエントラントではありませんが、<tt>_FS_REENTRANT</tt>オプションでリエントラント(スレッド・セーフ)にすることはできます。この場合、OS依存の同期オブジェクト操作関数<tt>ff_cre_syncobj, ff_del_syncobj, ff_req_grant</tt> と <tt>ff_rel_grant</tt>もまたプロジェクトに追加されなければなりません。サンプル・コードと解説は<tt>option/syncobj.c</tt>にあります。</p>
+<p>互いに異なるボリュームに対するファイル操作はリエントラントで、常に同時平行に動作できます。同じボリュームに対してはデフォルトではリエントラントではありませんが、<tt>_FS_REENTRANT</tt>オプションでリエントラント(スレッド・セーフ)にすることはできます。この場合、OS依存の同期オブジェクト操作関数<tt>ff_cre_syncobj(), ff_del_syncobj(), ff_req_grant(), ff_rel_grant()</tt>もまたプロジェクトに追加されなければなりません。サンプル・コードと解説は<tt>option/syncobj.c</tt>にあります。</p>
 <p>この場合、あるタスクがボリュームを使用中に他のタスクからそのボリュームに対するファイル関数が呼び出されると、そのアクセスは先のタスクがファイル関数を抜けるまでブロックされます。もし、待ち時間が<tt>_TIMEOUT</tt>で指定された期間を越すと、その関数は<tt>FR_TIMEOUT</tt>でアボートします。いくつかのRTOSではタイムアウト機能はサポートされないかも知れません。</p>
-<p>ひとつの例外が<tt>f_mount()</tt>と<tt>f_mkfs()</tt>にあります。これらの関数は同じボリュームに対してリエントラントではありません。これらの関数を使用するときは、アプリケーション・レベルで排他制御しなければなりません。</p>
-<p>注: このセクションはFatFsモジュールそれ自体のリエントランシーについて説明しています。ディスクI/Oモジュールのリエントランシーに関しては何の前提もありません。</p>
+<p>ひとつの例外が<tt>f_mount(), f_mkfs(), f_fdisk()</tt>にあります。これらの関数は同じボリューム(または関連する物理ドライブ)に対してリエントラントではありません。これらの関数を使用するときは、アプリケーション・レベルで排他制御しなければなりません。</p>
+<p>注: このセクションはFatFsモジュールそれ自体のリエントランシーについて説明しています。その下位のディスクI/Oモジュールのリエントランシーに関しては何の前提もありません。</p>
 </div>
 
 <div class="para" id="dup">
 <h3>多重ファイル・アクセス</h3>
 <p>FatFsモジュールではデフォルトでは多重アクセス制御機能をサポートしていません。ファイルに対する多重アクセスは、そのアクセス・モードによって制限されます。一つのファイルに対する多重オープンは、それらが全てリード・モードのときに限って許可されます。書き込みモードを含む多重オープン、また開かれているファイルに対するリネームや削除を行ってはなりません。さもないと、そのボリュームのFAT構造が破壊される可能性があります。</p>
-<p><tt>_FS_LOCK</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位の排他制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。<tt>_FS_LOCK</tt>を越えた数のファイルをオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
+<p><tt>_FS_LOCK</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位のアクセス制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。また、<tt>_FS_LOCK</tt>を越える数のファイルやディレクトリを同時にオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
 </div>
 
 <div class="para" id="fs1">
@@ -255,7 +256,7 @@ _FS_LOCK         0 (Disable file lock control)
 <h3>FatFsのライセンスについて</h3>
 <p>ソース・ファイルのヘッダにライセンス条件が記述されているので、利用の際はそれに従うこと。英語を読めない方のために以下に日本語訳を示しておきます。</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.09b                   (C)ChaN, 2013
+/  FatFs - FAT file system module  R0.10                    (C)ChaN, 2013
 /-----------------------------------------------------------------------------/
 / FatFsモジュールは、小規模な組み込みシステム向けの汎用FATファイルシステム・
 / モジュールです。これはフリー・ソフトウェアとして、教育・研究・開発のために
@@ -269,7 +270,7 @@ _FS_LOCK         0 (Disable file lock control)
 / * ソース・コードを再配布するときは、上記の著作権表示を保持しなければなりません。
 /
 /-----------------------------------------------------------------------------/</pre>
-<p>要するにFatFsはタダで自由に使えるということです。ソース・コードを再配布するときは、このブロックをそのまま保持しておくこと。このようにFatFsはBSDライクなライセンスとしていますが、一つ大きな違いがあります。特に組み込み用途での利用価値を高めるため、バイナリ形式(ソース・コードを含まない形式全て)での再配布については、条件は設けていません。その場合は、FatFsおよびそのライセンス文書についてはドキュメントに明記してもしなくてもかまいません。もちろんGNU GPLプロジェクトとも共存可能です。何らかの変更を加えて再配布する際は、矛盾しない他のライセンス(GNU GPLやBSDライセンスなど)に変更することも可能です。</p>
+<p>要するにFatFsはタダで自由に使えるということです。ソース・コードを再配布するときは、このブロックをそのまま保持しておくこと。このようにFatFsはBSDライクなライセンスとしていますが、一つ大きな違いがあります。特に組み込み用途での利用価値を高めるため、バイナリ形式(ソース・コードを含まない形式全て)での再配布については、条件は設けていません。その場合は、FatFsおよびそのライセンス文書についてはドキュメントに明記してもしなくてもかまいません。これは、一条項BSDライセンスと等価ということです。もちろんGNU GPLプロジェクトとも共存可能です。何らかの変更を加えて再配布する際は、矛盾しない他のライセンス(GNU GPLや修正BSDライセンスなど)に変更することも可能です。</p>
 </div>
 
 <p class="foot"><a href="../00index_j.html">戻る</a></p>

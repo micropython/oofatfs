@@ -17,7 +17,7 @@
 <pre>
 FRESULT f_fdisk (
   BYTE  <span class="arg">pdrv</span>,         <span class="c">/* [IN] 物理ドライブ番号 */</span>
-  const DWORD <em>part[]</em>, <span class="c">/* [IN] 区画マップ・テーブル */</span>
+  const DWORD <span class="arg">part[]</span>, <span class="c">/* [IN] 区画マップ・テーブル */</span>
   void* <span class="arg">work</span>          <span class="c">/* [-] ワークエリア */</span>
 );
 </pre>
@@ -27,7 +27,7 @@ FRESULT f_fdisk (
 <h4>引数</h4>
 <dl class="par">
 <dt>pdrv</dt>
-<dd>分割する<em>物理ドライブ</em>を指定します。</dd>
+<dd>分割する<em>物理ドライブ</em>のドライブ番号を指定します。</dd>
 <dt>part[]</dt>
 <dd>区画マップ・テーブルへのポインタを指定します。</dd>
 <dt>work</dt>
@@ -70,19 +70,19 @@ FRESULT f_fdisk (
 <pre>
     <span class="c">/* 新しい物理ドライブ(0)の初期化 */</span>
 
-    FATFS Fatfs;
+    FATFS fs;
     DWORD plist[] = {50, 50, 0, 0};  <span class="c">/* 2分割 */</span>
     BYTE work[_MAX_SS];
 
     f_fdisk(0, plist, work);  <span class="c">/* 物理ドライブ 0 の分割 */</span>
 
-    f_mount(0, &amp;Fatfs);
-    f_mkfs(0, 0, 0);          <span class="c">/* 論理ドライブ 0 の初期化. 第二引数は無視される.  */</span>
-    f_mount(0, 0);
+    f_mount(&amp;fs "0:", 0);
+    f_mkfs("0:", 0, 0);       <span class="c">/* 論理ドライブ 0 のフォーマット. 第二引数は無視される.  */</span>
+    f_mount(0, "0:", 0);
 
-    f_mount(1, &amp;Fatfs);
-    f_mkfs(1, 0, 0);
-    f_mount(1, 0);
+    f_mount(&amp;fs, "1:", 0);
+    f_mkfs("1:", 0, 0);       <span class="c">/* 論理ドライブ 0 のフォーマット. 第二引数は無視される.  */</span>
+    f_mount(0, "1:", 0);
 
 </pre>
 </div>

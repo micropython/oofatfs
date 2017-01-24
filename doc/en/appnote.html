@@ -42,7 +42,7 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 
 <h4>System organizations</h4>
 <p>The dependency diagram shown below is a typical configuration of the embedded system with FatFs module.</p>
-<p><img src="../img/modules.png" width="507" height="224" alt="dependency diagram"></p>
+<p><img src="../img/modules.png" width="580" height="280" alt="dependency diagram"></p>
 
 <h4>Which function is required?</h4>
 <p>You need to provide only low level disk I/O functions that required by FatFs module and nothing else. If a working disk module for the target is already existing, you need to write only glue functions to attach it to the FatFs module. If not, you need to port any other disk module or write it from scratch. Most of defined functions are not that always required. For example, disk write function is not required in read-only configuration. Following table shows which function is required depends on configuration options.</p>
@@ -66,8 +66,8 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 <li>Number of open files: Unlimited, depends on available memory.</li>
 <li>Number of volumes: Upto 10.</li>
 <li>File size: Depends on FAT specs. (upto 4G-1 bytes)</li>
-<li>Volume size: Depends on FAT specs. (upto 2T bytes on 512 bytes/sector)</li>
-<li>Cluster size: Depends on FAT specs. (upto 64K bytes on 512 bytes/sector)</li>
+<li>Volume size: Depends on FAT specs. (upto 2T bytes at 512 bytes/sector)</li>
+<li>Cluster size: Depends on FAT specs. (upto 64K bytes at 512 bytes/sector)</li>
 <li>Sector size: Depends on FAT specs. (upto 4K bytes)</li>
 </ul>
 </div>
@@ -78,18 +78,18 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 <tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>CM3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
 <tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
 <tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         RL78        *V850ES       *SH-2A       *RX600       *IA-32   -->
-<tr class="lst3"><td>text (Full, R/W)</td><td>10395</td><td>7037</td><td>6555</td><td>13362</td><td>10609</td><td>11364</td><td>12884</td><td>7814</td><td>8783</td><td>5826</td><td>7659</td></tr>
-<tr>             <td>text (Min, R/W)</td>  <td>6519</td><td>4747</td><td>4315</td> <td>8608</td> <td>7043</td> <td>7539</td> <td>8860</td><td>5070</td><td>5723</td><td>3821</td><td>5038</td></tr>
-<tr>             <td>text (Full, R/O)</td> <td>4563</td><td>3147</td><td>2911</td> <td>6174</td> <td>4925</td> <td>5340</td> <td>6136</td><td>3628</td><td>3863</td><td>2721</td><td>3534</td></tr>
-<tr>             <td>text (Min, R/O)</td>  <td>3311</td><td>2463</td><td>2209</td> <td>4610</td> <td>3817</td> <td>4029</td> <td>4641</td><td>2762</td><td>3003</td><td>2068</td><td>2722</td></tr>
+<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         *RL78       *V850ES       *SH-2A       *RX600       *IA-32   -->
+<tr class="lst3"><td>text (Full, R/W)</td><td>10591</td><td>7119</td><td>6565</td><td>13240</td><td>10864</td><td>11619</td><td>13192</td><td>8031</td><td>8960</td><td>5977</td><td>7856</td></tr>
+<tr>             <td>text (Min, R/W)</td>  <td>6671</td><td>4595</td><td>4293</td> <td>8512</td> <td>7232</td> <td>7674</td> <td>9033</td><td>5235</td><td>5768</td><td>3923</td><td>5129</td></tr>
+<tr>             <td>text (Full, R/O)</td> <td>4695</td><td>3121</td><td>2861</td> <td>6218</td> <td>5162</td> <td>5466</td> <td>6418</td><td>3799</td><td>3964</td><td>2847</td><td>3687</td></tr>
+<tr>             <td>text (Min, R/O)</td>  <td>3523</td><td>2463</td><td>2275</td> <td>4558</td> <td>4058</td> <td>4212</td> <td>4948</td><td>2959</td><td>3096</td><td>2199</td><td>2857</td></tr>
 <tr>             <td>bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
-<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*544</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td><td>V*564 +<br>F*550</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*32</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td><td>V*564 +<br>F*36</td></tr>
+<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
+<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
 </table>
 <p>These are the memory usage on some target systems with following condition. The memory sizes are in unit of byte, <em>V</em> denotes number of volumes and <em>F</em> denotes number of open files. All samples are optimezed in code size.</p>
 <pre>
-FatFs R0.09b options:
+FatFs R0.10 options:
 _FS_READONLY     0 (R/W), 1 (R/O)
 _FS_MINIMIZE     0 (Full function), 3 (Minimized function)
 _USE_STRFUNC     0 (Disable string functions)
@@ -104,7 +104,7 @@ _FS_LABEL        0 (Disable volume label functions)
 _VOLUMES         V (Number of logical drives to be used)
 _MULTI_PARTITION 0 (Single partition per drive)
 _FS_REENTRANT    0 (Disable reentrancy)
-_FS_LOCK         0 (Disable shareing control)
+_FS_LOCK         0 (Disable file lock control)
 </pre>
 </div>
 
@@ -122,6 +122,7 @@ _FS_LOCK         0 (Disable shareing control)
 <tr><td>f_sync</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_lseek</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_opendir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_closedir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_readdir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_stat</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_getfree</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -150,7 +151,7 @@ _FS_LOCK         0 (Disable shareing control)
 <h3>Long File Name</h3>
 <p>The FatFs module has started to support long file name (LFN) at revision 0.07. The two different file names, SFN and LFN, of a file is transparent in the file functions except for f_readdir function. To enable LFN feature, set <tt>_USE_LFN</tt> to 1, 2 or 3, and add a Unicode code conversion function <tt>ff_convert()</tt> and <tt>ff_wtoupper()</tt> to the project. The LFN feature requiers a certain working buffer in addition. The buffer size can be configured by <tt>_MAX_LFN</tt> corresponding to the available memory size. The size of long file name will reach up to 255 characters, so that the <tt>_MAX_LFN</tt> should be set to 255 for full featured LFN operation. If the size of working buffer is insufficient for the given file name, the file function fails with <tt>FR_INVALID_NAME</tt>. When enable the LFN feature with re-entrant feature, <tt>_USE_LFN</tt> must be set to 2 or 3. In this case, the file function allocates the working buffer on the stack or heap. The working buffer occupies <tt>(_MAX_LFN + 1) * 2</tt> bytes.</p>
 <table class="lst2 rset">
-<caption>LFN cfg on ARM7</caption>
+<caption>LFN cfg on ARM7TDMI</caption>
 <tr><th>Code page</th><th>Program size</th></tr>
 <tr><td>SBCS</td><td>+3.7K</td></tr>
 <tr><td>932(Shift-JIS)</td><td>+62K</td></tr>
@@ -164,26 +165,26 @@ _FS_LOCK         0 (Disable shareing control)
 
 <div class="para" id="unicode">
 <h3>Unicode API</h3>
-<p>In default, FatFs supports ANSI/OEM code set on the API but FatFs can also switch the code set to Unicode. This means the FatFs supports the True LFN feature. For more information, refer to the description in the <a href="filename.html">file name</a>.</p>
+<p>By default, FatFs uses ANSI/OEM code set on the API under LFN configuration. FatFs can also switch the character encoding to Unicode on the API (<tt>_LFN_UNICODE</tt>). This means the FatFs supports the True-LFN feature. For more information, refer to the description in the <a href="filename.html">file name</a>.</p>
 </div>
 
 <div class="para" id="reentrant">
 <h3>Re-entrancy</h3>
 <p>The file operations to the different volume is always re-entrant and can work simultaneously. The file operations to the same volume is not re-entrant but it can also be configured to thread-safe with <tt>_FS_REENTRANT</tt> option. In this case, also the OS dependent synchronization object control functions, <tt>ff_cre_syncobj(), ff_del_syncobj(), ff_req_grant() and ff_rel_grant()</tt> must be added to the project.</p>
-<p>When a file function is called while the volume is in use by any other task, the file function is suspended until that task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported on some RTOS.</p>
-<p>There is an exception on <tt>f_mount()</tt> and <tt>f_mkfs()</tt> function. These functions are not re-entrant to the same volume. When use these functions, all other task must close the corresponding file on the volume and avoid to access the volume.</p>
-<p>Note that this section describes on the re-entrancy of the FatFs module itself but also the low level disk I/O layer must be re-entrant.</p>
+<p>When a file function is called while the volume is in use by any other task, the file function is suspended until that task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported by some RTOS.</p>
+<p>There is an exception for <tt>f_mount(), f_mkfs(), f_fdisk()</tt> function. These functions are not re-entrant to the same volume or corresponding physical drive. When use these functions, all other tasks must unmount the volume and avoid to access the volume.</p>
+<p>Note that this section describes on the re-entrancy of the FatFs module itself but also the low level disk I/O layer will need to be re-entrant.</p>
 </div>
 
 <div class="para" id="dup">
 <h3>Duplicated File Access</h3>
 <p>FatFs module does not support the shareing controls of duplicated file access in default. It is permitted when open method to a file is only read mode. The duplicated open in write mode to a file is always prohibited and open file must not be renamed, deleted, or the FAT structure on the volume can be collapted.</p>
-<p>The file shareing control can also be available when <tt>_FS_LOCK</tt> is set to 1 or grater. The value specifies the number of files to manage simultaneously. In this case, if any open, rename or remove that violating the file shareing rule that described above is attempted, the file function will fail with <tt>FR_LOCKED</tt>. If number of open files gets larger than <tt>_FS_LOCK</tt>, the <tt>f_open()</tt> function will fail with <tt>FR_TOO_MANY_OPEN_FILES</tt>.</p>
+<p>The file shareing control can also be available when <tt>_FS_LOCK</tt> is set to 1 or grater. The value specifies the number of files to manage simultaneously. In this case, if any open, rename or remove that violating the file shareing rule that described above is attempted, the file function will fail with <tt>FR_LOCKED</tt>. If number of open objects gets larger than <tt>_FS_LOCK</tt>, the <tt>f_open()/f_opendir()</tt> function will fail with <tt>FR_TOO_MANY_OPEN_FILES</tt>.</p>
 </div>
 
 <div class="para" id="fs1">
 <h3>Performance Effective File Access</h3>
-<p>For good performance on reading/writing files on the small embedded system, application programmer should consider what process is done in the FatFs module. The file data on the volume is transferred in following sequence by <tt>f_read()</tt> function.</p>
+<p>For good performance to read/write files on the small embedded system, application programmer should consider what process is done in the FatFs module. The file data on the volume is transferred in following sequence by <tt>f_read()</tt> function.</p>
 <p>Figure 1. Sector miss-aligned read (short)<br>
 <img src="../img/f1.png" width="490" height="110" alt="">
 </p>
@@ -193,9 +194,9 @@ _FS_LOCK         0 (Disable shareing control)
 <p>Figure 3. Sector aligned read<br>
 <img src="../img/f3.png" width="490" height="119" alt="">
 </p>
-<p>The file I/O buffer is a sector buffer to read/write a partial data on the sector. The sector buffer is either file private sector buffer on each file object or shared sector buffer on the file system object. The buffer configuration option <tt>_FS_TINY</tt> determins which sector buffer is used for the file data transfer. When tiny buffer (1) is selected, data memory consumption is reduced 512 bytes each file object. In this case, FatFs module uses only a sector buffer on the file system object for file data transfer and FAT/directory access. The disadvantage of the tiny buffer configuration is: the FAT data cached in the sector buffer will be lost by file data transfer and it must be reloaded at every cluster boundary. However it will be suitable for most application from view point of the decent performance and low memory comsumption.</p>
-<p>Figure 1 shows that a partial sector is transferred via the file I/O buffer. On long data transfer shown in Figure 2, middle of transfer data that covers one or more sector is transferred to application buffer directly. Figure 3 shows that the case of entier transfer data is aligned to the sector boundary. In this case, file I/O buffer is not used. On the direct transfer, the maximum extent of sectors are read with <tt>disk_read()</tt> function at a time but the multiple sector transfer never across the cluster boundary even if it is contiguous.</p>
-<p>Therefore taking effort to sector aligned read/write accesss avoids buffered data transfer and the read/write performance will be improved. Besides the effect, cached FAT data will not be flushed by file data transfer on the tiny configuration so that it can achieve same performance as non-tiny configuration with small memory footprint.</p>
+<p>The file I/O buffer is a sector buffer to read/write a partial data on the sector. The sector buffer is either file private sector buffer on each file object or shared sector buffer in the file system object. The buffer configuration option <tt>_FS_TINY</tt> determins which sector buffer is used for the file data transfer. When tiny buffer (1) is selected, data memory consumption is reduced 512 bytes each file object. In this case, FatFs module uses only a sector buffer in the file system object for file data transfer and FAT/directory access. The disadvantage of the tiny buffer configuration is: the FAT data cached in the sector buffer will be lost by file data transfer and it must be reloaded at every cluster boundary. However it will be suitable for most application from view point of the decent performance and low memory comsumption.</p>
+<p>Figure 1 shows that a partial sector, sector mis-aligned part of the file, is transferred via the file I/O buffer. On long data transfer shown in Figure 2, middle of transfer data that covers one or more sector is transferred to the application buffer directly. Figure 3 shows that the case of entier transfer data is aligned to the sector boundary. In this case, file I/O buffer is not used. On the direct transfer, the maximum extent of sectors are read with <tt>disk_read()</tt> function at a time but the multiple sector transfer never across the cluster boundary even if it is contiguous.</p>
+<p>Therefore taking effort to sector aligned read/write accesss avoids buffered data transfer and the read/write performance will be improved. Besides the effect, cached FAT data will not be flushed by file data transfer at the tiny configuration, so that it can achieve same performance as non-tiny configuration with small memory footprint.</p>
 </div>
 
 <div class="para" id="fs2">
@@ -231,7 +232,7 @@ Figure 5. Minimized critical section<br>
 <li>The file created as new or overwritten remains but no content.</li>
 <li>Efficiency of disk use gets worse due to lost clusters.</li>
 </ul>
-<p>Each case does not affect the files that not opened in write mode. To minimize risk of data loss, the critical section can be minimized like shown in Figure 5 by minimizing the time that file is opened in write mode or using <tt>f_sync()</tt> function properly.</p>
+<p>Each case does not affect the files that not opened in write mode. To minimize risk of data loss, the critical section can be minimized by minimizing the time that file is opened in write mode or using <tt>f_sync()</tt> function as shown in Figure 5.</p>
 </div>
 
 <div class="para" id="fs3">
@@ -248,7 +249,7 @@ Figure 5. Minimized critical section<br>
 <h3>About FatFs License</h3>
 <p>This is a copy of the FatFs license document that included in the source codes.</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.09b                    (C)ChaN, 2013
+/  FatFs - FAT file system module  R0.10                     (C)ChaN, 2013
 /-----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial
@@ -262,7 +263,7 @@ Figure 5. Minimized critical section<br>
 / * Redistributions of source code must retain the above copyright notice.
 /
 /-----------------------------------------------------------------------------/</pre>
-<p>Therefore FatFs license is one of the BSD-style license but there is a big difference. Because FatFs is for embedded projects, the conditions for redistributions in binary form, such as embedded code, hex file and binary library, is not specified to increase its usability. The documentation of the distributions need not include about FatFs and its license document, and it may also. Of course FatFs is compatible with the projects under GNU GPL. When redistribute it with any modification, the license can also be changed to GNU GPL or BSD-style license.</p>
+<p>Therefore FatFs license is one of the BSD-style license but there is a significant feature. Because FatFs is for embedded projects, the conditions for redistributions in binary form, such as embedded code, hex file and binary library, are not specified to increase its usability. The documentation of the distributions need not include about FatFs and its license document, and it may also. This is equivalent to the BSD 1-Clause License. Of course FatFs is compatible with the projects under GNU GPL. When redistribute the FatFs with any modification, the license can also be changed to GNU GPL or BSD-style license.</p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

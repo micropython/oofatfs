@@ -1,3 +1,14 @@
+R0.10, Oct 02,'13
+  Added selection of character encoding on the file. (_STRF_ENCODE)
+  Added f_closedir().
+  Added forced full FAT scan for f_getfree(). (_FS_NOFSINFO)
+  Added forced mount feature with changes of f_mount().
+  Improved behavior of volume auto detection.
+  Improved write throughput of f_puts() and f_printf().
+  Changed argument of f_chdrive(), f_mkfs(), disk_read() and disk_write().
+  Fixed f_write() can be truncated when the file size is close to 4GB.
+  Fixed f_open(), f_mkdir() and f_setlabel() can return incorrect error code.
+
 R0.09b, Jan 24, 2013
   Added f_getlabel() and f_setlabel(). (_USE_LABEL = 1)
 

@@ -1,23 +1,29 @@
-/*------------------------------------------------------------/
+/*----------------------------------------------------------------------/
 / Allocate a contiguous area to the file
-/------------------------------------------------------------*/
+/-----------------------------------------------------------------------/
+/ This function checks if the file is contiguous with desired size.
+/ If not, a block of contiguous sectors is allocated to the file.
+/ If the file has been opened without FA_WRITE flag, it only checks if
+/ the file is contiguous and returns the resulut. */
+
+#if _FATFS != 80960 /* Check if R0.10 */
+#error This function may not be compatible with this revision of FatFs module.
+#endif
 
 /* Declarations of FatFs internal functions accessible from applications.
-/  This is intended to be used by disk checking/fixing or dirty hacks :-) */
-DWORD clust2sect (FATFS *fs, DWORD clst);
-DWORD get_fat (FATFS *fs, DWORD clst);
-FRESULT put_fat (FATFS *fs, DWORD clst, DWORD val);
+/  This is intended to be used for disk checking/fixing or dirty hacks :-) */
+DWORD clust2sect (FATFS* fs, DWORD clst);
+DWORD get_fat (FATFS* fs, DWORD clst);
+FRESULT put_fat (FATFS* fs, DWORD clst, DWORD val);
 
 
-DWORD allocate_contiguous_clusters (    /* Returns file start sector number */
+DWORD allocate_contiguous_clusters (    /* Returns the first sector in LBA (0:error or not contiguous) */
     FIL* fp,    /* Pointer to the open file object */
     DWORD len   /* Number of bytes to allocate */
 )
 {
     DWORD csz, tcl, ncl, ccl, cl;
-#if _FATFS != 82786 /* Check if R0.09b */
-#error This function may not be compatible with this revision of FatFs module.
-#endif
+
 
     if (f_lseek(fp, 0) || !len)     /* Check if the given parameters are valid */
         return 0;
@@ -37,7 +43,9 @@ DWORD allocate_contiguous_clusters (    /* Returns file start sector number */
         if (ncl == tcl)             /* Is the file contiguous? */
             return clust2sect(fp->fs, fp->sclust);  /* Return file start sector */
     }
-
+#if _FS_READONLY
+    return 0;
+#else
     if (f_truncate(fp)) return 0;   /* Remove the existing chain */
 
     /* Find a free contiguous area */
@@ -59,6 +67,7 @@ DWORD allocate_contiguous_clusters (    /* Returns file start sector number */
     if (f_lseek(fp, len)) return 0;
 
     return clust2sect(fp->fs, fp->sclust);  /* Return file start sector */
+#endif
 }
 
 
@@ -66,18 +75,18 @@ int main (void)
 {
     FRESULT fr;
     DRESULT dr;
+    FATFS fs;
     FIL fil;
     DWORD org;
 
 
-    f_mount(0, &Fatfs);
-
     /* Open or create a file */
-    fr = f_open(&fil, "pagefile.dat", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
+    f_mount(&fs, "", 0);
+    fr = f_open(&fil, "swapfile.sys", FA_READ | FA_WRITE | FA_OPEN_ALWAYS);
     if (fr) return 1;
 
     /* Check if the file is 64MB in size and occupies a contiguous area.
-    /  If not, a contiguous area is re-allocated to the file. */
+    /  If not, a contiguous area will be re-allocated to the file. */
     org = allocate_contiguous_clusters(&fil, 0x4000000);
     if (!org) {
         printf("Function failed due to any error or insufficient contiguous area.\n");
@@ -85,14 +94,13 @@ int main (void)
         return 1;
     }
 
-    /* Now you can read/write the file with disk functions bypassing the file system layer.
-    /  Note that 4th argument of the disk read/write function is BYTE, so that you may need
-    /  to bypass the disk functions for large number of multiple sector transfer. */
+    /* Now you can read/write the file with disk functions bypassing the file system layer. */
 
-    dr = disk_write(fil.fs->drv, Buff, org, 128);   /* Write 64K bytes from top of the file */
+    dr = disk_write(fil.fs->drv, Buff, org, 1024);   /* Write 512Ki bytes from top of the file */
 
     ...
 
     f_close(&fil);
     return 0;
 }
+

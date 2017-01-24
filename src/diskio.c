@@ -102,7 +102,7 @@ DRESULT disk_read (
     BYTE pdrv,      /* Physical drive nmuber (0..) */
     BYTE *buff,     /* Data buffer to store read data */
     DWORD sector,   /* Sector address (LBA) */
-    BYTE count      /* Number of sectors to read (1..128) */
+    UINT count      /* Number of sectors to read (1..128) */
 )
 {
     DRESULT res;
@@ -150,7 +150,7 @@ DRESULT disk_write (
     BYTE pdrv,          /* Physical drive nmuber (0..) */
     const BYTE *buff,   /* Data to be written */
     DWORD sector,       /* Sector address (LBA) */
-    BYTE count          /* Number of sectors to write (1..128) */
+    UINT count          /* Number of sectors to write (1..128) */
 )
 {
     DRESULT res;

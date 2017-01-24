@@ -19,7 +19,7 @@ DRESULT disk_read (
   BYTE <span class="arg">pdrv</span>,     <span class="c">/* [IN] Physical drive number */</span>
   BYTE* <span class="arg">buff</span>,    <span class="c">/* [OUT] Pointer to the read data buffer */</span>
   DWORD <span class="arg">sector</span>,  <span class="c">/* [IN] Start sector number */</span>
-  BYTE <span class="arg">count</span>     <span class="c">/* [IN] Number of sectros to read */</span>
+  UINT <span class="arg">count</span>     <span class="c">/* [IN] Number of sectros to read */</span>
 );
 </pre>
 </div>
@@ -34,7 +34,7 @@ DRESULT disk_read (
 <dt>sector</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>count</dt>
-<dd>Specifies number of sectors to read. The value can be 1 to 128. Generally, a multiple sector transfer request must not be split into single sector transactions to the device, or you may not get good read performance.</dd>
+<dd>Specifies number of sectors to read. FatFs specifis with 1 to 128. Generally, a multiple sector transfer request must not be split into single sector transactions to the device, or you may not get good read performance.</dd>
 </dl>
 </div>
 

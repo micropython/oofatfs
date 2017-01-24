@@ -86,33 +86,64 @@ FRESULT f_open (
 
 
 <div class="para use">
-<h4>使用例（ファイル・コピー）</h4>
+<h4>使用例</h4>
 <pre>
-void main (void)
+<span class="c">/* テキストファイルを読み出して表示 */</span>
+
+FATFS FatFs;   <span class="c">/* 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト) */</span>
+
+int main (void)
 {
-    FATFS fs[2];         <span class="c">/* 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト) */</span>
+    FIL fil;       <span class="c">/* ファイル・オブジェクト */</span>
+    char line[82]; <span class="c">/* 行バッファ */</span>
+    FRESULT fr;    <span class="c">/* 戻り値 */</span>
+
+
+    <span class="c">/* デフォルト・ドライブにワークエリアを与える */</span>
+    f_mount(&amp;FatFs, "", 0);
+
+    <span class="c">/* テキスト・ファイルを開く */</span>
+    fr = f_open(&fil, "message.txt", FA_READ);
+    if (fr) return (int)fr;
+
+    <span class="c">/* 1行ずつ読み出して表示 */</span>
+    while (f_gets(line, sizeof line, &fil))
+        printf(line);
+
+    <span class="c">/* ファイルを閉じる */</span>
+    f_close(&fil);
+
+    return 0;
+}
+</pre>
+<pre>
+<span class="c">/* ドライブ1のファイル "file.bin" をドライブ0へコピー */</span>
+
+int main (void)
+{
+    FATFS fs[2];         <span class="c">/* 論理ドライブのワークエリア(ファイル・システム・オブジェクト) */</span>
     FIL fsrc, fdst;      <span class="c">/* ファイル・オブジェクト */</span>
-    BYTE buffer[4096];   <span class="c">/* file copy buffer */</span>
-    FRESULT res;         <span class="c">/* FatFs function common result code */</span>
+    BYTE buffer[4096];   <span class="c">/* File copy buffer */</span>
+    FRESULT fr;          <span class="c">/* FatFs function common result code */</span>
     UINT br, bw;         <span class="c">/* File R/W count */</span>
 
-    <span class="c">/* ドライブ0,1にワーク・エリアを与える (常に成功する) */</span>
-    f_mount(0, &amp;fs[0]);
-    f_mount(1, &amp;fs[1]);
+    <span class="c">/* ドライブ0,1にワーク・エリアを与える */</span>
+    f_mount(&amp;fs[0], "0:", 0);
+    f_mount(&amp;fs[1], "1:", 0);
 
-    <span class="c">/* ドライブ1のソース・ファイルを開く */</span>
-    res = f_open(&amp;fsrc, "1:srcfile.dat", FA_OPEN_EXISTING | FA_READ);
-    if (res) die(res);
+    <span class="c">/* ドライブ1のコピー元ファイルを開く */</span>
+    res = f_open(&amp;fsrc, "1:file.dat", FA_OPEN_EXISTING | FA_READ);
+    if (fr) return (int)fr;
 
-    <span class="c">/* ドライブ0にデスティネーション・ファイルを作成する */</span>
-    res = f_open(&amp;fdst, "0:dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
-    if (res) die(res);
+    <span class="c">/* ドライブ0にコピー先ファイルを作成する */</span>
+    res = f_open(&amp;fdst, "0:file.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    if (fr) return (int)fr;
 
-    <span class="c">/* ソースからデスティネーションにコピーする */</span>
+    <span class="c">/* コピー元からコピー先にデータ転送する */</span>
     for (;;) {
-        res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br);
+        res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br); <span class="c">/* コピー元からから読み出す */</span>
         if (res || br == 0) break;   <span class="c">/* エラーかファイル終端 */</span>
-        res = f_write(&amp;fdst, buffer, br, &amp;bw);
+        res = f_write(&amp;fdst, buffer, br, &amp;bw);           <span class="c">/* それをコピー先に書き込む */</span>
         if (res || bw &lt; br) break;   <span class="c">/* エラーかディスク満杯 */</span>
     }
 
@@ -121,8 +152,10 @@ void main (void)
     f_close(&amp;fdst);
 
     <span class="c">/* ワーク・エリアを開放する */</span>
-    f_mount(0, NULL);
-    f_mount(1, NULL);
+    f_mount(NULL, "0:", 0);
+    f_mount(NULL, "1:", 0);
+
+    return (int)fr;
 }
 </pre>
 </div>
