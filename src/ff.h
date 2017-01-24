@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.08b    (C)ChaN, 2011
+/  FatFs - FAT file system module include file  R0.09     (C)ChaN, 2011
 /----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial
@@ -15,7 +15,7 @@
 /----------------------------------------------------------------------------*/
 
 #ifndef _FATFS
-#define _FATFS  8237    /* Revision ID */
+#define _FATFS  6502    /* Revision ID */
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,17 +33,17 @@ extern "C" {
 /* Definitions of volume management */
 
 #if _MULTI_PARTITION        /* Multiple partition configuration */
-#define LD2PD(vol) (VolToPart[vol].pd)  /* Get physical drive# */
-#define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition# */
 typedef struct {
-    BYTE pd;    /* Physical drive# */
-    BYTE pt;    /* Partition # (0-3) */
+    BYTE pd;    /* Physical drive number */
+    BYTE pt;    /* Partition: 0:Auto detect, 1-4:Forced partition) */
 } PARTITION;
-extern const PARTITION VolToPart[]; /* Volume - Physical location resolution table */
+extern PARTITION VolToPart[];   /* Volume - Partition resolution table */
+#define LD2PD(vol) (VolToPart[vol].pd)  /* Get physical drive number */
+#define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition index */
 
 #else                       /* Single partition configuration */
-#define LD2PD(vol) (vol)    /* Logical drive# is bound to the same physical drive# */
-#define LD2PT(vol) 0        /* Always mounts the 1st partition */
+#define LD2PD(vol) (vol)    /* Each logical drive is bound to the same physical drive number */
+#define LD2PT(vol) 0        /* Always mounts the 1st partition or in SFD */
 
 #endif
 
@@ -84,7 +84,7 @@ typedef struct {
     WORD    id;             /* File system mount ID */
     WORD    n_rootdir;      /* Number of root directory entries (FAT12/16) */
 #if _MAX_SS != 512
-    WORD    ssize;          /* Bytes per sector (512,1024,2048,4096) */
+    WORD    ssize;          /* Bytes per sector (512, 1024, 2048 or 4096) */
 #endif
 #if _FS_REENTRANT
     _SYNC_t sobj;           /* Identifier of sync object */
@@ -188,12 +188,13 @@ typedef enum {
     FR_WRITE_PROTECTED,     /* (10) The physical drive is write protected */
     FR_INVALID_DRIVE,       /* (11) The logical drive number is invalid */
     FR_NOT_ENABLED,         /* (12) The volume has no work area */
-    FR_NO_FILESYSTEM,       /* (13) There is no valid FAT volume on the physical drive */
+    FR_NO_FILESYSTEM,       /* (13) There is no valid FAT volume */
     FR_MKFS_ABORTED,        /* (14) The f_mkfs() aborted due to any parameter error */
     FR_TIMEOUT,             /* (15) Could not get a grant to access the volume within defined period */
     FR_LOCKED,              /* (16) The operation is rejected according to the file shareing policy */
     FR_NOT_ENOUGH_CORE,     /* (17) LFN working buffer could not be allocated */
-    FR_TOO_MANY_OPEN_FILES  /* (18) Number of open files > _FS_SHARE */
+    FR_TOO_MANY_OPEN_FILES, /* (18) Number of open files > _FS_SHARE */
+    FR_INVALID_PARAMETER    /* (19) Given parameter is invalid */
 } FRESULT;
 
 
@@ -218,24 +219,25 @@ FRESULT f_mkdir (const TCHAR*);                     /* Create a new directory */
 FRESULT f_chmod (const TCHAR*, BYTE, BYTE);         /* Change attriburte of the file/dir */
 FRESULT f_utime (const TCHAR*, const FILINFO*);     /* Change timestamp of the file/dir */
 FRESULT f_rename (const TCHAR*, const TCHAR*);      /* Rename/Move a file or directory */
-FRESULT f_forward (FIL*, UINT(*)(const BYTE*,UINT), UINT, UINT*);   /* Forward data to the stream */
-FRESULT f_mkfs (BYTE, BYTE, UINT);                  /* Create a file system on the drive */
 FRESULT f_chdrive (BYTE);                           /* Change current drive */
 FRESULT f_chdir (const TCHAR*);                     /* Change current directory */
 FRESULT f_getcwd (TCHAR*, UINT);                    /* Get current directory */
+FRESULT f_forward (FIL*, UINT(*)(const BYTE*,UINT), UINT, UINT*);   /* Forward data to the stream */
+FRESULT f_mkfs (BYTE, BYTE, UINT);                  /* Create a file system on the drive */
+FRESULT f_fdisk (BYTE, const DWORD[], void*);       /* Divide a physical drive into some partitions */
 int f_putc (TCHAR, FIL*);                           /* Put a character to the file */
 int f_puts (const TCHAR*, FIL*);                    /* Put a string to the file */
 int f_printf (FIL*, const TCHAR*, ...);             /* Put a formatted string to the file */
 TCHAR* f_gets (TCHAR*, int, FIL*);                  /* Get a string from the file */
 
-#ifndef EOF
-#define EOF (-1)
-#endif
-
 #define f_eof(fp) (((fp)->fptr == (fp)->fsize) ? 1 : 0)
 #define f_error(fp) (((fp)->flag & FA__ERROR) ? 1 : 0)
 #define f_tell(fp) ((fp)->fptr)
 #define f_size(fp) ((fp)->fsize)
+
+#ifndef EOF
+#define EOF (-1)
+#endif
 
 
 
@@ -308,7 +310,7 @@ int ff_del_syncobj (_SYNC_t);       /* Delete a sync object */
 #define AM_MASK 0x3F    /* Mask of defined bits */
 
 
-/* Fast seek function */
+/* Fast seek feature */
 #define CREATE_LINKMAP  0xFFFFFFFF
 
 

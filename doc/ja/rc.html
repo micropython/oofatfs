@@ -23,6 +23,7 @@
 <ul>
 <li>ボリューム上のFAT構造にエラーがある。</li>
 <li>スタック不足や他のタスク等によるワーク・エリア(ファイル・システム・オブジェクトやファイル・オブジェクト)の破壊。多くはこれが原因。</li>
+<li>そのファイルオブジェクトでは過去に<tt>FR_DISK_ERR</tt>が発生している。</li>
 </ul>
 </dd>
 <dt id="nr">FR_NOT_READY</dt>
@@ -77,6 +78,8 @@
 </dd>
 <dt id="tf">FR_TOO_MANY_OPEN_FILES</dt>
 <dd>同時オープン可能なファイル数を越えてファイルを開こうとした。(関連オプション: _FS_SHARE)</dd>
+<dt id="ip">FR_INVALID_PARAMETER</dt>
+<dd>与えられたパラメータが無効または矛盾している。</dd>
 </dl>
 
 </body>

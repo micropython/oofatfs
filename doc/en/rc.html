@@ -23,6 +23,7 @@
 <ul>
 <li>There is any error of the FAT structure on the volume.</li>
 <li>Work area (file system object, file object or etc...) is broken by stack overflow or any other application. This is the reason in most case.</li>
+<li>An <tt>FR_DISK_ERR</tt> has occured on the file object.</li>
 </ul>
 </dd>
 <dt id="nr">FR_NOT_READY</dt>
@@ -77,6 +78,8 @@
 </dd>
 <dt id="tf">FR_TOO_MANY_OPEN_FILES</dt>
 <dd>Number of open files has been reached maximum value and no more file can be opened. (Related option: _FS_SHARE)</dd>
+<dt id="ip">FR_INVALID_PARAMETER</dt>
+<dd>The given parameter is invalid or there is any inconsistent.</dd>
 </dl>
 
 </body>

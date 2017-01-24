@@ -3,7 +3,7 @@ body {margin: 8px; background-color: #e0ffff; font-color: black; font-family: se
 a:link {color: blue;}
 a:visited {color: darkmagenta;}
 a:hover {background-color: #a0ffff;}
-a:active {color: darkmagenta; position: relative; top: 1px; left: 1px;}
+a:active {color: darkmagenta; overflow: hidden; outline:none; position: relative; top: 1px; left: 1px;}
 abbr {border-width: 1px;}
 
 p {margin: 0 0 0.3em 1em;}

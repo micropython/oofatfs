@@ -13,7 +13,7 @@
 
 <div class="para func">
 <h2>f_mkfs</h2>
-<p>The f_mkfs fucntion creates a file system on the drive.</p>
+<p>The f_mkfs fucntion creates an FAT file system on the logical drive.</p>
 <pre>
 FRESULT f_mkfs (
   BYTE  <em>Drive</em>,            <span class="c">/* Logical drive number */</span>
@@ -29,9 +29,9 @@ FRESULT f_mkfs (
 <dt>Drive</dt>
 <dd>Logical drive number (0-9) to be formatted.</dd>
 <dt>PartitioningRule</dt>
-<dd>When 0 is given, a partition table is created into the master boot record and a primary DOS partition is created and then an FAT volume is created on the partition. This is called FDISK format and used for harddisk and memory cards. When 1 is given, the FAT volume starts from the first sector on the drive without partition table. This is called <abbr title="Super Floppy Disk">SFD</abbr> format and used for floppy disk and most optical disk.</dd>
+<dd>Specifies partitioning rule, FDISK(0) or SFD(1). This argument is ignored on some case.</dd>
 <dt>AllocSize</dt>
-<dd>Force the allocation unit (cluter) size in unit of byte. The value must be power of 2 and between the sector size and 128 times sector size. When invalid value is specified, the cluster size is determined depends on the volume size.</dd>
+<dd>Force the allocation unit (cluter) size in unit of byte. The value must be power of 2 and between the sector size and 128 * sector size. When a zero is given, the cluster size is determined depends on the volume size.</dd>
 </dl>
 </div>
 
@@ -44,23 +44,29 @@ FRESULT f_mkfs (
 <a href="rc.html#wp">FR_WRITE_PROTECTED</a>,
 <a href="rc.html#id">FR_INVALID_DRIVE</a>,
 <a href="rc.html#ne">FR_NOT_ENABLED</a>,
-<a href="rc.html#ma">FR_MKFS_ABORTED</a>
+<a href="rc.html#ma">FR_MKFS_ABORTED</a>,
+<a href="rc.html#ip">FR_INVALID_PARAMETER</a>
 </p>
 </div>
 
 <div class="para desc">
 <h4>Description</h4>
-<p>The f_mkfs function creates an FAT volume on the drive. There are two partitioning rules, FDISK and SFD, for removable media. The FDISK format is recommended for the most case. This function currently <em>does not support multiple partition</em>, so that existing partitions on the physical dirve will be deleted and re-created a new partition occupies entire disk space.</p>
+<p>The f_mkfs function creates an FAT volume on the logical drive. When FDISK is specified, a primary partition occupies the entire disk space is created and then an FAT volume is created on the partition. When SFD is specified, the FAT volume starts from the first sector of the physical drive.</p>
+<p>If the logical drive is being bound to any partition (1-4) by multiple partition feature <tt>(_MULTI_PARTITION)</tt>, the FAT volume is created into the specified partition. In this case, the second argument is ignored. The physical drive must be partitioned with f_fdisk function or any other partitioning tool prior to use this function.</p>
+<p>Note that there are two partitioning rules, FDISK and SFD. The FDISK format is usually used for harddisk, MMC, SDC and CFC. It can divide a physical drive into one or more partitions with a partition table on the MBR. The SFD format is non-partitioned method. The FAT volume starts from the first sector on the physical drive without partition table. It is used for floppy disk, Microdrive, optical disk and super-floppy media.</p>
 <p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the volume and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the volume size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
 <p>When the number of clusters gets near the FAT sub-type boundaries, the function can fail with FR_MKFS_ABORTED.</p>
 </div>
-
 
 <div class="para comp">
 <h4>QuickInfo</h4>
 <p>Available when <tt>_FS_READOLNY == 0</tt> and <tt>_USE_MKFS == 1</tt>.</p>
 </div>
 
+<div class="para ref">
+<h4>See Also</h4>
+<p><tt><a href="filename.html#vol">Volume management</a>, <a href="fdisk.html">f_fdisk</a></tt></p>
+</div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>
 </body>

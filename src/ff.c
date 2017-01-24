@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.08b                 (C)ChaN, 2011
+/  FatFs - FAT file system module  R0.09                  (C)ChaN, 2011
 /-----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial
@@ -87,6 +87,9 @@
 /                   f_lseek() reports required table size on creating CLMP.
 /                   Extended format syntax of f_printf function.
 /                   Ignores duplicated directory separators in given path names.
+/
+/ Sep 06,'11 R0.09  f_mkfs() supports multiple partition to finish the multiple partition feature.
+/                   Added f_fdisk(). (_MULTI_PARTITION = 2)
 /---------------------------------------------------------------------------*/
 
 #include "ff.h"         /* FatFs configurations and declarations */
@@ -99,7 +102,7 @@
 
 ---------------------------------------------------------------------------*/
 
-#if _FATFS != 8237
+#if _FATFS != 6502  /* Revision ID */
 #error Wrong include file (ff.h).
 #endif
 
@@ -109,7 +112,7 @@
 #error Wrong sector size.
 #endif
 #if _MAX_SS != 512
-#define SS(fs)  ((fs)->ssize)   /* Multiple sector size */
+#define SS(fs)  ((fs)->ssize)   /* Variable sector size */
 #else
 #define SS(fs)  512U            /* Fixed sector size */
 #endif
@@ -453,13 +456,18 @@ typedef struct {
 
 
 /*------------------------------------------------------------*/
-/* Work area                                                  */
+/* Module private work area                                   */
+/*------------------------------------------------------------*/
+/* Note that uninitialized variables with static duration are
+/  zeroed/nulled at start-up. If not, the compiler or start-up
+/  routine is out of ANSI-C standard.
+*/
 
 #if _VOLUMES
 static
 FATFS *FatFs[_VOLUMES]; /* Pointer to the file system objects (logical drives) */
 #else
-#error Number of drives must not be 0.
+#error Number of volumes must not be 0.
 #endif
 
 static
@@ -475,23 +483,23 @@ static
 FILESEM Files[_FS_SHARE];   /* File lock semaphores */
 #endif
 
-#if _USE_LFN == 0           /* No LFN */
+#if _USE_LFN == 0           /* No LFN feature */
 #define DEF_NAMEBUF         BYTE sfn[12]
 #define INIT_BUF(dobj)      (dobj).fn = sfn
 #define FREE_BUF()
 
-#elif _USE_LFN == 1         /* LFN with static LFN working buffer */
+#elif _USE_LFN == 1         /* LFN feature with static working buffer */
 static WCHAR LfnBuf[_MAX_LFN+1];
 #define DEF_NAMEBUF         BYTE sfn[12]
 #define INIT_BUF(dobj)      { (dobj).fn = sfn; (dobj).lfn = LfnBuf; }
 #define FREE_BUF()
 
-#elif _USE_LFN == 2         /* LFN with dynamic LFN working buffer on the stack */
+#elif _USE_LFN == 2         /* LFN feature with dynamic working buffer on the stack */
 #define DEF_NAMEBUF         BYTE sfn[12]; WCHAR lbuf[_MAX_LFN+1]
 #define INIT_BUF(dobj)      { (dobj).fn = sfn; (dobj).lfn = lbuf; }
 #define FREE_BUF()
 
-#elif _USE_LFN == 3         /* LFN with dynamic LFN working buffer on the heap */
+#elif _USE_LFN == 3         /* LFN feature with dynamic working buffer on the heap */
 #define DEF_NAMEBUF         BYTE sfn[12]; WCHAR *lfn
 #define INIT_BUF(dobj)      { lfn = ff_memalloc((_MAX_LFN + 1) * 2); \
                               if (!lfn) LEAVE_FF((dobj).fs, FR_NOT_ENOUGH_CORE); \
@@ -624,9 +632,7 @@ FRESULT chk_lock (  /* Check if the file can be accessed */
 
 
 static
-int enq_lock (  /* Check if an entry is available for a new file */
-    FATFS* fs   /* File system object */
-)
+int enq_lock (void) /* Check if an entry is available for a new file */
 {
     UINT i;
 
@@ -776,7 +782,7 @@ FRESULT sync (  /* FR_OK: successful, FR_DISK_ERR: failed */
             fs->fsi_flag = 0;
         }
         /* Make sure that no pending write process in the physical drive */
-        if (disk_ioctl(fs->drv, CTRL_SYNC, (void*)0) != RES_OK)
+        if (disk_ioctl(fs->drv, CTRL_SYNC, 0) != RES_OK)
             res = FR_DISK_ERR;
     }
 
@@ -1113,6 +1119,7 @@ FRESULT dir_next (  /* FR_OK:Succeeded, FR_NO_FILE:End of table, FR_DENIED:EOT a
     WORD i;
 
 
+    stretch = stretch;      /* To suppress warning on read-only cfg. */
     i = dj->index + 1;
     if (!i || !dj->sect)    /* Report EOT when index has reached 65535 */
         return FR_NO_FILE;
@@ -1968,11 +1975,11 @@ FRESULT follow_path (   /* FR_OK(0): successful, !=0: error code */
 
 
 /*-----------------------------------------------------------------------*/
-/* Load boot record and check if it is an FAT boot record                */
+/* Load a sector and check if it is an FAT Volume Boot Record            */
 /*-----------------------------------------------------------------------*/
 
 static
-BYTE check_fs ( /* 0:The FAT BR, 1:Valid BR but not an FAT, 2:Not a BR, 3:Disk error */
+BYTE check_fs ( /* 0:FAT-VBR, 1:Valid BR but not FAT, 2:Not a BR, 3:Disk error */
     FATFS *fs,  /* File system object */
     DWORD sect  /* Sector# (lba) to check if it is an FAT boot record or not */
 )
@@ -2004,7 +2011,7 @@ FRESULT chk_mounted (   /* FR_OK(0): successful, !=0: any error occurred */
     BYTE chk_wp         /* !=0: Check media write protection for write access */
 )
 {
-    BYTE fmt, b, *tbl;
+    BYTE fmt, b, pi, *tbl;
     UINT vol;
     DSTATUS stat;
     DWORD bsect, fasize, tsect, sysect, nclst, szbfat;
@@ -2024,7 +2031,7 @@ FRESULT chk_mounted (   /* FR_OK(0): successful, !=0: any error occurred */
 #endif
     }
 
-    /* Check if the logical drive is valid or not */
+    /* Check if the file system object is valid or not */
     if (vol >= _VOLUMES)                /* Is the drive number valid? */
         return FR_INVALID_DRIVE;
     *rfs = fs = FatFs[vol];             /* Return pointer to the corresponding file system object */
@@ -2035,44 +2042,43 @@ FRESULT chk_mounted (   /* FR_OK(0): successful, !=0: any error occurred */
     if (fs->fs_type) {                  /* If the logical drive has been mounted */
         stat = disk_status(fs->drv);
         if (!(stat & STA_NOINIT)) {     /* and the physical drive is kept initialized (has not been changed), */
-#if !_FS_READONLY
-            if (chk_wp && (stat & STA_PROTECT)) /* Check write protection if needed */
+            if (!_FS_READONLY && chk_wp && (stat & STA_PROTECT))    /* Check write protection if needed */
                 return FR_WRITE_PROTECTED;
-#endif
             return FR_OK;               /* The file system object is valid */
         }
     }
 
-    /* The logical drive must be mounted. */
-    /* Following code attempts to mount a volume. (analyze BPB and initialize the fs object) */
+    /* The file system object is not valid. */
+    /* Following code attempts to mount the volume. (analyze BPB and initialize the fs object) */
 
     fs->fs_type = 0;                    /* Clear the file system object */
-    fs->drv = (BYTE)LD2PD(vol);         /* Bind the logical drive and a physical drive */
+    fs->drv = LD2PD(vol);               /* Bind the logical drive and a physical drive */
     stat = disk_initialize(fs->drv);    /* Initialize low level disk I/O layer */
     if (stat & STA_NOINIT)              /* Check if the initialization succeeded */
         return FR_NOT_READY;            /* Failed to initialize due to no media or hard error */
+    if (!_FS_READONLY && chk_wp && (stat & STA_PROTECT))    /* Check disk write protection if needed */
+        return FR_WRITE_PROTECTED;
 #if _MAX_SS != 512                      /* Get disk sector size (variable sector size cfg only) */
     if (disk_ioctl(fs->drv, GET_SECTOR_SIZE, &fs->ssize) != RES_OK)
         return FR_DISK_ERR;
 #endif
-#if !_FS_READONLY
-    if (chk_wp && (stat & STA_PROTECT)) /* Check disk write protection if needed */
-        return FR_WRITE_PROTECTED;
-#endif
     /* Search FAT partition on the drive. Supports only generic partitionings, FDISK and SFD. */
-    fmt = check_fs(fs, bsect = 0);      /* Check sector 0 if it is a VBR */
-    if (fmt == 1) {                     /* Not an FAT-VBR, the disk may be partitioned */
-        /* Check the partition listed in top of the partition table */
-        tbl = &fs->win[MBR_Table + LD2PT(vol) * SZ_PTE];/* Partition table */
-        if (tbl[4]) {                                   /* Is the partition existing? */
-            bsect = LD_DWORD(&tbl[8]);                  /* Partition offset in LBA */
-            fmt = check_fs(fs, bsect);                  /* Check the partition */
+    fmt = check_fs(fs, bsect = 0);      /* Load sector 0 and check if it is an FAT-VBR (in SFD) */
+    if (LD2PT(vol) && !fmt) fmt = 1;    /* Force non-SFD if the volume is forced partition */
+    if (fmt == 1) {                     /* Not an FAT-VBR, the physical drive can be partitioned */
+        /* Check the partition listed in the partition table */
+        pi = LD2PT(vol);
+        if (pi) pi--;
+        tbl = &fs->win[MBR_Table + pi * SZ_PTE];/* Partition table */
+        if (tbl[4]) {                       /* Is the partition existing? */
+            bsect = LD_DWORD(&tbl[8]);      /* Partition offset in LBA */
+            fmt = check_fs(fs, bsect);      /* Check the partition */
         }
     }
     if (fmt == 3) return FR_DISK_ERR;
-    if (fmt) return FR_NO_FILESYSTEM;                   /* No FAT volume is found */
+    if (fmt) return FR_NO_FILESYSTEM;       /* No FAT volume is found */
 
-    /* Following code initializes the file system object */
+    /* An FAT volume is found. Following code initializes the file system object */
 
     if (LD_WORD(fs->win+BPB_BytsPerSec) != SS(fs))      /* (BPB_BytsPerSec must be equal to the physical sector size) */
         return FR_NO_FILESYSTEM;
@@ -2202,27 +2208,27 @@ FRESULT f_mount (
     FATFS *rfs;
 
 
-    if (vol >= _VOLUMES)            /* Check if the drive number is valid */
+    if (vol >= _VOLUMES)        /* Check if the drive number is valid */
         return FR_INVALID_DRIVE;
-    rfs = FatFs[vol];               /* Get current fs object */
+    rfs = FatFs[vol];           /* Get current fs object */
 
     if (rfs) {
 #if _FS_SHARE
         clear_lock(rfs);
 #endif
-#if _FS_REENTRANT                   /* Discard sync object of the current volume */
+#if _FS_REENTRANT               /* Discard sync object of the current volume */
         if (!ff_del_syncobj(rfs->sobj)) return FR_INT_ERR;
 #endif
-        rfs->fs_type = 0;           /* Clear old fs object */
+        rfs->fs_type = 0;       /* Clear old fs object */
     }
 
     if (fs) {
-        fs->fs_type = 0;            /* Clear new fs object */
-#if _FS_REENTRANT                   /* Create sync object for the new volume */
+        fs->fs_type = 0;        /* Clear new fs object */
+#if _FS_REENTRANT               /* Create sync object for the new volume */
         if (!ff_cre_syncobj(vol, &fs->sobj)) return FR_INT_ERR;
 #endif
     }
-    FatFs[vol] = fs;                /* Register new fs object */
+    FatFs[vol] = fs;            /* Register new fs object */
 
     return FR_OK;
 }
@@ -2276,7 +2282,7 @@ FRESULT f_open (
         if (res != FR_OK) {                 /* No file, create new */
             if (res == FR_NO_FILE)          /* There is no file to open, create a new entry */
 #if _FS_SHARE
-                res = enq_lock(dj.fs) ? dir_register(&dj) : FR_TOO_MANY_OPEN_FILES;
+                res = enq_lock() ? dir_register(&dj) : FR_TOO_MANY_OPEN_FILES;
 #else
                 res = dir_register(&dj);
 #endif
@@ -3555,10 +3561,10 @@ FRESULT f_mkfs (
 {
     static const WORD vst[] = { 1024,   512,  256,  128,   64,    32,   16,    8,    4,    2,   0};
     static const WORD cst[] = {32768, 16384, 8192, 4096, 2048, 16384, 8192, 4096, 2048, 1024, 512};
-    BYTE fmt, md, *tbl;
+    BYTE fmt, md, sys, *tbl, pdrv, part;
     DWORD n_clst, vs, n, wsect;
     UINT i;
-    DWORD b_vol, b_fat, b_dir, b_data;  /* Offset (LBA) */
+    DWORD b_vol, b_fat, b_dir, b_data;  /* LBA */
     DWORD n_vol, n_rsv, n_fat, n_dir;   /* Size */
     FATFS *fs;
     DSTATUS stat;
@@ -3566,25 +3572,39 @@ FRESULT f_mkfs (
 
     /* Check mounted drive and clear work area */
     if (drv >= _VOLUMES) return FR_INVALID_DRIVE;
+    if (sfd > 1) return FR_INVALID_PARAMETER;
+    if (au & (au - 1)) return FR_INVALID_PARAMETER;
     fs = FatFs[drv];
     if (!fs) return FR_NOT_ENABLED;
     fs->fs_type = 0;
-    drv = LD2PD(drv);
+    pdrv = LD2PD(drv);  /* Physical drive */
+    part = LD2PT(drv);  /* Partition (0:auto detect, 1-4:get from partition table)*/
 
     /* Get disk statics */
-    stat = disk_initialize(drv);
+    stat = disk_initialize(pdrv);
     if (stat & STA_NOINIT) return FR_NOT_READY;
     if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
 #if _MAX_SS != 512                  /* Get disk sector size */
-    if (disk_ioctl(drv, GET_SECTOR_SIZE, &SS(fs)) != RES_OK)
+    if (disk_ioctl(pdrv, GET_SECTOR_SIZE, &SS(fs)) != RES_OK || SS(fs) > _MAX_SS)
         return FR_DISK_ERR;
 #endif
-    if (disk_ioctl(drv, GET_SECTOR_COUNT, &n_vol) != RES_OK || n_vol < 128)
-        return FR_DISK_ERR;
-    b_vol = (sfd) ? 0 : 63; /* Volume start sector */
-    n_vol -= b_vol;
-    if (au & (au - 1)) au = 0;  /* Check validity of the AU size */
-    if (!au) {                  /* AU auto selection */
+    if (_MULTI_PARTITION && part) {
+        /* Get partition information from partition table in the MBR */
+        if (disk_read(pdrv, fs->win, 0, 1) != RES_OK) return FR_DISK_ERR;
+        if (LD_WORD(fs->win+BS_55AA) != 0xAA55) return FR_MKFS_ABORTED;
+        tbl = &fs->win[MBR_Table + (part - 1) * SZ_PTE];
+        if (!tbl[4]) return FR_MKFS_ABORTED;    /* No partition? */
+        b_vol = LD_DWORD(tbl+8);    /* Volume start sector */
+        n_vol = LD_DWORD(tbl+12);   /* Volume size */
+    } else {
+        /* Create a partition in this function */
+        if (disk_ioctl(pdrv, GET_SECTOR_COUNT, &n_vol) != RES_OK || n_vol < 128)
+            return FR_DISK_ERR;
+        b_vol = (sfd) ? 0 : 63;     /* Volume start sector */
+        n_vol -= b_vol;             /* Volume size */
+    }
+
+    if (!au) {              /* AU auto selection */
         vs = n_vol / (2000 / (SS(fs) / 512));
         for (i = 0; vs < vst[i]; i++) ;
         au = cst[i];
@@ -3613,10 +3633,10 @@ FRESULT f_mkfs (
     b_fat = b_vol + n_rsv;              /* FAT area start sector */
     b_dir = b_fat + n_fat * N_FATS;     /* Directory area start sector */
     b_data = b_dir + n_dir;             /* Data area start sector */
-    if (n_vol < b_data + au) return FR_MKFS_ABORTED;    /* Too small volume */
+    if (n_vol < b_data + au - b_vol) return FR_MKFS_ABORTED;    /* Too small volume */
 
     /* Align data start sector to erase block boundary (for flash memory media) */
-    if (disk_ioctl(drv, GET_BLOCK_SIZE, &n) != RES_OK || !n || n > 32768) n = 1;
+    if (disk_ioctl(pdrv, GET_BLOCK_SIZE, &n) != RES_OK || !n || n > 32768) n = 1;
     n = (b_data + n - 1) & ~(n - 1);    /* Next nearest erase block from current data start */
     n = (n - b_data) / N_FATS;
     if (fmt == FS_FAT32) {      /* FAT32: Move FAT offset */
@@ -3632,36 +3652,42 @@ FRESULT f_mkfs (
         || (fmt == FS_FAT32 && n_clst < MIN_FAT32))
         return FR_MKFS_ABORTED;
 
-    /* Create partition table if required */
-    if (sfd) {  /* No patition table (SFD) */
-        md = 0xF0;
-    } else {    /* With patition table (FDISK) */
-        DWORD n_disk = b_vol + n_vol;
-
-        mem_set(fs->win, 0, SS(fs));
-        tbl = fs->win+MBR_Table;
-        ST_DWORD(tbl, 0x00010180);          /* Partition start in CHS */
-        if (n_disk < 63UL * 255 * 1024) {   /* Partition end in CHS */
-            n_disk = n_disk / 63 / 255;
-            tbl[7] = (BYTE)n_disk;
-            tbl[6] = (BYTE)((n_disk >> 2) | 63);
-        } else {
-            ST_WORD(&tbl[6], 0xFFFF);   /* CHS saturated */
-        }
-        tbl[5] = 254;
-        if (fmt != FS_FAT32)                /* System ID */
-            tbl[4] = (n_vol < 0x10000) ? 0x04 : 0x06;
-        else
-            tbl[4] = 0x0c;
-        ST_DWORD(tbl+8, 63);                /* Partition start in LBA */
-        ST_DWORD(tbl+12, n_vol);            /* Partition size in LBA */
-        ST_WORD(fs->win+BS_55AA, 0xAA55);   /* MBR signature */
-        if (disk_write(drv, fs->win, 0, 1) != RES_OK)   /* Put the MBR into first physical sector */
-            return FR_DISK_ERR;
-        md = 0xF8;
+    switch (fmt) {  /* Determine system ID for partition table */
+    case FS_FAT12:  sys = 0x01; break;
+    case FS_FAT16:  sys = (n_vol < 0x10000) ? 0x04 : 0x06; break;
+    default:        sys = 0x0C;
     }
 
-    /* Create volume boot record */
+    if (_MULTI_PARTITION && part) {
+        /* Update system ID in the partition table */
+        tbl = &fs->win[MBR_Table + (part - 1) * SZ_PTE];
+        tbl[4] = sys;
+        if (disk_write(pdrv, fs->win, 0, 1) != RES_OK) return FR_DISK_ERR;
+        md = 0xF8;
+    } else {
+        if (sfd) {  /* No patition table (SFD) */
+            md = 0xF0;
+        } else {    /* Create partition table (FDISK) */
+            mem_set(fs->win, 0, SS(fs));
+            tbl = fs->win+MBR_Table;    /* Create partiton table for single partition in the drive */
+            tbl[1] = 1;                     /* Partition start head */
+            tbl[2] = 1;                     /* Partition start sector */
+            tbl[3] = 0;                     /* Partition start cylinder */
+            tbl[4] = sys;                   /* System type */
+            tbl[5] = 254;                   /* Partition end head */
+            n = (b_vol + n_vol) / 63 / 255;
+            tbl[6] = (BYTE)((n >> 2) | 63); /* Partiiton end sector */
+            tbl[7] = (BYTE)n;               /* End cylinder */
+            ST_DWORD(tbl+8, 63);            /* Partition start in LBA */
+            ST_DWORD(tbl+12, n_vol);        /* Partition size in LBA */
+            ST_WORD(fs->win+BS_55AA, 0xAA55);   /* MBR signature */
+            if (disk_write(pdrv, fs->win, 0, 1) != RES_OK)  /* Write it to the MBR sector */
+                return FR_DISK_ERR;
+            md = 0xF8;
+        }
+    }
+
+    /* Create BPB in the VBR */
     tbl = fs->win;                          /* Clear sector */
     mem_set(tbl, 0, SS(fs));
     mem_cpy(tbl, "\xEB\xFE\x90" "MSDOS5.0", 11);/* Boot jump code, OEM name */
@@ -3699,10 +3725,10 @@ FRESULT f_mkfs (
         mem_cpy(tbl+BS_VolLab, "NO NAME    " "FAT     ", 19);   /* Volume label, FAT signature */
     }
     ST_WORD(tbl+BS_55AA, 0xAA55);           /* Signature (Offset is fixed here regardless of sector size) */
-    if (disk_write(drv, tbl, b_vol, 1) != RES_OK)   /* Write VBR */
+    if (disk_write(pdrv, tbl, b_vol, 1) != RES_OK)  /* Write it to the VBR sector */
         return FR_DISK_ERR;
     if (fmt == FS_FAT32)                            /* Write backup VBR if needed (VBR+6) */
-        disk_write(drv, tbl, b_vol + 6, 1);
+        disk_write(pdrv, tbl, b_vol + 6, 1);
 
     /* Initialize FAT area */
     wsect = b_fat;
@@ -3718,11 +3744,11 @@ FRESULT f_mkfs (
             ST_DWORD(tbl+4, 0xFFFFFFFF);
             ST_DWORD(tbl+8, 0x0FFFFFFF);    /* Reserve cluster #2 for root dir */
         }
-        if (disk_write(drv, tbl, wsect++, 1) != RES_OK)
+        if (disk_write(pdrv, tbl, wsect++, 1) != RES_OK)
             return FR_DISK_ERR;
         mem_set(tbl, 0, SS(fs));            /* Fill following FAT entries with zero */
         for (n = 1; n < n_fat; n++) {       /* This loop may take a time on FAT32 volume due to many single sector writes */
-            if (disk_write(drv, tbl, wsect++, 1) != RES_OK)
+            if (disk_write(pdrv, tbl, wsect++, 1) != RES_OK)
                 return FR_DISK_ERR;
         }
     }
@@ -3730,7 +3756,7 @@ FRESULT f_mkfs (
     /* Initialize root directory */
     i = (fmt == FS_FAT32) ? au : n_dir;
     do {
-        if (disk_write(drv, tbl, wsect++, 1) != RES_OK)
+        if (disk_write(pdrv, tbl, wsect++, 1) != RES_OK)
             return FR_DISK_ERR;
     } while (--i);
 
@@ -3739,7 +3765,7 @@ FRESULT f_mkfs (
         DWORD eb[2];
 
         eb[0] = wsect; eb[1] = wsect + (n_clst - ((fmt == FS_FAT32) ? 1 : 0)) * au - 1;
-        disk_ioctl(drv, CTRL_ERASE_SECTOR, eb);
+        disk_ioctl(pdrv, CTRL_ERASE_SECTOR, eb);
     }
 #endif
 
@@ -3750,13 +3776,82 @@ FRESULT f_mkfs (
         ST_DWORD(tbl+FSI_Free_Count, n_clst - 1);   /* Number of free clusters */
         ST_DWORD(tbl+FSI_Nxt_Free, 2);              /* Last allocated cluster# */
         ST_WORD(tbl+BS_55AA, 0xAA55);
-        disk_write(drv, tbl, b_vol + 1, 1); /* Write original (VBR+1) */
-        disk_write(drv, tbl, b_vol + 7, 1); /* Write backup (VBR+7) */
+        disk_write(pdrv, tbl, b_vol + 1, 1);    /* Write original (VBR+1) */
+        disk_write(pdrv, tbl, b_vol + 7, 1);    /* Write backup (VBR+7) */
     }
 
-    return (disk_ioctl(drv, CTRL_SYNC, (void*)0) == RES_OK) ? FR_OK : FR_DISK_ERR;
+    return (disk_ioctl(pdrv, CTRL_SYNC, 0) == RES_OK) ? FR_OK : FR_DISK_ERR;
 }
 
+
+#if _MULTI_PARTITION == 2
+/*-----------------------------------------------------------------------*/
+/* Divide Physical Drive                                                 */
+/*-----------------------------------------------------------------------*/
+
+FRESULT f_fdisk (
+    BYTE pdrv,          /* Physical drive number */
+    const DWORD szt[],  /* Pointer to the size table for each partitions */
+    void* work          /* Pointer to the working buffer */
+)
+{
+    UINT i, n, sz_cyl, tot_cyl, b_cyl, e_cyl, p_cyl;
+    BYTE s_hd, e_hd, *p, *buf = (BYTE*)work;
+    DSTATUS stat;
+    DWORD sz_disk, sz_part, s_part;
+
+
+    stat = disk_initialize(pdrv);
+    if (stat & STA_NOINIT) return FR_NOT_READY;
+    if (stat & STA_PROTECT) return FR_WRITE_PROTECTED;
+    if (disk_ioctl(pdrv, GET_SECTOR_COUNT, &sz_disk)) return FR_DISK_ERR;
+
+    /* Determine CHS in the table regardless of the drive geometry */
+    for (n = 16; n < 256 && sz_disk / n / 63 > 1024; n *= 2) ;
+    if (n == 256) n--;
+    e_hd = n - 1;
+    sz_cyl = 63 * n;
+    tot_cyl = sz_disk / sz_cyl;
+
+    /* Create partition table */
+    mem_set(buf, 0, _MAX_SS);
+    p = buf + MBR_Table; b_cyl = 0;
+    for (i = 0; i < 4; i++, p += SZ_PTE) {
+        p_cyl = (szt[i] <= 100) ? (DWORD)tot_cyl * szt[i] / 100 : szt[i] / sz_cyl;
+        if (!p_cyl) continue;
+        s_part = (DWORD)sz_cyl * b_cyl;
+        sz_part = (DWORD)sz_cyl * p_cyl;
+        if (i == 0) {   /* Exclude first track of cylinder 0 */
+            s_hd = 1;
+            s_part += 63; sz_part -= 63;
+        } else {
+            s_hd = 0;
+        }
+        e_cyl = b_cyl + p_cyl - 1;
+        if (e_cyl >= tot_cyl) return FR_INVALID_PARAMETER;
+
+        /* Set partition table */
+        p[1] = s_hd;                        /* Start head */
+        p[2] = (BYTE)((b_cyl >> 2) + 1);    /* Start sector */
+        p[3] = (BYTE)b_cyl;                 /* Start cylinder */
+        p[4] = 0x06;                        /* System type (temporary setting) */
+        p[5] = e_hd;                        /* End head */
+        p[6] = (BYTE)((e_cyl >> 2) + 63);   /* End sector */
+        p[7] = (BYTE)e_cyl;                 /* End cylinder */
+        ST_DWORD(p + 8, s_part);            /* Start sector in LBA */
+        ST_DWORD(p + 12, sz_part);          /* Partition size */
+
+        /* Next partition */
+        b_cyl += p_cyl;
+    }
+    ST_WORD(p, 0xAA55);
+
+    /* Write it to the MBR */
+    return (disk_write(pdrv, buf, 0, 1) || disk_ioctl(pdrv, CTRL_SYNC, 0)) ? FR_DISK_ERR : FR_OK;
+}
+
+
+#endif /* _MULTI_PARTITION == 2 */
 #endif /* _USE_MKFS && !_FS_READONLY */
 
 
@@ -3894,7 +3989,7 @@ int f_printf (
     UINT i, j, w;
     ULONG v;
     TCHAR c, d, s[16], *p;
-    int res, cc;
+    int res, chc, cc;
 
 
     va_start(arp, str);
@@ -3930,11 +4025,13 @@ int f_printf (
         case 'S' :                  /* String */
             p = va_arg(arp, TCHAR*);
             for (j = 0; p[j]; j++) ;
-            res = 0;
-            while (!(f & 2) && j++ < w) res += (cc = f_putc(' ', fil));
-            res += (cc = f_puts(p, fil));
-            while (j++ < w) res += (cc = f_putc(' ', fil));
-            if (cc != EOF) cc = res;
+            chc = 0;
+            if (!(f & 2)) {
+                while (j++ < w) chc += (cc = f_putc(' ', fil));
+            }
+            chc += (cc = f_puts(p, fil));
+            while (j++ < w) chc += (cc = f_putc(' ', fil));
+            if (cc != EOF) cc = chc;
             continue;
         case 'C' :                  /* Character */
             cc = f_putc((TCHAR)va_arg(arp, int), fil); continue;
@@ -3952,7 +4049,7 @@ int f_printf (
         }
 
         /* Get an argument and put it in numeral */
-        v = (f & 4) ? va_arg(arp, long) : ((d == 'D') ? (long)va_arg(arp, int) : va_arg(arp, unsigned int));
+        v = (f & 4) ? (ULONG)va_arg(arp, long) : ((d == 'D') ? (ULONG)(long)va_arg(arp, int) : (ULONG)va_arg(arp, unsigned int));
         if (d == 'D' && (v & 0x80000000)) {
             v = 0 - v;
             f |= 8;

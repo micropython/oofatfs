@@ -39,6 +39,10 @@ The FatFs module is a middleware which is written in ANSI C (C89). There is no p
 The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is 16 or 32 bit. These correspondence are defined in integer.h. This will not be a problem on most compilers. When any conflict with existing definitions is occured, you must resolve it with care.</li>
 </ul>
 
+<h4>System organizations</h4>
+<p>The dependency diagram shown below is a typical configuration of the embedded system with FatFs module.</p>
+<img src="../img/modules.png" width="507" height="224" alt="dependency diagram">
+
 <h4>Which function is required?</h4>
 <p>You need to provide only low level disk I/O functions that required by FatFs module and nothing else. If a working disk module for the target is already existing, you need to write only glue functions to attach it to the FatFs module. If not, you need to port any other disk module or write it from scratch. All defined functions are not that always required. For example, disk write function is not required in read-only configuration. Following table shows which function is required depends on configuration options.</p>
 <table class="lst2">
@@ -68,15 +72,15 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 </div>
 
 <div class="para" id="memory">
-<h3>Memory Usage (R0.08b)</h3>
+<h3>Memory Usage (R0.09)</h3>
 <table class="lst2">
-<tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>Cortex-M3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX62N</th><th>IA-32</th></tr>
+<tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>Cortex-M3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
 <tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
 <tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<tr class="lst3"><td>text (Full, R/W)</td><td>10495</td><td>7205</td><td>6661</td><td>12646</td><td>10686</td><td>11430</td><td>12967</td><td>7732</td><td>8752</td><td>5747</td><td>7545</td></tr>
-<tr> <td>text (Min, R/W)</td><td>6523</td><td>4749</td><td>4335</td><td>8306</td><td>6986</td><td>7413</td><td>8745</td><td>4938</td><td>5576</td><td>3746</td><td>4923</td></tr>
-<tr><td>text (Full, R/O)</td><td>4539</td><td>3183</td><td>2893</td><td>5960</td><td>4876</td><td>5250</td><td>6060</td><td>3554</td><td>3804</td><td>2659</td><td>3450</td></tr>
-<tr> <td>text (Min, R/O)</td><td>3307</td><td>2495</td><td>2191</td><td>4366</td><td>3770</td><td>3939</td><td>4604</td><td>2684</td><td>2940</td><td>2025</td><td>2664</td></tr>
+<tr class="lst3"><td>text (Full, R/W)</td><td>10459</td><td>7201</td><td>6623</td><td>12646</td><td>10686</td><td>11466</td><td>12967</td><td>7732</td><td>8752</td><td>5747</td><td>7545</td></tr>
+<tr><td>text (Min, R/W)</td><td>6503</td><td>4745</td><td>4297</td><td>8306</td><td>6986</td><td>7440</td><td>8745</td><td>4938</td><td>5576</td><td>3746</td><td>4923</td></tr>
+<tr><td>text (Full, R/O)</td><td>4535</td><td>3181</td><td>2869</td><td>5960</td><td>4876</td><td>5286</td><td>6060</td><td>3554</td><td>3804</td><td>2659</td><td>3450</td></tr>
+<tr><td>text (Min, R/O)</td><td>3303</td><td>2493</td><td>2171</td><td>4366</td><td>3770</td><td>3984</td><td>4604</td><td>2684</td><td>2940</td><td>2025</td><td>2664</td></tr>
 <tr><td>bss</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
 <tr><td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
 <tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
@@ -104,34 +108,35 @@ _FS_SHARE        0 (Disable shareing control)
 <h3>Module Size Reduction</h3>
 <p>Follwing table shows which API function is removed by configuration options for the module size reduction.</p>
 <table class="lst2">
-<tr><td rowspan="2">Function</td><td colspan="4">_FS_MINIMIZE</td><td colspan="2">_FS_READONLY</td><td colspan="2">_USE_STRFUNC</td><td colspan="3">_FS_RPATH</td><td colspan="2">_USE_MKFS</td><td colspan="2">_USE_FORWARD</td></tr>
-<tr><td>0</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0&nbsp;&nbsp;</td><td>1/2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
-<tr class="lst3"><td>f_mount</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_open</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_close</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_read</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_write</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_sync</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_lseek</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_opendir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_readdir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_stat</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_getfree</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_truncate</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_unlink</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_mkdir</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_chmod</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_utime</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_rename</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_chdir</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_chdrive</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_getcwd</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_mkfs</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td></tr>
-<tr><td>f_forward</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td></tr>
-<tr><td>f_putc</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_puts</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_printf</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>f_gets</td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td rowspan="2">Function</td><td colspan="4">_FS_MINIMIZE</td><td colspan="2">_FS_READONLY</td><td colspan="2">_USE_STRFUNC</td><td colspan="3">_FS_RPATH</td><td colspan="2">_USE_MKFS</td><td colspan="2">_USE_FORWARD</td><td colspan="2">_MULTI_PARTITION</td></tr>
+<tr><td>0</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0&nbsp;&nbsp;</td><td>1/2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0/1</td><td>2</td></tr>
+<tr class="lst3"><td>f_mount</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_open</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_close</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_read</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_write</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_sync</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_lseek</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_opendir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_readdir</td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_stat</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_getfree</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_truncate</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_unlink</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_mkdir</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_chmod</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_utime</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_rename</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_chdir</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_chdrive</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_getcwd</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_mkfs</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_fdisk</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td>x</td><td></td></tr>
+<tr><td>f_forward</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_putc</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_puts</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_printf</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_gets</td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 </table>
 </div>
 
@@ -148,7 +153,7 @@ _FS_SHARE        0 (Disable shareing control)
 <tr><td>950(Big5)</td><td>+111K</td></tr>
 </table>
 <p>When the LFN feature is enabled, the module size will be increased depends on the selected code page. Right table shows how many bytes increased when LFN feature is enabled with some code pages. We are the East-Asians have tens of thousands of characters. Unfortunately, it requires a huge OEM-Unicode bidirectional conversion table and the module size will be drastically increased that shown in the table. As the result, the FatFs with LFN feature with DBCS will not able to be implemented to most 8-bit microcontrollers. <small>This is the reason why I had not been interested in implementing the LFN feature for a long time :-)</small></p>
-<p>Note that the LFN feature on the FAT file system is a patent of Microsoft Corporation. This is not the case on FAT32. When enable LFN feature on the commercial products, a license from Microsoft may be required depends on the final destination.</p>
+<p>Note that the LFN feature on the FAT file system is a patent of Microsoft Corporation. This is not the case on FAT32 but most FAT32 drivers include the LFN feature. FatFs can swich the LFN feature by configuration option. When enable LFN feature on the commercial products, a license from Microsoft may be required depends on the final destination.</p>
 </div>
 
 <div class="para" id="unicode">
@@ -158,7 +163,7 @@ _FS_SHARE        0 (Disable shareing control)
 
 <div class="para" id="reentrant">
 <h3>Re-entrancy</h3>
-<p>The file operations to the different volume is always re-entrant ant can work simultaneously. The file operations to the same volume is not re-entrant but it can also be configured to thread-safe with <tt>_FS_REENTRANT</tt> option. In this case, also the OS dependent synchronization object control functions, ff_cre_syncobj, ff_del_syncobj, ff_req_grant and ff_rel_grant must be added to the project.</p>
+<p>The file operations to the different volume is always re-entrant and can work simultaneously. The file operations to the same volume is not re-entrant but it can also be configured to thread-safe with <tt>_FS_REENTRANT</tt> option. In this case, also the OS dependent synchronization object control functions, ff_cre_syncobj, ff_del_syncobj, ff_req_grant and ff_rel_grant must be added to the project.</p>
 <p>When a file function is called while the volume is in use by any other task, the file function is suspended until that task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported on some RTOS.</p>
 <p>There is an exception on f_mount and f_mkfs function. These functions are not re-entrant to the same volume. When use these functions, all other task must close the corresponding file on the volume and avoid to access the volume.</p>
 <p>Note that this section describes on the re-entrancy of the FatFs module itself but also the low level disk I/O layer must be re-entrant.</p>
@@ -174,7 +179,7 @@ _FS_SHARE        0 (Disable shareing control)
 <h3>Performance Effective File Access</h3>
 <p>For good performance on reading/writing files on the small embedded system, application programmer should consider what process is done in the FatFs module. The file data on the disk is transferred in following sequence by f_read function.</p>
 <p>Figure 1. Sector miss-aligned read (short)<br>
-<img src="../img/f1.png" width="490" height="73" alt="">
+<img src="../img/f1.png" width="490" height="110" alt="">
 </p>
 <p>Figure 2. Sector miss-aligned read (long)<br>
 <img src="../img/f2.png" width="490" height="140" alt="">
@@ -195,9 +200,9 @@ _FS_SHARE        0 (Disable shareing control)
 Figure 6. Comparison between Multiple/Single Sector Write<br>
 <img src="../img/f6.png" width="630" height="148" alt="fig.6">
 </div>
-<p>The write throughput of the flash memory media becomes the worst at single sector write and it increases proportional to the number of sectors per a write transaction. This effect more appers at more fast bus clock and its ratio often becomes grater than ten. The number of write transaction also affects the life time of the media. Therefore the application program should write the data in large block as possible. The ideal block size is cluster size or power of 2 bytes and the byte offset should be aligned to the block. Of course all layers between the application and the media must support multiple sector write feature, however most of open-source disk drivers lack it. Do not split a multiple sector write request into single sector writes or the write throughput gets poor. Note that FatFs module and its sample disk drivers supprt multiple sector read/write.</p>
+<p>The write throughput of the flash memory media becomes the worst at single sector write and it increases proportional to the number of sectors per a write transaction. This effect more appers at more fast bus clock and its ratio often becomes grater than ten. The number of write transaction also affects the life time of the media. Therefore the application program should write the data in large block as possible. The ideal block size is cluster size or power of 2 bytes and the byte offset should be aligned to the block. Of course all layers between the application and the media must support multiple sector write feature, however most of open-source disk drivers lack it. Do not split a multiple sector write request into single sector writes or the write throughput gets poor. Note that FatFs module and its sample disk drivers supprt multiple sector read/write feature.</p>
 <h4>Forcing Memory Erase</h4>
-<p>When remove a file via f_remove function, the data clusters occupied by the file are maeked 'free' on the FAT. But the data sectors containing the file data are not that applied any process so that the file data left occupies a part of the media as live blocks. If the file data is forced erased on removing the file, the number of free blocks on the media will be increased. This may skip internal block erase operation to the data block on next write. As the result the write performance might be improved. To enable this feature, set <tt>_USE_ERASE</tt> to 1. Note that this is a feature with expectation of internal process of the flash memory media. It may not always effective and f_remove function will take a time on removing a large file.</p>
+<p>When remove a file with f_remove function, the data clusters occupied by the file are marked 'free' on the FAT. But the data sectors containing the file data are not that applied any process, so that the file data left occupies a part of the flash memory array as live blocks. If the file data is forced erased on removing the file, the number of free blocks on the flash memory will be increased. This may skip internal block erase operation to the data block on next write. As the result the write performance might be improved. To enable this feature, set <tt>_USE_ERASE</tt> to 1. Note that this is a feature with expectation of internal process of the flash memory media. It may not always effective and f_remove function will take a time on removing a large file.</p>
 </div>
 
 <div class="para" id="critical">
@@ -227,7 +232,7 @@ Figure 5. Minimized critical section<br>
 <h3>About FatFs License</h3>
 <p>This is a copy of the FatFs license document that included in the source codes.</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.08b                    (C)ChaN, 2011
+/  FatFs - FAT file system module  R0.09                     (C)ChaN, 2011
 /-----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial

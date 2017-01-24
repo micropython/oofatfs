@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module configuration file  R0.08b (C)ChaN, 2011
+/  FatFs - FAT file system module configuration file  R0.09  (C)ChaN, 2011
 /----------------------------------------------------------------------------/
 /
 / CAUTION! Do not forget to make clean the project after any changes to
@@ -7,11 +7,11 @@
 /
 /----------------------------------------------------------------------------*/
 #ifndef _FFCONF
-#define _FFCONF 8237    /* Revision ID */
+#define _FFCONF 6502    /* Revision ID */
 
 
 /*---------------------------------------------------------------------------/
-/ Function and Buffer Configurations
+/ Functions and Buffer Configurations
 /----------------------------------------------------------------------------*/
 
 #define _FS_TINY        0   /* 0:Normal or 1:Tiny */
@@ -36,7 +36,7 @@
 /   3: f_lseek is removed in addition to 2. */
 
 
-#define _USE_STRFUNC    0   /* 0:Disable or 1/2:Enable */
+#define _USE_STRFUNC    0   /* 0:Disable or 1-2:Enable */
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
@@ -137,7 +137,7 @@
 /  and GET_SECTOR_SIZE command must be implememted to the disk_ioctl function. */
 
 
-#define _MULTI_PARTITION    0   /* 0:Single partition or 1:Multiple partition */
+#define _MULTI_PARTITION    0   /* 0:Single partition, 1/2:Enable multiple partition */
 /* When set to 0, each volume is bound to the same physical drive number and
 / it can mount only first primaly partition. When it is set to 1, each volume
 / is tied to the partitions listed in VolToPart[]. */
@@ -163,7 +163,8 @@
 /  When the byte order on the memory is big-endian or address miss-aligned word
 /  access results incorrect behavior, the _WORD_ACCESS must be set to 0.
 /  If it is not the case, the value can also be set to 1 to improve the
-/  performance and code size. */
+/  performance and code size.
+*/
 
 
 /* A header file that defines sync object types on the O/S, such as

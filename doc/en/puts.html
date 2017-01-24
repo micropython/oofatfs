@@ -35,8 +35,8 @@ int f_puts (
 
 <div class="para ret">
 <h4>Return Value</h4>
-<p>When the function succeeded, number of characters written that is not minus value is returned. When the function failed due to disk full or any error, an <tt>EOF (-1)</tt> will be returned.</p>
-<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the UCS-2 string is written to the file in UTF-8 encoding. If not the case, the byte stream will be written directly.</p>
+<p>When the function succeeded, number of characters written that is not minus value is returned. When the write operation is aborted due to disk full or any error, an <tt>EOF (-1)</tt> will be returned.</p>
+<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the UTF-16 string is written to the file in UTF-8 encoding. If not the case, the byte stream will be written directly.</p>
 </div>
 
 

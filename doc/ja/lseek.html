@@ -54,8 +54,8 @@ FRESULT f_lseek (
 <li>非書き込みモードまたは高速シーク・モードのため、ファイル・サイズでクリップされた。</li>
 <li>ファイル拡張中にディスクが満杯になった。</li>
 </ul>
-<p><tt>_USE_FASTSEEK</tt>に1が指定されていて、且つファイル・オブジェクトの<tt>cltbl</tt>メンバがNULL以外(ファイルを開いたときはNULL)のとき、高速シーク・モードになります。これはファイルのクラスタ配置情報(CLMT)をメモリ上に保持しておくことにより、FATにアクセスすることなく後方シークやロング・シークを高速に行う機能です。高速シーク・モードは、f_read/f_wtite関数にも適用されます。高速シーク・モードではf_wtite/f_lseek関数によるファイル・サイズの拡張はできません。</p>
-<p>高速シーク動作を行う前に、CLMTを作成しておく必要があります。これを作成するには、まず<tt>cltbl</tt>メンバにCLMT格納バッファ(DWORD配列)へのポインタをセットします。そして、配列の先頭要素にその配列の要素数を入れ、f_lseek関数を<tt>Offset</tt>に<tt>CREATE_LINKMAP</tt>を指定して実行します。関数が成功するとCLMTが作成され、以降のf_read/f_write/f_lseek関数ではFATへのアクセスは発生しません。<tt>FR_NOT_ENOUGH_CORE</tt>で失敗したときは配列サイズが不足で、先頭要素には実際に必要となる要素数が返されます。必要な要素数は、(ファイルの分割数 + 1) * 2 です。たとえば、ファイルが5つに分断されているときに必要な要素数は、12となります。</p>
+<p><tt>_USE_FASTSEEK</tt>が1で、且つファイル・オブジェクトの<tt>cltbl</tt>メンバがNULL以外(f_open()でNULLに設定される)のとき、高速シーク・モードになります。これはファイルのクラスタ配置情報(CLMT)をメモリ上に保持しておくことにより、FATにアクセスすることなく後方シークやロング・シークを高速に行う機能です。高速シーク・モードは、f_read/f_wtite関数の動作にも適用されます。高速シーク・モードではf_wtite/f_lseek関数によるファイル・サイズの拡張はできません。</p>
+<p>高速シーク動作を行う前に、CLMTを作成しておく必要があります。これを作成するには、まずCLMT格納バッファ(DWORD配列)を準備し、<tt>cltbl</tt>メンバにそのポインタをセットします。そして、配列の先頭要素にその配列のサイズ(要素数)を入れ、f_lseek関数を<tt>Offset</tt>に<tt>CREATE_LINKMAP</tt>を指定して呼び出します。関数が成功するとCLMTが作成され、以降のf_read/f_write/f_lseek関数ではFATへのアクセスは発生しません。<tt>FR_NOT_ENOUGH_CORE</tt>で失敗したときは配列サイズが不足で、先頭要素には実際に必要となる要素数が返されます。必要な要素数は、(ファイルの分割数 + 1) * 2 です。たとえば、ファイルが5つのフラグメントに分断されているときに必要な要素数は、12となります。</p>
 </div>
 
 
@@ -75,30 +75,30 @@ FRESULT f_lseek (
     if (res) ...
 
     <span class="c">/* ファイル・オフセット5000へ移動 */</span>
-    res = f_lseek(file, 5000, 0);
+    res = f_lseek(file, 5000);
 
     <span class="c">/* ファイル終端へ移動(ファイル追記の準備) */</span>
-    res = f_lseek(file, f_size(file), 0);
+    res = f_lseek(file, f_size(file));
 
     <span class="c">/* 3000バイト進める */</span>
-    res = f_lseek(file, f_tell(file) + 3000, 0);
+    res = f_lseek(file, f_tell(file) + 3000);
 
     <span class="c">/* 2000バイト戻す (オーバーフローに注意) */</span>
-    res = f_lseek(file, f_tell(file) - 2000, 0);
+    res = f_lseek(file, f_tell(file) - 2000);
 </pre>
 <pre>
     <span class="c">/* クラスタ先行割り当て (ストリーミング・ライト時のバッファ・オーバーラン防止) */</span>
 
     res = f_open(file, "record.wav", FA_CREATE_NEW | FA_WRITE);  <span class="c">/* ファイル作成 */</span>
 
-    res = f_lseek(file, MAX_SIZE, 0);        <span class="c">/* 十分なクラスタの先行割り当て */</span>
+    res = f_lseek(file, MAX_SIZE);           <span class="c">/* 十分なクラスタの先行割り当て */</span>
     if (res || f_tell(file) != PRE_SIZE) ... <span class="c">/* 正しくファイルが拡張されたかチェック */</span>
 
-    res = f_lseek(file, DATA_START, 0);      <span class="c">/* データ・ストリームの記録(アロケーションディレイ無し) */</span>
+    res = f_lseek(file, DATA_START);         <span class="c">/* データ・ストリームの記録(アロケーションディレイ無し) */</span>
     ...
 
     res = f_truncate(file);                  <span class="c">/* 不要領域の切り捨て */</span>
-    res = f_lseek(file, 0, 0);               <span class="c">/* ヘッダの記録 */</span>
+    res = f_lseek(file, 0);                  <span class="c">/* ヘッダの記録 */</span>
     ...
 
     res = f_close(file);

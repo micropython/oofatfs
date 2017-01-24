@@ -34,8 +34,8 @@ FRESULT f_open (
 <dd>Specifies the type of access and open method for the file. It is specified by a combination of following flags.<br>
 <table class="lst">
 <tr><th>Value</th><th>Description</th></tr>
-<tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file.<br>Combine with <tt>FA_WRITE</tt> for read-write access.</td></tr>
-<tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file.<br>Combine with <tt>FA_READ</tt> for read-write access.</td></tr>
+<tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file. Combine with <tt>FA_WRITE</tt> for read-write access.</td></tr>
+<tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file. Combine with <tt>FA_READ</tt> for read-write access.</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing. (Default)</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>Opens the file if it is existing. If not, a new file is created.<br>
 To append data to the file, use <a href="lseek.html">f_lseek</a> function after file open in this method.</td></tr>
@@ -73,9 +73,9 @@ To append data to the file, use <a href="lseek.html">f_lseek</a> function after 
 
 <div class="para desc">
 <h4>Description</h4>
-<p>A file object is created when the function succeeded. The file object is used for subsequent read/write functions to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If the modified file is not closed, the file data can be collapsed.</p>
-<p>If duplicated file open is needed, read <a href="appnote.html#dup">here</a> carefully.</p>
-<p>Before using any file function, a work area (file system object) must be registered to the logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
+<p>After f_open function succeeded, the file object is valid. The file object is used for subsequent read/write functions to identify the file. When close an open file object, use <a href="close.html">f_close</a> function. If the modified file is not closed, the file data can be collapsed.</p>
+<p>If duplicated file open is needed, read <a href="appnote.html#dup">here</a> carefully. However duplicated open of a file with write mode flags is always prohibited.</p>
+<p>Before using any file function, a work area (file system object) must be registered to the logical drive with <a href="mount.html">f_mount</a> function. All API functions except for <a href="fdisk.html">f_fdisk</a> function can work after this procedure.</p>
 </div>
 
 
@@ -111,7 +111,7 @@ void main (void)
 
     <span class="c">/* Copy source to destination */</span>
     for (;;) {
-        res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);    <span class="c">/* Read a chunk of src file */</span>
+        res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br);     <span class="c">/* Read a chunk of src file */</span>
         if (res || br == 0) break; <span class="c">/* error or eof */</span>
         res = f_write(&amp;fdst, buffer, br, &amp;bw);               <span class="c">/* Write it to the dst file */</span>
         if (res || bw &lt; br) break; <span class="c">/* error or disk full */</span>

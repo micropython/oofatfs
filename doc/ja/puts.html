@@ -16,7 +16,7 @@
 <p>ファイルに文字列を書き込みます。</p>
 <pre>
 int f_puts (
-  const TCHAR* <em>Str</em>,  <span class="c">/* 文字列 */</span>
+  const TCHAR* <em>Str</em>,  <span class="c">/* 書き込む文字列 */</span>
   FIL* <em>FileObject</em>    <span class="c">/* ファイル・オブジェクト */</span>
 );
 </pre>
@@ -35,7 +35,7 @@ int f_puts (
 
 <div class="para ret">
 <h4>戻り値</h4>
-<p>文字列が正常に書き込まれると、書き込まれた文字数が返されます。ディスクが満杯またはエラーにより正常に書き込まれなかったときは<tt>EOF (-1)</tt>が返されます。</p>
+<p>文字列が正常に書き込まれると、書き込まれた文字数が返されます。ディスクが満杯またはエラーにより書き込みが中断されたときは<tt>EOF (-1)</tt>が返されます。</p>
 <p>APIにUnicodeが選択されている(<tt>_LFN_UNICODE</tt>が1)ときは、UTF-8エンコードでファイルに書き込みます。それ以外の時は無変換(1文字1バイト)で書き込みます。</p>
 </div>
 

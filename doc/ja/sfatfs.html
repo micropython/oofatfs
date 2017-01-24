@@ -26,10 +26,10 @@
     WORD    id;           <span class="c">/* ファイル・システム・マウントID */</span>
     WORD    n_rootdir;    <span class="c">/* ルート・ディレクトリのエントリ数 (FAT12/16) */</span>
 <span class="k">#if</span> _MAX_SS != 512
-    WORD    ssize;        <span class="c">/* セクタ・サイズ (可変セクタ長のみ) */</span>
+    WORD    ssize;        <span class="c">/* セクタ・サイズ (512, 1024, 2048 or 4096) */</span>
 <span class="k">#endif</span>
 <span class="k">#if</span> _FS_REENTRANT
-    HANDLE  h_mutex;      <span class="c">/* 同期オブジェクトID */</span>
+    _SYNC_t sobj;         <span class="c">/* 同期オブジェクトID */</span>
 <span class="k">#endif</span>
 <span class="k">#if</span> !_FS_READONLY
     DWORD   last_clust;   <span class="c">/* 最後に割り当てられたクラスタ番号 */</span>
@@ -39,7 +39,7 @@
 <span class="k">#if</span> _FS_RPATH
     DWORD   cdir;         <span class="c">/* カレント・ディレクトリのクラスタ (0:ルート) */</span>
 <span class="k">#endif</span>
-    DWORD   n_fatent;     <span class="c">/* FATのエントリ数 (= クラスタ数 + 2) */</span>
+    DWORD   n_fatent;     <span class="c">/* FATのエントリ数 (== クラスタ数 + 2) */</span>
     DWORD   fsize;        <span class="c">/* FAT 1個当たりのセクタ数 */</span>
     DWORD   fatbase;      <span class="c">/* FAT領域開始セクタ */</span>
     DWORD   dirbase;      <span class="c">/* ルート・ディレクトリ開始セクタ (FAT32: クラスタ番号) */</span>

@@ -1,3 +1,7 @@
+R0.09, Sep 6, 2011
+  f_mkfs() supports multiple partition to finish the multiple partition feature.
+  Added f_fdisk(). (_MULTI_PARTITION = 2)
+
 R0.08b, Jan 15, 2011
   Fast seek feature is also applied to f_read() and f_write().
   f_lseek() reports required table size on creating CLMP.

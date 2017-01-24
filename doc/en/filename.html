@@ -12,7 +12,7 @@
 <body>
 <h1>Path Names</h1>
 
-<div class="para">
+<div class="para" id="nam">
 <h3>Format of the path names</h3>
 <p>The path name format on the FatFs module is similer to the filename specs of DOS/Windos as follows:</p>
 <p><tt>"[drive#:][/]directory/file"</tt></p>
@@ -38,7 +38,7 @@
 </div>
 
 <p><br></p>
-<div class="para">
+<div class="para" id="uni">
 <h3>Unicode API</h3>
 <p>The path names are input/output in either ANSI/OEM code (SBCS/DBCS) or Unicode depends on the configuration options. The type of arguments that specifies the file names are defined as <tt>TCHAR</tt> which is an alias of <tt>char</tt> in default. The code set of the file name string is the ANSI/OEM code set specifid by <tt>_CODE_PAGE</tt>. When <tt>_LFN_UNICODE</tt> is set to 1 under LFN configuration, the type of the <tt>TCHAR</tt> is switched to <tt>unsigned short</tt> (UCS-2 character) to support Unicode. In this case, the LFN feature is fully supported and the Unicode specific characters, such as ✝☪✡☸☭, can also be used for the path name. It also affects data types and encoding of the string I/O functions. To define literal strings, <tt>_T(s)</tt> and <tt>_TEXT(s)</tt> macro are available to select either ANSI/OEM or Unicode automatically. The code shown below is an example to define the literal strings.</p>
 <pre>
@@ -49,25 +49,24 @@
 </div>
 
 <p><br></p>
-<div class="para">
+<div class="para" id="vol">
 <h3>Correspondence between logical and physical drives</h3>
-<p>The FatFs module has work areas that called <em>file system object</em> for each volume (logical drive). In default, the logical drive is bound to the physical drive that has same drive number, and the first partition is mounted. When <tt>_MULTI_PARTITION == 1</tt> is specified in configuration option, each individual logical drive can be bound to any physical drive/partition. In this case, a drive number resolution table must be defined as follows:</p>
+<p>The FatFs module has work areas that called <em>file system object</em> for each volume (logical drive). In default, each logical drive is bound to the physical drive that has same drive number. It attempts to mount a volume as SFD format and first FDISK partition. When <tt>_MULTI_PARTITION &gt;= 1</tt> is specified in configuration option, each individual logical drive is bound to any physical drive/partition. In this case, a volume management table must be defined by user. It is used to resolve relationship between logical drives and partitions as follows:</p>
 <pre>
 Example: Logical drive 0-2 are assigned to three pri-partitions on the physical drive 0 (fixed disk)
          Logical drive 3 is assigned to physical drive 1 (removable disk)
 
-const PARTITION Drives[] = {
-    {0, 0},     <span class="c">/* Logical drive 0 ==> Physical drive 0, 1st partition */</span>
-    {0, 1},     <span class="c">/* Logical drive 1 ==> Physical drive 0, 2nd partition */</span>
-    {0, 2},     <span class="c">/* Logical drive 2 ==> Physical drive 0, 3rd partition */</span>
-    {1, 0}      <span class="c">/* Logical drive 3 ==> Physical drive 1 */</span>
+PARTITION VolToPart[] = {
+    {0, 1},     <span class="c">/* Logical drive 0 ==> Physical drive 0, 1st partition */</span>
+    {0, 2},     <span class="c">/* Logical drive 1 ==> Physical drive 0, 2nd partition */</span>
+    {0, 3},     <span class="c">/* Logical drive 2 ==> Physical drive 0, 3rd partition */</span>
+    {1, 0}      <span class="c">/* Logical drive 3 ==> Physical drive 1 (auto detection) */</span>
 };
 </pre>
 <p>There are some considerations when use <tt>_MULTI_PARTITION</tt> configuration.</p>
 <ul>
-<li>Only pri-partition (0-3) can be mounted.</li>
-<li>When the physical drive has no partition table (SFD format), the partition number is ignored.</li>
-<li>The physical drive that has two or more logical drives must be a fixed drive.</li>
+<li>Only four pri-partitions can be mounted. Extended partition is not supported.</li>
+<li>The physical drive that has two or more partitions must be non-removable class.</li>
 </ul>
 </div>
 

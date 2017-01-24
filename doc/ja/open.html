@@ -73,7 +73,7 @@ FRESULT f_open (
 <div class="para desc">
 <h4>解説</h4>
 <p>既存のファイルを開いたり、新しいファイルを作成します。関数が成功するとファイル・オブジェクトが作成され、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。何らかの変更が行われたファイルがその後正しく閉じられなかった場合、そのファイルが破損する場合があります。</p>
-<p>もしも既に開かれているファイルを開く必要がある場合は、<a href="appnote.html#dup">多重アクセス制御</a>を参照してください。</p>
+<p>既に開かれているファイルを開く必要がある場合は、<a href="appnote.html#dup">多重アクセス制御</a>を参照してください。しかし、一つのファイルに対する書き込みモードを含む重複オープンは常に禁止です。</p>
 <p>ファイル・アクセスを開始する前に、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与える必要があります。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
 </div>
 
@@ -109,7 +109,7 @@ void main (void)
 
     <span class="c">/* ソースからデスティネーションにコピーする */</span>
     for (;;) {
-        res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);
+        res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br);
         if (res || br == 0) break;   <span class="c">/* エラーかファイル終端 */</span>
         res = f_write(&amp;fdst, buffer, br, &amp;bw);
         if (res || bw &lt; br) break;   <span class="c">/* エラーかディスク満杯 */</span>

@@ -1,4 +1,4 @@
-FatFs Module Source Files R0.08b                       (C)ChaN, 2011
+FatFs Module Source Files R0.09                        (C)ChaN, 2011
 
 
 FILES
@@ -125,3 +125,6 @@ REVISION HISTORY
                        f_lseek() reports required table size on creating CLMP.
                        Extended format syntax of f_printf function.
                        Ignores duplicated directory separators in given path names.
+
+  Sep 06,'11 R0.09     f_mkfs() supports multiple partition to finish the multiple partition feature.
+                       Added f_fdisk(). (_MULTI_PARTITION = 2)

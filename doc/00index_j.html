@@ -58,11 +58,12 @@
 <li><a href="ja/chmod.html">f_chmod</a> - ファイル/ディレクトリの属性の変更</li>
 <li><a href="ja/utime.html">f_utime</a> - ファイル/ディレクトリのタイムスタンプの変更</li>
 <li><a href="ja/rename.html">f_rename</a> - ファイル/ディレクトリの名前変更・移動</li>
-<li><a href="ja/mkfs.html">f_mkfs</a> - ディスクのフォーマット</li>
 <li><a href="ja/chdir.html">f_chdir</a> - カレント・ディレクトリの変更</li>
 <li><a href="ja/chdrive.html">f_chdrive</a> - カレント・ドライブの変更</li>
 <li><a href="ja/getcwd.html">f_getcwd</a> - カレント・ディレクトリの取得</li>
 <li><a href="ja/forward.html">f_forward</a> - ファイル・データをストリーム関数に転送</li>
+<li><a href="ja/mkfs.html">f_mkfs</a> - 論理ドライブのフォーマット</li>
+<li><a href="ja/fdisk.html">f_fdisk</a> - 物理ドライブの分割</li>
 <li><a href="ja/gets.html">f_gets</a> - 文字列の読み出し</li>
 <li><a href="ja/putc.html">f_putc</a> - 文字の書き込み</li>
 <li><a href="ja/puts.html">f_puts</a> - 文字列の書き込み</li>
@@ -79,10 +80,10 @@
 <h3>下位レイヤ・インターフェース</h3>
 <p>FatFsモジュールは、物理ドライブ等へのアクセスのため、下位レイヤに少なくとも次のインターフェースを要求します。使用する記録メディアに対応したディスクI/Oモジュールは、ユーザによって用意される必要があります。OS関連機能を有効にしたときは、加えてプロセス・メモリ関連関数も必要になります。資料にドライバを含むサンプル・プロジェクトあり。</p>
 <ul>
-<li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
-<li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
-<li><a href="ja/dread.html">disk_read</a> - ディスクからの読み込み</li>
-<li><a href="ja/dwrite.html">disk_write</a> - ディスクへの書き込み</li>
+<li><a href="ja/dinit.html">disk_initialize</a> - ドライブの初期化</li>
+<li><a href="ja/dstat.html">disk_status</a> - ドライブの状態取得</li>
+<li><a href="ja/dread.html">disk_read</a> - データの読み出し</li>
+<li><a href="ja/dwrite.html">disk_write</a> - データの書き込み</li>
 <li><a href="ja/dioctl.html">disk_ioctl</a> - その他のドライブ制御</li>
 <li><a href="ja/fattime.html">get_fattime</a> - 日付・時刻の取得</li>
 </ul>
@@ -94,7 +95,8 @@
 <p>FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人利用から商用まで）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。詳しくはアプリケーション・ノートを参照してください。</p>
 <ul>
 <li><a href="http://elm-chan.org/fsw/ff/bd/"><em>FatFsユーザ・フォーラム</em></a></li>
-<li>最初に読め: <a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a></li>
+<li>最初に読め: <a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a> <span class="mfd">2012. 7. 28</span></li>
+<li><a href="http://nemuisan.blog.bai.ne.jp/">ねむいさんのぶろぐ</a> (Well written implementations for STM32F/SDIO and LPC2300/MCI)</li>
 <li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/arm_memcards/index.html">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FATファイル・システム仕様書 by Microsoft</a> (FATの理解・実装に必要な唯一のリファレンス)</li>
 <li><a href="http://elm-chan.org/docs/fat.html">FATファイル・システム概要</a> (↑を読むためのガイド)</li>
@@ -106,6 +108,6 @@
 
 
 <hr>
-<p class="foot"><a href="http://elm-chan.org/fsw/ff/00index_j.html">FatFs Home Page</a></p>
+<p class="foot"><a href="../../fsw.html">戻る</a></p>
 </body>
 </html>
