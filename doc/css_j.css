@@ -33,6 +33,7 @@ a.imglnk img {border: 1px solid;}
 .iequ {white-space: nowrap; font-weight: bold;}
 .clr {clear: both;}
 .it {font-style: italic;}
+.mfd {font-size: 0.7em; padding: 0 1px; border: 1px solid; white-space : nowrap}
 
 h1 {line-height: 1em; font-size: 2em; font-family: sans-serif; padding: 0.3em 0 0.3em;}
 p.hdd {float: right; text-align: right; margin-top: 0.5em;}

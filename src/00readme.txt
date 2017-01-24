@@ -1,12 +1,12 @@
-FatFs/Tiny-FatFs Module Source Files  R0.01 (C)ChaN, 2006
+FatFs/Tiny-FatFs Module Source Files R0.02  (C)ChaN, 2006
 
 
 Files
 
   ff.h       Common include file for FatFs and application module.
-  ff.c       FatFs module
+  ff.c       FatFs module.
   tff.h      Common include file for Tiny-FatFs and application module.
-  tff.c      Tiny-FatFs module
+  tff.c      Tiny-FatFs module.
   diskio.h   Common include file for (Tiny-)FatFs and disk I/O module.
   integer.h  Alternative type definitions for unsigned integers.
 
@@ -20,7 +20,7 @@ Files
 Configuration Options
 
   There are several configuration options for various envilonment and requirement.
-  The configuration options are in include files ff.h and tff.h.
+  The configuration options are in include files, ff.h and tff.h.
 
   #define _BYTE_ACC
 
@@ -34,7 +34,7 @@ Configuration Options
 
   #define _FS_READONLY
 
-  When application program does not require any write access, _FS_READONLY can be
+  When application program does not require any write function, _FS_READONLY can be
   defined to eliminate writing code to reduce module size.
 
 
@@ -50,7 +50,7 @@ Agreements
   The FatFs/Tiny-FatFs module is a free software and there is no warranty.
   The FatFs/Tiny-FatFs module is opened for education, reserch and development.
   You can use, modify and republish it for personal, non-profit or profit use
-  without any limitation under your responsibility. 
+  without any limitation under your responsibility.
 
 
 
@@ -58,3 +58,5 @@ Revision History
 
   Feb 26, 2006  R0.00  Prototype
   Apr 29, 2006  R0.01  First stable version
+  Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
+                       Fixed a problem on small (<32M) patition.

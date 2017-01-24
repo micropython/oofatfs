@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="alternate" hreflang="en" title="English version" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - FAT Files System Module</title>
+<title>ELM - 汎用FATファイルシステム・モジュール</title>
 </head>
 
 <body>
@@ -14,18 +14,18 @@
 
 <div class="abst">
 <img src="layers.png" class="rset" width="245" height="255">
-<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・プラットフォームには依存しないので、必要なワークエリアが確保できれば、PIC, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュールを用意する必要があります。いろいろな使用形態を考慮して、高速版（FatFs）と省メモリ版（Tiny-FatFs）の2通りを作成してみました。読み出し専用アプリケーションではさらに書き込み関係のコードを削減した構成もできます。</p>
+<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワークエリアが確保できれば、PIC, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高速版（FatFs）と省メモリ版（Tiny-FatFs）の2通りを作成してみました。読み出し専用アプリケーションではさらに書き込み関係のコードを削減した構成もできます。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュールを用意する必要があります。</p>
 <h4>FatFsモジュールの特徴</h4>
 <ul>
  <li>システム用と各ファイル用バッファを分離し、複数ファイルの高速アクセスに適する</li>
  <li>メモリの消費が少ない(avrgccでの例)
   <ul>
-   <li>プログラム・エリア: 7736 bytes (R/W構成), 4154 bytes (R/O構成)</li>
+   <li>プログラム・エリア: 8282 bytes (R/W構成), 4482 bytes (R/O構成)</li>
    <li>静的ワーク・エリア: 2 bytes</li>
-   <li>動的ワーク・エリア: 544 + 542 * &lt;files&gt; bytes</li>
+   <li>動的ワーク・エリア: 544 + 540 * &lt;files&gt; bytes</li>
   </ul>
  </li>
- <li>FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
+ <li>FAT12, FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
  <li>8.3形式ファイル名とNT小文字フラグに対応</li>
  <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
 </ul>
@@ -34,12 +34,12 @@
  <li>システム用と各ファイル用バッファを共通化し、RAMの使用量を削減</li>
  <li>メモリの消費が少なく(avrgccでの例)、小メモリ・システム(1KB)に対応</li>
   <ul>
-   <li>プログラム・エリア: 6470 bytes (R/W構成), 3556 bytes (R/O構成)</li>
+   <li>プログラム・エリア: 6868 bytes (R/W構成), 3804 bytes (R/O構成)</li>
    <li>静的ワーク・エリア: 2 bytes</li>
    <li>動的ワーク・エリア: 538 + 24 * &lt;files&gt; bytes</li>
   </ul>
  </li>
- <li>FAT16(+FAT64)に対応</li>
+ <li>FAT12, FAT16(+FAT64)に対応</li>
  <li>8.3形式ファイル名とNT小文字フラグに対応</li>
  <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
 </ul>
@@ -83,7 +83,7 @@
 
 <div class="para">
 <h3>資料</h3>
-<p>FatFsモジュールとTiny-FatFsモジュールは教育・研究・開発用に公開しています。どのような目的（個人・非商用・商用）の利用でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
+<p>FatFsモジュールとTiny-FatFsモジュールは教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
 <br>
 <ul>
 <li><a href="rwtest.png">パフォーマンス・テスト</a>（テストボード：ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>）</li>

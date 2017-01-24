@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="alternate" hreflang="ja" title="Japanese version" href="00index_j.html">
 <link rel="stylesheet" href="css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - FAT Files System Module</title>
+<title>ELM - Generic FAT Files System Module</title>
 </head>
 
 <body>
@@ -14,35 +14,35 @@
 
 <div class="abst">
 <img src="layers.png" class="rset" width="245" height="255">
-<p>FatFs module is an experimental project to implement a FAT file system to small embdded system. Because the module is written in compliance with ANSI C, it can be used for most 8/16 bit microcontrollers, such as PIC, AVR, H8, Z80 and etc..., without any modification. To use the FatFs module, low level disk I/O functions for each recording media must be provided by user. I created two modules in different configurations in consideration of various use. For read only applications, wriiting codes can also be eliminated to reduce the code size.</p>
+<p>FatFs module is an experimental project to implement FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be implemented to most 8/16 small microcontrollers, such as PIC, AVR, H8, Z80 and etc..., without any changes. I created two modules in different configurations in consideration of various use. For read only applications, writing codes can also be eliminated to reduce the module size. To use the FatFs module, low level disk I/O functions for each media must be provided by user.</p>
 
 <h4>Features of FatFs Module</h4>
 <ul>
  <li>Separated buffer for FAT and each file. Suitable for fast multiple file accsess.</li>
  <li>Low memory consumption (ex. avr-gcc)
   <ul>
-   <li>Program Code: 7752 bytes (R/W cfg.), 4154 bytes (R/O cfg.)</li>
+   <li>Module Size: 8282 bytes (R/W cfg.), 4482 bytes (R/O cfg.)</li>
    <li>Static Work Area: 2 bytes</li>
-   <li>Dynamic Work Area: 544 + 542 * &lt;files&gt; bytes</li>
+   <li>Dynamic Work Area: 544 + 540 * &lt;files&gt; bytes</li>
   </ul>
  </li>
- <li>Supports FAT16(+FAT64) and FAT32 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
+ <li>Supports FAT12, FAT16(+FAT64) and FAT32 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
- <li>Supports two partitioning formats: FDISK (only primariy partition) and SFD (only 512B/sector)</li>
+ <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
 </ul>
 <h4>Features of Tiny-FatFs Module</h4>
 <ul>
  <li>Only a common buffer for FAT and each file to reduce memory consumption.</li>
  <li>Low memory consumption (ex. avr-gcc), suitable for small memory system (1KB)
   <ul>
-   <li>Program Code: 6470 bytes (R/W cfg.), 3556 bytes (R/O cfg.)</li>
+   <li>Module Size: 6868 bytes (R/W cfg.), 3804 bytes (R/O cfg.)</li>
    <li>Static Work Area: 2 bytes</li>
    <li>Dynamic Work Area: 538 + 24 * &lt;files&gt; bytes</li>
   </ul>
  </li>
- <li>Supports FAT16(+FAT64)</li>
+ <li>Supports FAT12 and FAT16(+FAT64)</li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
- <li>Supports two partitioning formats: FDISK (only primariy partition) and SFD (only 512B/sector)</li>
+ <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
 </ul>
 </div>
 
@@ -71,7 +71,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>FatFs module and Tiny-FatFs module require following functions to lower layer to read/write to physical disk and to get current time.</p>
+<p>FatFs module and Tiny-FatFs module require following functions to lower layer to read/write physical disk and to get current time.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -87,7 +87,7 @@
 <p>The FatFs module is opened for education, reserch and development. You can use, modify and republish it for personal, non-profit or profit use without any limitation under your responsibility.</p>
 <br>
 <ul>
-<li><a href="rwtest.png">Bench Mark</a> (Test Board: ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>)</li>
+<li><a href="rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification</a> (Microsoft)</li>
 <li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use an MMC</a></li>
 </ul>

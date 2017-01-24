@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_sync</title>
 </head>
@@ -36,7 +37,7 @@ FRESULT f_sync (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>FatFs module has not been enabled.</dd>
 </dl>
@@ -45,7 +46,7 @@ FRESULT f_sync (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_sync writes back the cached information of a file being written into the disk. This is the same function as f_close but the file is left opened and can continue the file access. This is suitable for an application of data logger that opens a file for long time in writing mode. The f_sync of periodic or immediataly after f_wriete can minimize the lost data due to an unintentional black out or disk removal. This function is not supported in read-only configuration.</p>
+<p>The f_sync() writes back the cached information of the file being written. This performs the same function as f_close() but the file is left opened and can continue file read/write operations to the file. This is suitable for applications that open files for a long time in writing mode, such as data logger. Performing f_sync() of periodic or immediataly after f_write() can minimize risk of data loss due to sudden blackout or unintentional disk removal. This function is not supported in read-only configuration.</p>
 </div>
 
 

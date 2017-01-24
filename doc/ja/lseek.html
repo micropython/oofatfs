@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_lseek</title>
 </head>
@@ -36,8 +37,6 @@ FRESULT f_lseek (
 <dl class="ret">
 <dt>FR_OK</dt>
 <dd>正常終了。</dd>
-<dt>FR_ALIGN_ERROR</dt>
-<dd>アンバッファモードで開いたファイルで、512の整数倍でないオフセットを指定した。</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>ディスクアクセスでエラーが発生した。</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
@@ -57,17 +56,17 @@ FRESULT f_lseek (
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    // Move to offset of 5000 from top of file.
+    // ファイルオフセット 5000 へ移動
     res = f_lseek(&file, 5000);
-    if (res) die(res);
 
-    // Move to 3000 bytes front of current offset.
+    // 3000バイト進める
     res = f_lseek(&file, file.fptr + 3000);
-    if (res) die(res);
 
-    // Move to 2000 bytes back of current offset.
+    // 2000バイト戻す
     res = f_lseek(&file, file.fptr - 2000);
-    if (res) die(res);
+
+    // ファイル末尾 + 1 へ移動
+    res = f_lseek(&file, 0xFFFFFFFF);
 </pre>
 </div>
 

@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_read</title>
 </head>
@@ -44,8 +45,6 @@ FRESULT f_read (
 <dd>正常終了。</dd>
 <dt>FR_DENIED</dt>
 <dd>書き込み専用モードで開いたファイルから読み込もうとした。</dd>
-<dt>FR_ALIGN_ERROR</dt>
-<dd>アンバッファモードで開かれたファイルで、512の整数倍でないアクセスを検出した。</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>ディスクアクセスでエラーが発生した。</dd>
 <dt>FR_NOT_READY</dt>
@@ -58,7 +57,7 @@ FRESULT f_read (
 
 <div class="para">
 <h4>解説</h4>
-<p>読み込み開始位置は、現在のファイルR/Wポインタからになります。ファイルR/Wポインタは読み込まれたバイト数だけ進みます。読み込み中にファイルの終端に達すると、<tt>*ByteRead</tt>は<tt>ByteToRead</tt>よりも小さくなります。アンバッファモードでは最後の端数バイトを残して<tt>FR_ALIGN_ERROR</tt>になります。</p>
+<p>読み込み開始位置は、現在のファイルR/Wポインタからになります。ファイルR/Wポインタは読み込まれたバイト数だけ進みます。読み込み中にファイルの終端に達すると、<tt>*ByteRead</tt>は<tt>ByteToRead</tt>よりも小さくなります。</p>
 </div>
 
 

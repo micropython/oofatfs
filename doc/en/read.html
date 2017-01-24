@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_read</title>
 </head>
@@ -44,8 +45,6 @@ FRESULT f_read (
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in write only mode.</dd>
-<dt>FR_ALIGN_ERROR</dt>
-<dd>The file has been opened in unbufferred mode but unaligned access was detected.</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_NOT_READY</dt>
@@ -58,7 +57,7 @@ FRESULT f_read (
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer increases in number of bytes read. The <tt>ByteRead</tt> will be smaller than <tt>ByteToRead</tt> when the read pointer reached to end of the file or alignment error occured during the read operation. In unbufferred mode, last fractional bytes cannot be read due to <tt>FR_ALIGN_ERROR</tt>.</p>
+<p>The read/write pointer increases in number of bytes read. The <tt>ByteRead</tt> will be smaller than <tt>ByteToRead</tt> when the read pointer reached to end of the file or alignment error occured during the read operation.</p>
 </div>
 
 

@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_write</title>
 </head>
@@ -32,7 +33,7 @@ FRESULT f_write (
 <dt>ByteToWrite</dt>
 <dd>書き込むバイト数を指定します。</dd>
 <dt>ByteWritten</dt>
-<dd>実際に書き込まれたバイト数を格納する変数を指すポインタを指定します。</dd>
+<dd>書き込まれたバイト数を格納する変数を指すポインタを指定します。</dd>
 </dl>
 </div>
 
@@ -44,8 +45,6 @@ FRESULT f_write (
 <dd>正常終了。</dd>
 <dt>FR_DENIED</dt>
 <dd>読み込み専用モードで開いたファイルに書き込もうとした。</dd>
-<dt>FR_ALIGN_ERROR</dt>
-<dd>アンバッファモードで開かれたファイルで、512の整数倍でないアクセスを検出した。</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>ディスクアクセスでエラーが発生した。</dd>
 <dt>FR_NOT_READY</dt>
@@ -58,7 +57,7 @@ FRESULT f_write (
 
 <div class="para">
 <h4>解説</h4>
-<p>書き込み開始位置は、ファイルR/Wポインタの現在位置からになります。ファイルR/Wポインタは実際に書き込まれたバイト数だけ進みます。書き込み中にディスクが一杯になった、または<tt>FR_ALIGN_ERROR</tt>が帰ったときは、<tt>*ByteWritten</tt>は<tt>ByteToWrite</tt>よりも小さくなります。リードオンリー構成ではこの関数はサポートされません。</p>
+<p>書き込み開始位置は、ファイルR/Wポインタの現在位置からになります。ファイルR/Wポインタは実際に書き込まれたバイト数だけ進みます。書き込み中にディスクが一杯になったときは、<tt>*ByteWritten</tt>は<tt>ByteToWrite</tt>よりも小さくなります。リードオンリー構成ではこの関数はサポートされません。</p>
 </div>
 
 

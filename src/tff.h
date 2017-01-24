@@ -5,9 +5,6 @@
 / cheap microcontrollers. This is opened for education, reserch and
 / development. You can use it for non-profit or profit use without any
 / limitation under your responsibility.
-/---------------------------------------------------------------------------/
-/  Feb 26, 2006  R0.00  Prototype
-/  Apr 29, 2006  R0.01  First stable version
 /---------------------------------------------------------------------------*/
 
 #ifndef _FATFS
@@ -32,86 +29,86 @@ typedef unsigned char   FRESULT;
 
 /* File system object */
 typedef struct _FATFS {
-    BYTE    fs_type;        // FAT type
-    BYTE    files;          // Number of files currently opend
-    BYTE    sects_clust;    // Sectors per cluster
-    BYTE    n_fats;         // Number of FAT copies
-    WORD    n_rootdir;      // Number of root directory entry
-    BYTE    winflag;        // win[] dirty flag (1:must be written back)
+    BYTE    fs_type;        /* FAT type */
+    BYTE    files;          /* Number of files currently opend */
+    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    n_fats;         /* Number of FAT copies */
+    WORD    n_rootdir;      /* Number of root directory entry */
+    BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    pad1;
-    WORD    sects_fat;      // Sectors per fat
-    WORD    max_clust;      // Maximum cluster# + 1
-    DWORD   fatbase;        // FAT start sector
-    DWORD   dirbase;        // Root directory start sector (cluster# for FAT32)
-    DWORD   database;       // Data start sector
-    DWORD   winsect;        // Current sector appearing in the win[]
-    BYTE    win[512];       // Disk access window
+    WORD    sects_fat;      /* Sectors per fat */
+    WORD    max_clust;      /* Maximum cluster# + 1 */
+    DWORD   fatbase;        /* FAT start sector */
+    DWORD   dirbase;        /* Root directory start sector (cluster# for FAT32) */
+    DWORD   database;       /* Data start sector */
+    DWORD   winsect;        /* Current sector appearing in the win[] */
+    BYTE    win[512];       /* Disk access window */
 } FATFS;
 
 
 /* Directory scan object */
 typedef struct _DIR {
-    WORD    sclust;     // Start cluster
-    WORD    clust;      // Current cluster
-    DWORD   sect;       // Current sector
-    WORD    index;      // Current index
+    WORD    sclust;     /* Start cluster */
+    WORD    clust;      /* Current cluster */
+    DWORD   sect;       /* Current sector */
+    WORD    index;      /* Current index */
 } DIR;
 
 
 /* File object */
 typedef struct _FIL {
-    DWORD   fptr;           // File Pointer
-    DWORD   fsize;          // File Size
-    WORD    org_clust;      // File start cluster
-    WORD    curr_clust;     // Current cluster
-    DWORD   curr_sect;      // Current sector
+    DWORD   fptr;           /* File Pointer */
+    DWORD   fsize;          /* File Size */
+    WORD    org_clust;      /* File start cluster */
+    WORD    curr_clust;     /* Current cluster */
+    DWORD   curr_sect;      /* Current sector */
 #ifndef _FS_READONLY
-    DWORD   dir_sect;       // Sector containing the directory entry
-    BYTE*   dir_ptr;        // Ponter to the directory entry in the window
+    DWORD   dir_sect;       /* Sector containing the directory entry */
+    BYTE*   dir_ptr;        /* Ponter to the directory entry in the window */
 #endif
-    BYTE    flag;           // File status flags
-    BYTE    sect_clust;     // Left sectors in cluster
+    BYTE    flag;           /* File status flags */
+    BYTE    sect_clust;     /* Left sectors in cluster */
 } FIL;
 
 
 /* File status structure */
 typedef struct _FILINFO {
-    DWORD fsize;            // Size
-    WORD fdate;             // Date
-    WORD ftime;             // Time
-    BYTE fattrib;           // Attribute
-    char fname[8+1+3+1];    // File/Directory name (8.3 format)
+    DWORD fsize;            /* Size */
+    WORD fdate;             /* Date */
+    WORD ftime;             /* Time */
+    BYTE fattrib;           /* Attribute */
+    char fname[8+1+3+1];    /* File/Directory name (8.3 format) */
 } FILINFO;
 
 
 
 /* fatfs module application interface */
 
-extern FATFS *FatFs;    // Pointer to active file system object
+extern FATFS *FatFs;    /* Pointer to active file system object */
 
-FRESULT f_open (FIL*, const char*, BYTE);           // Open or create a file
-FRESULT f_read (FIL*, BYTE*, WORD, WORD*);          // Read file
-FRESULT f_close (FIL*);                             // Close file
-FRESULT f_lseek (FIL*, DWORD);                      // Seek file pointer
-FRESULT f_opendir (DIR*, const char*);              // Initialize to read a directory
-FRESULT f_readdir (DIR*, FILINFO*);                 // Read a directory item
-FRESULT f_stat (const char*, FILINFO*);             // Get file status
-FRESULT f_getfree (DWORD*);                         // Get number of free clusters
-FRESULT f_mountdrv ();                              // Force initialized the file system
+FRESULT f_open (FIL*, const char*, BYTE);           /* Open or create a file */
+FRESULT f_read (FIL*, BYTE*, WORD, WORD*);          /* Read file */
+FRESULT f_close (FIL*);                             /* Close file */
+FRESULT f_lseek (FIL*, DWORD);                      /* Seek file pointer */
+FRESULT f_opendir (DIR*, const char*);              /* Initialize to read a directory */
+FRESULT f_readdir (DIR*, FILINFO*);                 /* Read a directory item */
+FRESULT f_stat (const char*, FILINFO*);             /* Get file status */
+FRESULT f_getfree (DWORD*);                         /* Get number of free clusters */
+FRESULT f_mountdrv ();                              /* Force initialized the file system */
 #ifndef _FS_READONLY
-FRESULT f_write (FIL*, const BYTE*, WORD, WORD*);   // Write file
-FRESULT f_sync (FIL*);                              // Flush cached information of a writing file
-FRESULT f_unlink (const char*);                     // Delete a file or directory
-FRESULT f_mkdir (const char*);                      // Create a directory
-FRESULT f_chmod (const char*, BYTE, BYTE);          // Change file attriburte
+FRESULT f_write (FIL*, const BYTE*, WORD, WORD*);   /* Write file */
+FRESULT f_sync (FIL*);                              /* Flush cached information of a writing file */
+FRESULT f_unlink (const char*);                     /* Delete a file or directory */
+FRESULT f_mkdir (const char*);                      /* Create a directory */
+FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file attriburte */
 #endif
 
 
 /* User defined function to give a current time to fatfs module */
 
 #ifndef _FS_READONLY
-DWORD get_fattime();    // 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: Day(1-31)
-                        // 15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2)
+DWORD get_fattime();    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: Day(1-31) */
+                        /* 15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */
 #endif
 
 
@@ -126,7 +123,6 @@ DWORD get_fattime();    // 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: 
 #define FR_DENIED                   5
 #define FR_DISK_FULL                6
 #define FR_RW_ERROR                 7
-#define FR_ALIGN_ERROR              8
 #define FR_INCORRECT_DISK_CHANGE    9
 #define FR_WRITE_PROTECTED          10
 #define FR_NOT_ENABLED              11
@@ -148,17 +144,18 @@ DWORD get_fattime();    // 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: 
 
 /* FAT type signature (fs_type) */
 
-#define FS_FAT16    1
+#define FS_FAT12    1
+#define FS_FAT16    2
 
 
 /* File attribute mask for directory entry */
 
-#define AM_RDO  0x01    // Read Only
-#define AM_HID  0x02    // Hidden
-#define AM_SYS  0x04    // System
-#define AM_VOL  0x08    // Volume Label
-#define AM_DIR  0x10    // Directory
-#define AM_ARC  0x20    // Archive
+#define AM_RDO  0x01    /* Read Only */
+#define AM_HID  0x02    /* Hidden */
+#define AM_SYS  0x04    /* System */
+#define AM_VOL  0x08    /* Volume Label */
+#define AM_DIR  0x10    /* Directory */
+#define AM_ARC  0x20    /* Archive */
 
 
 

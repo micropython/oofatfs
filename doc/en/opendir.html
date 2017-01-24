@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_opendir</title>
 </head>
@@ -35,7 +36,7 @@ FRESULT f_opendir (
 <h4>Return Values</h4>
 <dl class="ret">
 <dt>FR_OK</dt>
-<dd>The function succeeded. The <tt><em>DirObject</em></tt> structure is used for subsequent calls to read the directory items.</dd>
+<dd>The function succeeded. The <tt><em>DirObject</em></tt> structure is used for subsequent calls to read the directory entries.</dd>
 <dt>FR_NOPATH</dt>
 <dd>Could not find the path.</dd>
 <dt>FR_INVALID_NAME</dt>
@@ -45,7 +46,7 @@ FRESULT f_opendir (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>FatFs module has not been enabled.</dd>
 <dt>FR_NO_FILESYSTEM</dt>

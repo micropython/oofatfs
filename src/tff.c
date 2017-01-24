@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  Tiny FatFs - FAT file system module R0.01                 (C)ChaN, 2006
+/  Tiny FatFs - FAT file system module R0.02                 (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is opened for education, reserch and
@@ -8,6 +8,8 @@
 /---------------------------------------------------------------------------/
 /  Feb 26, 2006  R0.00  Prototype
 /  Apr 29, 2006  R0.01  First stable version
+/  Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
+/                       Fixed a problem on small (<32M) patition.
 /---------------------------------------------------------------------------*/
 
 
@@ -60,28 +62,38 @@ BOOL move_window (
 
 
 
-/*---------------------*/
-/* Get a Cluster State */
+/*----------------------*/
+/* Get a Cluster Status */
 
 static
-DWORD get_cluster (WORD clust)      /* Cluster# to get the link information */
+WORD get_cluster (WORD clust)       /* Cluster# to get the link information */
 {
+    WORD wc, bc;
+    DWORD fatsect;
     FATFS *fs = FatFs;
 
 
     if ((clust >= 2) && (clust < fs->max_clust)) {      /* Valid cluster# */
-        if (fs->fs_type == FS_FAT16) {
-            if (move_window(clust / 256 + fs->fatbase))
-                return LD_WORD(&(fs->win[(clust * 2) & 511]));
+        fatsect = fs->fatbase;
+        if (fs->fs_type == FS_FAT12) {
+            bc = clust * 3 / 2;
+            if (!move_window(fatsect + bc / 512)) return 1;
+            wc = fs->win[bc % 512]; bc++;
+            if (!move_window(fatsect + bc / 512)) return 1;
+            wc |= (WORD)fs->win[bc % 512] << 8;
+            return (clust & 1) ? (wc >> 4) : (wc & 0xFFF);
+        } else {
+            if (!move_window(fatsect + clust / 256)) return 1;
+            return LD_WORD(&(fs->win[(clust * 2) % 512]));
         }
     }
-    return 1;   /* Return with 1 means failed */
+    return 1;   /* Return with 1 means function failed */
 }
 
 
 
-/*------------------------*/
-/* Change a Cluster State */
+/*-------------------------*/
+/* Change a Cluster Status */
 
 #ifndef _FS_READONLY
 static
@@ -90,12 +102,26 @@ BOOL put_cluster (
     WORD val        /* New value to mark the cluster */
 )
 {
+    WORD bc;
+    BYTE *p;
+    DWORD fatsect;
     FATFS *fs = FatFs;
 
 
-    if (fs->fs_type != FS_FAT16) return FALSE;
-    if (!move_window(clust / 256 + fs->fatbase)) return FALSE;
-    ST_WORD(&(fs->win[((WORD)clust * 2) & 511]), (WORD)val);
+    fatsect = fs->fatbase;
+    if (fs->fs_type == FS_FAT12) {
+        bc = clust * 3 / 2;
+        if (!move_window(fatsect + bc / 512)) return FALSE;
+        p = &fs->win[bc % 512];
+        *p = (clust & 1) ? ((*p & 0x0F) | ((BYTE)val << 4)) : (BYTE)val;
+        fs->winflag = 1; bc++;
+        if (!move_window(fatsect + bc / 512)) return FALSE;
+        p = &fs->win[bc % 512];
+        *p = (clust & 1) ? (BYTE)(val >> 4) : ((*p & 0xF0) | ((BYTE)(val >> 8) & 0x0F));
+    } else {
+        if (!move_window(fatsect + clust / 256)) return FALSE;
+        ST_WORD(&(fs->win[((WORD)clust * 2) % 512]), (WORD)val);
+    }
 
     fs->winflag = 1;
     return TRUE;
@@ -196,7 +222,7 @@ BYTE check_fs (
     DWORD sect          /* Sector# to check if it is a FAT boot record or not */
 )
 {
-    static const char fatsign[] = "FAT16";
+    static const char fatsign[] = "FAT12FAT16";
     FATFS *fs = FatFs;
 
 
@@ -204,6 +230,8 @@ BYTE check_fs (
     if (disk_read(fs->win, sect, 1) == RES_OK) {    /* Load boot record */
         if (LD_WORD(&(fs->win[510])) == 0xAA55) {       /* Is it valid? */
             if (!memcmp(&(fs->win[0x36]), &fatsign[0], 5))
+                return FS_FAT12;
+            if (!memcmp(&(fs->win[0x36]), &fatsign[5], 5))
                 return FS_FAT16;
         }
     }
@@ -492,7 +520,7 @@ FRESULT check_mounted ()
 FRESULT f_mountdrv ()
 {
     BYTE fat;
-    DWORD sect, fatend;
+    DWORD sect, fatend, maxsect;
     FATFS *fs = FatFs;
 
 
@@ -524,10 +552,12 @@ FRESULT f_mountdrv ()
     fs->n_rootdir = LD_WORD(&(fs->win[0x11]));      /* Nmuber of root directory entries */
 
     fatend = fs->sects_fat * fs->n_fats + fs->fatbase;
-    fs->dirbase = fatend;                       /* Directory start sector (physical) */
-    fs->database = fs->n_rootdir / 16 + fatend; /* Data start sector (physical) */
-    fs->max_clust =                                 /* Maximum cluster number */
-        (LD_DWORD(&(fs->win[0x20])) - fs->database + sect) / fs->sects_clust + 2;
+    fs->dirbase = fatend;                           /* Directory start sector (physical) */
+    fs->database = fs->n_rootdir / 16 + fatend;     /* Data start sector (physical) */
+
+    maxsect = LD_DWORD(&(fs->win[0x20]));           /* Calculate maximum cluster number */
+    if (!maxsect) maxsect = LD_WORD(&(fs->win[0x13]));
+    fs->max_clust = (maxsect - fs->database + sect) / fs->sects_clust + 2;
 
     fs->files = 0;
     return FR_OK;
@@ -542,29 +572,35 @@ FRESULT f_getfree (
     DWORD *nclust       /* Pointer to the double word to return number of free clusters */
 )
 {
-    WORD clust;
     DWORD n, sect;
-    BYTE m, *ptr, fat;
+    WORD clust;
+    BYTE f, *p;
     FRESULT res;
     FATFS *fs = FatFs;
 
 
     if ((res = check_mounted()) != FR_OK) return res;
-    fat = fs->fs_type;
 
     /* Count number of free clusters */
-    n = clust = m = 0;
-    ptr = NULL;
-    sect = fs->fatbase;
-    do {
-        if (m == 0) {
-            if (!move_window(sect++)) return FR_RW_ERROR;
-            ptr = fs->win;
-        }
-        if (LD_WORD(ptr) == 0) n++;
-        ptr += 2; m++;
-        clust++;
-    } while (clust < fs->max_clust);
+    n = 0;
+    if (fs->fs_type == FS_FAT12) {
+        clust = 2;
+        do {
+            if (get_cluster(clust) == 0) n++;
+        } while (++clust < fs->max_clust);
+    } else {
+        clust = fs->max_clust;
+        sect = fs->fatbase;
+        f = 0; p = 0;
+        do {
+            if (!f) {
+                if (!move_window(sect++)) return FR_RW_ERROR;
+                p = fs->win;
+            }
+            if (LD_WORD(p) == 0) n++;
+            p += 2; f += 1;
+        } while (--clust);
+    }
 
     *nclust = n;
     return FR_OK;
@@ -682,7 +718,7 @@ FRESULT f_read (
 
     for ( ;  btr;                                   /* Repeat until all data transferred */
         buff += rcnt, fp->fptr += rcnt, *br += rcnt, btr -= rcnt) {
-        if ((fp->fptr & 511) == 0) {                /* On the sector boundary */
+        if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
             if (--(fp->sect_clust)) {               /* Decrement sector counter */
                 sect = fp->curr_sect + 1;           /* Next sector */
             } else {                                /* Next cluster */
@@ -703,9 +739,9 @@ FRESULT f_read (
             }
         }
         if (!move_window(fp->curr_sect)) goto fr_error; /* Move sector window */
-        rcnt = 512 - (fp->fptr & 511);                  /* Copy fractional bytes from sector window */
+        rcnt = 512 - (fp->fptr % 512);                  /* Copy fractional bytes from sector window */
         if (rcnt > btr) rcnt = btr;
-        memcpy(buff, &fs->win[fp->fptr & 511], rcnt);
+        memcpy(buff, &fs->win[fp->fptr % 512], rcnt);
     }
 
     return FR_OK;
@@ -743,7 +779,7 @@ FRESULT f_write (
 
     for ( ;  btw;                                   /* Repeat until all data transferred */
         buff += wcnt, fp->fptr += wcnt, *bw += wcnt, btw -= wcnt) {
-        if ((fp->fptr & 511) == 0) {                /* On the sector boundary */
+        if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
             if (--(fp->sect_clust)) {               /* Decrement sector counter */
                 sect = fp->curr_sect + 1;           /* Next sector */
             } else {                                /* Next cluster */
@@ -774,9 +810,9 @@ FRESULT f_write (
             }
         }
         if (!move_window(fp->curr_sect)) goto fw_error; /* Move sector window */
-        wcnt = 512 - (fp->fptr & 511);              /* Copy fractional bytes bytes to sector window */
+        wcnt = 512 - (fp->fptr % 512);              /* Copy fractional bytes bytes to sector window */
         if (wcnt > btw) wcnt = btw;
-        memcpy(&fs->win[fp->fptr & 511], buff, wcnt);
+        memcpy(&fs->win[fp->fptr % 512], buff, wcnt);
         fs->winflag = 1;
     }
 
@@ -934,9 +970,9 @@ FRESULT f_unlink (
         } while (next_dir_entry(&dirscan));
     }
 
-    if (!remove_chain(dclust)) return FR_RW_ERROR;  /* Remove the cluster chain */
-    if (!move_window(dsect)) return FR_RW_ERROR;    /* Mark the directory entry deleted */
+    if (!move_window(dsect)) return FR_RW_ERROR;    /* Mark the directory entry 'deleted' */
     *dir = 0xE5; fs->winflag = 1;
+    if (!remove_chain(dclust)) return FR_RW_ERROR;  /* Remove the cluster chain */
     if (!move_window(0)) return FR_RW_ERROR;
 
     return FR_OK;

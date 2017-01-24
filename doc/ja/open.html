@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_open</title>
 </head>
@@ -25,22 +26,18 @@ FRESULT f_open (
 <h4>パラメータ</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>新しく作成するファイルオブジェクト構造体へのポインタを指定します。以降、このファイルを閉じるまでそのファイルオブジェクトを使用してファイル操作をします。構造体メンバの<tt>buffer</tt>は、オープン前または直後にそのファイルで使用するR/Wバッファへのアドレスで初期化しておく必要があります（<tt>FA_UNBUFFERED</tt>を指定した場合はバッファは不要）。</dd>
+<dd>新しく作成するファイルオブジェクト構造体へのポインタを指定します。以降、そのファイルを閉じるまでこのファイルオブジェクトを使用してファイル操作をします。</dd>
 <dt>FileName</dt>
 <dd>作成する (またはオープンする) ファイルのフルパス名が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。ディレクトリセパレータには<tt>'/'</tt>を使用します。FatFsモジュールにはカレントディレクトリの概念がないので、パスはルートディレクトリから辿る絶対パスとなります。文字列先頭のスペースはスキップされます。パス先頭の<tt>'/'</tt>はあってもなくてもかまいません。</dd>
 <dt>ModeFlags</dt>
 <dd>ファイルのアクセス方法やオープン方法を決めるフラグです。このパラメータには次の組み合わせを指定します。<br>
 <table class="lst">
 <tr><th>値</th><th>意味</th></td>
-<tr><td>FA_READ</td><td>読み出しモードでオープンします。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></td>
-<tr><td>FA_WRITE</td><td>書き込みモードでオープンします。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></td>
-<tr><td>FA_UNBUFFERED</td><td>
-FatFsでのみ指定可。指定するとファイルR/Wバッファを使用せず、メモリを節約できます。<br>
-read/write/seekは512の整数倍単位でなければなりません。指定しない場合は、ファイル<br>
-R/Wバッファ（ファイルオブジェクト構造体メンバの<tt>buffer</tt>で指定）を使用。</td></td>
-<tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。</td></td>
-<tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。既存のファイルがある場合は、サイズを0にしてから開きます。</td></td>
-<tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。</td></td>
+<tr><td>FA_READ</td><td>読み出しモードでオープンします。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
+<tr><td>FA_WRITE</td><td>書き込みモードでオープンします。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
+<tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。</td></tr>
+<tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。既存のファイルがある場合は、サイズを0にしてから開きます。</td></tr>
+<tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。</td></tr>
 </table>
 </dd>
 </dl>
@@ -84,47 +81,42 @@ R/Wバッファ（ファイルオブジェクト構造体メンバの<tt>buffer</tt>で指定）を使用。</
 
 
 <div class="para">
-<h4>使用例</h4>
+<h4>使用例（ファイルコピー）</h4>
 <pre>
 void main ()
 {
-    FATFS fs;            // FatFs work area
-    FIL fsrc, fdst;      // file structures
-    BYTE fbuff[512*2];   // file r/w buffers (not required for Tiny-FatFs)
+    FATFS fs;            // FatFsワークエリア
+    FIL fsrc, fdst;      // ファイルオブジェクト
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
     WORD br, bw;         // File R/W count
 
 
-    // Activate FatFs module
+    // FatFsのワークエリアを確保する
     memset(&fs, 0, sizeof(FATFS));
     FatFs = &fs;
 
-    // Open source file
-    fsrc.buffer = fbuff+0;	// (not required for Tiny-FatFs)
+    // ソース・ファイルを開く
     res = f_open(&fsrc, "/srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
-    // Create destination file
-    fdst.buffer = fbuff+512;	// (not required for Tiny-FatFs)
+    // デスティネーション・ファイルを作成する
     res = f_open(&fdst, "/dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
-    // Copy source to destination
+    // ソースからデスティネーションにコピーする
     for (;;) {
         res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-        if (res) die(res);
-        if (br == 0) break;
+        if (res || br == 0) break;
         res = f_write(&fdst, buffer, br, &bw);
-        if (res) die(res);
-        if (bw &lt; br) break;
+        if (res || bw &lt; br) break;
     }
 
-    // Close all files
+    // 全てのファイルを閉じる
     f_close(&fsrc);
     f_close(&fdst);
 
-    // Deactivate FatFs module
+    // FatFsのワークエリアを開放する
     FatFs = NULL;
 }
 </pre>
