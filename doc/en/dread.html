@@ -28,7 +28,7 @@ DRESULT disk_read (
 <dt>Buffer</dt>
 <dd>Pointer to the read buffer to store the read data. <tt>SectorCount * 512</tt> bytes is required for the size of the read buffer.</dd>
 <dt>SectorNumber</dt>
-<dd>Specifies the sector number in logical block address to read from.</dd>
+<dd>Specifies the start sector number in logical block address.</dd>
 <dt>SectorCount</dt>
 <dd>Specifies number of sectors to read. The value can be 1 to 255.</dd>
 </dl>
@@ -41,7 +41,7 @@ DRESULT disk_read (
 <dt>RES_OK</dt>
 <dd>The function succeeded.</dd>
 <dt>RES_ERROR</dt>
-<dd>Any error occured during read operation.</dd>
+<dd>Any error occured during the read operation.</dd>
 <dt>RES_PARERR</dt>
 <dd>Invalid parameter.</dd>
 <dt>RES_NOTRDY</dt>

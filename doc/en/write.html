@@ -16,7 +16,7 @@
 <pre>
 FRESULT f_write (
   FIL* <em>FileObject</em>,     // Pointer to the file object structure
-  const BYTE* <em>Buffer</em>,  // Pointer to the data to be written
+  const void* <em>Buffer</em>,  // Pointer to the data to be written
   WORD <em>ByteToWrite</em>,    // Number of bytes to write
   WORD* <em>ByteWritten</em>    // Pointer to the variable to return number of bytes written
 );
@@ -41,7 +41,7 @@ FRESULT f_write (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in read only mode.</dd>
@@ -57,7 +57,7 @@ FRESULT f_write (
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer increases in number of bytes written. The <tt>ByteWritten</tt> will be smaller than <tt>ByteToWrite</tt> when disk gets full during write function. This function is not supported in read only configuration.</p>
+<p>The read/write pointer increases in number of bytes written. The <tt>ByteWritten</tt> will be smaller than <tt>ByteToWrite</tt> when disk gets full during write function. This function is not supported in read-only configuration.</p>
 </div>
 
 

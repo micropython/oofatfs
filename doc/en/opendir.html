@@ -35,7 +35,7 @@ FRESULT f_opendir (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded. The <tt><em>DirObject</em></tt> structure is used for subsequent calls to read the directory entries.</dd>
 <dt>FR_NOPATH</dt>
 <dd>Could not find the path.</dd>
@@ -57,7 +57,7 @@ FRESULT f_opendir (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_opendir opens a directory and initializes the <tt><em>DirObject</em></tt> structure for subsequent calls. The directory object structure can be discarded at any time.</p>
+<p>The f_opendir opens a directory and initializes the <tt><em>DirObject</em></tt> structure for subsequent calls. The directory object structure can be discarded at any time. This function is not supported in minimum configuration.</p>
 </div>
 
 

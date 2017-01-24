@@ -24,7 +24,7 @@ FRESULT f_unlink (
 <h4>パラメータ</h4>
 <dl class="par">
 <dt>FileName</dt>
-<dd>削除対象のファイルまたはディレクトリ名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。リードオンリー構成ではこの関数はサポートされません。</dd>
+<dd>削除対象のファイルまたはディレクトリ名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。リードオンリー構成およびミニマム構成ではこの関数はサポートされません。</dd>
 </dl>
 </div>
 
@@ -32,7 +32,7 @@ FRESULT f_unlink (
 <div class="para">
 <h4>戻り値</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
 <dt>FR_NOFILE</dt>
 <dd>ファイルが見つからない。</dd>

@@ -47,9 +47,10 @@ small {font-size: 80%;}
 .indent {margin-left: 2em;}
 
 /* Tables */
-table.lst {margin: 4px; border-collapse: collapse; border-style: solid; border-width: 2px; border-color: black; letter-spacing: 0;}
-table.lst th {background-color: white; border-style: solid; border-width: 1px 1px 2px; border-color: black; padding: 0 3px; vertical-align: top;}
-table.lst td {background-color: white; border-style: solid; border-width: 1px; border-color: black; padding: 0 3px; vertical-align: top; line-height: 1.3em;}
+table {margin: 4px; border-collapse: collapse; border-style: solid; border-width: 2px; border-color: black; letter-spacing: 0;}
+th {background-color: white; border-style: solid; border-width: 1px 1px 2px; border-color: black; padding: 0 3px; vertical-align: top;}
+td {background-color: white; border-style: solid; border-width: 1px; border-color: black; padding: 0 3px; vertical-align: top; line-height: 1.3em;}
 table.lst td:first-child {font-family: monospace; white-space: nowrap;}
+table caption {font-family: sans-serif; font-weight: bold;}
 
 p.foot {clear: both; text-indent: 0; margin: 1em 0.5em 1em;}

@@ -3,6 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="start" title="Site Top" href="../../">
+<link rel="up" title="Freewares" href="../../fsw_e.html">
 <link rel="alternate" hreflang="ja" title="Japanese version" href="00index_j.html">
 <link rel="stylesheet" href="css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - Generic FAT Files System Module</title>
@@ -14,18 +16,12 @@
 
 <div class="abst">
 <img src="layers.png" class="rset" width="245" height="255">
-<p>FatFs module is an experimental project to implement FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be implemented to most 8/16 small microcontrollers, such as PIC, AVR, H8, Z80 and etc..., without any changes. I created two modules in different configurations in consideration of various use. For read only applications, writing codes can also be eliminated to reduce the module size. To use the FatFs module, low level disk I/O functions for each media must be provided by user.</p>
+<p>FatFs module is an experimental project to implement FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into most small microcontrollers, such as PIC, AVR, H8, Z80 and etc..., without any change. I created two modules in different configurations in consideration of various use. To use the FatFs module, low level disk I/O functions for each media must be provided by user.</p>
 
 <h4>Features of FatFs Module</h4>
 <ul>
  <li>Separated buffer for FAT and each file. Suitable for fast multiple file accsess.</li>
- <li>Low memory consumption (ex. avr-gcc)
-  <ul>
-   <li>Module Size: 8282 bytes (R/W cfg.), 4482 bytes (R/O cfg.)</li>
-   <li>Static Work Area: 2 bytes</li>
-   <li>Dynamic Work Area: 544 + 540 * &lt;files&gt; bytes</li>
-  </ul>
- </li>
+ <li>Low memory consumption</li>
  <li>Supports FAT12, FAT16(+FAT64) and FAT32 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
  <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
@@ -33,13 +29,7 @@
 <h4>Features of Tiny-FatFs Module</h4>
 <ul>
  <li>Only a common buffer for FAT and each file to reduce memory consumption.</li>
- <li>Low memory consumption (ex. avr-gcc), suitable for small memory system (1KB)
-  <ul>
-   <li>Module Size: 6868 bytes (R/W cfg.), 3804 bytes (R/O cfg.)</li>
-   <li>Static Work Area: 2 bytes</li>
-   <li>Dynamic Work Area: 538 + 24 * &lt;files&gt; bytes</li>
-  </ul>
- </li>
+ <li>Low memory consumption , suitable for small memory system (1KB)</li>
  <li>Supports FAT12 and FAT16(+FAT64)</li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
  <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
@@ -48,8 +38,33 @@
 
 
 <div class="para">
+<h3>Memory Usage</h3>
+<p>There are some configuration options to eliminate unused functions to reduce module size. Following tables are memory consumption in unit of byte on avr-gcc.</p>
+
+<div class="lset">
+<table class="lst2">
+ <caption>FatFs</caption>
+ <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
+ <tr><td>Program (R/W cfg.)</td><td>8282</td><td>6294</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>4482</td><td>3704</td></tr>
+ <tr><td>Work Area (static)</td><td colspan="2">2</td>
+ <tr><td>Work Area (dynamic)</td><td colspan="2">544 + 540 * &lt;files&gt;</td>
+</table>
+</div>
+<table class="lst2">
+ <caption>Tiny-FatFs</caption>
+ <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
+ <tr><td>Program (R/W cfg.)</td><td>6868</td><td>5208</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>3804</td><td>3136</td></tr>
+ <tr><td>Work Area (static)</td><td colspan="2">2</td></tr>
+ <tr><td>Work Area (dynamic)</td><td colspan="2">538 + 24 * &lt;files&gt;</td></tr>
+</table>
+</div>
+
+
+<div class="para">
 <h3>Application Interface</h3>
-<p>FatFs module and Tiny-FatFs module provide following functions.</p>
+<p>FatFs/Tiny-FatFs module provides following functions.</p>
 <ul>
 <li><a href="en/open.html">f_open</a> - Open/Create a File</li>
 <li><a href="en/close.html">f_close</a> - Close a File</li>
@@ -71,7 +86,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>FatFs module and Tiny-FatFs module require following functions to lower layer to read/write physical disk and to get current time.</p>
+<p>FatFs/Tiny-FatFs module requires following functions to lower layer to read/write physical disk and to get current time.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -84,16 +99,15 @@
 
 <div class="para">
 <h3>Resources</h3>
-<p>The FatFs module is opened for education, reserch and development. You can use, modify and republish it for personal, non-profit or profit use without any limitation under your responsibility.</p>
+<p>The FatFs/Tiny-FatFs module is a freeware and is opened for education, research and development. You can use, modify and republish it for personal, non-profit or profit use without any limitation under your responsibility.</p>
 <br>
 <ul>
 <li><a href="rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification</a> (Microsoft)</li>
-<li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use an MMC</a></li>
+<li><a href="../../docs/mmc/mmc_e.html">How to Use an MMC</a></li>
 </ul>
 </div>
 
 
-<hr>
 </body>
 </html>

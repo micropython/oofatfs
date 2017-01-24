@@ -16,7 +16,7 @@
 <pre>
 FRESULT f_read (
   FIL* <em>FileObject</em>,    // ファイルオブジェクト構造体
-  BYTE* <em>Buffer</em>,       // 読み出したデータを格納するバッファ
+  void* <em>Buffer</em>,       // 読み出したデータを格納するバッファ
   WORD <em>ByteToRead</em>,    // 読み出すバイト数
   WORD* <em>ByteRead</em>      // 読み出されたバイト数
 );
@@ -41,7 +41,7 @@ FRESULT f_read (
 <div class="para">
 <h4>戻り値</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
 <dt>FR_DENIED</dt>
 <dd>書き込み専用モードで開いたファイルから読み込もうとした。</dd>

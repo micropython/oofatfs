@@ -32,7 +32,7 @@ FRESULT f_getfree (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded. The <tt><em>*Clusters</em></tt> havs number of free clusters.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
@@ -50,7 +50,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>Descriptions</h4>
-<p>The f_getfree gets number of free clusters on the drive. The <tt>FatFs.sects_clust</tt> is indicating number of sectors per cluster, so that the free space in unit of byte can be calcurated with this.</p>
+<p>The f_getfree gets number of free clusters on the drive. The <tt>FatFs.sects_clust</tt> is indicating number of sectors per cluster, so that the free space in unit of byte can be calcurated with this. This function is not supported in minimum configuration.</p>
 </div>
 
 

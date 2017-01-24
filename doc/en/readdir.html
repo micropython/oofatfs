@@ -35,7 +35,7 @@ FRESULT f_readdir (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
@@ -49,7 +49,7 @@ FRESULT f_readdir (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_readdir reads directory items in sequence. All items in the directory can be read by calling f_readdir repeatedly. When all items have been read and no item to read, the member <tt>f_name[]</tt> in the file information structure gets a null string. For details of the file informations, refer to the <tt>FILINFO</tt>.</p>
+<p>The f_readdir reads directory items in sequence. All items in the directory can be read by calling f_readdir repeatedly. When all items have been read and no item to read, the member <tt>f_name[]</tt> in the file information structure gets a null string. For details of the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimum configuration.</p>
 </div>
 
 

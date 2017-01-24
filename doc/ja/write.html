@@ -16,7 +16,7 @@
 <pre>
 FRESULT f_write (
   FIL* <em>FileObject</em>,     // ファイルオブジェクト構造体
-  const BYTE* <em>Buffer</em>,  // 書き込みデータ
+  const void* <em>Buffer</em>,  // 書き込みデータ
   WORD <em>ByteToWrite</em>,    // 書き込むバイト数
   WORD* <em>ByteWritten</em>    // 書き込まれたバイト数
 );
@@ -41,7 +41,7 @@ FRESULT f_write (
 <div class="para">
 <h4>戻り値</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
 <dt>FR_DENIED</dt>
 <dd>読み込み専用モードで開いたファイルに書き込もうとした。</dd>

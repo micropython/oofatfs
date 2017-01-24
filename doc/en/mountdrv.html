@@ -21,7 +21,7 @@ FRESULT f_mountdrv ();
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
@@ -37,8 +37,7 @@ FRESULT f_mountdrv ();
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mountdrv mounts a partition (initializes <tt>FATFS</tt> structure) and put all file functions can be used. The file system is mounted (initialized) automatically in accordance with the necessity when any file function is called, so that any initialization is not needed before using file functions. To terminate use of the FatFs module, close all files and clear the global variable <em>FatFs</em>, then the <tt>FATFS</tt> structure can be discarded. In this function, following process is executed.</p>
-<br>
+<p>The f_mountdrv mounts a partition (initializes <tt>FATFS</tt> structure) and put it that can handle all file functions. This function should not be used except for recover FR_INCORRECT_DISK_CHANGE error because the file system is mounted(initialized) automatically in accordance with the necessity when any file function is called. To terminate use of the FatFs module, close all files and then the <tt>FATFS</tt> structure can be discarded. In this function, following process is executed.</p><br>
 <ul>
 <li>Initializes lower level layer (disk I/O module).</li>
 <li>Searches a FAT boot record in order of sector 0 (as SFD format) and first primary partition (as FDISK format).</li>

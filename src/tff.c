@@ -1,15 +1,16 @@
 /*--------------------------------------------------------------------------/
-/  Tiny FatFs - FAT file system module R0.02                 (C)ChaN, 2006
+/  Tiny FatFs - FAT file system module R0.02a                (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
-/ cheap microcontrollers. This is opened for education, reserch and
-/ development. You can use, modify and republish it for non-profit or profit
-/ use without any limitation under your responsibility.
+/ cheap microcontrollers. This is a freeware and is opened for education,
+/ research and development. You can use, modify and republish it for
+/ non-profit or profit use without any limitation under your responsibility.
 /---------------------------------------------------------------------------/
 /  Feb 26, 2006  R0.00  Prototype
 /  Apr 29, 2006  R0.01  First stable version
 /  Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
 /                       Fixed a problem on small (<32M) patition.
+/  Jun 10, 2006  R0.02a Added a configuration option (_FS_MINIMUM).
 /---------------------------------------------------------------------------*/
 
 
@@ -126,7 +127,7 @@ BOOL put_cluster (
     fs->winflag = 1;
     return TRUE;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -192,7 +193,7 @@ DWORD create_chain (
 
     return ncl;     /* Return new cluster number */
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -225,7 +226,7 @@ BYTE check_fs (
     static const char fatsign[] = "FAT12FAT16";
     FATFS *fs = FatFs;
 
-
+    /* Determines FAT type by signature string but this is not correct */
     memset(fs->win, 0, 512);
     if (disk_read(fs->win, sect, 1) == RES_OK) {    /* Load boot record */
         if (LD_WORD(&(fs->win[510])) == 0xAA55) {       /* Is it valid? */
@@ -277,6 +278,7 @@ BOOL next_dir_entry (
 /*--------------------------------------*/
 /* Get File Status from Directory Entry */
 
+#ifndef _FS_MINIMUM
 static
 void get_fileinfo (
     FILINFO *finfo,     /* Ptr to Store the File Information */
@@ -312,7 +314,7 @@ void get_fileinfo (
     finfo->fdate = LD_WORD(dir+24);     /* Date */
     finfo->ftime = LD_WORD(dir+22);     /* Time */
 }
-
+#endif /* _FS_READONLY */
 
 
 /*-----------------------------------------------------*/
@@ -478,7 +480,7 @@ BYTE* reserve_direntry (
     fs->winflag = 1;
     return fs->win;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -665,7 +667,7 @@ FRESULT f_open (
     }
     /* Open a File */
     else {
-#endif
+#endif /* _FS_READONLY */
         if (res != FR_OK) return res;       /* Trace failed */
         if ((dir == NULL) || (*(dir+11) & AM_DIR))  /* It is a directory */
             return FR_NO_FILE;
@@ -697,14 +699,14 @@ FRESULT f_open (
 
 FRESULT f_read (
     FIL *fp,        /* Pointer to the file object */
-    BYTE *buff,     /* Pointer to data buffer */
+    void *buff,     /* Pointer to data buffer */
     WORD btr,       /* Number of bytes to read */
     WORD *br        /* Pointer to number of bytes read */
 )
 {
     DWORD sect, ln;
     WORD clust, rcnt;
-    BYTE cc;
+    BYTE cc, *rbuff = buff;
     FATFS *fs = FatFs;
 
 
@@ -717,7 +719,7 @@ FRESULT f_read (
     if (btr > ln) btr = ln;                         /* Truncate read count by number of bytes left */
 
     for ( ;  btr;                                   /* Repeat until all data transferred */
-        buff += rcnt, fp->fptr += rcnt, *br += rcnt, btr -= rcnt) {
+        rbuff += rcnt, fp->fptr += rcnt, *br += rcnt, btr -= rcnt) {
         if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
             if (--(fp->sect_clust)) {               /* Decrement sector counter */
                 sect = fp->curr_sect + 1;           /* Next sector */
@@ -732,7 +734,7 @@ FRESULT f_read (
             cc = btr / 512;                         /* When left bytes >= 512 */
             if (cc) {                               /* Read maximum contiguous sectors */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_read(buff, sect, cc) != RES_OK) goto fr_error;
+                if (disk_read(rbuff, sect, cc) != RES_OK) goto fr_error;
                 fp->sect_clust -= cc - 1;
                 fp->curr_sect += cc - 1;
                 rcnt = cc * 512; continue;
@@ -741,7 +743,7 @@ FRESULT f_read (
         if (!move_window(fp->curr_sect)) goto fr_error; /* Move sector window */
         rcnt = 512 - (fp->fptr % 512);                  /* Copy fractional bytes from sector window */
         if (rcnt > btr) rcnt = btr;
-        memcpy(buff, &fs->win[fp->fptr % 512], rcnt);
+        memcpy(rbuff, &fs->win[fp->fptr % 512], rcnt);
     }
 
     return FR_OK;
@@ -759,7 +761,7 @@ fr_error:   /* Abort this function due to an unrecoverable error */
 #ifndef _FS_READONLY
 FRESULT f_write (
     FIL *fp,            /* Pointer to the file object */
-    const BYTE *buff,   /* Pointer to the data to be written */
+    const void *buff,   /* Pointer to the data to be written */
     WORD btw,           /* Number of bytes to write */
     WORD *bw            /* Pointer to number of bytes written */
 )
@@ -767,6 +769,7 @@ FRESULT f_write (
     DWORD sect;
     WORD clust, wcnt;
     BYTE cc;
+    const BYTE *wbuff = buff;
     FATFS *fs = FatFs;
 
 
@@ -778,7 +781,7 @@ FRESULT f_write (
     if (fp->fsize + btw < fp->fsize) btw = 0;       /* File size cannot reach 4GB */
 
     for ( ;  btw;                                   /* Repeat until all data transferred */
-        buff += wcnt, fp->fptr += wcnt, *bw += wcnt, btw -= wcnt) {
+        wbuff += wcnt, fp->fptr += wcnt, *bw += wcnt, btw -= wcnt) {
         if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
             if (--(fp->sect_clust)) {               /* Decrement sector counter */
                 sect = fp->curr_sect + 1;           /* Next sector */
@@ -799,7 +802,7 @@ FRESULT f_write (
             cc = btw / 512;                         /* When left bytes >= 512 */
             if (cc) {                               /* Write maximum contiguous sectors */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_write(buff, sect, cc) != RES_OK) goto fw_error;
+                if (disk_write(wbuff, sect, cc) != RES_OK) goto fw_error;
                 fp->sect_clust -= cc - 1;
                 fp->curr_sect += cc - 1;
                 wcnt = cc * 512; continue;
@@ -812,7 +815,7 @@ FRESULT f_write (
         if (!move_window(fp->curr_sect)) goto fw_error; /* Move sector window */
         wcnt = 512 - (fp->fptr % 512);              /* Copy fractional bytes bytes to sector window */
         if (wcnt > btw) wcnt = btw;
-        memcpy(&fs->win[fp->fptr % 512], buff, wcnt);
+        memcpy(&fs->win[fp->fptr % 512], wbuff, wcnt);
         fs->winflag = 1;
     }
 
@@ -824,7 +827,7 @@ fw_error:   /* Abort this function due to an unrecoverable error */
     fp->flag |= FA__ERROR;
     return FR_RW_ERROR;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -901,7 +904,7 @@ FRESULT f_sync (
 
     return FR_OK;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -929,6 +932,7 @@ FRESULT f_close (
 
 
 
+#ifndef _FS_MINIMUM
 /*----------------------------*/
 /* Delete a File or Directory */
 
@@ -977,7 +981,7 @@ FRESULT f_unlink (
 
     return FR_OK;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -1043,7 +1047,7 @@ FRESULT f_mkdir (
 
     return FR_OK;
 }
-#endif
+#endif /* _FS_READONLY */
 
 
 
@@ -1172,6 +1176,7 @@ FRESULT f_chmod (
     }
     return res;
 }
-#endif
+#endif /* _FS_READONLY */
 
+#endif /* _FS_MINIMUM */
 

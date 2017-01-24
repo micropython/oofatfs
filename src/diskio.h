@@ -51,6 +51,7 @@ void    disk_timerproc ();
 #define MMC_GET_OCR     12
 #define ATA_GET_REV     20
 #define ATA_GET_MODEL   21
+#define ATA_GET_SN      22
 
 
 #define _DISKIF

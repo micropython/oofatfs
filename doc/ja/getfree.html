@@ -32,7 +32,7 @@ FRESULT f_getfree (
 <div class="para">
 <h4>戻り値</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>正常終了。<tt><em>*Clusters</em></tt>に空きクラスタ数が返されます。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
@@ -50,7 +50,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルシステム上の空きクラスタ数を取得します。<tt>FatFs.sects_clust</tt> がクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。</p>
+<p>ファイルシステム上の空きクラスタ数を取得します。<tt>FatFs.sects_clust</tt> がクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。ミニマム構成ではこの関数はサポートされません。</p>
 </div>
 
 

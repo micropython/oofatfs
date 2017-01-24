@@ -16,7 +16,7 @@
 <pre>
 FRESULT f_read (
   FIL* <em>FileObject</em>,    // Pointer to the file object structure
-  BYTE* <em>Buffer</em>,       // Pointer to the buffer to store read data
+  void* <em>Buffer</em>,       // Pointer to the buffer to store read data
   WORD <em>ByteToRead</em>,    // Number of bytes to read
   WORD* <em>ByteRead</em>      // Pointer to the variable to return number of bytes read
 );
@@ -41,7 +41,7 @@ FRESULT f_read (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in write only mode.</dd>
@@ -57,7 +57,7 @@ FRESULT f_read (
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer increases in number of bytes read. The <tt>ByteRead</tt> will be smaller than <tt>ByteToRead</tt> when the read pointer reached to end of the file or alignment error occured during the read operation.</p>
+<p>The read/write pointer increases in number of bytes read. The <tt>ByteRead</tt> will be smaller than <tt>ByteToRead</tt> when the read pointer reached to end of the file or any error occured during the read operation.</p>
 </div>
 
 

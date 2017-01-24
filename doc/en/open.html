@@ -47,7 +47,7 @@ FRESULT f_open (
 <div class="para">
 <h4>Return Values</h4>
 <dl class="ret">
-<dt>FR_OK</dt>
+<dt>FR_OK (0)</dt>
 <dd>The function succeeded. The <tt><em>FileObject</em></tt> structure is used for subsequent calls to refer to the file. When close the file, use function <tt><a href="close.html">f_close()</a></tt>.</dd>
 <dt>FR_NOFILE</dt>
 <dd>Could not find the file.</dd>
@@ -92,7 +92,7 @@ void main ()
     WORD br, bw;         // File R/W count
 
 
-    // Give a work area for FatFs (activate module)
+    // Give a work area to FatFs module (activate module)
     memset(&fs, 0, sizeof(FATFS));
     FatFs = &fs;
 

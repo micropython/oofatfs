@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.01        (C)ChaN, 2006
+/  Tiny-FatFs - FAT file system module include file  R0.02a   (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is opened for education, reserch and
@@ -10,14 +10,17 @@
 #ifndef _FATFS
 
 //#define _BYTE_ACC
-/* This enables byte-by-byte access for multi-byte variables */
-/* It must be defined on the big-endian processor, or to prevent address error */
+/* This enables byte-by-byte access for multi-byte variables. It must be defined
+on the big-endian processor, or to prevent address error. */
 
 //#define _FS_READONLY
-/* This removes writing code for read-only applications */
+/* Read only configuration. This removes writing code for read-only applications. */
+
+//#define _FS_MINIMUM
+/* Minimum configuration. This removes some functions to reduce module size. */
 
 #define _USE_SJIS
-/* This enables Shift-JIS code transparency, or only US-ASCII file name can be accepted */
+/* This enables Shift-JIS code transparency, or only US-ASCII file name can be accepted. */
 
 
 #include "integer.h"
@@ -87,7 +90,7 @@ typedef struct _FILINFO {
 extern FATFS *FatFs;    /* Pointer to active file system object */
 
 FRESULT f_open (FIL*, const char*, BYTE);           /* Open or create a file */
-FRESULT f_read (FIL*, BYTE*, WORD, WORD*);          /* Read file */
+FRESULT f_read (FIL*, void*, WORD, WORD*);          /* Read file */
 FRESULT f_close (FIL*);                             /* Close file */
 FRESULT f_lseek (FIL*, DWORD);                      /* Seek file pointer */
 FRESULT f_opendir (DIR*, const char*);              /* Initialize to read a directory */
@@ -96,7 +99,7 @@ FRESULT f_stat (const char*, FILINFO*);             /* Get file status */
 FRESULT f_getfree (DWORD*);                         /* Get number of free clusters */
 FRESULT f_mountdrv ();                              /* Force initialized the file system */
 #ifndef _FS_READONLY
-FRESULT f_write (FIL*, const BYTE*, WORD, WORD*);   /* Write file */
+FRESULT f_write (FIL*, const void*, WORD, WORD*);   /* Write file */
 FRESULT f_sync (FIL*);                              /* Flush cached information of a writing file */
 FRESULT f_unlink (const char*);                     /* Delete a file or directory */
 FRESULT f_mkdir (const char*);                      /* Create a directory */
