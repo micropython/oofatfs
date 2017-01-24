@@ -59,7 +59,12 @@ FRESULT f_getfree (
 <div class="para">
 <h4>Descriptions</h4>
 <p>The f_getfree function gets number of free clusters on the drive. The member <tt>csize</tt> in the file system object is refrecting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When FSInfo structure on FAT32 volume is not in sync, this function can return an incorrect free cluster count.</p>
-<p>This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_READONLY == 0</tt> and <tt>_FS_MINIMIZE == 0</tt>.</p>
 </div>
 
 
@@ -70,15 +75,15 @@ FRESULT f_getfree (
     DWORD fre_clust, fre_sect, tot_sect;
 
 
-    // Get drive information and free clusters
+    /* Get drive information and free clusters */
     res = f_getfree("/", &amp;fre_clust, &amp;fs);
     if (res) die(res);
 
-    // Get total sectors and free sectors
+    /* Get total sectors and free sectors */
     tot_sect = (fs->max_clust - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
-    // Print free space in unit of KB (assuming 512B/sector)
+    /* Print free space in unit of KB (assuming 512B/sector) */
     printf("%lu KB total drive space.\n"
            "%lu KB available.\n",
            fre_sect / 2, tot_sect / 2);
@@ -87,7 +92,7 @@ FRESULT f_getfree (
 
 
 <div class="para">
-<h4>References</h4>
+<h4>See Also</h4>
 <p><tt><a href="sfatfs.html">FATFS</a></tt></p>
 </div>
 

@@ -40,7 +40,13 @@ int f_putc (
 
 <div class="para">
 <h4>解説</h4>
-<p>この関数は<a href="write.html">f_write()</a>のラッパー関数です。リード・ライト構成で、<tt>_USE_STRFUNC</tt>が1または2のときこの関数がサポートされます。2を指定すると、<tt>'\n'</tt>は<tt>"\r\n"</tt>に変換されて書き込まれます。</p>
+<p>1文字をファイルに書き込みます。この関数は<a href="write.html">f_write()</a>のラッパー関数です。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_READONLY == 0</tt>で、且つ<tt>_USE_STRFUNC</tt>が 1または 2のとき使用可能です。2を指定すると、<tt>'\n'</tt>は<tt>"\r\n"</tt>に展開されてファイルに書き込まれます。</p>
 </div>
 
 

@@ -12,10 +12,10 @@
 
 <div class="para">
 <h2>f_unlink</h2>
-<p>The f_unlink removes file or directory.</p>
+<p>The f_unlink removes an object.</p>
 <pre>
 FRESULT f_unlink (
-  const XCHAR* <em>FileName</em>  /* Pointer to the file or directory name */
+  const XCHAR* <em>FileName</em>  /* Pointer to the object name */
 );
 </pre>
 </div>
@@ -24,7 +24,7 @@ FRESULT f_unlink (
 <h4>Parameter</h4>
 <dl class="par">
 <dt>FileName</dt>
-<dd>Pointer to the null-terminated string that specifies a <a href="filename.html">file or directory</a> to be removed.</dd>
+<dd>Pointer to the null-terminated string that specifies an <a href="filename.html">object</a> to be removed.</dd>
 </dl>
 </div>
 
@@ -44,7 +44,7 @@ FRESULT f_unlink (
 <dd>The drive number is invalid.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function was denied due to either of following reasons:
-<ul><li>The file or directory has read-only attribute</li><li>The directory is not empty.</li></ul></dd>
+<ul><li>The object has read-only attribute</li><li>The directory is not empty.</li></ul></dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -56,14 +56,20 @@ FRESULT f_unlink (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT partition on the disk.</dd>
+<dd>There is no valid FAT volume on the disk.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_unlink function removes a file or directory. In read-only configuration or minimization level is &gt;= 1, this function is not available.</p>
+<p>The f_unlink function removes an object. <em>Do not remove open objects and current directory</em>.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_READONLY == 0</tt> and <tt>_FS_MINIMIZE == 0</tt>.</p>
 </div>
 
 

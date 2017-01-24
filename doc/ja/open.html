@@ -63,7 +63,7 @@ FRESULT f_open (
 <dt>FR_DENIED</dt>
 <dd>アクセスが拒否された。リード・オンリー・ファイルの書き込みモード・オープン、同名のディレクトリまたはリード・オンリー・ファイルがある状態でのファイル作成、ディスクまたはディレクトリ・テーブルが満杯でファイルを作成できないなど。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態で書き込み系オープンをした。</dd>
 <dt>FR_DISK_ERR</dt>
@@ -73,16 +73,21 @@ FRESULT f_open (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>作成されたファイル・オブジェクトは、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。何らかの変更が行われたファイルが正しく閉じられなかった場合、そのファイルが破損する場合があります。</p>
+<p>既存のファイルを開いたり、新しいファイルを作成します。関数が成功するとファイル・オブジェクトが作成され、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。何らかの変更が行われたファイルがその後正しく閉じられなかった場合、そのファイルが破損する場合があります。</p>
 <p>ファイル・アクセスを開始する前に、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与える必要があります。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
-<p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p>全ての構成で使用可能です。<tt>_FS_READONLY == 1</tt>のときは、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
 </div>
 
 
@@ -91,37 +96,37 @@ FRESULT f_open (
 <pre>
 void main (void)
 {
-    FATFS fs[2];         // 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト)
-    FIL fsrc, fdst;      // ファイル・オブジェクト
-    BYTE buffer[4096];   // file copy buffer
-    FRESULT res;         // FatFs function common result code
-    UINT br, bw;         // File R/W count
+    FATFS fs[2];         /* 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト) */
+    FIL fsrc, fdst;      /* ファイル・オブジェクト */
+    BYTE buffer[4096];   /* file copy buffer */
+    FRESULT res;         /* FatFs function common result code */
+    UINT br, bw;         /* File R/W count */
 
-    // ドライブ0,1にワーク・エリアを与える
+    /* ドライブ0,1にワーク・エリアを与える */
     f_mount(0, &amp;fs[0]);
     f_mount(1, &amp;fs[1]);
 
-    // ドライブ1のソース・ファイルを開く
+    /* ドライブ1のソース・ファイルを開く */
     res = f_open(&amp;fsrc, "1:srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
-    // ドライブ0にデスティネーション・ファイルを作成する
+    /* ドライブ0にデスティネーション・ファイルを作成する */
     res = f_open(&amp;fdst, "0:dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
-    // ソースからデスティネーションにコピーする
+    /* ソースからデスティネーションにコピーする */
     for (;;) {
         res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);
-        if (res || br == 0) break;   // error or eof
+        if (res || br == 0) break;   /* エラーかファイル終端 */
         res = f_write(&amp;fdst, buffer, br, &amp;bw);
-        if (res || bw &lt; br) break;   // error or disk full
+        if (res || bw &lt; br) break;   /* エラーかディスク満杯 */
     }
 
-    // 全てのファイルを閉じる
+    /* 全てのファイルを閉じる */
     f_close(&amp;fsrc);
     f_close(&amp;fdst);
 
-    // ワーク・エリアを開放する
+    /* ワーク・エリアを開放する */
     f_mount(0, NULL);
     f_mount(1, NULL);
 }

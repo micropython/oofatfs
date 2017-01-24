@@ -52,19 +52,25 @@ FRESULT f_opendir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT partition on the disk.</dd>
+<dd>There is no valid FAT volume on the disk.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_opendir function opens an exsisting directory and creates the directory object for subsequent calls. The directory object structure can be discarded at any time without any procedure. This function is not supported in minimization level of &gt;=2.</p>
+<p>The f_opendir function opens an exsisting directory and creates the directory object for subsequent calls. The directory object structure can be discarded at any time without any procedure.</p>
 </div>
 
 
 <div class="para">
-<h4>References</h4>
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_MINIMIZE &lt;= 1</tt>.</p>
+</div>
+
+
+<div class="para">
+<h4>See Also</h4>
 <p><tt><a href="readdir.html">f_readdir</a>, <a href="sdir.html">DIR</a></tt></p>
 </div>
 

@@ -60,7 +60,12 @@ FRESULT f_forward (
 <div class="para">
 <h4>Description</h4>
 <p>The f_forward function reads the data from the file and forward it to the outgoing stream without data buffer. This is suitable for small memory system because it does not require any data buffer at application module. The file pointer of the file object increases in number of bytes forwarded. In case of <tt>*ByteFwd &lt; ByteToFwd</tt> without error, it means the requested bytes could not be transferred due to end of file or stream goes busy during data transfer.</p>
-<p>This function is available on <tt>_USE_FORWARD == 1</tt> and <tt>_FS_TINY == 1</tt>.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_USE_FORWARD == 1</tt> and <tt>_FS_TINY == 1</tt>.</p>
 </div>
 
 
@@ -128,7 +133,7 @@ FRESULT play_file (
 
 
 <div class="para">
-<h4>References</h4>
+<h4>See Also</h4>
 <p><tt><a href="open.html">f_open</a>, <a href="gets.html">fgets</a>, <a href="write.html">f_write</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 

@@ -44,12 +44,17 @@ char* f_gets (
 <div class="para">
 <h4>Description</h4>
 <p>The f_gets() is a wrapper function of <a href="read.html">f_read()</a>. The read operation continues until a <tt>'\n'</tt> is stored, reached end of file or buffer is filled with Size - 1 characters. The read string is terminated with a <tt>'\0'</tt>. When the file has reached end of the file or any error occured during read operation, f_gets() returns a <tt>NULL</tt>. The EOF and error status can be examined with <tt>f_eof()</tt> and <tt>f_error()</tt> macro.</p>
-<p>This function is available when <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set to 2, <tt>'\r'</tt> contained in the file is stripped.</p>
 </div>
 
 
 <div class="para">
-<h4>References</h4>
+<h4>QuickInfo</h4>
+<p>Available when <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set to 2, <tt>'\r'</tt>s contained in the file are stripped out.</p>
+</div>
+
+
+<div class="para">
+<h4>See Also</h4>
 <p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="putc.html">f_putc</a>, <a href="puts.html">f_puts</a>, <a href="printf.html">f_printf</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 

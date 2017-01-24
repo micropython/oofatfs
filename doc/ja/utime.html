@@ -12,10 +12,10 @@
 
 <div class="para">
 <h2>f_utime</h2>
-<p>ファイルまたはディレクトリのタイムスタンプを変更します。</p>
+<p>オブジェクトのタイムスタンプを変更します。</p>
 <pre>
 FRESULT f_utime (
-  const XCHAR* <em>FileName</em>,   /* ファイルまたはディレクトリ名へのポインタ */
+  const XCHAR* <em>FileName</em>,   /* オブジェクト名へのポインタ */
   const FILINFO* <em>TimeDate</em>  /* 設定する日付 */
 );
 </pre>
@@ -46,7 +46,7 @@ FRESULT f_utime (
 <dt>FR_INVALID_NAME</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
 <dt>FR_DISK_ERR</dt>
@@ -56,14 +56,20 @@ FRESULT f_utime (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルまたはディレクトリのタイムスタンプを変更します。リード・オンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
+<p>オブジェクトのタイムスタンプを変更します。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_READONLY == 0</tt>で、且つ<tt>_FS_MINIMIZE == 0</tt>のときに使用可能です。</p>
 </div>
 
 

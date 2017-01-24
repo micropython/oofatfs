@@ -49,14 +49,20 @@ FRESULT f_chdir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT partition on the disk.</dd>
+<dd>There is no valid FAT volume on the disk.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_chdir function changes the current directory of the logical drive. The current directory of a drive is initialized to the root directory when the drive is auto-mounted. Note that the current directory is retained in the each file system object so that it also affects other tasks that using the drive. This function is available when <tt>_FS_RPATH == 1</tt>.</p>
+<p>The f_chdir function changes the current directory of the logical drive. The current directory of a drive is initialized to the root directory when the drive is auto-mounted. Note that the current directory is retained in the each file system object so that it also affects other tasks that using the drive.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_RPATH == 1</tt>.</p>
 </div>
 
 
@@ -72,7 +78,7 @@ FRESULT f_chdir (
 </div>
 
 <div class="para">
-<h4>References</h4>
+<h4>See Also</h4>
 <p><tt><a href="chdrive.html">f_chdrive</a></tt></p>
 </div>
 

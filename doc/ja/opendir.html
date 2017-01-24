@@ -12,7 +12,7 @@
 
 <div class="para">
 <h2>f_opendir</h2>
-<p>ディレクトリをオープンします。</p>
+<p>ディレクトリを開きます。</p>
 <pre>
 FRESULT f_opendir (
   DIR* <em>DirObject</em>,       /* ディレクトリ・ブジェクト構造体へのポインタ */
@@ -44,7 +44,7 @@ FRESULT f_opendir (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_DISK_ERR</dt>
 <dd>ディスク・エラーによる失敗。</dd>
 <dt>FR_INT_ERR</dt>
@@ -52,14 +52,20 @@ FRESULT f_opendir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>ディレクトリをオープンします。正常終了したら、<tt>DirObject</tt>構造体を使ってこのディレクトリの項目を順次読み出せます。<tt>DirObject</tt>構造体は使用後は任意の時点で破棄できます。<tt>_FS_MINIMIZE >= 2</tt>ではこの関数はサポートされません。</p>
+<p>ディレクトリを開きます。正常終了したら、<tt>DirObject</tt>構造体を使ってこのディレクトリの項目を順次読み出せます。<tt>DirObject</tt>構造体は使用後は任意の時点で破棄できます。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_MINIMIZE &lt;= 1</tt>のとき使用可能になります。</p>
 </div>
 
 

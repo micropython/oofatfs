@@ -29,7 +29,7 @@ DRESULT disk_write (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the byte array to be written. The start address specified by upper layer may be aligned or non-aligned.</dd>
+<dd>Pointer to the byte array to be written. The memory address specified by upper layer may or may not be aligned to word boundary.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>

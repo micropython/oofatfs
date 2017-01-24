@@ -43,7 +43,7 @@ FRESULT f_getfree (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_DISK_ERR</dt>
 <dd>ディスク・エラーによる失敗。</dd>
 <dt>FR_INT_ERR</dt>
@@ -59,7 +59,12 @@ FRESULT f_getfree (
 <div class="para">
 <h4>解説</h4>
 <p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいては、FSINFOの状態によっては不正確な値を返したり、処理に時間がかかったりする可能性があります。</p>
-<p>リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_READONLY == 0</tt>で、且つ<tt>_FS_MINIMIZE == 0</tt>のとき使用可能です。</p>
 </div>
 
 
@@ -70,15 +75,15 @@ FRESULT f_getfree (
     DWORD fre_clust, fre_sect, tot_sect;
 
 
-    // Get drive information and free clusters
+    /* Get drive information and free clusters */
     res = f_getfree("/", &amp;fre_clust, &amp;fs);
     if (res) die(res);
 
-    // Get total sectors and free sectors
+    /* Get total sectors and free sectors */
     tot_sect = (fs->max_clust - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
-    // Print free space in unit of KB (assuming 512B/sector)
+    /* Print free space in unit of KB (assuming 512B/sector) */
     printf("%lu KB total drive space.\n"
            "%lu KB available.\n",
            fre_sect / 2, tot_sect / 2);

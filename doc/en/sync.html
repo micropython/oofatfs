@@ -48,12 +48,18 @@ FRESULT f_sync (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_sync function performs the same process as f_close function but the file is left opened and can continue read/write/seek operations to the file. This is suitable for applications that open files for a long time in writing mode, such as data logger. Performing f_sync of periodic or immediataly after f_write can minimize risk of data loss due to a sudden blackout or an unintentional disk removal. However f_sync immediataly before f_close has no advantage because f_close performs f_sync in it. This function is not available in read-only configuration.</p>
+<p>The f_sync function performs the same process as f_close function but the file is left opened and can continue read/write/seek operations to the file. This is suitable for the applications that open files for a long time in write mode, such as data logger. Performing f_sync of periodic or immediataly after f_write can minimize the risk of data loss due to a sudden blackout or an unintentional disk removal. However f_sync immediataly before f_close has no advantage because f_close performs f_sync in it. In other words, the differnce between those functions is that the file object is invalidated or not. </p>
 </div>
 
 
 <div class="para">
-<h4>References</h4>
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_READONLY == 0</tt>.</p>
+</div>
+
+
+<div class="para">
+<h4>See Also</h4>
 <p><tt><a href="close.html">f_close</a></tt></p>
 </div>
 

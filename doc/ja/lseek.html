@@ -42,7 +42,7 @@ FRESULT f_lseek (
 <dt>FR_INT_ERR</dt>
 <dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_INVALID_OBJECT</dt>
 <dd>無効なファイル・オブジェクト。</dd>
 </dl>
@@ -56,38 +56,43 @@ FRESULT f_lseek (
 <li>非書き込みモードのため、ファイル・サイズでクリップされた。</li>
 <li>ファイル拡張中にディスクが満杯になった。</li>
 </ul>
-<p>_FS_MINIMIZE >= 3ではこの関数はサポートされません。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_MINIMIZE &lt; 3</tt>のとき使用可能です。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    // ファイル・オフセット5000へ移動
+    /* オフセット5000へ移動 */
     res = f_lseek(&amp;file, 5000);
 
-    // ファイル追記の準備 (ファイル終端へ移動)
+    /* ファイル追記の準備 (ファイル終端へ移動) */
     res = f_lseek(&amp;file, file.fsize);
 
-    // 3000バイト進める
+    /* 3000バイト進める */
     res = f_lseek(&amp;file, file.fptr + 3000);
 
-    // 2000バイト戻す (オーバーフローに注意)
+    /* 2000バイト戻す (オーバーフローに注意) */
     res = f_lseek(&amp;file, file.fptr - 2000);
 </pre>
 <pre>
-    // クラスタ先行割り当て (ストリーミング・ライト時のバッファ・オーバーラン防止)
+    /* クラスタ先行割り当て (ストリーミング・ライト時のバッファ・オーバーラン防止) */
 
-    res = f_open(&amp;file, "record.wav", FA_CREATE_NEW | FA_WRITE); // ファイル作成
+    res = f_open(&amp;file, "record.wav", FA_CREATE_NEW | FA_WRITE); /* ファイル作成 */
 
-    res = f_lseek(&amp;file, MAX_SIZE);        // 十分なクラスタの先行割り当て
-    if (res || file.fptr != PRE_SIZE) .... // 正しくファイルが拡張されたかチェック
+    res = f_lseek(&amp;file, MAX_SIZE);        /* 十分なクラスタの先行割り当て */
+    if (res || file.fptr != PRE_SIZE) .... /* 正しくファイルが拡張されたかチェック */
 
-    res = f_lseek(&amp;file, DATA_START);      // データ・ストリームの記録(アロケーションディレイ無し)
+    res = f_lseek(&amp;file, DATA_START);      /* データ・ストリームの記録(アロケーションディレイ無し) */
     ...
 
-    res = f_truncate(&amp;file);              // 不要領域の切り捨て
-    res = f_lseek(&amp;file, 0);              // ヘッダの記録
+    res = f_truncate(&amp;file);              /* 不要領域の切り捨て */
+    res = f_lseek(&amp;file, 0);              /* ヘッダの記録 */
     ...
 
     res = f_close(&amp;file);

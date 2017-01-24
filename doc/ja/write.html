@@ -33,7 +33,7 @@ FRESULT f_write (
 <dt>ByteToWrite</dt>
 <dd>書き込むバイト数(0～UINTの最大値)を指定します。</dd>
 <dt>ByteWritten</dt>
-<dd>書き込まれたバイト数を格納する変数を指すポインタを指定します。戻り値は常に有効です。</dd>
+<dd>書き込まれたバイト数を格納する変数を指すポインタを指定します。戻り値は関数の成否にかかわらず常に有効です。</dd>
 </dl>
 </div>
 
@@ -50,7 +50,7 @@ FRESULT f_write (
 <dt>FR_INT_ERR</dt>
 <dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_INVALID_OBJECT</dt>
 <dd>無効なファイルオブジェクト。</dd>
 </dl>
@@ -60,7 +60,12 @@ FRESULT f_write (
 <div class="para">
 <h4>解説</h4>
 <p>書き込み開始位置は、ファイルR/Wポインタの位置からになります。ファイルR/Wポインタは実際に書き込まれたバイト数だけ進みます。関数が正常終了した後、要求したバイト数が書き込まれたかどうか<tt>*ByteWritten</tt>をチェックすべきです。<tt>*ByteWritten &lt; ByteToWrite</tt>のときは、ディスク・フルを意味します。</p>
-<p>リード・オンリー構成ではこの関数はサポートされません。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_READONLY == 0</tt>のときに使用可能です。</p>
 </div>
 
 

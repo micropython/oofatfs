@@ -3,8 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="start" title="Site Top" href="../../index_j.html">
-<link rel="up" title="Freewares" href="../../fsw.html">
+<meta name="description" content="組み込みシステム向けFATファイル・システム">
 <link rel="alternate" hreflang="en" title="英文" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - 汎用FATファイルシステム・モジュール</title>
@@ -16,19 +15,20 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, SH, Z80, H8, ARMなど安価なマイコンでそのまま使用可能です。</p>
+<p>FatFsは小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, SH, Z80, H8, ARMなど安価なマイコンでも使用可能です。FatFsをシュリンクした<a href="http://elm-chan.org/fsw/ff/00index_p.html">ぷちFatFs</a>もあります。</p>
 <h4>FatFsモジュールの特徴</h4>
 <ul>
- <li>FAT12, FAT16, FAT32に対応</li>
- <li>複数のボリューム(物理ドライブ・区画)に対応</li>
- <li>2種類の区画フォーマット(FDISKとSuper-floppy)に対応</li>
+ <li>Windows互換 FATファイル・システム</li>
+ <li>プラットフォーム非依存</li>
+ <li>コンパクトなコード・サイズとRAM使用量</li>
  <li>多くの構成オプション:
   <ul>
-   <li>長いファイル名(LFN)</li>
-   <li>複数のコード・ページ</li>
+   <li>複数のボリューム(物理ドライブ・区画)</li>
+   <li>DBCSを含む複数のOEMコード・ページ</li>
+   <li>長いファイル名(LFN)対応 (Unicode APIも選択可)</li>
    <li>マルチタスク対応</li>
    <li>マルチ・セクタ・サイズ対応</li>
-   <li>リードオンリー、一部機能の削除、バッファ構成等...</li>
+   <li>リード・オンリー、一部APIの削除、バッファ構成、その他…</li>
   </ul>
  </li>
 </ul>
@@ -70,7 +70,7 @@
 
 <div class="para">
 <h3>下位レイヤI/F</h3>
-<p>FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。これらのインターフェースを持つそれぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザにより用意する必要があります。資料にサンプル・ドライバあり。</p>
+<p>FatFsモジュールは、物理ドライブ等へのアクセスのため、下位レイヤに次のインターフェースを要求します。それぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザによって用意される必要があります。資料にドライバを含むサンプル・プロジェクトあり。</p>
 <ul>
 <li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
 <li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
@@ -84,10 +84,10 @@
 
 <div class="para">
 <h3>資料</h3>
-<p>FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
+<p>FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。詳しくはアプリケーション・ノートを参照してください。</p>
 <ul>
 <li><a href="http://elm-chan.org/fsw/ff/bd/"><em>FatFsユーザ・フォーラム</em></a></li>
-<li><a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a> <span class="mfd">2009. 6. 21</span></li>
+<li><a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a> <span class="mfd">2010. 1. 28</span></li>
 <li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FATファイル・システム仕様書 by Microsoft</a> (FATの理解・実装に必要な唯一のリファレンス)</li>
 <li><a href="http://elm-chan.org/docs/fat.html">FATファイル・システム概要</a></li>
@@ -97,8 +97,5 @@
 </ul>
 </div>
 
-
-<hr>
-<p class="foot"><a href="../../fsw.html">戻る</a></p>
 </body>
 </html>

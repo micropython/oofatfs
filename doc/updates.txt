@@ -1,17 +1,24 @@
-R0.07b, Jun 21, 2009
+R0.07e, Nov 3, 2009
+  Separated out configuration options from ff.h to ffconf.h.
+  Added a configuration option, _LFN_UNICODE.
+  Fixed f_unlink() fails to remove a sub-dir on _FS_RPATH.
+  Fixed name matching error on the 13 char boundary.
+  Changed f_readdir() to return the SFN with always upper case on non-LFN cfg.
+
+R0.07c, Jun 21, 2009
   Fixed f_unlink() may return FR_OK on error.
   Fixed wrong cache control in f_lseek().
   Added relative path feature.
   Added f_chdir().
   Added f_chdrive().
-  Added proper case conversion to extended char.
+  Added proper case conversion to extended characters.
 
 R0.07a, Apr 14, 2009
   Separated out OS dependent code on re-entrant configuration.
   Added multiple sector size support.
 
 R0.07, Apr 01, 2009
-  Merged Tiny-FatFs as a buffer configuration option.
+  Merged Tiny-FatFs into FatFs as a buffer configuration option.
   Added long file name support.
   Added multiple code page support.
   Added re-entrancy for multitask operation.

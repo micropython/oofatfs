@@ -67,14 +67,20 @@ FRESULT f_chmod (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT partition on the disk.</dd>
+<dd>There is no valid FAT volume on the disk.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_chmod function changes the attribute of a file or directory. This function is not available in read-only configuration and minimization level of &gt;=1.</p>
+<p>The f_chmod function changes the attribute of a file or directory.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_READONLY == 0</tt> and <tt>_FS_MINIMIZE == 0</tt>.</p>
 </div>
 
 

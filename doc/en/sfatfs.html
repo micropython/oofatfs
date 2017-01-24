@@ -20,6 +20,7 @@ typedef struct _FATFS_ {
     BYTE    csize;      /* Number of sectors per cluster */
     BYTE    n_fats;     /* Number of FAT copies */
     BYTE    wflag;      /* win[] dirty flag (1:must be written back) */
+    BYTE    fsi_flag;   /* fsinfo dirty flag (1:must be written back) */
     WORD    id;         /* File system mount ID */
     WORD    n_rootdir;  /* Number of root directory entries (0 on FAT32) */
 #if _FS_REENTRANT
@@ -29,7 +30,6 @@ typedef struct _FATFS_ {
     WORD    s_size;     /* Sector size */
 #endif
 #if !_FS_READONLY
-    BYTE    fsi_flag;   /* fsinfo dirty flag (1:must be written back) */
     DWORD   last_clust; /* Last allocated cluster */
     DWORD   free_clust; /* Number of free clusters */
     DWORD   fsi_sector; /* fsinfo sector */

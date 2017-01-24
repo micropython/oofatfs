@@ -44,7 +44,18 @@ int f_printf (
 
 <div class="para">
 <h4>解説</h4>
-<p>この関数は<a href="putc.html">f_putc()</a>および<a href="puts.html">f_puts()</a>のラッパー関数です。書式制御機能はサブセットとなっていて、使用可能はタイプは<tt>c s d u X</tt>、精度指定は<tt>l</tt>、フラグは<tt>0</tt>となっています。リード・ライト構成で<tt>_USE_STRFUNC</tt>が1または2のときこの関数がサポートされます。</p>
+<p>この関数は<a href="putc.html">f_putc()</a>および<a href="puts.html">f_puts()</a>のラッパー関数です。書式制御機能はサブセットとなっていて、書式制御文字は次に示すものが使用可能です。</p>
+<ul>
+<li>タイプ: <tt>c s d u X</tt></li>
+<li>精度指定: <tt>l</tt></li>
+<li>フラグ: <tt>0</tt></li>
+</ul>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_READONLY == 0</tt>で、且つ<tt>_USE_STRFUNC</tt>が 1または 2のとき使用可能になります。2の時は、出力に含まれる<tt>'\n'</tt>が<tt>"\r\n"</tt>に展開されてファイルに書き込まれます。</p>
 </div>
 
 

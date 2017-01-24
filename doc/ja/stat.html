@@ -45,7 +45,7 @@ FRESULT f_stat (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_DISK_ERR</dt>
 <dd>ディスク・エラーによる失敗。</dd>
 <dt>FR_INT_ERR</dt>
@@ -53,14 +53,20 @@ FRESULT f_stat (
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワークエリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルまたはディレクトリに関する情報を得ます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
+<p>ファイルまたはディレクトリに関する情報を得ます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。</p>
+</div>
+
+
+<div class="para">
+<h4>対応情報</h4>
+<p><tt>_FS_MINIMIZE == 0</tt>のときに使用可能です。</p>
 </div>
 
 

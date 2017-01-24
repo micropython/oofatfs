@@ -17,7 +17,7 @@
 FRESULT f_mkfs (
   BYTE  <em>Drive</em>,            /* Logical drive number */
   BYTE  <em>PartitioningRule</em>, /* Partitioning rule */
-  WORD  <em>AllocSize</em>         /* Allocation unit size */
+  WORD  <em>AllocSize</em>         /* Size of the allocation unit */
 );
 </pre>
 </div>
@@ -28,9 +28,9 @@ FRESULT f_mkfs (
 <dt>Drive</dt>
 <dd>Logical drive number (0-9) to be formatted.</dd>
 <dt>PartitioningRule</dt>
-<dd>When 0 is given, a partition table is created into first sector on the drive and then the file system is created on the partition. This is called FDISK format. When 1 is given, the file system starts from the first sector without partition table. This is often called super floppy (SFD) format.</dd>
+<dd>When 0 is given, a partition table is created into the first sector on the drive and then the file system is created on the partition. This is called FDISK format and used for harddisk and memory card. When 1 is given, the file system starts from the first sector without partition table. This is often called super floppy disk (SFD) format and used for floppy disk and removable disk.</dd>
 <dt>AllocSize</dt>
-<dd>Specifies allocation unit size in number of bytes per cluster. The value must be 0 or power of 2 in range of from 512 to 32768. When 0 is specified, the cluster size is determined by the drive size. FAT64 (64KB/cluster on FAT16) cannot be created by this function.</dd>
+<dd>Specifies allocation unit size in number of bytes per cluster. The value must be 0 or power of 2 in range of from 512 to 32768. When 0 is specified, the cluster size is determined depends on the volume size. FAT64 (64KB/cluster on FAT16) cannot be created by this function.</dd>
 </dl>
 </div>
 
@@ -63,8 +63,13 @@ FRESULT f_mkfs (
 <div class="para">
 <h4>Description</h4>
 <p>The f_mkfs function creates a FAT file system on the drive. There are two partitioning rules, FDISK and SFD, for removable media. It can be selected with an argument. The FDISK format is recommended for the most case. This function currently <em>does not support multiple partition</em>, so that existing partitions on the physical dirve will be deleted and re-created a new partition occupies entire disk space.</p>
-<p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the partition size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
-<p>This function is supported on only _USE_MKFS option is selected.</p>
+<p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the volume size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
+</div>
+
+
+<div class="para">
+<h4>QuickInfo</h4>
+<p>Available when <tt>_FS_READOLNY == 0</tt> and <tt>_USE_MKFS == 1</tt>.</p>
 </div>
 
 
