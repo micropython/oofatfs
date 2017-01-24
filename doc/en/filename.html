@@ -34,10 +34,10 @@
 <p><br></p>
 <div class="para">
 <h2>Correspondence between logical/physical drive</h2>
-<p>In default, the FatFs module has work areas that called `file system object' for each logical drive. The logical drive is bound simply to the physical drive that has same drive number, and first partition is mounted. When <tt>_MULTI_PARTITION</tt> is specified in configuration option, each individual logical drive can be bound to any physical drive/partition. In this case, a drive number resolution table must be defined as follows:</p>
+<p>In default, the FatFs module has work areas that called <em>file system object</em> for each logical drive. The logical drive is bound to the physical drive that has same drive number, and the first partition is mounted. When <tt>_MULTI_PARTITION</tt> is specified in configuration option, each individual logical drive can be bound to any physical drive/partition. In this case, a drive number resolution table must be defined as follows:</p>
 <pre>
 Example: Logical drive 0-2 are assigned to three pri-partitions on the physical drive 0 (fixed disk)
-         Logical drive 3 is assigned to physical drive 0 (removable disk)
+         Logical drive 3 is assigned to physical drive 1 (removable disk)
 
 const PARTITION Drives[] = {
     {0, 0},     /* Logical drive 0 ==> Physical drive 0, 1st partition */

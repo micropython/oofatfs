@@ -8,7 +8,7 @@
 #include "diskio.h"
 
 /*-----------------------------------------------------------------------*/
-/* Correspondence between drive number and physical drive                */
+/* Correspondence between physical drive number and physical drive.      */
 /* Note that Tiny-FatFs supports only single drive and always            */
 /* accesses drive number 0.                                              */
 
@@ -92,8 +92,8 @@ DSTATUS disk_status (
 DRESULT disk_read (
     BYTE drv,       /* Physical drive nmuber (0..) */
     BYTE *buff,     /* Data buffer to store read data */
-    DWORD sector,   /* Sector number (LBA) */
-    BYTE count      /* Sector count (1..255) */
+    DWORD sector,   /* Sector address (LBA) */
+    BYTE count      /* Number of sectors to read (1..255) */
 )
 {
     DRESULT res;
@@ -130,8 +130,8 @@ DRESULT disk_read (
 DRESULT disk_write (
     BYTE drv,           /* Physical drive nmuber (0..) */
     const BYTE *buff,   /* Data to be written */
-    DWORD sector,       /* Sector number (LBA) */
-    BYTE count          /* Sector count (1..255) */
+    DWORD sector,       /* Sector address (LBA) */
+    BYTE count          /* Number of sectors to write (1..255) */
 )
 {
     DRESULT res;

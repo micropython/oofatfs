@@ -16,7 +16,7 @@
 <pre>
 DRESULT disk_read (
   BYTE <em>Drive</em>,          /* Physical drive number */
-  BYTE* <em>Buffer</em>,        /* Pointer to the read buffer */
+  BYTE* <em>Buffer</em>,        /* Pointer to the read data buffer */
   DWORD <em>SectorNumber</em>,  /* Sector number to read from */
   BYTE <em>SectorCount</em>     /* Number of sectros to read */
 );
@@ -31,7 +31,7 @@ DRESULT disk_read (
 <dt>Buffer</dt>
 <dd>Pointer to the read buffer to store the read data. The buffer size of number of bytes to be read is required.</dd>
 <dt>SectorNumber</dt>
-<dd>Specifies the start sector number in logical block address.</dd>
+<dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
 <dd>Specifies number of sectors to read. The value can be 1 to 255.</dd>
 </dl>

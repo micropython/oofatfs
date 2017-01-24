@@ -12,7 +12,7 @@
 
 <div class="para">
 <h2>disk_status</h2>
-<p>The disk_status function return the current disk status.</p>
+<p>The disk_status function returns the current disk status.</p>
 <pre>
 DSTATUS disk_status (
   BYTE <em>Drive</em>     /* Physical drive number */
@@ -24,7 +24,7 @@ DSTATUS disk_status (
 <h4>Parameters</h4>
 <dl class="par">
 <dt>Drive</dt>
-<dd>Specifies the physical drive number to be tested.</dd>
+<dd>Specifies the physical drive number to be confirmed.</dd>
 </dl>
 </div>
 
@@ -38,7 +38,7 @@ DSTATUS disk_status (
 <dt>STA_NODISK</dt>
 <dd>Indicates that no medium in the drive. This is always cleared on fixed disk drive.</dd>
 <dt>STA_PROTECTED</dt>
-<dd>Indicates that the medium is write protected. This is always cleared on the drive that does not support write protect notch.</dd>
+<dd>Indicates that the medium is write protected. This is always cleared on the drive that does not support write protect notch. Not valid when <tt>STA_NODISK</tt> is set.</dd>
 </dl>
 </div>
 

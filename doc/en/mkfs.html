@@ -63,7 +63,7 @@ FRESULT f_mkfs (
 <div class="para">
 <h4>Description</h4>
 <p>The f_mkfs function creates a FAT file system on the drive. There are two partitioning rules, FDISK and SFD, for removable media. It can be selected with an argument. The FDISK format is recommended for most case. This function currently does not support multiple partition, so that existing partitions on the physical dirve will be deleted and re-created a partition occupies entire disk space.</p>
-<p>The FAT type, FAT12/FAT16/FAT32, is determined by only how many clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT type is selected, is depends on the drive size and specified cluster size. The cluster size affects performance of file system and large cluster increases the performance, so that 32768 bytes per cluster is recommended for most case except for small drive.</p>
+<p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by only how many clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the drive size and specified cluster size. The cluster size affects performance of file system and large cluster increases the performance, so that 32768 bytes per cluster is recommended for most case except for small drive.</p>
 <p>This function is supported on only FatFs with _USE_MKFS option.<p>
 </div>
 

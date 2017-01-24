@@ -16,7 +16,7 @@
 <pre>
 DRESULT disk_write (
   BYTE <em>Drive</em>,          /* Physical drive number */
-  const BYTE* <em>Buffer</em>,  /* Pointer to the read buffer */
+  const BYTE* <em>Buffer</em>,  /* Pointer to the write data */
   DWORD <em>SectorNumber</em>,  /* Sector number to write */
   BYTE <em>SectorCount</em>     /* Number of sectors to write */
 );
@@ -31,7 +31,7 @@ DRESULT disk_write (
 <dt>Buffer</dt>
 <dd>Pointer to the data to be written.</dd>
 <dt>SectorNumber</dd>
-<dd>Specifies the start sector number in logical block address.</dd>
+<dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
 <dd>Specifies the number of sectors to write. The value can be 1 to 255.</dd>
 </dl>

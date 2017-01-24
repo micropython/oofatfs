@@ -12,7 +12,8 @@
 
 <div class="para">
 <h2>f_lseek</h2>
-<p>The f_lseek functione moves the file read/write pointer of an open file object.</p>
+<p>The f_lseek function moves the file read/write pointer of an open file object. It can also be used to extend the file size (cluster pre-allocation).</p>
+
 <pre>
 FRESULT f_lseek (
   FIL* <em>FileObject</em>,   /* Pointer to the file object structure *
@@ -78,7 +79,7 @@ FRESULT f_lseek (
 
 <div class="para">
 <h4>References</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="truncate.html">f_truncate</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

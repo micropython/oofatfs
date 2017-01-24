@@ -1,11 +1,11 @@
 /*--------------------------------------------------------------------------/
-/  Tiny-FatFs - FAT file system module include file  R0.05    (C)ChaN, 2007
+/  Tiny-FatFs - FAT file system module include file  R0.05a   (C)ChaN, 2008
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
 / research and development under license policy of following trems.
 /
-/  Copyright (C) 2007, ChaN, all right reserved.
+/  Copyright (C) 2008, ChaN, all right reserved.
 /
 / * The FatFs module is a free software and there is no warranty.
 / * You can use, modify and/or redistribute it for personal, non-profit or
@@ -21,18 +21,18 @@
 /  1: Enable word access.
 /  2: Disable word access and use byte-by-byte access instead.
 /  When the architectural byte order of the MCU is big-endian and/or address
-/  miss-aligned access results incorrect behavior, the _MCU_ENDIAN must be set
-/  to 2. If it is not the case, it can be set to 1 for good code efficiency. */
+/  miss-aligned access results incorrect behavior, the _MCU_ENDIAN must be set to 2.
+/  If it is not the case, it can also be set to 1 for good code efficiency. */
 
 #define _FS_READONLY    0
 /* Setting _FS_READONLY to 1 defines read only configuration. This removes
-/  writing functions, f_write, f_sync, f_unlink, f_mkdir, f_chmod, f_rename
-/  and useless f_getfree. */
+/  writing functions, f_write, f_sync, f_unlink, f_mkdir, f_chmod, f_rename,
+/  f_truncate, f_getfree and internal writing codes. */
 
 #define _FS_MINIMIZE    0
 /* The _FS_MINIMIZE option defines minimization level to remove some functions.
 /  0: Full function.
-/  1: f_stat, f_getfree, f_unlink, f_mkdir, f_chmod and f_rename are removed.
+/  1: f_stat, f_getfree, f_unlink, f_mkdir, f_chmod, f_truncate and f_rename are removed.
 /  2: f_opendir and f_readdir are removed in addition to level 1.
 /  3: f_lseek is removed in addition to level 2. */
 
@@ -163,10 +163,12 @@ FRESULT f_opendir (DIR*, const char*);              /* Open an existing director
 FRESULT f_readdir (DIR*, FILINFO*);                 /* Read a directory item */
 FRESULT f_stat (const char*, FILINFO*);             /* Get file status */
 FRESULT f_getfree (const char*, DWORD*, FATFS**);   /* Get number of free clusters on the drive */
+FRESULT f_truncate (FIL*);                          /* Truncate file */
 FRESULT f_sync (FIL*);                              /* Flush cached data of a writing file */
 FRESULT f_unlink (const char*);                     /* Delete an existing file or directory */
 FRESULT f_mkdir (const char*);                      /* Create a new directory */
 FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file/dir attriburte */
+FRESULT f_utime (const char*, const FILINFO*);      /* Change file/dir timestamp */
 FRESULT f_rename (const char*, const char*);        /* Rename/Move a file or directory */
 
 
@@ -273,15 +275,13 @@ DWORD get_fattime (void);   /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-
 #define LD_DWORD(ptr)       (DWORD)(*(DWORD*)(BYTE*)(ptr))
 #define ST_WORD(ptr,val)    *(WORD*)(BYTE*)(ptr)=(WORD)(val)
 #define ST_DWORD(ptr,val)   *(DWORD*)(BYTE*)(ptr)=(DWORD)(val)
-#else
-#if _MCU_ENDIAN == 2    /* Use byte-by-byte access */
+#elif _MCU_ENDIAN == 2  /* Use byte-by-byte access */
 #define LD_WORD(ptr)        (WORD)(((WORD)*(volatile BYTE*)((ptr)+1)<<8)|(WORD)*(volatile BYTE*)(ptr))
 #define LD_DWORD(ptr)       (DWORD)(((DWORD)*(volatile BYTE*)((ptr)+3)<<24)|((DWORD)*(volatile BYTE*)((ptr)+2)<<16)|((WORD)*(volatile BYTE*)((ptr)+1)<<8)|*(volatile BYTE*)(ptr))
 #define ST_WORD(ptr,val)    *(volatile BYTE*)(ptr)=(BYTE)(val); *(volatile BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8)
 #define ST_DWORD(ptr,val)   *(volatile BYTE*)(ptr)=(BYTE)(val); *(volatile BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8); *(volatile BYTE*)((ptr)+2)=(BYTE)((DWORD)(val)>>16); *(volatile BYTE*)((ptr)+3)=(BYTE)((DWORD)(val)>>24)
 #else
 #error Do not forget to set _MCU_ENDIAN properly!
-#endif
 #endif
 
 

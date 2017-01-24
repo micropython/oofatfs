@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.05   (C)ChaN, 2007
+FatFs/Tiny-FatFs Module Source Files R0.05a   (C)ChaN, 2008
 
 
 FILES
@@ -67,20 +67,21 @@ CONFIGURATION OPTIONS
 
   _USE_FSINFO
 
-  When _USE_FSINFO is set to 1, FSInfo is used for FAT32 volume.
-
+  When _USE_FSINFO is set to 1, FSInfo is used for FAT32 volume. The initial
+  value is 0. (FSInfo is not used)
 
   _USE_SJIS
 
   When _USE_SJIS is set to 1, Shift_JIS code set can be used as a file name,
-  otherwire second byte of double-byte characters will be collapted.
-  The initial value is 1.
+  otherwire second byte of double-byte characters will be collapted. The
+  initial value is 1.
 
 
   _USE_NTFLAG
 
   When _USE_NTFLAG is set to 1, upper/lower case of the file/dir name is
   preserved. Note that the files are always accessed in case insensitive.
+  The initial value is 1.
 
 
   _USE_MKFS
@@ -90,7 +91,7 @@ CONFIGURATION OPTIONS
   The initial value is 0. (f_mkfs is not available)
 
 
-  Following table shows which function is removed by configuratin options.
+  Following table shows which function is removed by configuration options.
 
                 _FS_MINIMIZE   _FS_READONLY  _USE_MKFS 
                 (1)  (2)  (3)       (1)         (0)    
@@ -105,9 +106,11 @@ CONFIGURATION OPTIONS
    f_readdir          x    x                           
    f_stat        x    x    x                           
    f_getfree     x    x    x         x                 
+   f_truncate    x    x    x         x                 
    f_unlink      x    x    x         x                 
    f_mkdir       x    x    x         x                 
    f_chmod       x    x    x         x                 
+   f_utime       x    x    x         x                 
    f_rename      x    x    x         x                 
    f_mkfs        x    x    x         x          x      
 
@@ -117,8 +120,8 @@ AGREEMENTS
 
   The FatFs/Tiny-FatFs module is a free software and there is no warranty.
   The FatFs/Tiny-FatFs module is opened for education, reserch and development.
-  You can use and/or modify it for personal, non-profit or profit use without
-  any restriction under your responsibility.
+  You can use and/or modify it for personal, non-profit or commercial use
+  without any restriction under your responsibility.
 
 
 
@@ -162,3 +165,9 @@ REVISION HISTORY
                        Changed arguments of f_mkfs. (FatFs)
                        Fixed f_mkfs on FAT32 creates incorrect FSInfo. (FatFs)
                        Fixed f_mkdir on FAT32 creates incorrect directory. (FatFs)
+
+  Feb 03, 2008  R0.05a Added f_truncate().
+                       Added f_utime().
+                       Fixed off by one error at FAT sub-type determination.
+                       Fixed btr in f_read() can be mistruncated.
+                       Fixed cached sector is not flushed when create and close without write.

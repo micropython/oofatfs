@@ -1,8 +1,15 @@
+R0.05a, Feb 03, 2008
+  Added f_truncate.
+  Added f_utime.
+  Fixed off by one error at FAT sub-type determination.
+  Fixed btr in f_read can be mistruncated.
+  Fixed cached sector is left not flushed when create and close without write.
+
 R0.05, Aug 26, 2007
   Changed arguments of f_read, f_write.
   Changed arguments of f_mkfs. (FatFs)
   Fixed f_mkfs on FAT32 creates incorrect FSInfo. (FatFs)
-  Fixed f_mkdir on FAT32 creates incorrect directory.  (FatFs)
+  Fixed f_mkdir on FAT32 creates incorrect directory. (FatFs)
 
 R0.04b, May 05, 2007
   Added _USE_NTFLAG option.
