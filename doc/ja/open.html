@@ -15,7 +15,7 @@
 <p>ファイルをオープンまたは作成します。</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,      // 作成するファイルオブジェクト構造体へのポインタ
+  FIL* <em>FileObject</em>,      // 空のファイルオブジェクト構造体へのポインタ
   const char* <em>FileName</em>, // ファイルのフルパス名へのポインタ
   BYTE <em>ModeFlags</em>        // モードフラグ
 );
@@ -75,7 +75,7 @@ FRESULT f_open (
 
 <div class="para">
 <h4>解説</h4>
-<p>FatFsモジュールの使用を開始するにはまず、FatFsモジュールにワークエリア（構造体<tt>FATFS</tt>）を割り当てます。確保したワークエリアを0で初期化したあと、FatFsモジュールのグローバル変数<em>FatFs</em>にそのアドレスを代入するだけでモジュールは動作可能状態になり、ファイル関数が使えるようになります。</p>
+<p>FatFsモジュールの使用を開始するにはまず、FatFsモジュールのグローバル変数<em>FatFs</em>にゼロクリアしたワークエリア(<tt>FATFS</tt>構造体)のアドレスを代入します。このようにしてFatFsモジュールにワークエリアを割り当てるとモジュールは動作可能状態になり、ファイル関数が使えるようになります。ゼロクリアの代わりに<a href="mountdrv.html">f_mountdrv()</a>でもOKですが、少なくともその時点で物理ドライブが動作可能になっていなければなりません。FatFsモジュールの使用を終了するには、全てのファイルを閉じたあと<em>FatFs</em>をクリアします。その後、ワークエリアは破棄できます。</p>
 <p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
 </div>
 
@@ -93,8 +93,8 @@ void main ()
 
 
     // FatFsのワークエリアを確保する
-    memset(&fs, 0, sizeof(FATFS));
     FatFs = &fs;
+    memset(&fs, 0, sizeof(FATFS));      // ワークエリアの初期化。代わりに f_mountdrv() でもよい
 
     // ソース・ファイルを開く
     res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);

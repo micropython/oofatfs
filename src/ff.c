@@ -1,10 +1,17 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.03                     (C)ChaN, 2006
+/  FatFs - FAT file system module  R0.03a                    (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
-/ research and development. You can use, modify and/or republish it for
-/ non-profit or profit use without any restriction under your responsibility.
+/ research and development under license policy of following trems.
+/
+/  Copyright (C) 2006, ChaN, all right reserved.
+/
+/ * The FatFs module is a free software and there is no warranty.
+/ * You can use, modify and/or redistribute it for personal, non-profit or
+/   profit use without any restriction under your responsibility.
+/ * Redistributions of source code must retain the above copyright notice.
+/
 /---------------------------------------------------------------------------/
 /  Feb 26, 2006  R0.00  Prototype.
 /  Apr 29, 2006  R0.01  First stable version.
@@ -13,6 +20,8 @@
 /  Jun 10, 2006  R0.02a Added a configuration option (_FS_MINIMUM).
 /  Sep 22, 2006  R0.03  Added f_rename().
 /                       Changed option _FS_MINIMUM to _FS_MINIMIZE.
+/  Dec 11, 2006  R0.03a Improved cluster scan algolithm to write files fast.
+/                       Fixed f_mkdir() creates incorrect directory on FAT32.
 /---------------------------------------------------------------------------*/
 
 #include <string.h>
@@ -94,7 +103,7 @@ DWORD get_cluster (
 
         case FS_FAT32 :
             if (!move_window(fatsect + clust / 128)) break;
-            return LD_DWORD(&(fs->win[((WORD)clust * 4) % 512]));
+            return LD_DWORD(&(fs->win[((WORD)clust * 4) % 512])) & 0x0FFFFFFF;
         }
     }
     return 1;   /* There is no cluster information, or an error occured */
@@ -185,34 +194,36 @@ DWORD create_chain (
     DWORD clust          /* Cluster# to stretch, 0 means create new */
 )
 {
-    DWORD ncl, ccl, mcl = FatFs->max_clust;
+    DWORD cstat, ncl, scl, mcl;
+    FATFS *fs = FatFs;
 
 
-    if (clust == 0) {   /* Create new chain */
-        ncl = 1;
-        do {
-            ncl++;                      /* Check next cluster */
-            if (ncl >= mcl) return 0;   /* No free custer was found */
-            ccl = get_cluster(ncl);     /* Get the cluster status */
-            if (ccl == 1) return 0;     /* Any error occured */
-        } while (ccl);              /* Repeat until find a free cluster */
+    mcl = fs->max_clust;
+    if (clust == 0) {       /* Create new chain */
+        scl = fs->last_clust;           /* Get last allocated cluster */
+        if (scl < 2 || scl >= mcl) scl = 1;
     }
-    else {              /* Stretch existing chain */
-        ncl = get_cluster(clust);   /* Check the cluster status */
-        if (ncl < 2) return 0;      /* It is an invalid cluster */
-        if (ncl < mcl) return ncl;  /* It is already followed by next cluster */
-        ncl = clust;                /* Search free cluster */
-        do {
-            ncl++;                      /* Check next cluster */
-            if (ncl >= mcl) ncl = 2;    /* Wrap around */
-            if (ncl == clust) return 0; /* No free custer was found */
-            ccl = get_cluster(ncl);     /* Get the cluster status */
-            if (ccl == 1) return 0;     /* Any error occured */
-        } while (ccl);              /* Repeat until find a free cluster */
+    else {                  /* Stretch existing chain */
+        cstat = get_cluster(clust);     /* Check the cluster status */
+        if (cstat < 2) return 0;        /* It is an invalid cluster */
+        if (cstat < mcl) return cstat;  /* It is already followed by next cluster */
+        scl = clust;
     }
+    ncl = scl;              /* Scan start cluster */
+    do {
+        ncl++;                      /* Next cluster */
+        if (ncl >= mcl) {           /* Wrap around */
+            ncl = 2;
+            if (scl == 1) return 0; /* No free custer was found */
+        }
+        if (ncl == scl) return 0;   /* No free custer was found */
+        cstat = get_cluster(ncl);   /* Get the cluster status */
+        if (cstat == 1) return 0;   /* Any error occured */
+    } while (cstat);                /* Repeat until find a free cluster */
 
-    if (!put_cluster(ncl, 0xFFFFFFFF)) return 0;        /* Mark the new cluster "in use" */
+    if (!put_cluster(ncl, 0x0FFFFFFF)) return 0;        /* Mark the new cluster "in use" */
     if (clust && !put_cluster(clust, ncl)) return 0;    /* Link it to previous one if needed */
+    fs->last_clust = ncl;
 
     return ncl;     /* Return new cluster number */
 }
@@ -249,7 +260,8 @@ BYTE check_fs (
     static const char fatsign[] = "FAT12FAT16FAT32";
     FATFS *fs = FatFs;
 
-    /* Determines FAT type by signature string but this is not correct */
+    /* Determines FAT type by signature string but this is not correct.
+       For further information, refer to fatgen103.doc from Microsoft. */
     memset(fs->win, 0, 512);
     if (disk_read(fs->win, sect, 1) == RES_OK) {    /* Load boot record */
         if (LD_WORD(&(fs->win[510])) == 0xAA55) {       /* Is it valid? */
@@ -1151,7 +1163,7 @@ FRESULT f_mkdir (
 {
     FRESULT res;
     BYTE *dir, *w, n;
-    DWORD sect, dsect, dclust, tim;
+    DWORD sect, dsect, dclust, pclust, tim;
     DIR dirscan;
     char fn[8+3+1];
     FATFS *fs = FatFs;
@@ -1184,11 +1196,13 @@ FRESULT f_mkdir (
     *(w+11) = AM_DIR;
     tim = get_fattime();
     ST_DWORD(w+22, tim);
-    memcpy(w+32, w, 32); *(w+33) = '.';
     ST_WORD(w+26, dclust);
     ST_WORD(w+20, dclust >> 16);
-    ST_WORD(w+32+26, dirscan.sclust);
-    ST_WORD(w+32+20, dirscan.sclust >> 16);
+    memcpy(w+32, w, 32); *(w+33) = '.';
+    pclust = dirscan.sclust;
+    if (fs->fs_type == FS_FAT32 && pclust == fs->dirbase) pclust = 0;
+    ST_WORD(w+32+26, pclust);
+    ST_WORD(w+32+20, pclust >> 16);
     fs->winflag = 1;
 
     if (!move_window(sect)) return FR_RW_ERROR;

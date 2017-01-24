@@ -1,18 +1,27 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.03        (C)ChaN, 2006
+/  FatFs - FAT file system module include file  R0.03a       (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
-/ research and development. You can use, modify and/or republish it for
-/ non-profit or profit use without any restriction under your responsibility.
+/ research and development under license policy of following trems.
+/
+/  Copyright (C) 2006, ChaN, all right reserved.
+/
+/ * The FatFs module is a free software and there is no warranty.
+/ * You can use, modify and/or redistribute it for personal, non-profit or
+/   profit use without any restriction under your responsibility.
+/ * Redistributions of source code must retain the above copyright notice.
+/
 /---------------------------------------------------------------------------*/
 
 #ifndef _FATFS
 
+#error Don't forget to change these options.
+
 //#define _BYTE_ACC
 /* The _BYTE_ACC enables byte-by-byte access for multi-byte variables. This
 /  MUST be defined when multi-byte variable is stored in big-endian and/or
-/  address miss-aligned access is prohibited.  */
+/  address miss-aligned access is prohibited. */
 
 //#define _FS_READONLY
 /* Read only configuration. This removes writing functions, f_write, f_sync,
@@ -45,12 +54,13 @@ typedef struct _FATFS {
     WORD    n_rootdir;      /* Number of root directory entry */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    pad1;
+    DWORD   winsect;        /* Current sector appearing in the win[] */
     DWORD   sects_fat;      /* Sectors per fat */
     DWORD   max_clust;      /* Maximum cluster# + 1 */
     DWORD   fatbase;        /* FAT start sector */
     DWORD   dirbase;        /* Root directory start sector (cluster# for FAT32) */
     DWORD   database;       /* Data start sector */
-    DWORD   winsect;        /* Current sector appearing in the win[] */
+    DWORD   last_clust;     /* Last allocated cluster */
     BYTE    win[512];       /* Disk access window for Directory/FAT */
 } FATFS;
 

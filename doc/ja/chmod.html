@@ -31,10 +31,10 @@ FRESULT f_chmod (
 <dd>設定する属性。指定可能な属性は次の通りで、これらの組み合わせで指定します。指定されなかった属性は解除されます。<br>
 <table class="lst">
 <tr><th>値</th><th>意味</th></td>
-<tr><td>AR_RDO</td><td>リードオンリー</td></td>
-<tr><td>AR_ARC</td><td>アーカイブ</td></td>
-<tr><td>AR_SYS</td><td>システム</td></td>
-<tr><td>AR_HID</td><td>ヒドゥン</td></td>
+<tr><td>AM_RDO</td><td>リードオンリー</td></td>
+<tr><td>AM_ARC</td><td>アーカイブ</td></td>
+<tr><td>AM_SYS</td><td>システム</td></td>
+<tr><td>AM_HID</td><td>ヒドゥン</td></td>
 </table>
 </dd>
 <dt>AttributeMask</dt>
@@ -79,8 +79,8 @@ FRESULT f_chmod (
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    // Set read-only flag , clear archive flag and others are not changed.
-    f_chmod("/file.txt", AR_RDO, AR_RDO | AR_ARC);
+    // Set read-only flag , clear archive flag and others are left unchanged.
+    f_chmod("file.txt", AM_RDO, AM_RDO | AM_ARC);
 </pre>
 </div>
 

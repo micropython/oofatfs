@@ -29,7 +29,7 @@
 <ul>
  <li>Only a common buffer for FAT and each file to reduce memory consumption.</li>
  <li>Optimized for 8/16 bit microcontrollers.</li>
- <li>Low memory consumption , suitable for small memory system (1KB)</li>
+ <li>Low memory consumption, suitable for small memory system (1KB)</li>
  <li>Supports FAT12 and FAT16(+FAT64)</li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
  <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
@@ -39,25 +39,25 @@
 
 <div class="para">
 <h3>Memory Usage</h3>
-<p>There are some configuration options to eliminate unused functions to reduce module size. Following tables are memory consumption in unit of byte on avr-gcc.</p>
+<p>There are some configuration options to eliminate unused functions to reduce module size. Following tables are the memory consumption in unit of byte on avr-gcc.</p>
 
 <div class="lset">
 <table class="lst2">
  <caption>FatFs</caption>
  <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>8554</td><td>6020</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>4170</td><td>3400</td></tr>
+ <tr><td>Program (R/W cfg.)</td><td>8526</td><td>6042</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>4172</td><td>3402</td></tr>
  <tr><td>Static Work Area</td><td colspan="2">2</td>
- <tr><td>Dynamic Work Area</td><td colspan="2">544 + 540 * &lt;files&gt;</td>
+ <tr><td>Dynamic Work Area</td><td colspan="2">548 + 540 * &lt;files&gt;</td>
 </table>
 </div>
 <table class="lst2">
  <caption>Tiny-FatFs</caption>
  <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>7112</td><td>4836</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>3538</td><td>2774</td></tr>
+ <tr><td>Program (R/W cfg.)</td><td>7138</td><td>4862</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>3542</td><td>2778</td></tr>
  <tr><td>Static Work Area</td><td colspan="2">2</td></tr>
- <tr><td>Dynamic Work Area</td><td colspan="2">538 + 24 * &lt;files&gt;</td></tr>
+ <tr><td>Dynamic Work Area</td><td colspan="2">540 + 24 * &lt;files&gt;</td></tr>
 </table>
 </div>
 
@@ -87,7 +87,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>Since the FatFs/Tiny-FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time.</p>
+<p>Since the FatFs/Tiny-FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time. These functions must be provided by user.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -103,13 +103,11 @@
 <p>The FatFs/Tiny-FatFs module is a free software and is opened for education, research and development. You can use, modify and/or republish it for personal, non-profit or profit use without any restriction under your responsibility.</p>
 <br>
 <ul>
-<li><a href="ff003.zip">FatFs/Tiny-FatFs R0.03 Source Files</a> <span class="mfd">Sep. 22, 2006</span></li>
 <li><a href="rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification</a> (Microsoft)</li>
-<li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use an MMC</a></li>
+<li><a href="../../docs/mmc/mmc_e.html">How to Use an MMC</a></li>
 </ul>
 </div>
-
 
 </body>
 </html>

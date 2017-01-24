@@ -37,8 +37,8 @@ FRESULT f_mountdrv (void);
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mountdrv forces the partition mounted (initializes <tt>FATFS</tt> structure). This function should not be used except for recover FR_INCORRECT_DISK_CHANGE error. The file system is initialized automatically in accordance with the necessity when any file function is called.</p>
-<p>To terminate use of the FatFs module, close all files and then the <tt>FATFS</tt> structure can be discarded. In this function, following process is executed.</p><br>
+<p>The f_mountdrv forces the partition mounted (initializes <tt>FATFS</tt> structure). The file system is initialized automatically in accordance with the necessity when any file function is called. This function should not be used except for recovering <tt>FR_INCORRECT_DISK_CHANGE</tt> error. Using this function, while any file is opened, can destroy the file system.</p>
+<p>In this function, following processes are executed.</p><br>
 <ul>
 <li>Initializes lower level layer (disk I/O module).</li>
 <li>Searches a FAT boot record in order of sector 0 (as SFD format) and first primary partition (as FDISK format).</li>

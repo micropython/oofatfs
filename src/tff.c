@@ -1,10 +1,17 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.03                     (C)ChaN, 2006
+/  FatFs - FAT file system module  R0.03a                    (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
-/ research and development. You can use, modify and/or republish it for
-/ non-profit or profit use without any restriction under your responsibility.
+/ research and development under license policy of following trems.
+/
+/  Copyright (C) 2006, ChaN, all right reserved.
+/
+/ * The FatFs module is a free software and there is no warranty.
+/ * You can use, modify and/or redistribute it for personal, non-profit or
+/   profit use without any restriction under your responsibility.
+/ * Redistributions of source code must retain the above copyright notice.
+/
 /---------------------------------------------------------------------------/
 /  Feb 26, 2006  R0.00  Prototype.
 /  Apr 29, 2006  R0.01  First stable version.
@@ -13,6 +20,7 @@
 /  Jun 10, 2006  R0.02a Added a configuration option (_FS_MINIMUM).
 /  Sep 22, 2006  R0.03  Added f_rename().
 /                       Changed option _FS_MINIMUM to _FS_MINIMIZE.
+/  Dec 09, 2006  R0.03a Improved cluster scan algolithm to write files fast.
 /---------------------------------------------------------------------------*/
 
 #include <string.h>
@@ -170,34 +178,36 @@ WORD create_chain (
     WORD clust       /* Cluster# to stretch, 0 means create new */
 )
 {
-    WORD ncl, ccl, mcl = FatFs->max_clust;
+    WORD cstat, ncl, scl, mcl;
+    FATFS *fs = FatFs;
 
 
-    if (clust == 0) {   /* Create new chain */
-        ncl = 1;
-        do {
-            ncl++;                      /* Check next cluster */
-            if (ncl >= mcl) return 0;   /* No free custer was found */
-            ccl = get_cluster(ncl);     /* Get the cluster status */
-            if (ccl == 1) return 0;     /* Any error occured */
-        } while (ccl);              /* Repeat until find a free cluster */
+    mcl = fs->max_clust;
+    if (clust == 0) {       /* Create new chain */
+        scl = fs->last_clust;           /* Get last allocated cluster */
+        if (scl < 2 || scl >= mcl) scl = 1;
     }
-    else {              /* Stretch existing chain */
-        ncl = get_cluster(clust);   /* Check the cluster status */
-        if (ncl < 2) return 0;      /* It is an invalid cluster */
-        if (ncl < mcl) return ncl;  /* It is already followed by next cluster */
-        ncl = clust;                /* Search free cluster */
-        do {
-            ncl++;                      /* Check next cluster */
-            if (ncl >= mcl) ncl = 2;    /* Wrap around */
-            if (ncl == clust) return 0; /* No free custer was found */
-            ccl = get_cluster(ncl);     /* Get the cluster status */
-            if (ccl == 1) return 0;     /* Any error occured */
-        } while (ccl);              /* Repeat until find a free cluster */
+    else {                  /* Stretch existing chain */
+        cstat = get_cluster(clust);     /* Check the cluster status */
+        if (cstat < 2) return 0;        /* It is an invalid cluster */
+        if (cstat < mcl) return cstat;  /* It is already followed by next cluster */
+        scl = clust;
     }
+    ncl = scl;              /* Scan start cluster */
+    do {
+        ncl++;                      /* Next cluster */
+        if (ncl >= mcl) {           /* Wrap around */
+            ncl = 2;
+            if (scl == 1) return 0; /* No free custer was found */
+        }
+        if (ncl == scl) return 0;   /* No free custer was found */
+        cstat = get_cluster(ncl);   /* Get the cluster status */
+        if (cstat == 1) return 0;   /* Any error occured */
+    } while (cstat);                /* Repeat until find a free cluster */
 
     if (!put_cluster(ncl, 0xFFFF)) return 0;            /* Mark the new cluster "in use" */
     if (clust && !put_cluster(clust, ncl)) return 0;    /* Link it to previous one if needed */
+    fs->last_clust = ncl;
 
     return ncl;     /* Return new cluster number */
 }
@@ -234,7 +244,8 @@ BYTE check_fs (
     static const char fatsign[] = "FAT12FAT16";
     FATFS *fs = FatFs;
 
-    /* Determines FAT type by signature string but this is not correct */
+    /* Determines FAT type by signature string but this is not correct.
+       For further information, refer to fatgen103.doc from Microsoft. */
     memset(fs->win, 0, 512);
     if (disk_read(fs->win, sect, 1) == RES_OK) {    /* Load boot record */
         if (LD_WORD(&(fs->win[510])) == 0xAA55) {       /* Is it valid? */

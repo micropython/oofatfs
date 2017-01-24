@@ -64,16 +64,17 @@ FRESULT f_rename (
 <div class="para">
 <h4>Description</h4>
 <p>Rename a file or directory and can move it to other directory. This function is not supported in read-only configuration or minimization level of &gt;= 1.</p>
+<p>Note: In this revision, moving any directory to other directory collapses the file system.</p>
 </div>
 
 
 <div class="para">
 <h4>Example</h4>
 <pre>
-    // Rename an object
+    // Rename file or directory
     f_rename("oldname.txt", "newname.txt");
 
-    // Rename and move to other directory simultaneously
+    // Rename and move file to other directory simultaneously
     f_rename("oldname.txt", "dir1/newname.txt");
 </pre>
 </div>

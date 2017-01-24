@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.03  (C)ChaN, 2006
+FatFs/Tiny-FatFs Module Source Files R0.03a  (C)ChaN, 2006
 
 
 FILES
@@ -40,7 +40,8 @@ CONFIGURATION OPTIONS
 
   When application program does not require any write function, _FS_READONLY
   can be defined to eliminate writing code to reduce module size. This is
-  UNDEFINED in default.
+  UNDEFINED in default. This setting should be reflected to configurations for
+  low level disk function if available.
 
 
   _FS_MINIMIZE
@@ -83,8 +84,8 @@ AGREEMENTS
 
   The FatFs/Tiny-FatFs module is a free software and there is no warranty.
   The FatFs/Tiny-FatFs module is opened for education, reserch and development.
-  You can use, modify and/or republish it for personal, non-profit or profit
-  use without any restriction under your responsibility.
+  You can use and/or modify it for personal, non-profit or profit use without
+  any restriction under your responsibility.
 
 
 
@@ -97,3 +98,5 @@ REVISION HISTORY
   Jun 10, 2006  R0.02a Added a configuration option _FS_MINIMUM.
   Sep 22, 2006  R0.03  Added f_rename().
                        Changed option _FS_MINIMUM to _FS_MINIMIZE.
+  Dec 11, 2006  R0.03a Improved cluster scan algolithm to write files fast.
+                       Fixed f_mkdir() creates incorrect directory on FAT32.

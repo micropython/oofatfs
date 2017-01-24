@@ -35,9 +35,9 @@ FRESULT f_open (
 <tr><th>Value</th><th>Description</th></tr>
 <tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file.<br>Combine with FA_WRITE for read-write access.</td></tr>
 <tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file.<br>Combine with FA_READ for read-write access.</td></tr>
-<tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file does not exist.</td></tr>
-<tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file exists, it is truncated and overwritten.</td></tr>
-<tr><td>FA_OPEN_ALWAYS</td><td>Opens the file, if it exists. If the file does not exist, the function creates the file.</td></tr>
+<tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing.</td></tr>
+<tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
+<tr><td>FA_OPEN_ALWAYS</td><td>Opens the file, if it is existing. If not, the function creates the new file.</td></tr>
 </table>
 </dd>
 </dl>
@@ -75,7 +75,7 @@ FRESULT f_open (
 
 <div class="para">
 <h4>Description</h4>
-<p>To start to use the FatFs module, prepare a work area (<tt>FATFS</tt> structure), clear it and set its address to the global pointer 'FatFs' to allocate the work area to the FatFs module. Then the FatFs module can work.</p>
+<p>To start FatFs module, prepare a work area (<tt>FATFS</tt> structure), fill it with zero and set its address to the global variable <em>FatFs</em> to give the work area to the FatFs module. All file functions can work after the initialization. <a href="mountdrv.html">f_mountdrv()</a> can also be used instead of the zero filling, however, the physical drive must be ready at that time. To terminate use of the FatFs module, close all files, clear <em>FatFs</em> and then the work area can be discarded.</p>
 <p>Flags <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt> are not supported in read-only configuration.</p>
 </div>
 
@@ -92,9 +92,9 @@ void main ()
     WORD br, bw;         // File R/W count
 
 
-    // Give a work area to FatFs module (activate module)
-    memset(&fs, 0, sizeof(FATFS));
+    // Give a work area to FatFs module (activate FatFs module)
     FatFs = &fs;
+    memset(&fs, 0, sizeof(FATFS));  // Clear work area. f_mountdrv() can also be used instead.
 
     // Open source file
     res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);

@@ -46,7 +46,7 @@ FRESULT f_close (
 
 <div class="para">
 <h4>Description</h4>
-<p>Function f_close closes a file. When the function succeeded, the file object structure can be discarded.</p>
+<p>Function f_close closes a file. If any data has been written, the cached information of the file is written back to the disk. When the function succeeded, the file object is no longer valid and structure can be discarded.</p>
 </div>
 
 
