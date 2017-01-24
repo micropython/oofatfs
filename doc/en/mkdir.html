@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_mkdir</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_mkdir</h2>
+<p>The f_mkdir creates a directory.</p>
+<pre>
+FRESULT f_mkdir (
+  const char* <em>DirName</em> // Pointer to the directory name
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>Parameter</h4>
+<dl class="par">
+<dt>DirName</dt>
+<dd>Pointer to the null-terminated string that specifies the full-path directory name to create. The directory separator is <tt>'/'</tt>. Because the FatFs module does not have a concept of current directory, a full-path name that followed from the root directory must be used. Leading space charactors are skipped if exist and heading <tt>'/'</tt> can be exist or omitted.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Return Value</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>The function succeeded.</dd>
+<dt>FR_NOPATH</dt>
+<dd>Could not find the path.</dd>
+<dt>FR_INVALID_NAME</dt>
+<dd>The path name is invalid.</dd>
+<dt>FR_DENIED</dt>
+<dd>The function was denied due to any of following reasons: any file or directory that has same name is existing, cannot be created due to the directory table or disk full.</dd>
+<dt>FR_NOT_READY</dt>
+<dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
+<dt>FR_WRITE_PROTECTED</dt>
+<dd>The medium is write protected.</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>Any error occured in low level disk I/O.</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFs module has not been enabled.</dd>
+<dt>FR_NO_FILESYSTEM</dt>
+<dd>There is no valid FAT partition on the disk.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Description</h4>
+<p>The f_mkdir creates an empty directory. This function is not supported in read only configuration.</p>
+<p>
+</p>
+</div>
+
+
+<div class="para">
+<h4>Sample Code</h4>
+<pre>
+    res = f_mkdir("/sub1");
+    if (res) die(res);
+    res = f_mkdir("/sub1/sub2");
+    if (res) die(res);
+    res = f_mkdir("/sub1/sub2/sub3");
+    if (res) die(res);
+</pre>
+</div>
+
+<p class="foot"><a href="../00index_e.html">Return</a></p>
+</body>
+</html>

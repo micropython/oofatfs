@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="alternate" hreflang="en" title="English version" href="00index_e.html">
+<link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - FAT Files System Module</title>
+</head>
+
+<body>
+<h1>FATファイルシステム・モジュール</h1>
+<hr>
+
+<div class="abst">
+<img src="layers.png" class="rset" width="245" height="255">
+<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・プラットフォームには依存しないので、必要なワークエリアが確保できれば、PIC, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュールを用意する必要があります。いろいろな使用形態を考慮して、高速版（FatFs）と省メモリ版（Tiny-FatFs）の2通りを作成してみました。読み出し専用アプリケーションではさらに書き込み関係のコードを削減した構成もできます。</p>
+<h4>FatFsモジュールの特徴</h4>
+<ul>
+ <li>システム用と各ファイル用バッファを分離し、複数ファイルの高速アクセスに適する</li>
+ <li>メモリの消費が少ない(avrgccでの例)
+  <ul>
+   <li>プログラム・エリア: 7736 bytes (R/W構成), 4154 bytes (R/O構成)</li>
+   <li>静的ワーク・エリア: 2 bytes</li>
+   <li>動的ワーク・エリア: 544 + 542 * &lt;files&gt; bytes</li>
+  </ul>
+ </li>
+ <li>FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
+ <li>8.3形式ファイル名とNT小文字フラグに対応</li>
+ <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
+</ul>
+<h4>Tiny-FatFsモジュールの特徴</h4>
+<ul>
+ <li>システム用と各ファイル用バッファを共通化し、RAMの使用量を削減</li>
+ <li>メモリの消費が少なく(avrgccでの例)、小メモリ・システム(1KB)に対応</li>
+  <ul>
+   <li>プログラム・エリア: 6470 bytes (R/W構成), 3556 bytes (R/O構成)</li>
+   <li>静的ワーク・エリア: 2 bytes</li>
+   <li>動的ワーク・エリア: 538 + 24 * &lt;files&gt; bytes</li>
+  </ul>
+ </li>
+ <li>FAT16(+FAT64)に対応</li>
+ <li>8.3形式ファイル名とNT小文字フラグに対応</li>
+ <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
+</ul>
+</div>
+
+
+<div class="para">
+<h3>上位レイヤI/F</h3>
+<p>FatFsモジュールとTiny-FatFsモジュールは、次のファイル操作関数を提供しています。</p>
+<ul>
+<li><a href="ja/open.html">f_open</a> - ファイルのオープン・作成</li>
+<li><a href="ja/close.html">f_close</a> - ファイルのクローズ</li>
+<li><a href="ja/read.html">f_read</a> - ファイルの読み込み</li>
+<li><a href="ja/write.html">f_write</a> - ファイルの書き込み</li>
+<li><a href="ja/lseek.html">f_lseek</a> - ファイルR/Wポインタの移動</li>
+<li><a href="ja/sync.html">f_sync</a> - キャッシュされたデータのフラッシュ</li>
+<li><a href="ja/opendir.html">f_opendir</a> - ディレクトリのオープン</li>
+<li><a href="ja/readdir.html">f_readdir</a> - ディレクトリの読み出し</li>
+<li><a href="ja/getfree.html">f_getfree</a> - ディスク空き領域の取得</li>
+<li><a href="ja/stat.html">f_stat</a> - ファイル・ステータスの取得</li>
+<li><a href="ja/mkdir.html">f_mkdir</a> - ディレクトリの作成</li>
+<li><a href="ja/unlink.html">f_unlink</a> - ファイルまたはディレクトリの削除</li>
+<li><a href="ja/chmod.html">f_chmod</a> - ファイルまたはディレクトリ属性の変更</li>
+<li><a href="ja/mountdrv.html">f_mountdrv</a> - ファイル・システムの明示的初期化</li>
+</ul>
+</div>
+
+
+<div class="para">
+<h3>下位レイヤI/F</h3>
+<p>FatFsモジュールとTiny-FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。</p>
+<ul>
+<li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
+<li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
+<li><a href="ja/dread.html">disk_read</a> - ディスクからの読み込み</li>
+<li><a href="ja/dwrite.html">disk_write</a> - ディスクへの書き込み</li>
+<li><a href="ja/fattime.html">get_fattime</a> - 日付・時刻の取得</li>
+</ul>
+</div>
+
+
+<div class="para">
+<h3>資料</h3>
+<p>FatFsモジュールとTiny-FatFsモジュールは教育・研究・開発用に公開しています。どのような目的（個人・非商用・商用）の利用でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
+<br>
+<ul>
+<li><a href="rwtest.png">パフォーマンス・テスト</a>（テストボード：ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>）</li>
+<li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32仕様書</a> (Microsoft)</li>
+<li><a href="http://elm-chan.org/docs/mmc/mmc.html">MMCの使いかた</a></li>
+</ul>
+</div>
+
+
+<hr>
+</body>
+</html>

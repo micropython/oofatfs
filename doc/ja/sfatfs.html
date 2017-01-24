@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - FATFS</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>FATFS</h2>
+<p><tt>FATFS</tt>構造体は、FatFsモジュールのダイナミックワークエリアを保持し、アプリケーション側で確保・管理されます。アプリケーションから変更可能なメンバはありません。</p>
+<h4>FatFs</h4>
+<pre>
+typedef struct _FATFS {
+    BYTE    fs_type;        // FAT type
+    BYTE    files;          // Number of files currently opend
+    BYTE    sects_clust;    // Sectors per cluster
+    BYTE    n_fats;         // Number of FAT copies
+    WORD    n_rootdir;      // Number of root directory entry
+    BYTE    winflag;        // win[] dirty flag (1:must be written back)
+    BYTE    pad1;
+    DWORD   sects_fat;      // Sectors per fat
+    DWORD   max_clust;      // Maximum cluster# + 1
+    DWORD   fatbase;        // FAT start sector
+    DWORD   dirbase;        // Root directory start sector (cluster# for FAT32)
+    DWORD   database;       // Data start sector
+    DWORD   winsect;        // Current sector# appearing in the win[]
+    BYTE    win[512];       // Disk access window for Directory/FAT area
+} FATFS;
+</pre>
+
+<h4>Tiny-FatFs</h4>
+<pre>
+typedef struct _FATFS {
+    BYTE    fs_type;        // FAT type
+    BYTE    files;          // Number of files currently opend
+    BYTE    sects_clust;    // Sectors per cluster
+    BYTE    n_fats;         // Number of FAT copies
+    WORD    n_rootdir;      // Number of root directory entry
+    BYTE    winflag;        // win[] dirty flag (1:must be written back)
+    BYTE    pad1;
+    WORD    sects_fat;      // Sectors per fat
+    WORD    max_clust;      // Maximum cluster# + 1
+    DWORD   fatbase;        // FAT start sector
+    DWORD   dirbase;        // Root directory start sector (cluster# for FAT32)
+    DWORD   database;       // Data start sector
+    DWORD   winsect;        // Current sector# appearing in the win[]
+    BYTE    win[512];       // Disk access window
+} FATFS;
+</pre>
+</div>
+
+<p class="foot"><a href="../00index_j.html">戻る</a></p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - disk_status</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>disk_status</h2>
+<p>The disk_status gets the disk status.</p>
+<pre>
+DSTATUS disk_status ();
+</pre>
+</div>
+
+<div class="para">
+<h4>Return Values</h4>
+<p>The disk status is returned in combinatin of following flags.</p>
+<dl class="ret">
+<dt>STA_NOINIT</dt>
+<dd>Indicates that the disk drive has not been initialiezed. This flag is set when power-on, occurrence of disk removal or <tt>disk_initialize()</tt> failed and cleared when <tt>disk_initialize()</tt> succeeded.</dd>
+<dt>STA_NODISK</dt>
+<dd>Indicates that no disk in the drive. It is always cleared on non-removable drive.</dd>
+<dt>STA_PROTECTED</dt>
+<dd>Indicates that the disk is write protected. It is always cleared on the disk that has not write protect notch.</dd>
+</dl>
+</div>
+
+<p class="foot"><a href="../00index_e.html">Return</a></p>
+</body>
+</html>

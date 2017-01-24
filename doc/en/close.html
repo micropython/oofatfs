@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_close</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_close</h2>
+<p>Function f_close closes a file.</p>
+<pre>
+FRESULT f_close (
+  FIL* <em>FileObject</em>     // Pointer to the file object structure
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>Parameter</h4>
+<dl class="par">
+<dt>FileObject</dt>
+<dd>Pointer to the file object structure to be closed.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Return Values</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>The file has been closed successfuly.</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>Any error occured in low level disk I/O.</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFs module is not enabled.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Description</h4>
+<p>Function f_close closes a file. When the function succeeded, the file object structure can be discarded.</p>
+</div>
+
+
+<div class="para">
+<h4>References</h4>
+<p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="write.html">f_write</a>,  <a href="sync.html">f_sync</a>, <a href="sfile.html">FIL</a>, <a href="sfatfs.html">FATFS</a></tt></p>
+</div>
+
+<p class="foot"><a href="../00index_e.html">Return</a></p>
+</body>
+</html>

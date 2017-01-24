@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_lseek</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_lseek</h2>
+<p>ファイルのR/Wポインタを移動します。</p>
+<pre>
+FRESULT f_lseek (
+  FIL* <em>FileObject</em>,   // ファイルオブジェクト構造体へのポインタ
+  DWORD <em>Offset</em>       // 移動先オフセット
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>パラメータ</h4>
+<dl class="par">
+<dt>FileObject</dt>
+<dd>対象となるファイルオブジェクト構造体へのポインタを指定します。</dd>
+<dt>Offset</dt>
+<dd>移動先のオフセット（R/Wポインタ）値。ファイル先頭からのオフセットをバイト単位で指定します。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>戻り値</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>正常終了。</dd>
+<dt>FR_ALIGN_ERROR</dt>
+<dd>アンバッファモードで開いたファイルで、512の整数倍でないオフセットを指定した。</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>ディスクアクセスでエラーが発生した。</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFsモジュールが停止状態。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>解説</h4>
+<p>ファイルR/Wポインタを移動します。オフセットの指定はファイル先頭からのみです。ファイル末尾以降への移動はできません。ファイルサイズ以上のオフセットを指定した場合、R/Wポインタはファイル末尾に移動します。</p>
+</div>
+
+
+<div class="para">
+<h4>使用例</h4>
+<pre>
+    // Move to offset of 5000 from top of file.
+    res = f_lseek(&file, 5000);
+    if (res) die(res);
+
+    // Move to 3000 bytes front of current offset.
+    res = f_lseek(&file, file.fptr + 3000);
+    if (res) die(res);
+
+    // Move to 2000 bytes back of current offset.
+    res = f_lseek(&file, file.fptr - 2000);
+    if (res) die(res);
+</pre>
+</div>
+
+
+<div class="para">
+<h4>参照</h4>
+<p><tt><a href="open.html">f_open</a>, <a href="sfile.html">FIL</a></tt></p>
+</div>
+
+<p class="foot"><a href="../00index_j.html">戻る</a></p>
+</body>
+</html>

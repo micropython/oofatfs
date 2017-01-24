@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_sync</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_sync</h2>
+<p>The f_sync flushes the cached information of the wriiting file.</p>
+<pre>
+FRESULT f_sync (
+  FIL* <em>FileObject</em>     // Pointer to the file object structure
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>Parameters</h4>
+<dl class="par">
+<dt>FileObject</dt>
+<dd>Pointer to the file object to be flushed.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Return Values</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>The function succeeded.</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>Any error occured in low level disk I/O.</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFs module has not been enabled.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Description</h4>
+<p>The f_sync writes back the cached information of a file being written into the disk. This is the same function as f_close but the file is left opened and can continue the file access. This is suitable for an application of data logger that opens a file for long time in writing mode. The f_sync of periodic or immediataly after f_wriete can minimize the lost data due to an unintentional black out or disk removal. This function is not supported in read-only configuration.</p>
+</div>
+
+
+<div class="para">
+<h4>References</h4>
+<p><tt><a href="close.html">f_close</a></tt></p>
+</div>
+
+<p class="foot"><a href="../00index_e.html">Return</a></p>
+</body>
+</html>

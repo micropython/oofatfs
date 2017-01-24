@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_sync</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_sync</h2>
+<p>書き込み中のファイルのキャッシュされた情報をフラッシュします。</p>
+<pre>
+FRESULT f_sync (
+  FIL* <em>FileObject</em>     // ファイルオブジェクト構造体へのポインタ
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>パラメータ</h4>
+<dl class="par">
+<dt>FileObject</dt>
+<dd>syncするファイルオブジェクト構造体へのポインタを指定します。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>戻り値</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>正常終了。</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>ディスクアクセスでエラーが発生した。</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFsモジュールが停止状態。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>解説</h4>
+<p>書き込み中のファイルのそこまでの状態（R/Wバッファ上のデータ、変更されたFATやディレクトリ項目）をディスクに書き込みます。この関数はファイルクローズのプロセスを実行しますが、ファイルは引き続き開かれたままになり、読み書きを続行できます。ロギングなど、書き込みモードで長時間ファイルが開かれているアプリケーションにおいて、定期的または区切りの良いところでsyncすることにより、不意の電源断やメディアの取り外しにより失われるデータを最小限にします。</p>
+<p>リードオンリー構成ではこの関数はサポートされません。</p>
+</div>
+
+
+<div class="para">
+<h4>参照</h4>
+<p><tt><a href="close.html">f_close</a></tt></p>
+</div>
+
+<p class="foot"><a href="../00index_j.html">戻る</a></p>
+</body>
+</html>

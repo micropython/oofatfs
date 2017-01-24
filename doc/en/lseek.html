@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_lseek</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_lseek</h2>
+<p>The f_lseek moves the file read/write pointer.</p>
+<pre>
+FRESULT f_lseek (
+  FIL* <em>FileObject</em>,   // Pointer to the file object structure
+  DWORD <em>Offset</em>       // File offset in unit of byte
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>Parameters</h4>
+<dl class="par">
+<dt>FileObject</dt>
+<dd>Pointer to the file object structure.</dd>
+<dt>Offset</dt>
+<dd>Number of bytes where from start of file</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Return Values</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>The function succeeded.</dd>
+<dt>FR_ALIGN_ERROR</dt>
+<dd>Out of alignment. In unbuffered mode, specified offset must be aligned on 512 byte boundary.</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>Any error occured in low level disk I/O.</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>Incorrect disk removal, such as a medium change during any file opend, has been occured.</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFs module has not been enabled.</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>Description</h4>
+<p>The f_lseek moves the file read/write pointer. The offset can be specified in only origin from top of the file and cannot moved to above end of the file. When an offset above the file size was specified, the read/write pointer moves to end of the file.</p>
+</div>
+
+
+<div class="para">
+<h4>Sample Code</h4>
+<pre>
+    // Move to offset of 5000 from top of file.
+    res = f_lseek(&file, 5000);
+    if (res) die(res);
+
+    // Move to 3000 bytes front of current offset.
+    res = f_lseek(&file, file.fptr + 3000);
+    if (res) die(res);
+
+    // Move to 2000 bytes back of current offset.
+    res = f_lseek(&file, file.fptr - 2000);
+    if (res) die(res);
+</pre>
+</div>
+
+
+<div class="para">
+<h4>References</h4>
+<p><tt><a href="open.html">f_open</a>, <a href="sfile.html">FIL</a></tt></p>
+</div>
+
+<p class="foot"><a href="../00index_e.html">Return</a></p>
+</body>
+</html>

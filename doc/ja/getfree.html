@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - f_getfree</title>
+</head>
+
+<body>
+
+<div class="para">
+<h2>f_getfree</h2>
+<p>ディスクの未使用領域を得ます。</p>
+<pre>
+FRESULT f_getfree (
+  DWORD* <em>Clusters</em>     // 空きクラスタ数を格納する変数へのポインタ
+);
+</pre>
+</div>
+
+<div class="para">
+<h4>パラメータ</h4>
+<dl class="par">
+<dt>Clusters</dt>
+<dd>空きクラスタ数を格納するDWORD変数へのポインタを指定します。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>戻り値</h4>
+<dl class="ret">
+<dt>FR_OK</dt>
+<dd>正常終了。<tt><em>*Clusters</em></tt>に空きクラスタ数が返されます。</dd>
+<dt>FR_NOT_READY</dt>
+<dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
+<dt>FR_RW_ERROR</dt>
+<dd>ディスクアクセスでエラーが発生した。</dd>
+<dt>FR_INCORRECT_DISK_CHANGE</dt>
+<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>FatFsモジュールが停止状態。</dd>
+<dt>FR_NO_FILESYSTEM</dt>
+<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+</dl>
+</div>
+
+
+<div class="para">
+<h4>解説</h4>
+<p>ファイルシステム上の空きクラスタ数を取得します。<tt>FatFs.sects_clust</tt> がクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。</p>
+</div>
+
+
+<div class="para">
+<h4>使用例</h4>
+<pre>
+    DWORD clust;
+
+    // Get free clusters
+    res = f_getfree(&clust);
+    if (res) die(res);
+
+    // Get free bytes
+    printf("%lu bytes available on the disk.\n", clust * FatFs->sects_clust * 512);
+</pre>
+</div>
+
+
+<div class="para">
+<h4>参照</h4>
+<tt><a href="sfatfs.html">FATFS</a></tt>
+</div>
+
+<p class="foot"><a href="../00index_j.html">戻る</a></p>
+</body>
+</html>
