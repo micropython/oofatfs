@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/mkfs.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_mkfs</title>
 </head>
@@ -15,9 +16,9 @@
 <p>The f_mkfs fucntion creates a file system on the drive.</p>
 <pre>
 FRESULT f_mkfs (
-  BYTE  <em>Drive</em>,            /* Logical drive number */
-  BYTE  <em>PartitioningRule</em>, /* Partitioning rule */
-  WORD  <em>AllocSize</em>         /* Size of the allocation unit */
+  BYTE  <em>Drive</em>,            <span>/* Logical drive number */</span>
+  BYTE  <em>PartitioningRule</em>, <span>/* Partitioning rule */</span>
+  UINT  <em>AllocSize</em>         <span>/* Size of the allocation unit */</span>
 );
 </pre>
 </div>
@@ -28,9 +29,9 @@ FRESULT f_mkfs (
 <dt>Drive</dt>
 <dd>Logical drive number (0-9) to be formatted.</dd>
 <dt>PartitioningRule</dt>
-<dd>When 0 is given, a partition table is created into the first sector on the drive and then the file system is created on the partition. This is called FDISK format and used for harddisk and memory card. When 1 is given, the file system starts from the first sector without partition table. This is often called super floppy disk (SFD) format and used for floppy disk and removable disk.</dd>
+<dd>When 0 is given, a partition table is created into the master boot record and a primary DOS partition is created and then an FAT volume is created on the partition. This is called FDISK format and used for harddisk and memory cards. When 1 is given, the FAT volume starts from the first sector on the drive without partition table. This is called <abbr title="Super Floppy Disk">SFD</abbr> format and used for floppy disk and most optical disk.</dd>
 <dt>AllocSize</dt>
-<dd>Specifies allocation unit size in number of bytes per cluster. The value must be 0 or power of 2 in range of from 512 to 32768. When 0 is specified, the cluster size is determined depends on the volume size. FAT64 (64KB/cluster on FAT16) cannot be created by this function.</dd>
+<dd>Force the allocation unit (cluter) size in unit of byte. The value must be power of 2 and between the sector size and 128 times sector size. When invalid value is specified, the cluster size is determined depends on the volume size.</dd>
 </dl>
 </div>
 
@@ -62,8 +63,8 @@ FRESULT f_mkfs (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mkfs function creates a FAT file system on the drive. There are two partitioning rules, FDISK and SFD, for removable media. It can be selected with an argument. The FDISK format is recommended for the most case. This function currently <em>does not support multiple partition</em>, so that existing partitions on the physical dirve will be deleted and re-created a new partition occupies entire disk space.</p>
-<p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the volume size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
+<p>The f_mkfs function creates an FAT volume on the drive. There are two partitioning rules, FDISK and SFD, for removable media. The FDISK format is recommended for the most case. This function currently <em>does not support multiple partition</em>, so that existing partitions on the physical dirve will be deleted and re-created a new partition occupies entire disk space.</p>
+<p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the volume and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the volume size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
 </div>
 
 

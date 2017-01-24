@@ -26,7 +26,6 @@ typedef enum {
 /*---------------------------------------*/
 /* Prototypes for disk control functions */
 
-BOOL assign_drives (int argc, char *argv[]);
 DSTATUS disk_initialize (BYTE);
 DSTATUS disk_status (BYTE);
 DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);

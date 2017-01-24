@@ -4,6 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="description" content="Open souece FAT file system module for embedded projects">
+<link rel="start" title="Site Top" href="../../">
+<link rel="up" title="Freewares" href="../../fsw_e.html">
 <link rel="alternate" hreflang="ja" title="Japanese version" href="00index_j.html">
 <link rel="stylesheet" href="css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - FAT File System Module</title>
@@ -15,7 +17,7 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>FatFs is a generic FAT file system module for small embedded systems. The FatFs is written in compliance with ANSI C and completely separated from the disk I/O layer. Therefore it is independent of hardware architecture. It can be incorporated into low cost microcontrollers, such as AVR, 8051, PIC, ARM, Z80 and etc..., without any change. Petit FatFs module is also available <a href="http://elm-chan.org/fsw/ff/00index_p.html">here</a>.</p>
+<p>FatFs is a generic FAT file system module for small embedded systems. The FatFs is written in compliance with ANSI C and completely separated from the disk I/O layer. Therefore it is independent of hardware architecture. It can be incorporated into low cost microcontrollers, such as AVR, 8051, PIC, ARM, Z80, 68k and etc..., without any change. Petit FatFs module is also available <a href="http://elm-chan.org/fsw/ff/00index_p.html">here</a>.</p>
 
 <h4>Features</h4>
 <ul>
@@ -25,8 +27,8 @@
  <li>Various configuration options:
   <ul>
    <li>Multiple volumes (physical drives and partitions).</li>
-   <li>Multiple OEM code pages including DBCS.</li>
-   <li>Long file name (LFN) support in OEM code or Unicode.</li>
+   <li>Multiple ANSI/OEM code pages including DBCS.</li>
+   <li>Long file name support in SBCS/DBCS or Unicode.</li>
    <li>RTOS support.</li>
    <li>Multiple sector size support.</li>
    <li>Read-only, minimized API, I/O buffer and etc...</li>
@@ -38,7 +40,7 @@
 
 <div class="para">
 <h3>Application Interface</h3>
-<p>FatFs module provides following functions to access the FAT volumes.</p>
+<p>FatFs module provides following functions to the applications. In other words, this list describes what FatFs can do to access the FAT volumes.</p>
 <ul>
 <li><a href="en/mount.html">f_mount</a> - Register/Unregister a Work Area</li>
 <li><a href="en/open.html">f_open</a> - Open/Create a File</li>
@@ -71,7 +73,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>Since the FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write the physical disk and to get current time. The low level disk I/O module is not a part of FatFs module so that it must be provided by user. The sample drivers are also available in the resources.</p>
+<p>Since the FatFs module is completely separated from disk I/O layer, it requires following functions at least to access the physical media. When O/S related feature is enabled, it will require process/memory functions in addition. However the low level disk I/O module is not a part of FatFs module so that it must be provided by user. The sample drivers are also available in the resources.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -85,10 +87,10 @@
 
 <div class="para">
 <h3>Resources</h3>
-<p>The FatFs module is a free software opened for education, research and development. You can use, modify and/or redistribute it for personal, non-profit use or commercial products without any restriction under your responsibility. For further information, refer to the application note.</p>
+<p>The FatFs module is a free software opened for education, research and development. You can use, modify and/or redistribute it for personal projects or commercial products without any restriction under your responsibility. For further information, refer to the application note.</p>
 <ul>
 <li><a href="http://elm-chan.org/fsw/ff/bd/"><em>FatFs User Forum</em></a></li>
-<li><a href="en/appnote.html">FatFs module application note</a> <span class="mfd">Jan 28, 2010</span></li>
+<li>Read first: <a href="en/appnote.html">FatFs module application note</a> <span class="mfd">May 15, 2010</span></li>
 <li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification by Microsoft</a> (The reference document on FAT file system)</li>
 <li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use MMC/SDC</a></li>
@@ -98,5 +100,6 @@
 </div>
 
 
+<hr>
 </body>
 </html>

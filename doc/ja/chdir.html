@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/chdir.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_chdir</title>
 </head>
@@ -15,7 +16,7 @@
 <p>カレント・ディレクトリを変更します。</p>
 <pre>
 FRESULT f_chdir (
-  const XCHAR* <em>Path</em> /* ディレクトリ名へのポインタ */
+  const XCHAR* <em>Path</em> <span>/* ディレクトリ名へのポインタ */</span>
 );
 </pre>
 </div>
@@ -53,7 +54,7 @@ FRESULT f_chdir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
@@ -71,7 +72,7 @@ FRESULT f_chdir (
 
 
 <div class="para">
-<h4>サンプル・コード</h4>
+<h4>使用例</h4>
 <pre>
     // カレント・ドライブのカレント・ディレクトリを変更 (ルート下のdir1へ)
     f_chdir("/dir1");

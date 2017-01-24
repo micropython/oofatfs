@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/dioctl.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - disk_ioctl</title>
 </head>
@@ -15,9 +16,9 @@
 <p>The disk_ioctl function cntrols device specified features and miscellaneous functions other than disk read/write.</p>
 <pre>
 DRESULT disk_ioctl (
-  BYTE <em>Drive</em>,      /* Drive number */
-  BYTE <em>Command</em>,    /* Control command code */
-  void* <em>Buffer</em>     /* Data transfer buffer */
+  BYTE <em>Drive</em>,      <span>/* Drive number */</span>
+  BYTE <em>Command</em>,    <span>/* Control command code */</span>
+  void* <em>Buffer</em>     <span>/* Parameter and data buffer */</span>
 );
 </pre>
 </div>
@@ -56,9 +57,9 @@ DRESULT disk_ioctl (
 <table class="lst">
 <tr><th>Command</th><th>Description</th></tr>
 <tr><td>CTRL_SYNC</td><td>Make sure that the disk drive has finished pending write process. When the disk I/O module has a write back cache, flush the dirty sector immediately. This command is not required in read-only configuration.</td></tr>
-<tr><td>GET_SECTOR_SIZE</td><td>Returns sector size of the drive into the WORD variable pointed by Buffer. This command is not required in single sector size configuration, _MAX_SS is 512.</td></tr>
-<tr><td>GET_SECTOR_COUNT</td><td>Returns total sectors on the drive into the DWORD variable pointed by Buffer. This command is used in only f_mkfs function.</td></tr>
-<tr><td>GET_BLOCK_SIZE</td><td>Returns erase block size of the memory array in unit of sector into the DWORD variable pointed by Buffer. When the erase block size is unknown or magnetic disk device, return 1. This command is used in only f_mkfs function.</td></tr>
+<tr><td>GET_SECTOR_SIZE</td><td>Returns sector size of the drive into the WORD variable pointed by <tt>Buffer</tt>. This command is not required in single sector size configuration, _MAX_SS is 512.</td></tr>
+<tr><td>GET_SECTOR_COUNT</td><td>Returns total sectors on the drive into the DWORD variable pointed by <tt>Buffer</tt>. This command is used by only f_mkfs function to determine the volume size to be created.</td></tr>
+<tr><td>GET_BLOCK_SIZE</td><td>Returns erase block size of the flash memory in unit of sector into the DWORD variable pointed by <tt>Buffer</tt>. This command is used by only f_mkfs function and it attempts to align data area to the erase block boundary. The allowable value is 1 to 32768 in power of 2. Return 1 if the erase block size is unknown or disk devices.</td></tr>
 </table>
 </div>
 

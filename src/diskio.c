@@ -9,6 +9,7 @@
 
 /*-----------------------------------------------------------------------*/
 /* Correspondence between physical drive number and physical drive.      */
+/*-----------------------------------------------------------------------*/
 
 #define ATA     0
 #define MMC     1
@@ -18,6 +19,7 @@
 
 /*-----------------------------------------------------------------------*/
 /* Inidialize a Drive                                                    */
+/*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
     BYTE drv                /* Physical drive nmuber (0..) */
@@ -52,6 +54,7 @@ DSTATUS disk_initialize (
 
 /*-----------------------------------------------------------------------*/
 /* Return Disk Status                                                    */
+/*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
     BYTE drv        /* Physical drive nmuber (0..) */
@@ -86,6 +89,7 @@ DSTATUS disk_status (
 
 /*-----------------------------------------------------------------------*/
 /* Read Sector(s)                                                        */
+/*-----------------------------------------------------------------------*/
 
 DRESULT disk_read (
     BYTE drv,       /* Physical drive nmuber (0..) */
@@ -123,6 +127,12 @@ DRESULT disk_read (
 
 /*-----------------------------------------------------------------------*/
 /* Write Sector(s)                                                       */
+/*-----------------------------------------------------------------------*/
+/* The FatFs module will issue multiple sector transfer request
+/  (count > 1) to the disk I/O layer. The disk function should process
+/  the multiple sector transfer properly Do. not translate it into
+/  multiple single sector transfers to the media, or the data read/write
+/  performance may be drasticaly decreased. */
 
 #if _READONLY == 0
 DRESULT disk_write (
@@ -162,6 +172,7 @@ DRESULT disk_write (
 
 /*-----------------------------------------------------------------------*/
 /* Miscellaneous Functions                                               */
+/*-----------------------------------------------------------------------*/
 
 DRESULT disk_ioctl (
     BYTE drv,       /* Physical drive nmuber (0..) */

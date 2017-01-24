@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/read.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_read</title>
 </head>
@@ -15,10 +16,10 @@
 <p>ファイルからデータを読み出します。</p>
 <pre>
 FRESULT f_read (
-  FIL* <em>FileObject</em>,    /* ファイル・オブジェクト構造体 */
-  void* <em>Buffer</em>,       /* 読み出したデータを格納するバッファ */
-  UINT <em>ByteToRead</em>,    /* 読み出すバイト数 */
-  UINT* <em>ByteRead</em>      /* 読み出されたバイト数 */
+  FIL* <em>FileObject</em>,    <span>/* ファイル・オブジェクト構造体 */</span>
+  void* <em>Buffer</em>,       <span>/* 読み出したデータを格納するバッファ */</span>
+  UINT <em>ByteToRead</em>,    <span>/* 読み出すバイト数 */</span>
+  UINT* <em>ByteRead</em>      <span>/* 読み出されたバイト数 */</span>
 );
 </pre>
 </div>
@@ -59,7 +60,7 @@ FRESULT f_read (
 
 <div class="para">
 <h4>解説</h4>
-<p>読み込み開始位置は、現在のファイルR/Wポインタからになります。ファイルR/Wポインタは読み込まれたバイト数だけ進みます。読み込み中にファイルの終端に達すると、<tt>*ByteRead</tt>は<tt>ByteToRead</tt>よりも小さくなります。</p>
+<p>読み込み開始位置は、現在のリード/ライト・ポインタからになります。リード/ライト・ポインタは読み込まれたバイト数だけ進みます。関数が正常終了した後は、<tt>*ByteRead</tt>の値をチェックすべきです。<tt>*ByteRead</tt>が<tt>ByteToRead</tt>よりも小さいときは、読み込み中にファイルの終端に達したことを示しています。</p>
 </div>
 
 

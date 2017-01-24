@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/rename.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_rename</title>
 </head>
@@ -15,8 +16,8 @@
 <p>ファイルまたはディレクトリの名前の変更または移動。</p>
 <pre>
 FRESULT f_rename (
-  const XCHAR* <em>OldName</em>, /* 古いファイルまたはディレクトリ名 */
-  const XCHAR* <em>NewName</em>  /* 新しいファイルまたはディレクトリ名 */
+  const TCHAR* <em>OldName</em>, <span>/* 古いファイルまたはディレクトリ名 */</span>
+  const TCHAR* <em>NewName</em>  <span>/* 新しいファイルまたはディレクトリ名 */</span>
 );
 </pre>
 </div>
@@ -27,7 +28,7 @@ FRESULT f_rename (
 <dt>OldName</dt>
 <dd>変更対象のオブジェクト(ファイルまたはディレクトリ)への<a href="filename.html">パス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>NewName</dt>
-<dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在する名前は使えません。また、ドライブ番号は指定できず、<tt>OldName</tt>で指定されたボリューム上のオブジェクトとして扱われます。<br>
+<dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在する名前は使えません。また、ドライブ番号は指定できず、<tt>OldName</tt>で指定された論理ドライブ上のオブジェクトとして扱われます。<br>
 </dl>
 </div>
 
@@ -60,7 +61,7 @@ FRESULT f_rename (
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワークエリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
@@ -80,10 +81,10 @@ FRESULT f_rename (
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    /* ファイルまたはサブディレクトリの名前を変更する */
+    <span>/* ファイルまたはサブディレクトリの名前を変更する */</span>
     f_rename("oldname.txt", "newname.txt");
 
-    /* ファイルまたはサブディレクトリの名前の変更と別のディレクトリへの移動 */
+    <span>/* ファイルまたはサブディレクトリの名前の変更と別のディレクトリへの移動 */</span>
     f_rename("oldname.txt", "dir1/newname.txt");
 </pre>
 </div>

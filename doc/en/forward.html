@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/forward.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_forward</title>
 </head>
@@ -15,10 +16,10 @@
 <p>The f_forward function reads the file data and forward it to the data streaming device.</p>
 <pre>
 FRESULT f_forward (
-  FIL* <em>FileObject</em>,                 /* File object */
-  UINT (*<em>Func</em>)(const BYTE*,UINT),  /* Data streaming function */
-  UINT <em>ByteToFwd</em>,                  /* Number of bytes to forward */
-  UINT* <em>ByteFwd</em>                    /* Number of bytes forwarded */
+  FIL* <em>FileObject</em>,                 <span>/* File object */</span>
+  UINT (*<em>Func</em>)(const BYTE*,UINT),  <span>/* Data streaming function */</span>
+  UINT <em>ByteToFwd</em>,                  <span>/* Number of bytes to forward */</span>
+  UINT* <em>ByteFwd</em>                    <span>/* Number of bytes forwarded */</span>
 );
 </pre>
 </div>
@@ -72,26 +73,26 @@ FRESULT f_forward (
 <div class="para">
 <h4>Example (Audio playback)</h4>
 <pre>
-/*-----------------------------------------------------------------------*/
-/* Sample code of data transfer function to be called from f_forward     */
-/*-----------------------------------------------------------------------*/
+<span>/*------------------------------------------------------------------------*/</span>
+<span>/* Sample code of data transfer function to be called back from f_forward */</span>
+<span>/*------------------------------------------------------------------------*/</span>
 
-UINT out_stream (   /* Returns number of bytes sent or stream status */
-    const BYTE *p,  /* Pointer to the data block to be sent */
-    UINT btf        /* &gt;0: Transfer call (Number of bytes to be sent). 0: Sense call */
+UINT out_stream (   <span>/* Returns number of bytes sent or stream status */</span>
+    const BYTE *p,  <span>/* Pointer to the data block to be sent */</span>
+    UINT btf        <span>/* &gt;0: Transfer call (Number of bytes to be sent). 0: Sense call */</span>
 )
 {
     UINT cnt = 0;
 
 
-    if (btf == 0) {     /* Sense call */
-        /* Return stream status (0: Busy, 1: Ready) */
-        /* When once it returned ready to sense call, it must accept a byte at least */
-        /* at subsequent transfer call, or f_forward will fail with FR_INT_ERROR. */
+    if (btf == 0) {     <span>/* Sense call */</span>
+        <span>/* Return stream status (0: Busy, 1: Ready) */</span>
+        <span>/* When once it returned ready to sense call, it must accept a byte at least */</span>
+        <span>/* at subsequent transfer call, or f_forward will fail with FR_INT_ERROR. */</span>
         if (FIFO_READY) cnt = 1;
     }
-    else {              /* Transfer call */
-        do {    /* Repeat while there is any data to be sent and the stream is ready */
+    else {              <span>/* Transfer call */</span>
+        do {    <span>/* Repeat while there is any data to be sent and the stream is ready */</span>
             FIFO_PORT = *p++;
             cnt++;
         } while (cnt &lt; btf &amp;&amp; FIFO_READY);
@@ -101,31 +102,33 @@ UINT out_stream (   /* Returns number of bytes sent or stream status */
 }
 
 
-/*-----------------------------------------------------------------------*/
-/* Sample code using f_forward function                                  */
-/*-----------------------------------------------------------------------*/
+<span>/*------------------------------------------------------------------------*/</span>
+<span>/* Sample code using f_forward function                                   */</span>
+<span>/*------------------------------------------------------------------------*/</span>
 
 FRESULT play_file (
-    char *fn        /* Pointer to the audio file name to be played */
+    char *fn        <span>/* Pointer to the audio file name to be played */</span>
 )
 {
     FRESULT rc;
     FIL fil;
     UINT dmy;
 
-    /* Open the audio file in read only mode */
+    <span>/* Open the audio file in read only mode */</span>
     rc = f_open(&amp;fil, fn, FA_READ);
+    if (rc) return rc;
 
-    /* Repeat until the file pointer reaches end of the file */
+    <span>/* Repeat until the file pointer reaches end of the file */</span>
     while (rc == FR_OK &amp;&amp; fil.fptr &lt; fil.fsize) {
 
-        /* any other processes... */
+        <span>/* any other processes... */</span>
 
-        /* Fill output stream periodicaly or on-demand */
+        <span>/* Fill output stream periodicaly or on-demand */</span>
         rc = f_forward(&amp;fil, out_stream, 1000, &amp;dmy);
     }
 
-    /* The read-only file object may be discarded without close */
+    <span>/* Close the file and return */</span>
+    f_close(&amp;fil);
     return rc;
 }
 </pre>

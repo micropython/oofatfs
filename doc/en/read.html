@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/read.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_read</title>
 </head>
@@ -15,10 +16,10 @@
 <p>The f_read function reads data from a file.</p>
 <pre>
 FRESULT f_read (
-  FIL* <em>FileObject</em>,    /* Pointer to the file object structure */
-  void* <em>Buffer</em>,       /* Pointer to the buffer to store read data */
-  UINT <em>ByteToRead</em>,    /* Number of bytes to read */
-  UINT* <em>ByteRead</em>      /* Pointer to the variable to return number of bytes read */
+  FIL* <em>FileObject</em>,    <span>/* Pointer to the file object structure */</span>
+  void* <em>Buffer</em>,       <span>/* Pointer to the buffer to store read data */</span>
+  UINT <em>ByteToRead</em>,    <span>/* Number of bytes to read */</span>
+  UINT* <em>ByteRead</em>      <span>/* Pointer to the variable to return number of bytes read */</span>
 );
 </pre>
 </div>
@@ -59,7 +60,7 @@ FRESULT f_read (
 
 <div class="para">
 <h4>Description</h4>
-<p>The file pointer of the file object increases in number of bytes read. After the function succeeded, <tt>*ByteRead</tt> should be checked to detect the end of file. In case of <tt>*ByteRead &lt; ByteToRead</tt>, it means the R/W pointer reached end of the file during read operation.</p>
+<p>The file pointer of the file object increases in number of bytes read. After the function succeeded, <tt>*ByteRead</tt> should be checked to detect the end of file. In case of <tt>*ByteRead &lt; ByteToRead</tt>, it means the read/write pointer reached end of the file during read operation.</p>
 </div>
 
 

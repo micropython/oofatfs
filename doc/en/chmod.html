@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/chmod.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_chmod</title>
 </head>
@@ -15,9 +16,9 @@
 <p>The f_chmod function changes the attribute of a file or directory.</p>
 <pre>
 FRESULT f_chmod (
-  const XCHAR* <em>FileName</em>, /* Pointer to the file or directory */
-  BYTE <em>Attribute</em>,        /* Attribute flags */
-  BYTE <em>AttributeMask</em>     /* Attribute masks */
+  const TCHAR* <em>FileName</em>, <span>/* Pointer to the file or directory */</span>
+  BYTE <em>Attribute</em>,        <span>/* Attribute flags */</span>
+  BYTE <em>AttributeMask</em>     <span>/* Attribute masks */</span>
 );
 </pre>
 </div>
@@ -67,7 +68,7 @@ FRESULT f_chmod (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
 </dl>
 </div>
 
@@ -87,7 +88,7 @@ FRESULT f_chmod (
 <div class="para">
 <h4>Example</h4>
 <pre>
-    // Set read-only flag, clear archive flag and others are retained.
+    <span>/* Set read-only flag, clear archive flag and others are retained. */</span>
     f_chmod("file.txt", AR_RDO, AR_RDO | AR_ARC);
 </pre>
 </div>

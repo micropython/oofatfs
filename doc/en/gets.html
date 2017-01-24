@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/gets.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_gets</title>
 </head>
@@ -14,10 +15,10 @@
 <h2>f_gets</h2>
 <p>The f_gets reads a string from the file.</p>
 <pre>
-char* f_gets (
-  char* <em>Str</em>,        /* Read buffer */
-  int <em>Size</em>,         /* Size of the read buffer */
-  FIL* <em>FileObject</em>   /* File object */
+TCHAR* f_gets (
+  TCHAR* <em>Str</em>,       <span>/* Read buffer */</span>
+  int <em>Size</em>,         <span>/* Size of the read buffer */</span>
+  FIL* <em>FileObject</em>   <span>/* File object */</span>
 );
 </pre>
 </div>
@@ -28,7 +29,7 @@ char* f_gets (
 <dt>Str</dt>
 <dd>Pointer to read buffer to store the read string.</dd>
 <dt>Size</dt>
-<dd>Size of the read buffer.</dd>
+<dd>Size of the read buffer in unit of character.</dd>
 <dt>FileObject</dt>
 <dd>Pointer to the open file object structure.</dd>
 </dl>
@@ -43,7 +44,8 @@ char* f_gets (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_gets() is a wrapper function of <a href="read.html">f_read()</a>. The read operation continues until a <tt>'\n'</tt> is stored, reached end of file or buffer is filled with Size - 1 characters. The read string is terminated with a <tt>'\0'</tt>. When the file has reached end of the file or any error occured during read operation, f_gets() returns a <tt>NULL</tt>. The EOF and error status can be examined with <tt>f_eof()</tt> and <tt>f_error()</tt> macro.</p>
+<p>The f_gets() is a wrapper function of <a href="read.html">f_read()</a>. The read operation continues until a <tt>'\n'</tt> is stored, reached end of the file or the buffer is filled with <tt>Size - 1</tt> characters. The read string is terminated with a <tt>'\0'</tt>. When no character to read or any error occured during read operation, f_gets() returns a null pointer. The end of file and error status can be examined with <tt>f_eof()</tt> and <tt>f_error()</tt> macros.</p>
+<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the file is read in UTF-8 encoding and stored it to the buffer in UCS-2. If not the case, the file will be read in one byte per character without any code conversion.</p>
 </div>
 
 

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/mkdir.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_mkdir</title>
 </head>
@@ -15,7 +16,7 @@
 <p>ディレクトリを作成します。</p>
 <pre>
 FRESULT f_mkdir (
-  const XCHAR* <em>DirName</em> /* 作成するディレクトリ名へのポインタ */
+  const TCHAR* <em>DirName</em> <span>/* 作成するディレクトリ名へのポインタ */</span>
 );
 </pre>
 </div>
@@ -55,7 +56,7 @@ FRESULT f_mkdir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 

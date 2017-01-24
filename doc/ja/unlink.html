@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/unlink.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_unlink</title>
 </head>
@@ -15,7 +16,7 @@
 <p>オブジェクトを削除します。</p>
 <pre>
 FRESULT f_unlink (
-  const XCHAR* <em>FileName</em>  /* オブジェクト名へのポインタ */
+  const TCHAR* <em>FileName</em>  <span>/* オブジェクト名へのポインタ */</span>
 );
 </pre>
 </div>
@@ -55,7 +56,9 @@ FRESULT f_unlink (
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワーク・エリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
+<dt>FR_LOCKED</dt>
+<dd>ファイル共有機能によるアクセス拒否。</dd>
 </dl>
 </div>
 

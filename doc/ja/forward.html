@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/forward.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_forward</title>
 </head>
@@ -15,10 +16,10 @@
 <p>ファイルからデータを読み出し、送信ストリームに直接転送します。</p>
 <pre>
 FRESULT f_forward (
-  FIL* <em>FileObject</em>,                 /* ファイル・オブジェクト構造体 */
-  UINT (*<em>Func</em>)(const BYTE*,UINT),  /* データ転送関数 */
-  UINT <em>ByteToFwd</em>,                  /* 転送するバイト数 */
-  UINT* <em>ByteFwd</em>                    /* 転送されたバイト数 */
+  FIL* <em>FileObject</em>,                 <span>/* ファイル・オブジェクト構造体 */</span>
+  UINT (*<em>Func</em>)(const BYTE*,UINT),  <span>/* データ転送関数 */</span>
+  UINT <em>ByteToFwd</em>,                  <span>/* 転送するバイト数 */</span>
+  UINT* <em>ByteFwd</em>                    <span>/* 転送されたバイト数 */</span>
 );
 </pre>
 </div>
@@ -72,26 +73,26 @@ FRESULT f_forward (
 <div class="para">
 <h4>使用例（オーディオ再生）</h4>
 <pre>
-/*-----------------------------------------------------------------------*/
-/* f_forward関数から呼ばれるデータ送信関数の例                           */
-/*-----------------------------------------------------------------------*/
+<span>/*-----------------------------------------------------------------------*/</span>
+<span>/* f_forward関数から呼ばれるデータ送信関数の例                           */</span>
+<span>/*-----------------------------------------------------------------------*/</span>
 
-UINT out_stream (   /* 戻り値: 転送されたバイト数またはストリームの状態 */
-    const BYTE *p,  /* 転送するデータを指すポインタ */
-    UINT btf        /* &gt;0: 転送を行う(バイト数). 0: ストリームの状態を調べる */
+UINT out_stream (   <span>/* 戻り値: 転送されたバイト数またはストリームの状態 */</span>
+    const BYTE *p,  <span>/* 転送するデータを指すポインタ */</span>
+    UINT btf        <span>/* &gt;0: 転送を行う(バイト数). 0: ストリームの状態を調べる */</span>
 )
 {
     UINT cnt = 0;
 
 
-    if (btf == 0) {     /* センス要求 */
-        /* ストリームの状態を返す (0: ビジー, 1: レディ) */
-        /* 一旦、レディを返したら、続く転送要求で少なくとも1バイトは */
-        /* 転送されないと f_forward関数は FR_RW_ERROR となる。 */
+    if (btf == 0) {     <span>/* センス要求 */</span>
+        <span>/* ストリームの状態を返す (0: ビジー, 1: レディ) */</span>
+        <span>/* 一旦、レディを返したら、続く転送要求で少なくとも1バイトは */</span>
+        <span>/* 転送されないと f_forward関数は FR_RW_ERROR となる。 */</span>
         if (FIFO_READY) cnt = 1;
     }
-    else {              /* 転送要求 */
-        do {    /* 全てのバイトを転送するか、ストリームがビジーになるまで繰り返す */
+    else {              <span>/* 転送要求 */</span>
+        do {    <span>/* 全てのバイトを転送するか、ストリームがビジーになるまで繰り返す */</span>
             FIFO_PORT = *p++;
             cnt++;
         } while (cnt &lt; btf &amp;&amp; FIFO_READY);
@@ -101,31 +102,34 @@ UINT out_stream (   /* 戻り値: 転送されたバイト数またはストリームの状態 */
 }
 
 
-/*-----------------------------------------------------------------------*/
-/* f_forward関数の使用例                                                 */
-/*-----------------------------------------------------------------------*/
+<span>/*-----------------------------------------------------------------------*/</span>
+<span>/* f_forward関数の使用例                                                 */</span>
+<span>/*-----------------------------------------------------------------------*/</span>
 
 FRESULT play_file (
-    char *fn        /* 再生するオーディオ・ファイル名を指すポインタ */
+    char *fn        <span>/* 再生するオーディオ・ファイル名を指すポインタ */</span>
 )
 {
     FRESULT rc;
     FIL fil;
     UINT dmy;
 
-    /* ファイルを読み出しモードで開く */
+    <span>/* ファイルを読み出しモードで開く */</span>
     rc = f_open(&amp;fil, fn, FA_READ);
+    if (rc) return rc;
 
-    /* 全てのデータが転送されるかエラーが発生するまで続ける */
+    <span>/* 全てのデータが転送されるかエラーが発生するまで続ける */</span>
     while (rc == FR_OK &amp;&amp; fil.fptr &lt; fil.fsize) {
 
-        /* ほかの処理... */
+        <span>/* ほかの処理... */</span>
 
-        /* 定期的または要求に応じてデータをストリームに送出する */
+        <span>/* 定期的または要求に応じてデータをストリームに送出する */</span>
         rc = f_forward(&amp;fil, out_stream, 1000, &amp;dmy);
     }
 
-    return rc;	/* FR_OK: 正常終了, ほか:異常終了 */
+    <span>/* ファイルを閉じて戻る */</span>
+    f_close(&amp;fil);
+    return rc;	<span>
 }
 </pre>
 </div>

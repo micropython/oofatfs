@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/dioctl.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - disk_ioctl</title>
 </head>
@@ -15,9 +16,9 @@
 <p>セクタの読み書き以外のディスク・ドライブ自体に対する様々な制御をします。</p>
 <pre>
 DRESULT disk_ioctl (
-  BYTE <em>Drive</em>,      /* 物理ドライブ番号 */
-  BYTE <em>Command</em>,    /* 制御コマンド */
-  void* <em>Buffer</em>     /* データ受け渡しバッファ */
+  BYTE <em>Drive</em>,      <span>/* 物理ドライブ番号 */</span>
+  BYTE <em>Command</em>,    <span>/* 制御コマンド */</span>
+  void* <em>Buffer</em>     <span>/* データ受け渡しバッファ */</span>
 );
 </pre>
 </div>
@@ -54,10 +55,10 @@ DRESULT disk_ioctl (
 <p>この関数はリード・オンリー構成では必要とされません。</p>
 <table class="lst">
 <tr><th>コマンド</th><th>解説</th></tr>
-<tr><td>CTRL_SYNC</td><td>ドライブがデータの書き込みを完了するのを待ちます。ライト・バック・キャッシュがある場合は、書き込まれていないデータを即時書き戻します。</td></tr>
-<tr><td>GET_SECTOR_SIZE</td><td>Bufferの指すWORD変数にドライブのセクタ・サイズを返します。_MAX_SSが1024以上のとき必要とされます。</td></tr>
-<tr><td>GET_SECTOR_COUNT</td><td>Bufferの指すDWORD変数にドライブ上の総セクタ数を返します。f_mkfs内でのみ使用。</td></tr>
-<tr><td>GET_BLOCK_SIZE</td><td>Bufferの指すDWORD変数にメモリ・アレーの消去ブロックサイズをセクタ単位で返します。不明な場合またはHDDでは1を返します。f_mkfs内でのみ使用。</td></tr>
+<tr><td>CTRL_SYNC</td><td>ドライブがデータの書き込み処理を完了するのを待ちます。また、ライト・バック・キャッシュが存在する場合は、書き込まれていないデータを即時書き戻します。</td></tr>
+<tr><td>GET_SECTOR_SIZE</td><td><tt>Buffer</tt>の指すWORD変数にドライブのセクタ・サイズを返します。セクタサイズが固定(_MAX_SSが512)のときはこのコマンドは必要ありません。</td></tr>
+<tr><td>GET_SECTOR_COUNT</td><td><tt>Buffer</tt>の指すDWORD変数にドライブ上の総セクタ数を返します。f_mkfs関数内で作成するボリュームのサイズを決定するために使用されます。</td></tr>
+<tr><td>GET_BLOCK_SIZE</td><td>フラッシュ・メモリ・アレーの消去ブロック・サイズが分かる場合は、<tt>Buffer</tt>の指すDWORD変数にそれをセクタ単位で返します。1から32768でかつ2の累乗の値でなければなりません。f_mkfs関数内でのみ使用され、データ領域はこの境界にアライメントされます。不明な場合またはディスク・ドライブでは1を返します。</td></tr>
 </table>
 </div>
 

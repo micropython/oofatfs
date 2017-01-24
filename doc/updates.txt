@@ -1,3 +1,11 @@
+R0.08, May 15, 2010
+  Added a memory configuration option. (_USE_LFN)
+  Added file lock feature. (_FS_SHARE)
+  Added fast seek feature. (_USE_FASTSEEK)
+  Changed some types on the API, XCHAR->TCHAR.
+  Changed fname member in the FILINFO structure on Unicode cfg.
+  String functions support UTF-8 encoding files on Unicode cfg.
+
 R0.07e, Nov 3, 2009
   Separated out configuration options from ff.h to ffconf.h.
   Added a configuration option, _LFN_UNICODE.

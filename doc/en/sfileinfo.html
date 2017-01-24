@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/sfileinfo.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - FILINFO</title>
 </head>
@@ -14,15 +15,15 @@
 <h2>FILINFO</h2>
 <p>The <tt>FILINFO</tt> structure holds a file information returned by f_stat and f_readdir function.</p>
 <pre>
-typedef struct _FILINFO_ {
-    DWORD fsize;      /* File size */
-    WORD  fdate;      /* Last modified date */
-    WORD  ftime;      /* Last modified time */
-    BYTE  fattrib;    /* Attribute */
-    char  fname[13];  /* Short file name (8.3 format) */
+typedef struct {
+    DWORD fsize;      <span>/* File size */</span>
+    WORD  fdate;      <span>/* Last modified date */</span>
+    WORD  ftime;      <span>/* Last modified time */</span>
+    BYTE  fattrib;    <span>/* Attribute */</span>
+    TCHAR fname[13];  <span>/* Short file name (8.3 format) */</span>
 #if _USE_LFN
-    XCHAR* lfname;    /* Pointer to the LFN buffer */
-    int   lfsize;     /* Size of LFN buffer [characters] */
+    TCHAR* lfname;    <span>/* Pointer to the LFN buffer */</span>
+    int   lfsize;     <span>/* Size of LFN buffer [characters] */</span>
 #endif
 } FILINFO;
 </pre>

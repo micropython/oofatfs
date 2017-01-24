@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/gets.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_gets</title>
 </head>
@@ -14,10 +15,10 @@
 <h2>f_gets</h2>
 <p>ファイルから文字列を読み出します。</p>
 <pre>
-char* f_gets (
-  char* <em>Str</em>,        /* バッファ */
-  int <em>Size</em>,         /* バッファのサイズ */
-  FIL* <em>FileObject</em>   /* ファイル・オブジェクト */
+TCHAR* f_gets (
+  TCHAR* <em>Str</em>,       <span>/* バッファ */</span>
+  int <em>Size</em>,         <span>/* バッファのサイズ */</span>
+  FIL* <em>FileObject</em>   <span>/* ファイル・オブジェクト */</span>
 );
 </pre>
 </div>
@@ -28,7 +29,7 @@ char* f_gets (
 <dt>Str</dt>
 <dd>文字列を読み出すバッファを指すポインタを指定します。</dd>
 <dt>Size</dt>
-<dd>バッファのサイズを指定します。</dd>
+<dd>バッファのサイズを要素数で指定します。</dd>
 <dt>FileObject</dt>
 <dd>ファイル・オブジェクト構造体へのポインタを指定します。</dd>
 </dl>
@@ -43,7 +44,8 @@ char* f_gets (
 
 <div class="para">
 <h4>解説</h4>
-<p>この関数は<a href="read.html">f_read()</a>のラッパー関数です。読み出し動作は、最初の<tt>'\n'</tt>を読み込むか、ファイル終端に達するか、<tt>Size - 1</tt>文字を読み出すまで続きます。読み込まれた文字列の終端には<tt>'\0'</tt>が付加されます。既にファイル終端で1文字も読み込まれなかったとき、または何らかのエラーが発生したときは<tt>NULL</tt>を返します。ファイル終端かエラーかは<tt>f_eof()</tt>,<tt>f_error()</tt>マクロで調べられます。</p>
+<p>この関数は<a href="read.html">f_read()</a>のラッパー関数です。読み出し動作は、最初の<tt>'\n'</tt>を読み込むか、ファイル終端に達するか、<tt>Size - 1</tt>文字を読み出すまで続きます。読み込まれた文字列の終端には<tt>'\0'</tt>が付加されます。既にファイル終端で1文字も読み込まれなかったとき、または何らかのエラーが発生したときは関数は失敗しヌル・ポインタを返します。ファイル終端かエラーかは<tt>f_eof()</tt>,<tt>f_error()</tt>マクロで調べられます。</p>
+<p>APIにUnicodeが選択されている(<tt>_LFN_UNICODE</tt>が1)ときは、UTF-8エンコードのテキスト・ファイルとしてUCS-2に変換してバッファに読み込みます。それ以外の時は無変換(1文字1バイト)で読み込みます。</p>
 </div>
 
 

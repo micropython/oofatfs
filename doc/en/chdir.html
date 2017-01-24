@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/chdir.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_chdir</title>
 </head>
@@ -15,7 +16,7 @@
 <p>The f_chdir function changes the current directory of a drive.</p>
 <pre>
 FRESULT f_chdir (
-  const XCHAR* <em>Path</em> /* Pointer to the path name */
+  const TCHAR* <em>Path</em> <span>/* Pointer to the path name */</span>
 );
 </pre>
 </div>
@@ -49,7 +50,7 @@ FRESULT f_chdir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
 </dl>
 </div>
 
@@ -69,10 +70,10 @@ FRESULT f_chdir (
 <div class="para">
 <h4>Example</h4>
 <pre>
-    // Change current direcoty of the current drive (dir1 under root dir)
+    <span>/* Change current direcoty of the current drive (dir1 under root dir) */</span>
     f_chdir("/dir1");
 
-    // Change current direcoty of drive 2 (parent dir)
+    <span>/* Change current direcoty of drive 2 (parent dir) */</span>
     f_chdir("2:..");
 </pre>
 </div>

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/close.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_close</title>
 </head>
@@ -15,7 +16,7 @@
 <p>The f_close function closes an open file.</p>
 <pre>
 FRESULT f_close (
-  FIL* <em>FileObject</em>     /* Pointer to the file object structure */
+  FIL* <em>FileObject</em>     <span>/* Pointer to the file object structure */</span>
 );
 </pre>
 </div>
@@ -48,7 +49,7 @@ FRESULT f_close (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_close function closes an open file object. If any data has been written to the file, the cached information of the file is written back to the disk. After the function succeeded, the file object is no longer valid and it can be discarded. If the file object has been opened in read-only mode, it may be discarded without closing process by this function.</p>
+<p>The f_close function closes an open file object. If any data has been written to the file, the cached information of the file is written back to the disk. After the function succeeded, the file object is no longer valid and it can be discarded. If the file object has been opened in read-only mode, it may be discarded without closing process by this function but not recommended.</p>
 </div>
 
 

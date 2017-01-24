@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/mkdir.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_mkdir</title>
 </head>
@@ -15,7 +16,7 @@
 <p>The f_mkdir function creates a new directory.</p>
 <pre>
 FRESULT f_mkdir (
-  const XCHAR* <em>DirName</em> /* Pointer to the directory name */
+  const TCHAR* <em>DirName</em> <span>/* Pointer to the directory name */</span>
 );
 </pre>
 </div>
@@ -55,7 +56,7 @@ FRESULT f_mkdir (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
 </dl>
 </div>
 

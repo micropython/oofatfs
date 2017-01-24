@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/utime.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_utime</title>
 </head>
@@ -15,8 +16,8 @@
 <p>The f_utime function changes the timestamp of a file or directory.</p>
 <pre>
 FRESULT f_utime (
-  const XCHAR* <em>FileName</em>,   /* Pointer to the file or directory path */
-  const FILINFO* <em>TimeDate</em>  /* Time and data to be set */
+  const TCHAR* <em>FileName</em>,   <span>/* Pointer to the file or directory path */</span>
+  const FILINFO* <em>TimeDate</em>  <span>/* Time and data to be set */</span>
 );
 </pre>
 </div>
@@ -56,7 +57,7 @@ FRESULT f_utime (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
 </dl>
 </div>
 
@@ -64,6 +65,30 @@ FRESULT f_utime (
 <div class="para">
 <h4>Description</h4>
 <p>The f_utime function changes the timestamp of a file or directory</p>
+</div>
+
+
+<div class="para">
+<h4>Example</h4>
+<pre>
+FRESULT set_timestamp (
+    char *obj,     <span>/* Pointer to the file name */</span>
+    int year,
+    int month,
+    int mday,
+    int hour,
+    int min,
+    int sec
+)
+{
+    FILINFO fno;
+
+    fno.fdate = (WORD)(((year - 1980) * 512U) | month * 32U | mday);
+    fno.ftime = (WORD)(hour * 2048U | min * 32U | sec / 2U);
+
+    return f_utime(obj, &fno);
+}
+</pre>
 </div>
 
 

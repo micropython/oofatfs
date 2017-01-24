@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/putc.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_putc</title>
 </head>
@@ -15,8 +16,8 @@
 <p>The f_putc funciton puts a character to the file.</p>
 <pre>
 int f_putc (
-  int <em>Chr</em>,          /* A character to put */
-  FIL* <em>FileObject</em>   /* File object */
+  TCHAR <em>Chr</em>,        <span>/* A character to put */</span>
+  FIL* <em>FileObject</em>   <span>/* File object */</span>
 );
 </pre>
 </div>
@@ -34,7 +35,8 @@ int f_putc (
 
 <div class="para">
 <h4>Return Values</h4>
-<p>When the character was written successfuly, the function returns the character. When the function failed due to disk full or any error, an <tt>EOF</tt> will be returned.</p>
+<p>When the character was written successfuly, the function returns the character. When the function failed due to disk full or any error, an <tt>EOF (-1)</tt> will be returned.</p>
+<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the UCS-2 character is written to the file in UTF-8 encoding. If not the case, the byte will be written directly.</p>
 </div>
 
 

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/rename.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_rename</title>
 </head>
@@ -15,8 +16,8 @@
 <p>Renames an object.</p>
 <pre>
 FRESULT f_rename (
-  const XCHAR* <em>OldName</em>, /* Pointer to old object name */
-  const XCHAR* <em>NewName</em>  /* Pointer to new object name */
+  const TCHAR* <em>OldName</em>, <span>/* Pointer to old object name */</span>
+  const TCHAR* <em>NewName</em>  <span>/* Pointer to new object name */</span>
 );
 </pre>
 </div>
@@ -60,7 +61,9 @@ FRESULT f_rename (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
+<dt>FR_LOCKED</dt>
+<dd>The function was rejected due to file shareing policy.</dd>
 </dl>
 </div>
 
@@ -80,10 +83,10 @@ FRESULT f_rename (
 <div class="para">
 <h4>Example</h4>
 <pre>
-    /* Rename an object */
+    <span>/* Rename an object */</span>
     f_rename("oldname.txt", "newname.txt");
 
-    /* Rename and move an object to other directory */
+    <span>/* Rename and move an object to other directory */</span>
     f_rename("oldname.txt", "dir1/newname.txt");
 </pre>
 </div>

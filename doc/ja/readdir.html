@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/readdir.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_readdir</title>
 </head>
@@ -15,8 +16,8 @@
 <p>ディレクトリ項目を読み出します</p>
 <pre>
 FRESULT f_readdir (
-  DIR* <em>DirObject</em>,    /* ディレクトリ・ブジェクト構造体へのポインタ */
-  FILINFO* <em>FileInfo</em>  /* ファイル情報構造体へのポインタ */
+  DIR* <em>DirObject</em>,    <span>/* ディレクトリ・ブジェクト構造体へのポインタ */</span>
+  FILINFO* <em>FileInfo</em>  <span>/* ファイル情報構造体へのポインタ */</span>
 );
 </pre>
 </div>
@@ -51,7 +52,7 @@ FRESULT f_readdir (
 
 <div class="para">
 <h4>解説</h4>
-<p>ディレクトリ項目を順次読み出します。この関数を繰り返し実行することによりディレクトリの全ての項目を読み出すことができます。全ての項目を読み出し、読み出す項目がもう無いときは、<tt>f_name[]</tt>メンバにヌル文字列が返されます。ボリューム名は読み出すときに棄てられ、現れることはありません。"."、".."は、相対パスが有効なとき(<tt>_FS_RPATH == 1</tt>)にのみ現れます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。FileInfoにヌル・ポインタを指定すると、そのディレクトリのリード・インデックスを巻き戻します。</p>
+<p>ディレクトリ項目を順次読み出します。この関数を繰り返し実行することによりディレクトリの全ての項目を読み出すことができます。全ての項目を読み出し、読み出す項目がもう無いときは、<tt>f_name[]</tt>メンバにヌル文字列が返されます。ボリューム・ラベルは読み出すときに棄てられ、現れることはありません。"."、".."は、相対パスが有効なとき(<tt>_FS_RPATH == 1</tt>)にのみ現れます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。FileInfoにヌル・ポインタを指定すると、そのディレクトリのリード・インデックスを巻き戻します。</p>
 <p>LFN機能が有効な時は、f_readdir関数の呼び出しに先立ってFILINFO構造体の<tt>lfname</tt>と<tt>lfsize</tt>が有効な値で初期化されていなければなりません。<tt>lfname</tt>はLFNを格納するバッファで、<tt>lfsize</tt>はそのバッファ・サイズ(文字数)です。次の条件に一つでも該当する場合は、LFN格納バッファにヌル文字列が返されます。</p>
 <ul>
 <li>そのディレクトリ項目にLFNが存在しない。</li>

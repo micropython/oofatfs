@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/open.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_open</title>
 </head>
@@ -15,9 +16,9 @@
 <p>The f_open function creates a <em>file object</em> to be used to access the file.</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,       /* Pointer to the blank file object structure */
-  const XCHAR* <em>FileName</em>, /* Pointer to the file neme */
-  BYTE <em>ModeFlags</em>         /* Mode flags */
+  FIL* <em>FileObject</em>,       <span>/* Pointer to the blank file object structure */</span>
+  const TCHAR* <em>FileName</em>, <span>/* Pointer to the file neme */</span>
+  BYTE <em>ModeFlags</em>         <span>/* Mode flags */</span>
 );
 </pre>
 </div>
@@ -36,7 +37,8 @@ FRESULT f_open (
 <tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file.<br>Combine with FA_WRITE for read-write access.</td></tr>
 <tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file.<br>Combine with FA_READ for read-write access.</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing. (Default)</td></tr>
-<tr><td>FA_OPEN_ALWAYS</td><td>Opens the file, if it is existing. If not, a new file is created.</td></tr>
+<tr><td>FA_OPEN_ALWAYS</td><td>Opens the file if it is existing. If not, a new file is created.<br>
+To append data to the file, use f_lseek function after file open in this method.</td></tr>
 <tr><td>FA_CREATE_NEW</td><td>Creates a new file. The function fails if the file is already existing.</td></tr>
 <tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
 </table>
@@ -62,9 +64,9 @@ FRESULT f_open (
 <dd>The file is already existing.</dd>
 <dt>FR_DENIED</dt>
 <dd>The required access was denied due to one of the following reasons:
-<ul><li>Write mode open of a read-only file.</li>
-<li>File cannot be created due to a read-only file or same name directory is existing.</li>
-<li>File cannot be created due to the directory table or disk is full.</li></ul></dd>
+<ul><li>Write mode open against a read-only file.</li>
+<li>File cannot be created due to a read-only file or same directory name is existing.</li>
+<li>File cannot be created due to the directory table or volume is full.</li></ul></dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -76,21 +78,23 @@ FRESULT f_open (
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>There is no valid FAT volume on the disk.</dd>
+<dd>There is no valid FAT volume on the drive.</dd>
+<dt>FR_LOCKED</dt>
+<dd>The function was rejected due to file shareing policy.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>A file object is created when the function succeeded. The file object is used for subsequent read/write functions to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If the modified file is not closed, the file may be collapsed.</p>
+<p>A file object is created when the function succeeded. The file object is used for subsequent read/write functions to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If the modified file is not closed, the file data can be collapsed.</p>
 <p>Before using any file function, a work area (file system object) must be given to the logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
 </div>
 
 
 <div class="para">
 <h4>QuickInfo</h4>
-<p>Always available. The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>, are not available when <tt>_FS_READONLY == 1</tt>.</p>
+<p>Always available. The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW and FA_OPEN_ALWAYS</tt>, are not available when <tt>_FS_READONLY == 1</tt>.</p>
 </div>
 
 
@@ -99,38 +103,38 @@ FRESULT f_open (
 <pre>
 void main (void)
 {
-    FATFS fs[2];         /* Work area (file system object) for logical drives */
-    FIL fsrc, fdst;      /* file objects */
-    BYTE buffer[4096];   /* file copy buffer */
-    FRESULT res;         /* FatFs function common result code */
-    UINT br, bw;         /* File R/W count */
+    FATFS fs[2];         <span>/* Work area (file system object) for logical drives */</span>
+    FIL fsrc, fdst;      <span>/* file objects */</span>
+    BYTE buffer[4096];   <span>/* file copy buffer */</span>
+    FRESULT res;         <span>/* FatFs function common result code */</span>
+    UINT br, bw;         <span>/* File read/write count */</span>
 
 
-    /* Register work area for logical drives */
+    <span>/* Register work area for logical drives */</span>
     f_mount(0, &amp;fs[0]);
     f_mount(1, &amp;fs[1]);
 
-    /* Open source file on the drive 1 */
+    <span>/* Open source file on the drive 1 */</span>
     res = f_open(&amp;fsrc, "1:srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
-    /* Create destination file on the drive 0 */
+    <span>/* Create destination file on the drive 0 */</span>
     res = f_open(&amp;fdst, "0:dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
-    /* Copy source to destination */
+    <span>/* Copy source to destination */</span>
     for (;;) {
-        res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);
-        if (res || br == 0) break;   /* error or eof */
-        res = f_write(&amp;fdst, buffer, br, &amp;bw);
-        if (res || bw &lt; br) break;   /* error or disk full */
+        res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);    <span>/* Read a chunk of src file */</span>
+        if (res || br == 0) break; <span>/* error or eof */</span>
+        res = f_write(&amp;fdst, buffer, br, &amp;bw);               <span>/* Write it to the dst file */</span>
+        if (res || bw &lt; br) break; <span>/* error or disk full */</span>
     }
 
-    /* Close open files */
+    <span>/* Close open files */</span>
     f_close(&amp;fsrc);
     f_close(&amp;fdst);
 
-    /* Unregister work area prior to discard it */
+    <span>/* Unregister work area prior to discard it */</span>
     f_mount(0, NULL);
     f_mount(1, NULL);
 }

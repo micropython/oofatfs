@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/utime.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_utime</title>
 </head>
@@ -15,8 +16,8 @@
 <p>オブジェクトのタイムスタンプを変更します。</p>
 <pre>
 FRESULT f_utime (
-  const XCHAR* <em>FileName</em>,   /* オブジェクト名へのポインタ */
-  const FILINFO* <em>TimeDate</em>  /* 設定する日付 */
+  const TCHAR* <em>FileName</em>,   <span>/* オブジェクト名へのポインタ */</span>
+  const FILINFO* <em>TimeDate</em>  <span>/* 設定する日付 */</span>
 );
 </pre>
 </div>
@@ -44,7 +45,7 @@ FRESULT f_utime (
 <dt>FR_INVALID_NAME</dt>
 <dd>パス名が不正。</dd>
 <dt>FR_INVALID_NAME</dt>
-<dd>ドライブ番号が不正。</dd>
+<dd>論理ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -56,7 +57,7 @@ FRESULT f_utime (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
@@ -64,6 +65,30 @@ FRESULT f_utime (
 <div class="para">
 <h4>解説</h4>
 <p>オブジェクトのタイムスタンプを変更します。</p>
+</div>
+
+
+<div class="para">
+<h4>使用例</h4>
+<pre>
+FRESULT set_timestamp (
+    char *obj,     <span>/* ファイル名へのポインタ */</span>
+    int year,
+    int month,
+    int mday,
+    int hour,
+    int min,
+    int sec
+)
+{
+    FILINFO fno;
+
+    fno.fdate = (WORD)(((year - 1980) * 512U) | month * 32U | mday);
+    fno.ftime = (WORD)(hour * 2048U | min * 32U | sec / 2U);
+
+    return f_utime(obj, &fno);
+}
+</pre>
 </div>
 
 

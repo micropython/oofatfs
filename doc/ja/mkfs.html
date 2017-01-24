@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/mkfs.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_mkfs</title>
 </head>
@@ -15,9 +16,9 @@
 <p>ドライブ上にFATファイル・システムを作成(フォーマット)します。</p>
 <pre>
 FRESULT f_mkfs (
-  BYTE  <em>Drive</em>,              /* 論理ドライブ番号 */
-  BYTE  <em>PartitioningRule</em>,   /* 区画作成方法 */
-  WORD  <em>AllocSize</em>           /* クラス・タサイズ */
+  BYTE  <em>Drive</em>,              <span>/* 論理ドライブ番号 */</span>
+  BYTE  <em>PartitioningRule</em>,   <span>/* 区画作成方法 */</span>
+  UINT  <em>AllocSize</em>           <span>/* クラス・タサイズ */</span>
 );
 </pre>
 </div>
@@ -28,9 +29,9 @@ FRESULT f_mkfs (
 <dt>Drive</dt>
 <dd>フォーマットする論理ドライブ(0-9)。</dd>
 <dt>PartitioningRule</dt>
-<dd>0を指定すると、ドライブの全領域を占める基本DOS区画を作成したあとその区画にファイル・システムを作成します(FDISKフォーマット)。1を指定すると、区画テーブルを作成せずドライブの先頭セクタから直接ファイル・システムを作成します(super floppy (SFD) フォーマット)。</dd>
+<dd>0を指定すると、ドライブの全領域を占める基本DOS区画を作成したあと、その区画にファイル・システムを作成します(FDISKフォーマット)。1を指定すると、区画テーブルを作成せず物理ドライブの先頭セクタから直接ファイル・システムを作成します(super floppy (SFD) フォーマット)。</dd>
 <dt>AllocSize</dt>
-<dd>クラスタ・サイズをバイト単位で指定します。0または512～32768の範囲でかつ2の累乗でなければなりません。0を指定するとドライブ・サイズに応じたデフォルトのクラスタ・サイズを選択します。FAT64(64KB/クラスタ)は選択できません。</dd>
+<dd>クラスタ・サイズをバイト単位で指定します。2の累乗、且つセクタ・サイズ以上、且つセクタ・サイズの128倍以下でなければなりません。無効な値を指定した場合、ドライブ・サイズに応じたデフォルトのクラスタ・サイズが選択されます。特に指定しない場合は、0を指定して自動選択とします。</dd>
 </dl>
 </div>
 
@@ -63,7 +64,7 @@ FRESULT f_mkfs (
 <div class="para">
 <h4>説明</h4>
 <p>f_mkfs関数はFATファイル・システムをドライブ上に作成します。リムーバブル・メディアのパーテーショニング・ルールとしてはFDISK形式とSFD形式があり、メモリ・カードではFDISK形式が普通です。この関数は<em>複数区画には対応していない</em>ので、その物理ドライブの既存の区画は全て削除され、全体が一つの区画になります。</p>
-<p>FATタイプ(FAT12/FAT16/FAT32)は、その論理ドライブ上の<em>クラスタ数によってのみ決定</em>される[FAT仕様書より]決まりになっていて、それ以外の要因はありません。したがって、どのFATタイプになるかはドライブ・サイズと指定されたクラスタ・サイズに依存します。クラスタ・サイズは大きくするほど性能が上がり、逆にディスク利用効率は落ちます。</p>
+<p>FATタイプ(FAT12/FAT16/FAT32)は、その論理ドライブ上の<em>クラスタ数によってのみ決定</em>される決まり[FAT仕様書より]になっていて、それ以外の要因はありません。したがって、どのFATタイプになるかはドライブ・サイズとクラスタ・サイズに依存します。クラスタ・サイズは大きくするほど性能が上がり、逆にディスク利用効率は落ちます。</p>
 </div>
 
 

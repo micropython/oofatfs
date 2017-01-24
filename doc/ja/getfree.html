@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/getfree.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_getfree</title>
 </head>
@@ -15,9 +16,9 @@
 <p>論理ドライブ上の未使用クラスタ数を得ます。</p>
 <pre>
 FRESULT f_getfree (
-  const XCHAR* <em>Path</em>,       /* 対象ドライブのルート・ディレクトリ */
-  DWORD* <em>Clusters</em>,         /* 空きクラスタ数を格納する変数へのポインタ */
-  FATFS** <em>FileSystemObject</em> /* ファイル・システム・オブジェクトを指すポインタへのポインタ */
+  const TCHAR* <em>Path</em>,       <span>/* 対象ドライブを指定します */</span>
+  DWORD* <em>Clusters</em>,         <span>/* 空きクラスタ数を格納する変数へのポインタ */</span>
+  FATFS** <em>FileSystemObject</em> <span>/* ファイル・システム・オブジェクトを指すポインタへのポインタ */</span>
 );
 </pre>
 </div>
@@ -26,7 +27,7 @@ FRESULT f_getfree (
 <h4>引数</h4>
 <dl class="par">
 <dt>Path</dt>
-<dd>対象の論理ドライブのルートディレクトリの<a href="filename.html">パス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dd>調べる対象の論理ドライブを示す<a href="filename.html">パス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>Clusters</dt>
 <dd>空きクラスタ数を格納する<tt>DWORD</tt>変数へのポインタを指定します。</dd>
 <dt>FileSystemObject</dt>
@@ -51,14 +52,14 @@ FRESULT f_getfree (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいては、FSINFOの状態によっては不正確な値を返したり、処理に時間がかかったりする可能性があります。</p>
+<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいては、FSINFOセクタの状態によっては不正確な値を返したり、処理に時間がかかったりする可能性があります。</p>
 </div>
 
 
@@ -75,15 +76,15 @@ FRESULT f_getfree (
     DWORD fre_clust, fre_sect, tot_sect;
 
 
-    /* Get drive information and free clusters */
-    res = f_getfree("/", &amp;fre_clust, &amp;fs);
+    <span>/* ドライブ1のボリューム情報と空きクラスタ数を得る */</span>
+    res = f_getfree("1:", &amp;fre_clust, &amp;fs);
     if (res) die(res);
 
-    /* Get total sectors and free sectors */
+    <span>/* 全セクタ数と空きセクタ数を計算 */</span>
     tot_sect = (fs->max_clust - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
-    /* Print free space in unit of KB (assuming 512B/sector) */
+    <span>/* ドライブサイズと空きサイズの表示 (512バイト/セクタと仮定) */</span>
     printf("%lu KB total drive space.\n"
            "%lu KB available.\n",
            fre_sect / 2, tot_sect / 2);

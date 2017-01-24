@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/chmod.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - f_chmod</title>
 </head>
@@ -15,9 +16,9 @@
 <p>ファイルまたはディレクトリの属性を変更します。</p>
 <pre>
 FRESULT f_chmod (
-  const XCHAR* <em>FileName</em>, /* ファイルまたはディレクトリ名へのポインタ */
-  BYTE <em>Attribute</em>,        /* 設定値 */
-  BYTE <em>AttributeMask</em>     /* 変更マスク */
+  const TCHAR* <em>FileName</em>, <span>/* ファイルまたはディレクトリ名へのポインタ */</span>
+  BYTE <em>Attribute</em>,        <span>/* 設定値 */</span>
+  BYTE <em>AttributeMask</em>     <span>/* 変更マスク */</span>
 );
 </pre>
 </div>
@@ -67,7 +68,7 @@ FRESULT f_chmod (
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
-<dd>ディスク上に有効なFATボリュームが見つからない。</dd>
+<dd>有効なFATボリュームが見つからない。</dd>
 </dl>
 </div>
 
@@ -87,7 +88,7 @@ FRESULT f_chmod (
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    /* リードオンリーをセット、アーカイブをクリア、その他は変更しない */
+    <span>/* リードオンリーをセット、アーカイブをクリア、その他は変更しない */</span>
     f_chmod("file.txt", AM_RDO, AM_RDO | AM_ARC);
 </pre>
 </div>

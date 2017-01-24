@@ -4,6 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="description" content="組み込みシステム向けFATファイル・システム">
+<link rel="start" title="Site Top" href="../../index_j.html">
+<link rel="up" title="Freewares" href="../../fsw.html">
 <link rel="alternate" hreflang="en" title="英文" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - 汎用FATファイルシステム・モジュール</title>
@@ -15,20 +17,20 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>FatFsは小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, SH, Z80, H8, ARMなど安価なマイコンでも使用可能です。FatFsをシュリンクした<a href="http://elm-chan.org/fsw/ff/00index_p.html">ぷちFatFs</a>もあります。</p>
+<p>FatFsは小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, SH, Z80, 68k, H8, ARMなど安価なマイコンでも使用可能です。FatFsをシュリンクした<a href="http://elm-chan.org/fsw/ff/00index_p.html">ぷちFatFs</a>もあります。</p>
 <h4>FatFsモジュールの特徴</h4>
 <ul>
  <li>Windows互換 FATファイル・システム</li>
  <li>プラットフォーム非依存</li>
- <li>コンパクトなコード・サイズとRAM使用量</li>
+ <li>コンパクトなコードとRAM使用量</li>
  <li>多くの構成オプション:
   <ul>
    <li>複数のボリューム(物理ドライブ・区画)</li>
-   <li>DBCSを含む複数のOEMコード・ページ</li>
-   <li>長いファイル名(LFN)対応 (Unicode APIも選択可)</li>
-   <li>マルチタスク対応</li>
-   <li>マルチ・セクタ・サイズ対応</li>
-   <li>リード・オンリー、一部APIの削除、バッファ構成、その他…</li>
+   <li>DBCSを含む複数のANSI/OEMコード・ページ</li>
+   <li>長いファイル名(LFN) (Unicode APIも選択可)</li>
+   <li>マルチタスク関連</li>
+   <li>マルチ・セクタ・サイズ</li>
+   <li>リード・オンリー構成、一部APIの削除、バッファ構成、その他…</li>
   </ul>
  </li>
 </ul>
@@ -36,8 +38,8 @@
 
 
 <div class="para">
-<h3>上位レイヤI/F</h3>
-<p>FatFsモジュールは、次のファイル操作関数を提供しています。</p>
+<h3>上位レイヤ・インターフェース</h3>
+<p>FatFsモジュールは、次のファイル操作関数(API)を提供します。つまり、このリストはFatFsにできることをシンプルに示しています。</p>
 <ul>
 <li><a href="ja/mount.html">f_mount</a> - ワークエリアの登録・削除</li>
 <li><a href="ja/open.html">f_open</a> - ファイルのオープン・作成</li>
@@ -69,8 +71,8 @@
 
 
 <div class="para">
-<h3>下位レイヤI/F</h3>
-<p>FatFsモジュールは、物理ドライブ等へのアクセスのため、下位レイヤに次のインターフェースを要求します。それぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザによって用意される必要があります。資料にドライバを含むサンプル・プロジェクトあり。</p>
+<h3>下位レイヤ・インターフェース</h3>
+<p>FatFsモジュールは、物理ドライブ等へのアクセスのため、下位レイヤに少なくとも次のインターフェースを要求します。使用する記録メディアに対応したディスクI/Oモジュールは、ユーザによって用意される必要があります。OS関連機能を有効にしたときは、加えてプロセス・メモリ関連関数も必要になります。資料にドライバを含むサンプル・プロジェクトあり。</p>
 <ul>
 <li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
 <li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
@@ -84,18 +86,20 @@
 
 <div class="para">
 <h3>資料</h3>
-<p>FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。詳しくはアプリケーション・ノートを参照してください。</p>
+<p>FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人利用から商用まで）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。詳しくはアプリケーション・ノートを参照してください。</p>
 <ul>
 <li><a href="http://elm-chan.org/fsw/ff/bd/"><em>FatFsユーザ・フォーラム</em></a></li>
-<li><a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a> <span class="mfd">2010. 1. 28</span></li>
+<li>最初に読め: <a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a> <span class="mfd">2010. 5. 15</span></li>
 <li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FATファイル・システム仕様書 by Microsoft</a> (FATの理解・実装に必要な唯一のリファレンス)</li>
-<li><a href="http://elm-chan.org/docs/fat.html">FATファイル・システム概要</a></li>
+<li><a href="http://elm-chan.org/docs/fat.html">FATファイル・システム概要</a> (↑を読むためのガイド)</li>
 <li><a href="http://elm-chan.org/docs/mmc/mmc.html">MMCの使いかた</a></li>
 <li><a href="img/rwtest.png">パフォーマンス・テスト1</a> (ATmega64/9.2MHz with MMC via SPI, HDD/CFC via GPIO)</li>
 <li><a href="img/rwtest2.png">パフォーマンス・テスト2</a> (LPC2368/72MHz with MMC via MCI)</li>
 </ul>
 </div>
 
+
+<hr>
 </body>
 </html>

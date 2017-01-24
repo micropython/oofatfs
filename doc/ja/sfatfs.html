@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/sfatfs.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - FATFS</title>
 </head>
@@ -15,33 +16,36 @@
 <p><tt>FATFS</tt>構造体は、個々の論理ドライブのダイナミック・ワーク・エリアを保持し、f_mount()でFatFsモジュールに登録されます。標準状態では次のようなメンバになっています。アプリケーションから書き換え可能なメンバはありません。</p>
 
 <pre>
-typedef struct _FATFS_ {
-    BYTE    fs_type;      /* FAT sub type */
-    BYTE    drive;        /* Physical drive number */
-    BYTE    csize;        /* Number of sectors per cluster */
-    BYTE    n_fats;       /* Number of FAT copies */
-    BYTE    wflag;        /* win[] dirty flag (1:must be written back) */
-    BYTE    fsi_flag;     /* fsinfo dirty flag (1:must be written back) */
-    WORD    id;           /* File system mount ID */
-    WORD    n_rootdir;    /* Number of root directory entries (0 on FAT32) */
-#if _FS_REENTRANT
-    HANDLE  h_mutex;      /* Handle to the mutex (Platform dependent) */
-#endif
+typedef struct {
+    BYTE    fs_type;      <span>/* FATタイプ */</span>
+    BYTE    drv;          <span>/* 物理ドライブ番号 */</span>
+    BYTE    csize;        <span>/* クラスタ当たりのセクタ数 */</span>
+    BYTE    n_fats;       <span>/* FATの多重化数 */</span>
+    BYTE    wflag;        <span>/* win[]ダーティ・フラグ */</span>
+    BYTE    fsi_flag;     <span>/* fsinfoダーティ・フラグ */</span>
+    WORD    id;           <span>/* ファイル・システム・マウントID */</span>
+    WORD    n_rootdir;    <span>/* ルート・ディレクトリのエントリ数 (FAT12/16) */</span>
 #if _MAX_SS != 512
-    WORD    s_size;       /* Sector size */
+    WORD    ssize;        <span>/* セクタ・サイズ (可変セクタ長のみ) */</span>
+#endif
+#if _FS_REENTRANT
+    HANDLE  h_mutex;      <span>/* 同期オブジェクトID */</span>
 #endif
 #if !_FS_READONLY
-    DWORD   last_clust;   /* Last allocated cluster */
-    DWORD   free_clust;   /* Number of free clusters */
-    DWORD   fsi_sector;   /* fsinfo sector */
+    DWORD   last_clust;   <span>/* 最後に割り当てられたクラスタ番号 */</span>
+    DWORD   free_clust;   <span>/* 空きクラスタ数 */</span>
+    DWORD   fsi_sector;   <span>/* fsinfoセクタ (FAT32) */</span>
 #endif
-    DWORD   sects_fat;    /* Sectors per fat */
-    DWORD   max_clust;    /* Maximum cluster# + 1. Number of clusters is max_clust - 2 */
-    DWORD   fatbase;      /* FAT start sector */
-    DWORD   dirbase;      /* Root directory start sector (Cluster# on FAT32) */
-    DWORD   database;     /* Data start sector */
-    DWORD   winsect;      /* Current sector appearing in the win[] */
-    BYTE    win[_MAX_SS]; /* Disk access window for Directory/FAT */
+#if _FS_RPATH
+    DWORD   cdir;         <span>/* カレント・ディレクトリのクラスタ (0:ルート) */</span>
+#endif
+    DWORD   n_fatent;     <span>/* FATのエントリ数 (= クラスタ数 + 2) */</span>
+    DWORD   fsize;        <span>/* FAT 1個当たりのセクタ数 */</span>
+    DWORD   fatbase;      <span>/* FAT領域開始セクタ */</span>
+    DWORD   dirbase;      <span>/* ルート・ディレクトリ開始セクタ (FAT32: クラスタ番号) */</span>
+    DWORD   database;     <span>/* データ領域開始区セクタ */</span>
+    DWORD   winsect;      <span>/* win[]に現れているセクタ番号 */</span>
+    BYTE    win[_MAX_SS]; <span>/* ディスク・アクセス・ウィンドウ */</span>
 } FATFS;
 </pre>
 </div>

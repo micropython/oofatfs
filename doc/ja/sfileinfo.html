@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="alternate" hreflang="en" title="English" href="../en/sfileinfo.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>FatFs - FILINFO</title>
 </head>
@@ -14,15 +15,15 @@
 <h2>FILINFO</h2>
 <p><tt>FILINFO</tt>構造体は、<tt>f_stat(), f_readdir()</tt>で返されるファイル情報を保持します。</p>
 <pre>
-typedef struct _FILINFO_ {
-    DWORD fsize;     /* File size */
-    WORD fdate;      /* Last modified date */
-    WORD ftime;      /* Last modified time */
-    BYTE fattrib;    /* Attribute */
-    char fname[13];  /* Short file name (8.3 format) */
+typedef struct {
+    DWORD fsize;     <span>/* ファイル・サイズ */</span>
+    WORD fdate;      <span>/* 最後に更新された日付 */</span>
+    WORD ftime;      <span>/* 最後に更新された時刻  */</span>
+    BYTE fattrib;    <span>/* アトリビュート */</span>
+    TCHAR fname[13]; <span>/* 短いファイル名 (8.3フォーマット) */</span>
 #if _USE_LFN
-    XCHAR* lfname;   /* Pointer to the LFN buffer */
-    int lfsize;      /* Size of LFN buffer [characters] */
+    TCHAR* lfname;   <span>/* 長いファイル名のバッファへのポインタ */</span>
+    int lfsize;      <span>/* 長いファイル名のバッファのサイズ [文字数] */</span>
 #endif
 } FILINFO;
 </pre>
@@ -59,7 +60,7 @@ typedef struct _FILINFO_ {
 <dt>fname[]</dt>
 <dd>8.3形式の名前が<tt>'\0'</tt>で終わる文字列として格納されます。非LFN構成のときは、常に大文字で返されます。LFN構成のときは短い名前が返されますが、ASCII英字が小文字になる場合があります。</dd>
 <dt>lfname</dt>
-<dd>返される長いファイル名を格納するバッファへのポインタ。この構造体を使用する前にアプリケーションにより初期化されなければなりません。非LFN構成のときはこのメンバは存在しません。</dd>
+<dd>返される長いファイル名を格納するバッファへのポインタ。この構造体を使用する前にアプリケーションにより初期化されなければなりません。このメンバにNULLが設定されるとLFNは返されません。非LFN構成のときはこのメンバは存在しません。</dd>
 <dt>lfsize</dt>
 <dd>長いファイル名を格納するバッファのサイズ(文字数)。この構造体を使用する前にアプリケーションにより初期化されなければなりません。非LFN構成のときはこのメンバは存在しません。</dd>
 </dl>

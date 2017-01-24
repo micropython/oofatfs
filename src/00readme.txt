@@ -1,4 +1,4 @@
-FatFs Module Source Files R0.07e                        (C)ChaN, 2009
+FatFs Module Source Files R0.08                        (C)ChaN, 2010
 
 
 FILES
@@ -24,7 +24,7 @@ AGREEMENTS
  small embedded systems. This is a free software and is opened for education,
  research and commercial developments under license policy of following trems.
 
-  Copyright (C) 2009, ChaN, all right reserved.
+  Copyright (C) 2010, ChaN, all right reserved.
 
  * The FatFs module is a free software and there is NO WARRANTY.
  * No restriction on use. You can use, modify and redistribute it for
@@ -103,8 +103,15 @@ REVISION HISTORY
                        Added f_chdrive().
                        Added proper case conversion for extended characters.
 
-  Nov 03,'2009 R0.07e  Separated out configuration options from ff.h to ffconf.h.
+  Nov 03, 2009 R0.07e  Separated out configuration options from ff.h to ffconf.h.
                        Added a configuration option, _LFN_UNICODE.
                        Fixed f_unlink() fails to remove a sub-dir on _FS_RPATH.
                        Fixed name matching error on the 13 char boundary.
                        Changed f_readdir() to return the SFN with always upper case on non-LFN cfg.
+
+  May 15, 2010, R0.08  Added a memory configuration option. (_USE_LFN)
+                       Added file lock feature. (_FS_SHARE)
+                       Added fast seek feature. (_USE_FASTSEEK)
+                       Changed some types on the API, XCHAR->TCHAR.
+                       Changed fname member in the FILINFO structure on Unicode cfg.
+                       String functions support UTF-8 encoding files on Unicode cfg.

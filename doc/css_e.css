@@ -10,7 +10,8 @@ p {margin: 0 0 0.3em 1em;}
 em {font-style: normal; font-weight: bold; margin: 0 0.1em;}
 pre em {font-style: italic; font-weight: normal;}
 strong {}
-pre {margin: 0.5em 1em; padding: 0.5em; line-height: 1.2em; background-color: white;}
+pre {border: 1px dashed gray; margin: 0.5em 1em; padding: 0.5em; line-height: 1.2em; background-color: white;}
+pre span {color: green;}
 tt {margin: 0 0.2em;}
 ol {margin: 0 2.5em;}
 ul {margin: 0 2em;}
@@ -37,7 +38,7 @@ h1 {line-height: 1em; font-size: 2em; font-family: sans-serif; padding: 0.3em 0 
 p.hdd {float: right; text-align: right; margin-top: 0.5em;}
 hr.hds {clear: both; margin-bottom: 1em;}
 
-h2 {font-size: 1.5em; font-family: sans-serif; margin: 0 0 0.5em;}
+h2 {font-size: 1.5em; color: blueviolet; font-family: sans-serif; margin: 0 0 0.5em;}
 h3 {font-size: 1.5em; font-family: sans-serif; margin: 1.5em 0 0.5em;}
 h4 {font-size: 1.2em; font-family: sans-serif; margin: 1em 0 0.2em;}
 h5 {font-size: 1em; font-family: sans-serif; margin: 0.5em 0 0em;}
