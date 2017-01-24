@@ -45,8 +45,10 @@ FRESULT f_read (
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in non-read mode.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_INVALID_OBJECT</dt>

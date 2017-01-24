@@ -1,3 +1,17 @@
+R0.07a, Apr 14, 2009
+  Separated out OS dependent code on re-entrant configuration.
+  Added multiple sector size support.
+
+R0.07, Apr 01, 2009
+  Merged Tiny-FatFs as a buffer configuration option.
+  Added long file name support.
+  Added multiple code page support.
+  Added re-entrancy for multitask operation.
+  Added auto cluster size selection to f_mkfs().
+  Added rewind option to f_readdir().
+  Changed result code of critical errors.
+  Renamed string functions to avoid name collision.
+
 R0.06, Apr 01, 2008
   Added f_forward. (Tiny-FatFs)
   Added string functions: fgets, fputc, fputs and fprintf.
@@ -40,6 +54,10 @@ R0.03a, Dec 11, 2006
   Improved cluster scan algolithm to write files fast.
   Fixed f_mkdir creates incorrect directory on FAT32.
 
+R0.03, Sep 22, 2006
+  Added f_rename.
+  Changed option _FS_MINIMUM to _FS_MINIMIZE.
+
 R0.02a, Jun 10, 2006
   Added a configuration option _FS_MINIMUM.
 
@@ -47,10 +65,6 @@ R0.02, Jun 01, 2006
   Added FAT12.
   Removed unbuffered mode.
   Fixed a problem on small (<32M) patition.
-
-R0.03, Sep 22, 2006
-  Added f_rename.
-  Changed option _FS_MINIMUM to _FS_MINIMIZE.
 
 R0.01, Apr 29, 2006
   First release

@@ -9,8 +9,6 @@
 
 /*-----------------------------------------------------------------------*/
 /* Correspondence between physical drive number and physical drive.      */
-/* Note that Tiny-FatFs supports only single drive and always            */
-/* accesses drive number 0.                                              */
 
 #define ATA     0
 #define MMC     1

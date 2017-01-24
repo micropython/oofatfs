@@ -29,7 +29,7 @@ DRESULT disk_write (
 <dt>Drive</dt>
 <dd>物理ドライブ番号(0-9)を指定します。</dd>
 <dt>Buffer</dt>
-<dd>ディスクに書き込むデータを指定します。</dd>
+<dd>ディスクに書き込むバイト配列を指定します。アドレスはアライメントされているとは限りません。</dd>
 <dt>SectorNumber</dt>
 <dd>書き込みを開始するセクタ番号。LBAで指定します。</dd>
 <dt>SectorCount</dt>
@@ -46,7 +46,7 @@ DRESULT disk_write (
 <dt>RES_ERROR</dt>
 <dd>書き込み中にエラーが発生し、その回復にも失敗した。</dd>
 <dt>RES_WRPRT</dt>
-<dd>ディスクが書き込み禁止状態。</dd>
+<dd>メディアが書き込み禁止状態。</dd>
 <dt>RES_PARERR</dt>
 <dd>パラメータが不正。</dd>
 <dt>RES_NOTRDY</dt>

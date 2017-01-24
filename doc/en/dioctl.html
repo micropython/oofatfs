@@ -53,11 +53,12 @@ DRESULT disk_ioctl (
 <div class="para">
 <h4>Description</h4>
 <p>The FatFs module uses only device independent commands described below. Any device dependent function is not used.</p>
-<p>In read-only configuration, the disk_ioctl function is not needed.</p>
 <table class="lst">
 <tr><th>Command</th><th>Description</th></tr>
-<tr><td>CTRL_SYNC</td><td>Make sure that the disk drive has finished pending write process. When the disk I/O module has a write back cache, flush the dirty sector immediately.</td></tr>
-<tr><td>GET_SECTOR_COUNT</td><td>Returns total sectors on the drive into the DWORD variable pointed by Buffer. This command is used in only f_mkfs function.</td></tr>
+<tr><td>CTRL_SYNC</td><td>Make sure that the disk drive has finished pending write process. When the disk I/O module has a write back cache, flush the dirty sector immediately. This function is not required in read-only configuration.</p>
+</td></tr>
+<tr><td>GET_SECTOR_SIZE</td><td>Returns sector size of the drive into the WORD variable pointed by Buffer. This functions is not required in single sector size configuration, _MAX_SS is 512.</td></tr>
+<tr><td>GET_SECTOR_COUNT</td><td>Returns total sectors on the drive into the DWORD variable pointed by Buffer. This function is used in only f_mkfs function.</td></tr>
 <tr><td>GET_BLOCK_SIZE</td><td>Returns erase block size of the memory array in unit of sector into the DWORD variable pointed by Buffer. When the erase block size is unknown or magnetic disk device, return 1. This command is used in only f_mkfs function.</td></tr>
 </table>
 </div>

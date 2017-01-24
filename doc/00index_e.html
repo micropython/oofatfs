@@ -16,26 +16,27 @@
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
 <p>FatFs is a generic file system module to implement the FAT file system to small embedded systems. The FatFs is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into cheap microcontrollers, such as 8051, PIC, AVR, SH, Z80, H8, ARM and etc..., without any change.</p>
 
-<h4>Features of FatFs</h4>
-<ol>
- <li>Separated buffer for FAT structure and each file, suitable for fast multiple file access.</li>
- <li>Supports multiple drives and partitions.</li>
- <li>Supports FAT12, FAT16 and FAT32.</li>
- <li>Supports 8.3 format file name. (LFN is not supported)</li>
- <li>Supports two partitioning rules: FDISK and Super-floppy.</li>
- <li>Optimized for 8/16-bit microcontrollers.</li>
-</ol>
-<h4>Features of Tiny-FatFs (different to FatFs)</h4>
-<ol>
- <li>Very low memory consumption, suitable for small memory system. (1KB RAM)</li>
- <li>Supports only single drive.</li>
-</ol>
+<h4>Features</h4>
+<ul>
+ <li>FAT12, FAT16 and FAT32.</li>
+ <li>Multiple volumes (physical drives and partitions).</li>
+ <li>Two partitioning rules: FDISK and Super-floppy.</li>
+ <li>Various configuration options:
+  <ul>
+   <li>Long file name (LFN) support.</li>
+   <li>Selectable code pages including DBCS.</li>
+   <li>Multitask support.</li>
+   <li>Multiple sector size support.</li>
+   <li>Read-only, minimized API, buffer configuration and etc...</li>
+  </ul>
+ </li>
+</ul>
 </div>
 
 
 <div class="para">
 <h3>Application Interface</h3>
-<p>FatFs/Tiny-FatFs module provides following functions.</p>
+<p>FatFs module provides following functions.</p>
 <ul>
 <li><a href="en/mount.html">f_mount</a> - Register/Unregister a Work Area</li>
 <li><a href="en/open.html">f_open</a> - Open/Create a File</li>
@@ -56,10 +57,10 @@
 <li><a href="en/rename.html">f_rename</a> - Rename/Move a File or Directory</li>
 <li><a href="en/mkfs.html">f_mkfs</a> - Create a File System on the Drive</li>
 <li><a href="en/forward.html">f_forward</a> - Forward file data to the stream directly</li>
-<li><a href="en/gets.html">fgets</a> - Read a string</li>
-<li><a href="en/putc.html">fputc</a> - Write a character</li>
-<li><a href="en/puts.html">fputs</a> - Write a string</li>
-<li><a href="en/printf.html">fprintf</a> - Write a formatted string</li>
+<li><a href="en/gets.html">f_gets</a> - Read a string</li>
+<li><a href="en/putc.html">f_putc</a> - Write a character</li>
+<li><a href="en/puts.html">f_puts</a> - Write a string</li>
+<li><a href="en/printf.html">f_printf</a> - Write a formatted string</li>
 
 </ul>
 </div>
@@ -67,7 +68,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>Since the FatFs/Tiny-FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time. The low level disk I/O module with this interface must be provided by user. The sample drivers are also available in the next resources.</p>
+<p>Since the FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time. The low level disk I/O module is not a part of FatFs module and it must be provided by user. The sample drivers are also available in the resources.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -81,20 +82,22 @@
 
 <div class="para">
 <h3>Resources</h3>
-<p>The FatFs/Tiny-FatFs module is a free software and is opened for education, research and development. You can use, modify and/or republish it for personal, non-profit or commercial use without any restriction under your responsibility.</p>
+<p>The FatFs module is a free software and is opened for education, research and development. You can use, modify and/or republish it for personal, non-profit or commercial use without any restriction under your responsibility.</p>
 <ul>
-<li><a href="en/appnote.html">FatFs module application note</a></li>
-<li><a href="http://elm-chan.org/fsw/ff/ffsample.zip">Sample projects</a> (AVR, LPC2000, H8/300H, TLCS-870/C, PIC and V850ES) <span class="mfd">Oct 22, 2008</span></li>
+<li><a href="ff007a.zip">FatFs R0.07a</a> | <a href="updates.txt">Updates</a> | <a href="patches.txt">Patches</a> <span class="mfd">Apr 14, 2009</span></li>
+<li><a href="http://elm-chan.org/fsw/ff/bd/">FatFs User Forum</a></li>
+<li><a href="en/appnote.html">FatFs module application note</a> <span class="mfd">Apr 14, 2009</span></li>
 <li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/">ARM-Projects by Martin THOMAS</a> (examples for LPC2000 and AT91SAM)</li>
 <li><a href="img/rwtest.png">Benchmark 1</a> (ATmega64/9.2MHz with MMC via SPI, HDD/CFC via GPIO)</li>
 <li><a href="img/rwtest2.png">Benchmark 2</a> (LPC2368/72MHz with MMC via MCI)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification by Microsoft</a> (The reference document on FAT file system)</li>
 <li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use MMC/SDC</a></li>
+<li>Previous versions: <a href="ff007.zip">R0.07</a> | <a href="ff006.zip">R0.06</a> | <a href="ff001-005a.zip">Earlyer than R0.06</a></li>
 </ul>
 </div>
 
 
 <hr>
-<p class="foot"><a href="../../cc_e.html">Return</a></p>
+<p class="foot"><a href="../../fsw_e.html">Return</a></p>
 </body>
 </html>

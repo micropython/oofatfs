@@ -44,8 +44,10 @@ FRESULT f_getfree (
 <dd>The drive number is invalid.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -56,7 +58,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>Descriptions</h4>
-<p>The f_getfree function gets number of free clusters on the drive. The member <tt>csize</tt> in the file system object is refreting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When <tt>_USE_FSINFO</tt> option is enabled, this function might return an inaccurate free cluster count on FAT32 volume. When it is disabled, this function will take a time on FAT32 volume.</p>
+<p>The f_getfree function gets number of free clusters on the drive. The member <tt>csize</tt> in the file system object is refreting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When FSInfo structure on FAT32 volume is not in sync, this function can return an incorrect free cluster count.</p>
 <p>This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
 </div>
 

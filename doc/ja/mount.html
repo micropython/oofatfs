@@ -12,7 +12,7 @@
 
 <div class="para">
 <h2>f_mount</h2>
-<p>論理ドライブのワーク・エリアを登録・抹消します。</p>
+<p>論理ドライブ(ボリューム)のワーク・エリアを登録・抹消します。</p>
 <pre>
 FRESULT f_mount (
   BYTE  <em>Drive</em>,               /* 論理ドライブ番号 */
@@ -25,7 +25,7 @@ FRESULT f_mount (
 <h4>引数</h4>
 <dl class="par">
 <dt>Drive</dt>
-<dd>論理ドライブ番号(0-9)。Tiny-FatFsでは常に0。</dd>
+<dd>論理ドライブ番号(0-9)。</dd>
 <dt>FileSystemObject</dt>
 <dd>登録するワーク・エリア(ファイル・システム・オブジェクト)へのポインタ。</dd>
 </dl>

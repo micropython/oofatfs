@@ -39,8 +39,10 @@ FRESULT f_readdir (
 <dd>正常終了。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>ディスク・エラーによる失敗。</dd>
+<dt>FR_INT_ERR</dt>
+<dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_INVALID_OBJECT</dt>
 <dd>無効なディレクトリ・オブジェクト。</dd>
 </dl>
@@ -49,31 +51,52 @@ FRESULT f_readdir (
 
 <div class="para">
 <h4>解説</h4>
-<p>ディレクトリ項目を順次読み出します。この関数を繰り返し実行することによりディレクトリの全ての項目を読み出すことができます。全ての項目を読み出し、読み出す項目がもう無いときは、<tt>f_name[]</tt>メンバにヌル文字列が返されます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。<tt>_FS_MINIMIZE >= 2</tt>ではこの関数はサポートされません。</p>
+<p>ディレクトリ項目を順次読み出します。この関数を繰り返し実行することによりディレクトリの全ての項目を読み出すことができます。全ての項目を読み出し、読み出す項目がもう無いときは、<tt>f_name[]</tt>メンバにヌル文字列が返されます。得られるファイル情報の詳細については <tt>FILINFO</tt>構造体を参照してください。FileInfoにヌル・ポインタを指定すると、そのディレクトリのリード・インデックスを巻き戻します。</p>
+<p>LFN機能が有効な時は、f_readdir関数の呼び出しに先立ってFILINFO構造体の<tt>lfname</tt>と<tt>lfsize</tt>が有効な値で初期化されていなければなりません。<tt>lfname</tt>はLFNを格納するバッファで、<tt>lfsize</tt>はそのバッファ・サイズです。LFN格納バッファまたはLFN操作バッファどちらかのサイズがそのLFNのサイズに対して不十分だった場合、またはLFNが存在しない場合はLFN格納バッファにヌル文字列が返されます。<tt>lfname</tt>にヌル・ポインタを指定した場合は、LFNに関して何も返されません。</p>
+<p><tt>_FS_MINIMIZE >= 2</tt>ではこの関数はサポートされません。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
-void scan_files (char* path)
+FRESULT scan_files (char* path)
 {
-    FILINFO finfo;
-    DIR dirs;
+    FRESULT res;
+    FILINFO fno;
+    DIR dir;
     int i;
+    char *fn;
+#if _USE_LFN
+    static char lfn[_MAX_LFN * (_DF1S ? 2 : 1) + 1];
+    fno.lfname = lfn;
+    fno.lfsize = sizeof(lfn);
+#endif
 
-    if (f_opendir(&amp;dirs, path) == FR_OK) {
+
+    res = f_opendir(&amp;dir, path);
+    if (res == FR_OK) {
         i = strlen(path);
-        while ((f_readdir(&amp;dirs, &amp;finfo) == FR_OK) &amp;&amp; finfo.fname[0]) {
-            if (finfo._attrib &amp; AM_DIR) {
-                sprintf(&amp;path[i], "/%s", &amp;finfo.fname[0]);
-                scan_files(path);
+        for (;;) {
+            res = f_readdir(&amp;dir, &amp;fno);
+            if (res != FR_OK || fno.fname[0] == 0) break;
+#if _USE_LFN
+            fn = *fno.lfname ? fno.lfname : fno.fname;
+#else
+            fn = fno.fname;
+#endif
+            if (fno.fattrib &amp; AM_DIR) {
+                sprintf(&amp;path[i], "/%s", fn);
+                res = scan_files(path);
+                if (res != FR_OK) break;
                 path[i] = 0;
             } else {
-                printf("%s/%s\n", path, &amp;finfo.fname[0]);
+                printf("%s/%s\n", path, fn);
             }
         }
     }
+
+    return res;
 }
 </pre>
 </div>

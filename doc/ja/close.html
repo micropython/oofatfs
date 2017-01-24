@@ -34,8 +34,10 @@ FRESULT f_close (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>ディスク・エラーによる失敗。</dd>
+<dt>FR_INT_ERR</dt>
+<dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_INVALID_OBJECT</dt>

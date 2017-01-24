@@ -60,8 +60,10 @@ FRESULT f_chmod (
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>The medium is write protected.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -72,7 +74,7 @@ FRESULT f_chmod (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_chmod function changes the attribute of a file or directory. This function is not supported in read-only configuration and minimization level of &gt;=1.</p>
+<p>The f_chmod function changes the attribute of a file or directory. This function is not available in read-only configuration and minimization level of &gt;=1.</p>
 </div>
 
 

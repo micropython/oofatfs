@@ -16,7 +16,7 @@
 <pre>
 DRESULT disk_write (
   BYTE <em>Drive</em>,          /* Physical drive number */
-  const BYTE* <em>Buffer</em>,  /* Pointer to the write data */
+  const BYTE* <em>Buffer</em>,  /* Pointer to the write data (may be non aligned) */
   DWORD <em>SectorNumber</em>,  /* Sector number to write */
   BYTE <em>SectorCount</em>     /* Number of sectors to write */
 );
@@ -29,7 +29,7 @@ DRESULT disk_write (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the data to be written.</dd>
+<dd>Pointer to the byte array to be written. The start address specified by upper layer may be aligned or non-aligned.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
@@ -46,7 +46,7 @@ DRESULT disk_write (
 <dt>RES_ERROR</dt>
 <dd>Any hard error occured during the write operation and could not recover it.</dd>
 <dt>RES_WRPRT</dt>
-<dd>The disk is write protected.</dd>
+<dd>The medium is write protected.</dd>
 <dt>RES_PARERR</dt>
 <dd>Invalid parameter.</dd>
 <dt>RES_NOTRDY</dt>

@@ -17,71 +17,121 @@
 <p>The FatFs module is assuming following terms on portability.</p>
 <ul>
 <li>ANSI C<br>
-The FatFs module is a middleware that written in ANSI C. There is no platform dependence, so long as the compiler is in compliance with ANSI C. However it handles the system portable FAT structures. You must take the <strong>endian</strong> into consideration. This setting is defined in ff.h (tff.h). It must be changed for your platform first or the compiler will abort with an error.</li>
-<li>Size of char/short/long are 8/16/32-bit and int is 16 or 32 bit.<br>
-These correspondence are defined in integer.h. This will not be a problem on most compilers. When any conflict of the definitions between the integer.h and existing definitions is occured, you must resolve the confrict with care.</li>
+The FatFs module is a middleware that written in ANSI C. There is no platform dependence, so long as the compiler is in compliance with ANSI C.</li>
+<li>Size of integer types<br>
+The FatFs module assumes that size of char/short/long are 8/16/32-bit and int is 16 or 32 bit. These correspondence are defined in integer.h. This will not be a problem on most compilers. When any conflict with existing definitions is occured, you must resolve it with care.</li>
 </ul>
 </div>
 
 <div class="para">
-<h3>Memory Usage (R0.06)</h3>
-<p>These are the memory usage on some target systems. The memory sizes are in unit of byte, D means number of logical drives and F means number of open files. All samples are optimezed in code size.</p>
+<h3>Memory Usage (R0.07)</h3>
 <table class="lst2">
-<tr><th></th><th>AVR</th><th>H8/300H</th><th>PIC</th><th>MSP430</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th><th>ARM7</th></tr>
-<tr><td>Compiler</td><td>gcc(WinAVR)</td><td>CH38</td><td>gcc(C30)</td><td>CL430</td><td>CC870C</td><td>CA850</td><td>SHC</td><td>gcc(WinARM)</td></tr>
-<tr><td>_MCU_ENDIAN</td><td>1</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td></tr>
-<tr class="lst3"><td>FatFs Code (Full, R/W)</td><td>9280</td><td>9348</td><td>9387</td><td></td><td></td><td>6728</td><td>7538</td><td>11820</td></tr>
-<tr><td>FatFs Code (Min, R/W)</td><td>5814</td><td>5798</td><td>5913</td><td></td><td></td><td>4094</td><td>4742</td><td></td></tr>
-<tr><td>FatFs Code (Full, R/O)</td><td>4402</td><td>4236</td><td>4371</td><td></td><td></td><td>3054</td><td>3474</td><td></td></tr>
-<tr><td>FatFs Code (Min, R/O)</td><td>3066</td><td>3158</td><td>3213</td><td></td><td></td><td>2172</td><td>2630</td><td></td></tr>
-<tr><td>FatFs Work (Static)</td><td>D*2+2</td><td>D*4+2</td><td>D*2+2</td><td></td><td></td><td>D*4+2</td><td>D*4+2</td><td></td></tr>
-<tr><td>FatFs Work (Dynamic)</td><td>D*554+F*544</td><td>D*554+F*550</td><td>D*554+F*544</td><td></td><td></td><td>D*554+F*550</td><td>D*554+F*550</td><td>D*554+F*550</td></tr>
-<tr class="lst3"><td>Tiny-FatFs Code (Full, R/W)</td><td>7628</td><td>7668</td><td>7560</td><td>7108</td><td>9501</td><td>5978</td><td>6640</td><td></td></tr>
-<tr><td>Tiny-FatFs Code (Min, R/W)</td><td>4684</td><td>4820</td><td>4698</td><td>4390</td><td>6322</td><td>3678</td><td>4236</td><td></td></tr>
-<tr><td>Tiny-FatFs Code (Full, R/O)</td><td>3634</td><td>3600</td><td>3618</td><td>3382</td><td>4554</td><td>2722</td><td>3072</td><td></td></tr>
-<tr><td>Tiny-FatFs Code (Min, R/O)</td><td>2524</td><td>2700</td><td>2601</td><td>2398</td><td>3390</td><td>1862</td><td>2300</td><td></td></tr>
-<tr><td>Tiny-FatFs Wrok (Static)</td><td>4</td><td>6</td><td>4</td><td>4</td><td>4</td><td>6</td><td>6</td><td></td></tr>
-<tr><td>Tiny-FatFs Work (Dynamic)</td><td>544+F*28</td><td>544+F*32</td><td>544+F*28</td><td>544+F*28</td><td>544+F*28</td><td>544+F*32</td><td>544+F*32</td><td>544+F*32</td></tr>
+<tr><th></th><th>AVR</th><th>H8/300H</th><th>PIC</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th><th>ARM7TDMI</th><th>IA-32</th></tr>
+<tr><td>Compiler</td><td>gcc(WinAVR)</td><td>CH38</td><td>gcc(C30)</td><td>CC870C</td><td>CA850</td><td>SHC</td><td>gcc(WinARM)</td><td>MSC</td></tr>
+<tr><td>_WORD_ACCESS</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+<tr class="lst3"><td>ROM (Full, R/W)</td><td>11136</td><td>10356</td><td>10838</td><td>15167</td><td>7682</td><td>8654</td><td>10628</td><td>7232</td></tr>
+<tr><td>ROM (Min, R/W)</td><td>7072</td><td>6696</td><td>7007</td><td>9800</td><td>4634</td><td>5570</td><td>6564</td><td>4647</td></tr>
+<tr><td>ROM (Full, R/O)</td><td>5218</td><td>4626</td><td>4949</td><td>6786</td><td>3528</td><td>3826</td><td>4676</td><td>3267</td></tr>
+<tr><td>ROM (Min, R/O)</td><td>3626</td><td>3418</td><td>3536</td><td>4941</td><td>2558</td><td>2874</td><td>3272</td><td>2397</td></tr>
+<tr><td>RAM (Static)</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
+<tr><td>RAM (Dynamic)<br>(_FS_TINY == 0)</td><td>D*560 +<br>F*544</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*544</td><td></td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td></tr>
+<tr><td>RAM (Dynamic)<br>(_FS_TINY == 1)</td><td>D*560 +<br>F*32</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*32</td><td>D*560 +<br>F*32</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td></tr>
+</table>
+<p>These are the memory usage on some target systems with following condition. The memory sizes are in unit of byte, D means number of volumes and F means number of open files. All samples are optimezed in code size.</p>
+<pre>
+_FS_READONLY     0 (R/W), 1 (R/O)
+_FS_MINIMIZE     0 (Full function), 3 (Minimized function)
+_USE_STRFUNC     0 (Disable string functions)
+_USE_MKFS        0 (Disable f_mkfs function)
+_USE_FORWARD     0 (Disable f_forward function)
+_CODE_PAGE       932 (Japanese Shift-JIS)
+_USE_LFN         0 (Disable LFN)
+_MULTI_PARTITION 0 (Single partition per drive)
+_FS_REENTRANT    0 (Disable reentrancy)
+</pre>
+</div>
+
+<div class="para">
+<h3>Module Size Reduction</h3>
+<p>Follwing table shows which function is removed by configuration options for the module size reduction.</p>
+<table class="lst2">
+<tr><td rowspan="2">Function</td><td colspan="3">_FS_MINIMIZE</td><td>_FS_READONLY</td><td>_USE_STRFUNC</td><td>_USE_MKFS</td><td>_USE_FORWARD</td></tr>
+<tr><td>1</td><td>2</td><td>3</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr class="lst3"><td>f_mount</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_open</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_close</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_read</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_write</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_sync</td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_lseek</td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_opendir</td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_readdir</td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_stat</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>f_getfree</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_truncate</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_unlink</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_mkdir</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_chmod</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_utime</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_rename</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
+<tr><td>f_mkfs</td><td></td><td></td><td></td><td>x</td><td></td><td>x</td><td></td></tr>
+<tr><td>f_forward</td><td></td><td></td><td></td><td></td><td></td><td></td><td>x</td></tr>
+<tr><td>f_putc</td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td></tr>
+<tr><td>f_puts</td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td></tr>
+<tr><td>f_printf</td><td></td><td></td><td></td><td>x</td><td>x</td><td></td><td></td></tr>
+<tr><td>f_gets</td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td></tr>
 </table>
 </div>
 
 <div class="para">
-<h3>FatFs vs. Tiny-FatFs</h3>
-<p>For most applications, such as portable audio and data logger, Tiny-FatFs is the best choice. However because the Tiny-FatFs does not support FAT32 in default, there is a limitation that can handle only tiny storage upto 2GB(4GB in FAT64). The FAT32 support can be added by <tt>_USE_FAT32</tt> option with an additional code size. The FatFs is suitable for fast multiple files access, and for multiple drive system.</p>
-<div class="rset">
-<table class="lst2">
-<tr><th>Memory Size</th><th>FAT Type</th></tr>
-<tr><td>&lt;= 64MB</td><td>FAT12</td></tr>
-<tr><td>128MB - 2GB</td><td>FAT16</td></tr>
-<tr><td>&gt;= 4GB</td><td>FAT32</td></tr>
+<h3>Long File Name</h3>
+<p>The FatFs module supports long file name (LFN) from revision 0.07. The two different file names, SFN and LFN, of a file is transparent in the file functions except for f_readdir function. To enable LFN feature, set <tt>_USE_LFN</tt> to 1 or 2, and add an OEM-Unicode bidirectional code conversion function ff_convert to the project. This function is available in <tt>cc*.c</tt>. The LFN feature requiers a certain working buffer in addition. The buffer size can be configured by <tt>_MAX_LFN</tt> corresponding to the available memory size. The size of long file name will reach up to 255 characters so that the <tt>_MAX_LFN</tt> should be set to 255 for full featured LFN operation. When the size of working buffer is insufficient for the given file name, the file function will fail with <tt>FR_INVALID_NAME</tt>. When enable the LFN feature with re-entrant feature, <tt>_USE_LFN</tt> must be set to 2. In this case, the file funciton allocates the working buffer on the stack. The working buffer occupies <tt>_MAX_LFN * 2 + 1</tt> bytes so that the caller's stack must be a sufficient size considering the working buffer.</p>
+<table class="lst2 rset">
+<caption>LFN cfg on ARM7DMI</caption>
+<tr><th>Code page</th><th>ROM size [bytes]</th></tr>
+<tr><td>SBCS</td><td>+4719</td></tr>
+<tr><td>932(Shift-JIS)</td><td>+63755</td></tr>
+<tr><td>936(GBK)</td><td>+178943</td></tr>
+<tr><td>949(Korean)</td><td>+141003</td></tr>
+<tr><td>950(Big5)</td><td>+112631</td></tr>
 </table>
-</div>
-<p>Rignt table shows the correspondence between memory size and FAT type for SD memroy card and they are shipped with this format. The data area is justified to the erase block boundary and the memory card works with the best performance. For that reason, the memory card should not be reformated with PC. When cluster size or FAT type is changed, the write performance can be decreased.</p>
+<p>When the LFN feature is enabled, the module size will be increased depends on the selected code page. Right table shows the difference in module size when LFN is enabled with some code pages. We are the Japanese, Chinese and Korean have tens of thousands of characters. Unfortunately, it requires a huge OEM-Unicode bidirectional conversion table and the module size will be drastically increased that shown in the table. As the result, the FatFs with LFN will not able to be implemented to most 8-bit microcontrollers including AVR. <small>This is the reason why I had not been interested in implementing the LFN feature for a long time :-)</small></p>
+<p>Note that the LFN feature on the FAT file system is a patent of Microsoft Corporation. When enable it on the commercial products, a license from Microsoft may be required depends on the final destination.</p>
 </div>
 
+<div class="para">
+<h3>Re-entrancy</h3>
+<p>The file operations to the different volume can always work simultaneously regardless of re-entrancy setting. The re-entrancy to the same volume can be enabled with <tt>_FS_REENTRANT</tt> option. In this case, also the OS dependent synchronization object control functions, ff_cre_syncobj, ff_del_syncobj, ff_req_grant and ff_rel_grant must be added to the project. The sample code with documentation is available in <tt>syncobj.c</tt>.</p>
+<p>When a file function is called while the volume is in use by any other task, the access is blocked until the task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported on some RTOS.</p>
+<p>There is an exception on f_mount and f_mkfs function. These functions are not re-entrant to the same volume. When use these functions, all other task must close the corresponding file on the volume and avoid to access the volume.</p>
+<p>Note that this section describes on the re-entrancy of the FatFs module itself. There is no assumtion on the re-entrancy of low level disk I/O module.</p>
+</div>
+
+<div class="para">
+<h3>Duplicated file access</h3>
+<p>FatFs module does not support the shareing controls of duplicated file access. It is permitted when open method to the file is only read mode. The duplicated open in write mode to a file is always prohibited and open file must not be renamed, deleted, otherwise the FAT structure on the volume can be collapted.</p>
+</div>
 
 <div class="para">
 <h3>Performance effective file access</h3>
-<p>For good performance on reading/writing files on the small embedded system, application program should consider what process is done in the FatFs module. The file data on the disk is transferred by f_read function in these sequence.</p>
+<p>For good performance on reading/writing files on the small embedded system, application programmer should consider what process is done in the FatFs module. The file data on the disk is transferred in following sequence by f_read function.</p>
 <p>Figure 1. Sector miss-aligned read (short)<br>
-<img src="../img/f1.png" width="490" height="73">
+<img src="../img/f1.png" width="490" height="73" alt="">
 </p>
 <p>Figure 2. Sector miss-aligned read (long)<br>
-<img src="../img/f2.png" width="490" height="140">
+<img src="../img/f2.png" width="490" height="140" alt="">
 </p>
 <p>Figure 3. Sector aligned read<br>
-<img src="../img/f3.png" width="490" height="119">
+<img src="../img/f3.png" width="490" height="119" alt="">
 </p>
-<p>The file I/O buffer means a sector buffer to read/write a partial data on the sector. On the FatFs, member buffer[] in the file object is used. On the Tiny-FatFs, member win[] in the file system object is used.</p>
-<p>Tiny-FatFs processes all file data transfer and access to the FAT/directory with only one sector buffer, so that FAT sector cached into the buffer is lost and it must reloaded at every cluster boundary. FatFs has a FAT/directory buffer separated from file I/O buffer, the frequency of FAT accesses is only 1/341, 1/256 or 1/128 (when cluster is contiguous) compared to Tiny-FatFs. Thus the Tiny-FatFs is sacrificing its performance in compensation for very small memory footprint.</p>
-<p>Figure 1 shows that partial sector data is transferred via the file I/O buffer. At long data transfer shown in Figure 2, middle of transfer data that aligned to sector boundary is transferred into memory directly. Figure 3 shows that entier transfer data is aligned to the sector boundary. In this case, file I/O buffer is not used. At the unbuffered transfer, maximum extent of sectors are read with disk_read function at a time but it never across cluster boundary even if it is contiguous.</p>
-<p>Therefore taking effort to sector aligned read/write accesss eliminates memcpy and the read/write performance will be improved. Besides the effect, cached FAT sector is not flushed during read/write access on the Tiny-FatFs, so that it can achieve same performance as FatFs and its small memory footprint simultanesously.</p>
+<p>The file I/O buffer means a sector buffer to read/write a partial data on the sector. The sector buffer is either file private sector buffer on each file object or shared sector buffer on the file system object. The buffer configuration option <tt>_FS_TINY</tt> determins which sector buffer is used for the file data transfer. When tiny buffer (1) is selected, data memory consumption is reduced 512 bytes each file object. In this case, FatFs module uses only a sector buffer on the file system object for file data transfer and FAT/directory access. The disadvantage of the tiny buffer configuration is: the FAT data cached in the sector buffer will be lost by file data transfer and it must be reloaded at every cluster boundary. However it will be suitable for most application from view point of the decent performance and low memory comsumption.</p>
+<p>Figure 1 shows that partial sector data is transferred via the file I/O buffer. On long data transfer shown in Figure 2, middle of transfer data that covers one or more sector is transferred to application buffer directly. Figure 3 shows that the case of entier transfer data is aligned to the sector boundary. In this case, file I/O buffer is not used. On the direct transfer, the maximum extent of sectors are read with disk_read function at a time but the multi sector transfer never across the cluster boundary even if it is contiguous.</p>
+<p>Therefore taking effort to sector aligned read/write accesss avoids buffered data transfer and the read/write performance will be improved. Besides the effect, cached FAT data will not be flushed by file data transfer on the tiny configuration so that it can achieve same performance as non tiny configuration with small memory footprint.</p>
 </div>
 
-
 <div class="para">
-<h3>Critical section</h3>
-<p>When write operation to the FAT file system is interrupted due to any accidental failure, such as sudden blackout, incorrect disk removal and unrecoverable data error, the FAT structure can be destroyed. Following images shows the critical section on the FatFs module.</p>
+<h3>Critical Section</h3>
+<p>When write operation to the FAT file system is interrupted due to any accidental failure, such as sudden blackout, incorrect disk removal and unrecoverable disk error, the FAT structure can be collapted. Following images shows the critical section on the FatFs module.</p>
 <div class="lset">
 Figure 4. Long critical section<br>
 <img src="../img/f4.png" width="320" height="436" alt="fig.4">
@@ -91,7 +141,7 @@ Figure 5. Minimized critical section<br>
 <img src="../img/f5.png" width="320" height="436" alt="fig.5">
 </div>
 <br class="clr">
-<p>An interruption in the red section can cause a cross link; as a result, the file/directory being changed will be lost. There is one or more possibility listed below when an interruption in the yellow section is occured.</p>
+<p>An interruption in the red section can cause a cross link; as a result, the file/directory being changed may be lost. There is one or more possibility listed below when an interruption in the yellow section is occured.</p>
 <ul>
 <li>File data being rewrited is collapted.</li>
 <li>A file being appended returns initial state.</li>
@@ -99,24 +149,7 @@ Figure 5. Minimized critical section<br>
 <li>A file created as new or in overwritten remains with length of zero.</li>
 <li>Efficiency of disk use gets worse due to lost chain.</li>
 </ul>
-<p>Each case does not affect the files that not in write operation. To minimize risk of data loss, the critical section can be minimized like shown in Figure 5 by minimizing the time that file is opened in write mode and using f_sync function properly.</p>
-</div>
-
-
-<div class="para">
-<h3>Problems and Ideas</h3>
-<ul>
-<li>Abstraction of file object<br>
-Currently the file object structure is held by application layer. This is not a problem for Tiny-FatFs, it consumes the task stack only 26 bytes per file. But FatFs requires 550 bytes per file. When managed the file objects in file handle, stack consumption at application module will able to be reduced. In this case, the work area for file objects is managed in FatFs module. This has a disadvantage that direct access to the file object structure cannot be used and additional file functions, such as feof and ftell, will be needed.</li>
-<li>Efficient sector buffer management<br>
-The FatFs module has only one sector buffer per logical drive. There is an ineffciency on random file access with many files simultanesously. When additional memory for the sector buffer is available, the file access performance will able to be improved with an advanced cache mechanism.</li>
-<li>Long file name<br>
-There is an extended feature to handle long file name (LFN) up to 255 characters in addition to 8.3 format file name on the FAT file system. To support this feature, 512 byte string buffer for file name and Unicode - Local code mutual conversion table which occupies 256KB is required. Therefore memory consumption of code and work area will be increased drastically. The FatFs module currently does not support this feature. The LFN on the FAT file system is a patent of Microsoft. When use it on the commercial products, you have to be licensed.</li>
-<li>Porting to RTOS<br>
-When use FatFs module from only one task, no consideration is needed. However when make access to a logical drive from two or more tasks simultanesously, any exclusion control will be required. The FatFs module is also ported to a free RTOS based on &mu;ITRON by <a href="http://www.toppers.jp/en/index.html">TOPPERS Project</a>.</li>
-</ul>
-<br>
-<p>These are the problems and ideas on current revision of FatFs module. However the main target of FatFs module is 8 bit microcontrollers. These extensions requires much resource and the FatFs will unable to be ported to the 8 bit system. This may be the most serious problem on future plan.</p>
+<p>Each case does not affect the files that not in write mode open. To minimize risk of data loss, the critical section can be minimized like shown in Figure 5 by minimizing the time that file is opened in write mode or using f_sync function properly.</p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

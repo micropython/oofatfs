@@ -69,8 +69,10 @@ FRESULT f_open (
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>Write mode open or creation under the medium is write protected.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -81,9 +83,9 @@ FRESULT f_open (
 
 <div class="para">
 <h4>Description</h4>
-<p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If modified file is not closed correctly, the file may be collapsed.</p>
+<p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If modified file is not closed, the file may be collapsed.</p>
 <p>Before using any file function, a work area (file system object) must be given to the logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
-<p>The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>, are not supported in read-only configuration.</p>
+<p>The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>, are not available in read-only configuration.</p>
 </div>
 
 

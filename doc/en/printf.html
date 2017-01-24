@@ -5,16 +5,16 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - fprintf</title>
+<title>FatFs - f_printf</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>fprintf</h2>
-<p>The fprintf function writes formatted string to the file.</p>
+<h2>f_printf</h2>
+<p>The f_printf function writes formatted string to the file.</p>
 <pre>
-int fprintf (
+int f_printf (
   FIL* <em>FileObject</em>,     /* File object */
   const char* <em>Foramt</em>,  /* Format stirng */
   ...
@@ -44,7 +44,7 @@ int fprintf (
 
 <div class="para">
 <h4>Description</h4>
-<p>The fprintf() is a wrapper function of <a href="putc.html">fputc()</a> and <a href="puts.html">fputs()</a>. The format control directive is a sub-set of standard library. It supports <tt>c s d u X</tt> for the data type, <tt>l</tt> for the precision and <tt>0</tt> for the flags.</p>
+<p>The f_printf() is a wrapper function of <a href="putc.html">f_putc()</a> and <a href="puts.html">f_puts()</a>. The format control directive is a sub-set of standard library. It supports <tt>c s d u X</tt> for the data type, <tt>l</tt> for the precision and <tt>0</tt> for the flags.</p>
 <p>This function is available when read-write configuration and <tt>_USE_STRFUNC</tt> is 1 or 2.</p>
 </div>
 
@@ -52,19 +52,19 @@ int fprintf (
 <div class="para">
 <h4>Example</h4>
 <pre>
-    fprintf(&amp;fil, "%6d", -200);         // "  -200"
-    fprintf(&amp;fil, "%02u", 5);           // "05"
-    fprintf(&amp;fil, "%ld", 12345678L);    // "12345678"
-    fprintf(&amp;fil, "%08lX", 1194684UL);  // "00123ABC"
-    fprintf(&amp;fil, "%s", "String");      // "String"
-    fprintf(&amp;fil, "%c", 'a');           // "a"
+    f_printf(&amp;fil, "%6d", -200);         // "  -200"
+    f_printf(&amp;fil, "%02u", 5);           // "05"
+    f_printf(&amp;fil, "%ld", 12345678L);    // "12345678"
+    f_printf(&amp;fil, "%08lX", 1194684UL);  // "00123ABC"
+    f_printf(&amp;fil, "%s", "String");      // "String"
+    f_printf(&amp;fil, "%c", 'a');           // "a"
 </pre>
 </div>
 
 
 <div class="para">
 <h4>References</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="putc.html">fputc</a>, <a href="puts.html">fputs</a>, <a href="gets.html">fgets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="putc.html">f_putc</a>, <a href="puts.html">f_puts</a>, <a href="gets.html">f_gets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

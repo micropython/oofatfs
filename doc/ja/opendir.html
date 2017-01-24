@@ -45,8 +45,10 @@ FRESULT f_opendir (
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>ディスク・エラーによる失敗。</dd>
+<dt>FR_INT_ERR</dt>
+<dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>

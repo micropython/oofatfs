@@ -5,16 +5,16 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - fgets</title>
+<title>FatFs - f_gets</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>fgets</h2>
-<p>The fgets reads a string from the file.</p>
+<h2>f_gets</h2>
+<p>The f_gets reads a string from the file.</p>
 <pre>
-char* fgets (
+char* f_gets (
   char* <em>Str</em>,        /* Read buffer */
   int <em>Size</em>,         /* Size of the read buffer */
   FIL* <em>FileObject</em>   /* File object */
@@ -43,14 +43,14 @@ char* fgets (
 
 <div class="para">
 <h4>Description</h4>
-<p>The fgets() is a wrapper function of <a href="read.html">f_read()</a>. The read operation continues until a <tt>'\n'</tt> is stored, reached end of file or buffer is filled with Size - 1 characters. The read string is terminated with a <tt>'\0'</tt>. When the file is already reached end of file or any error occured during read operation, fgets() returns a <tt>NULL</tt>. The EOF status can be examined with <tt>feof()</tt> macro.</p>
+<p>The f_gets() is a wrapper function of <a href="read.html">f_read()</a>. The read operation continues until a <tt>'\n'</tt> is stored, reached end of file or buffer is filled with Size - 1 characters. The read string is terminated with a <tt>'\0'</tt>. When the file has reached end of the file or any error occured during read operation, f_gets() returns a <tt>NULL</tt>. The EOF and error status can be examined with <tt>f_eof()</tt> and <tt>f_error()</tt> macro.</p>
 <p>This function is available when <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set to 2, <tt>'\r'</tt> contained in the file is stripped.</p>
 </div>
 
 
 <div class="para">
 <h4>References</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="putc.html">fputc</a>, <a href="puts.html">fputs</a>, <a href="printf.html">fprintf</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="putc.html">f_putc</a>, <a href="puts.html">f_puts</a>, <a href="printf.html">f_printf</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

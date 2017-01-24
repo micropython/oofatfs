@@ -32,6 +32,7 @@ DSTATUS disk_initialize (
 <div class="para">
 <h4>戻り値</h4>
 <p>この関数は戻り値としてディスク・ステータスを返します。ディスク・ステータスの詳細に関しては<tt><a href="dstat.html">disk_status()</a></tt>を参照してください。</p>
+<p>FatFsモジュールは、自動マウント動作で必要に応じてこの関数を呼び出します。FatFsモジュール使用中は、アプリケーションからこの関数を呼び出すことは禁止です。</p>
 </div>
 
 <div class="para">

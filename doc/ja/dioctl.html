@@ -55,6 +55,7 @@ DRESULT disk_ioctl (
 <table class="lst">
 <tr><th>コマンド</th><th>解説</th></tr>
 <tr><td>CTRL_SYNC</td><td>ドライブがデータの書き込みを完了するのを待ちます。ライト・バック・キャッシュがある場合は、書き込まれていないデータを即時書き戻します。</td></tr>
+<tr><td>GET_SECTOR_SIZE</td><td>Bufferの指すWORD変数にドライブのセクタ・サイズを返します。_MAX_SSが1024以上のとき必要とされます。</td></tr>
 <tr><td>GET_SECTOR_COUNT</td><td>Bufferの指すDWORD変数にドライブ上の総セクタ数を返します。f_mkfs内でのみ使用。</td></tr>
 <tr><td>GET_BLOCK_SIZE</td><td>Bufferの指すDWORD変数にメモリ・アレーの消去ブロックサイズをセクタ単位で返します。不明な場合またはHDDでは1を返します。f_mkfs内でのみ使用。</td></tr>
 </table>

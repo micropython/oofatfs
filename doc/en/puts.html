@@ -5,16 +5,16 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - fputs</title>
+<title>FatFs - f_puts</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>fputs</h2>
-<p>The fputs function writes a string to the file.</p>
+<h2>f_puts</h2>
+<p>The f_puts function writes a string to the file.</p>
 <pre>
-int fputs (
+int f_puts (
   const char* <em>Str</em>,  /* String */
   FIL* <em>FileObject</em>   /* File object */
 );
@@ -40,13 +40,13 @@ int fputs (
 
 <div class="para">
 <h4>Description</h4>
-<p>The fputs() is a wrapper function of <a href="putc.html">fputc()</a>. This function is available when read-write configuration and <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set 2, a <tt>'\n'</tt> is extended to <tt>"\r\n"</tt>.</p>
+<p>The f_puts() is a wrapper function of <a href="putc.html">f_putc()</a>. This function is available when read-write configuration and <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set 2, a <tt>'\n'</tt> is extended to <tt>"\r\n"</tt>.</p>
 </div>
 
 
 <div class="para">
 <h4>Reference</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="putc.html">fputc</a>, <a href="printf.html">fprintf</a>, <a href="gets.html">fgets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="putc.html">f_putc</a>, <a href="printf.html">f_printf</a>, <a href="gets.html">f_gets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

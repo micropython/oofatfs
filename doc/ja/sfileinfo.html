@@ -15,11 +15,15 @@
 <p><tt>FILINFO</tt>構造体は、<tt>f_stat(), f_readdir()</tt>で返されるファイル情報を保持します。</p>
 <pre>
 typedef struct _FILINFO {
-    DWORD fsize;            /* Size [bytes] */
-    WORD fdate;             /* Date [15-9]:Year-1980, [8-5]:Month, [4-0]:Mday */
-    WORD ftime;             /* Time [15-11]:Hour, [10-5]:Minute, [4-0]:Sec/2 */
-    BYTE fattrib;           /* Attribute */
-    char fname[8+1+3+1];    /* Name */
+    DWORD fsize;     /* File size */
+    WORD fdate;      /* Last modified date */
+    WORD ftime;      /* Last modified time */
+    BYTE fattrib;    /* Attribute */
+    char fname[13];  /* Short file name (8.3 format) */
+#if _USE_LFN
+    char* lfname;    /* Pointer to the LFN buffer */
+    int lfsize;      /* Size of LFN buffer [bytes] */
+#endif
 } FILINFO;
 </pre>
 </div>

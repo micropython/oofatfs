@@ -29,7 +29,7 @@ DRESULT disk_read (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the read buffer to store the read data. The buffer size of number of bytes to be read is required.</dd>
+<dd>Pointer to the byte array to store the read data. The buffer size of number of bytes to be read is required. The start address specified by upper layer may be aligned or non-aligned.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>

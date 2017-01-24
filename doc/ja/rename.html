@@ -25,7 +25,7 @@ FRESULT f_rename (
 <h4>引数</h4>
 <dl class="par">
 <dt>OldName</dt>
-<dd>変更対象のファイルまたはディレクトリの<a href="filename.html">フルパス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dd>変更対象のオブジェクト(ファイルまたはディレクトリ)の<a href="filename.html">フルパス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>NewName</dt>
 <dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在するものと同じ名前は使えません。また、ドライブ番号は指定できず、<tt>OldName</tt>で指定されたドライブ上のオブジェクトとして扱われます。<br>
 </dl>
@@ -38,7 +38,7 @@ FRESULT f_rename (
 <dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
 <dt>FR_NO_FILE</dt>
-<dd>ファイルが見つからない。</dd>
+<dd>OldNameのオブジェクトが見つからない。</dd>
 <dt>FR_NO_PATH</dt>
 <dd>パスが見つからない。</dd>
 <dt>FR_INVALID_NAME</dt>
@@ -46,15 +46,17 @@ FRESULT f_rename (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_DENIED</dt>
-<dd>新しい名前のオブジェクトが作れない。</dd>
+<dd>ドライブ容量の不足等の理由で新しい名前のオブジェクトが作れない。</dd>
 <dt>FR_EXIST</dt>
-<dd>NewNameと同じ名前のオブジェクトが既にある。</dd>
+<dd>NewNameと同じオブジェクトが既に存在する。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>ディスク・エラーによる失敗。</dd>
+<dt>FR_INT_ERR</dt>
+<dd>不正なFAT構造または内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワークエリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -65,18 +67,17 @@ FRESULT f_rename (
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルまたはディレクトリの名前を変更します。別のディレクトリへの移動(同じドライブ内のみ)も可能です。リード・オンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
-<p>※現リビジョンでは、ディレクトリを別のディレクトリに移動するとファイル・システムが壊れます。</p>
+<p>ファイルまたはディレクトリの名前を変更します。また、別のディレクトリへの移動(同じドライブ内のみ)も可能です。リード・オンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    // 名前を変更する
+    // ファイルまたはサブディレクトリの名前を変更する
     f_rename("oldname.txt", "newname.txt");
 
-    // 名前の変更と同時に別のディレクトリへ移動する
+    // ファイルまたはサブディレクトリの名前を変更すると同時に別のディレクトリへ移動する
     f_rename("oldname.txt", "dir1/newname.txt");
 </pre>
 </div>

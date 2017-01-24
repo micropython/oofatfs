@@ -5,16 +5,16 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - fprintf</title>
+<title>FatFs - f_printf</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>fprintf</h2>
+<h2>f_printf</h2>
 <p>ファイルに書式化文字列を書き込みます。</p>
 <pre>
-int fprintf (
+int f_printf (
   FIL* <em>FileObject</em>,     /* ファイル・オブジェクト */
   const char* <em>Foramt</em>,  /* 書式制御文字列 */
   ...
@@ -44,26 +44,26 @@ int fprintf (
 
 <div class="para">
 <h4>解説</h4>
-<p>この関数は<a href="putc.html">fputc()</a>および<a href="puts.html">fputs()</a>のラッパー関数です。書式制御機能はサブセットとなっていて、使用可能はタイプは<tt>c s d u X</tt>、精度指定は<tt>l</tt>、フラグは<tt>0</tt>となっています。リード・ライト構成で<tt>_USE_STRFUNC</tt>が1または2のときこの関数がサポートされます。</p>
+<p>この関数は<a href="putc.html">f_putc()</a>および<a href="puts.html">f_puts()</a>のラッパー関数です。書式制御機能はサブセットとなっていて、使用可能はタイプは<tt>c s d u X</tt>、精度指定は<tt>l</tt>、フラグは<tt>0</tt>となっています。リード・ライト構成で<tt>_USE_STRFUNC</tt>が1または2のときこの関数がサポートされます。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    fprintf(&amp;fil, "%6d", -200);         // "  -200"
-    fprintf(&amp;fil, "%02u", 5);           // "05"
-    fprintf(&amp;fil, "%ld", 12345678L);    // "12345678"
-    fprintf(&amp;fil, "%08lX", 1194684UL);  // "00123ABC"
-    fprintf(&amp;fil, "%s", "String");      // "String"
-    fprintf(&amp;fil, "%c", 'a');           // "a"
+    f_printf(&amp;fil, "%6d", -200);         // "  -200"
+    f_printf(&amp;fil, "%02u", 5);           // "05"
+    f_printf(&amp;fil, "%ld", 12345678L);    // "12345678"
+    f_printf(&amp;fil, "%08lX", 1194684UL);  // "00123ABC"
+    f_printf(&amp;fil, "%s", "String");      // "String"
+    f_printf(&amp;fil, "%c", 'a');           // "a"
 </pre>
 </div>
 
 
 <div class="para">
 <h4>参照</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="putc.html">fputc</a>, <a href="puts.html">fputs</a>, <a href="gets.html">fgets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="putc.html">f_putc</a>, <a href="puts.html">f_puts</a>, <a href="gets.html">f_gets</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_j.html">戻る</a></p>

@@ -45,8 +45,10 @@ FRESULT f_forward (
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in non-read mode.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_INVALID_OBJECT</dt>
@@ -57,8 +59,8 @@ FRESULT f_forward (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_forward() is for only Tiny-FatFs and not supported on FatFs. It reads the data from the file and forward it to the outgoing stream without data buffer. This is suitable for small memory system because it does not require any data buffer at application module. The file pointer of the file object increases in number of bytes forwarded. In case of <tt>*ByteFwd &lt; ByteToFwd</tt> without error, it means the requested bytes could not be transferred due to end of file or stream goes busy during transfering process.</p>
-<p>This function is available when <tt>_USE_FORWARD == 1</tt>.</p>
+<p>The f_forward function reads the data from the file and forward it to the outgoing stream without data buffer. This is suitable for small memory system because it does not require any data buffer at application module. The file pointer of the file object increases in number of bytes forwarded. In case of <tt>*ByteFwd &lt; ByteToFwd</tt> without error, it means the requested bytes could not be transferred due to end of file or stream goes busy during data transfer.</p>
+<p>This function is available on <tt>_USE_FORWARD == 1</tt> and <tt>_FS_TINY == 1</tt>.</p>
 </div>
 
 
@@ -80,7 +82,7 @@ UINT out_stream (   /* Returns number of bytes sent or stream status */
     if (btf == 0) {     /* Sense call */
         /* Return stream status (0: Busy, 1: Ready) */
         /* When once it returned ready to sense call, it must accept a byte at least */
-        /* at subsequent transfer call, or f_forward will result FR_RW_ERROR. */
+        /* at subsequent transfer call, or f_forward will fail with FR_INT_ERROR. */
         if (FIFO_READY) cnt = 1;
     }
     else {              /* Transfer call */

@@ -36,8 +36,10 @@ FRESULT f_truncate (
 <dd>The function succeeded.</dd>
 <dt>FR_DENIED</dt>
 <dd>The file has been opened in read-only mode.</dd>
-<dt>FR_RW_ERROR</dt>
-<dd>The function failed due to a disk error or an internal error.</dd>
+<dt>FR_DISK_ERR</dt>
+<dd>The function failed due to an error in the disk function.</dd>
+<dt>FR_INT_ERR</dt>
+<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_INVALID_OBJECT</dt>
@@ -48,7 +50,7 @@ FRESULT f_truncate (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_truncate function truncates the file size to the current file R/W point. When the file R/W pointer is already pointing end of the file, there is no effect. This function is not supported in read-only configuration and minimization level of &gt;=1.</p>
+<p>The f_truncate function truncates the file size to the current file R/W point. When the file R/W pointer is already pointing end of the file, this function has no effect. This function is not available in read-only configuration or minimization level of &gt;=1.</p>
 </div>
 
 

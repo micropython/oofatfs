@@ -2,7 +2,7 @@
 /* Common style sheet for Tech Notes */
 
 * {margin: 0; padding: 0; border-width: 0;}
-body {margin: 8px; background-color: #e0ffff; font-color: black; line-height: 150%; letter-spacing: 1px; max-width: 1024px;}
+body {margin: 8px; background-color: #e0ffff; font-color: black; font-family:"‚l‚r ‚o–¾’©", serif; line-height: 150%; letter-spacing: 1px; max-width: 1024px;}
 a:link {color: blue;}
 a:visited {color: darkmagenta;}
 a:hover {background-color: #a0ffff;}
@@ -13,7 +13,7 @@ p {text-indent: 1em; margin: 0 0 0.3em 0.5em;}
 em {font-style: normal; font-weight: bold; margin: 0 0.1em;}
 pre em {font-style: italic; font-weight: normal;}
 strong {}
-pre {margin: 1em; line-height: 1.2em; letter-spacing: 0; background-color: white;}
+pre {margin: 0.5em 1em; padding: 0.5em; line-height: 1.2em; letter-spacing: 0; background-color: white;}
 tt {margin: 0 0.2em; letter-spacing: 0;}
 ol {margin: 0 2em;}
 ul {margin: 0 2em;}
@@ -40,15 +40,15 @@ h1 {line-height: 1em; font-size: 2em; font-family: sans-serif; padding: 0.3em 0 
 p.hdd {float: right; text-align: right; margin-top: 0.5em;}
 hr.hds {clear: both; margin-bottom: 1em;}
 
-h2 {font-size: 1.5em; font-family: sans-serif; margin: 0 0 0.5em;}
-h3 {font-size: 1.5em; font-family: sans-serif; margin: 1.5em 0 0.5em;}
-h4 {font-size: 1.2em; font-family: sans-serif; margin: 1em 0 0.2em;}
-h5 {font-size: 1em; font-family: sans-serif; margin: 0.5em 0 0em;}
+h2 {font-size: 1.5em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 0 0 0.5em;}
+h3 {font-size: 1.5em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 1.5em 0 0.5em;}
+h4 {font-size: 1.2em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 1em 0 0.2em;}
+h5 {font-size: 1em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 0.5em 0 0em;}
 small {font-size: 80%;}
 .indent {margin-left: 2em;}
 
 /* Tables */
-table {margin: 4px; border-collapse: collapse; border-style: solid; border-width: 2px; border-color: black; letter-spacing: 0;}
+table {margin: 0.5em 1em; border-collapse: collapse; border-style: solid; border-width: 2px; border-color: black; letter-spacing: 0;}
 th {background-color: white; border-style: solid; border-width: 1px 1px 2px; border-color: black; padding: 0 3px; vertical-align: top;}
 td {background-color: white; border-style: solid; border-width: 1px; border-color: black; padding: 0 3px; vertical-align: top; line-height: 1.3em;}
 table.lst td:first-child {font-family: monospace; white-space: nowrap;}
