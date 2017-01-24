@@ -51,9 +51,10 @@ FRESULT f_readdir (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_readdir function reads directory entries in sequence. All items in the directory can be read by calling f_readdir function repeatedly. When all directory items have been read and no item to read, the function returns a null string into <tt>f_name[]</tt> member without any error. When a null pointer is given to the <tt>FileInfo</tt>, the read index of the directory object will be rewinded.</p>
-<p>When LFN feature is enabled, <tt>lfname</tt> and <tt>lfsize</tt> in the file information structure must be initialized with valid value prior to calling the f_readdir function. The <tt>lfname</tt> is a pointer to the string buffer to return the long file name. The <tt>lfsize</tt> is the size of the string buffer. When either the size of specified buffer or LFN working buffer is insufficient to store the LFN or LFN is not exist, a null string will be returned. When <tt>lfname</tt> is a NULL, nothing is returned.</p>
-<p>For details on the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimization level of &gt;=2.</p>
+<p>The f_readdir function reads directory entries in sequence. All items in the directory can be read by calling f_readdir function repeatedly. When all directory entries have been read and no item to read, the function returns a null string into <tt>f_name[]</tt> member without any error. When a null pointer is given to the <tt>FileInfo</tt>, the read index of the directory object will be rewinded.</p>
+<p>When LFN feature is enabled, <tt>lfname</tt> and <tt>lfsize</tt> in the file information structure must be initialized with valid value prior to calling the f_readdir function. The <tt>lfname</tt> is a pointer to the string buffer to return the long file name. The <tt>lfsize</tt> is the size of the string buffer. If either the size of read buffer or LFN working buffer is insufficient for the LFN or the entry has no LFN, a null string will be returned to the LFN read buffer. If the LFN contains any charactrer that cannot be converted to OEM code, a null string will be returned but this is not the case on Unicode API configuration. When <tt>lfname</tt> is a NULL, nothing of the LFN is returned.</p>
+<p>When relative path feature is enabled <tt>(_FS_RPATH == 1)</tt>, &quot;.&quot; and &quot;..&quot; entries are not filtered out and it will appear in the read entries.</p>
+<p>This function is not supported in minimization level of &gt;=2.</p>
 </div>
 
 
@@ -85,6 +86,7 @@ FRESULT scan_files (char* path)
 #else
             fn = fno.fname;
 #endif
+            if (*fn == '.') continue;
             if (fno.fattrib &amp; AM_DIR) {
                 sprintf(&amp;path[i], "/%s", fn);
                 res = scan_files(path);

@@ -15,8 +15,8 @@
 <p>ディレクトリをオープンします。</p>
 <pre>
 FRESULT f_opendir (
-  DIR* <em>DirObject</em>,      /* ディレクトリ・ブジェクト構造体へのポインタ */
-  const char* <em>DirName</em>  /* ディレクトリ名へのポインタ */
+  DIR* <em>DirObject</em>,       /* ディレクトリ・ブジェクト構造体へのポインタ */
+  const XCHAR* <em>DirName</em>  /* ディレクトリ名へのポインタ */
 );
 </pre>
 </div>
@@ -27,7 +27,7 @@ FRESULT f_opendir (
 <dt>DirObject</dt>
 <dd>初期化するディレクトリ・オブジェクト構造体へのポインタを指定します。</dd>
 <dt>DirName</dt>
-<dd>オープンするディレクトリの<a href="filename.html">フルパス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dd>オープンするディレクトリへの<a href="filename.html">パス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 </dl>
 </div>
 

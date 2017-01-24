@@ -12,12 +12,12 @@
 
 <div class="para">
 <h2>DIR</h2>
-<p><tt>DIR</tt>構造体は、f_opendir(), f_readdir()のワーク・エリアとして使用されます。</p>
+<p><tt>DIR</tt>構造体は、f_opendir(), f_readdir()のワーク・エリアとして使用されます。アプリケーションから変更可能なメンバはありません。</p>
 <pre>
-typedef struct _DIR {
+typedef struct _DIR_ {
+    FATFS*  fs;        /* Pointer to the owner file system object */
     WORD    id;        /* Owner file system mount ID */
     WORD    index;     /* Current index number */
-    FATFS*  fs;        /* Pointer to the owner file system object */
     DWORD   sclust;    /* Table start cluster (0:Static table) */
     DWORD   clust;     /* Current cluster */
     DWORD   sect;      /* Current sector */

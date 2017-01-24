@@ -15,7 +15,7 @@
 <p><tt>FIL</tt>構造体は、f_open()で作成され、そのファイルの状態を保持します。アプリケーションから書き換え可能なメンバはありません。</p>
 
 <pre>
-typedef struct _FIL {
+typedef struct _FIL_ {
     FATFS*  fs;           /* Pointer to the owner file system object */
     WORD    id;           /* Owner file system mount ID */
     BYTE    flag;         /* File status flags */

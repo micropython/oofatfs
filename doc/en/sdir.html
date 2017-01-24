@@ -12,20 +12,20 @@
 
 <div class="para">
 <h2>DIR</h2>
-<p>The <tt>DIR</tt> structure is used for the work area to read a directory by f_oepndir, f_readdir function.</p>
+<p>The <tt>DIR</tt> structure is used for the work area to read a directory by f_oepndir, f_readdir function. There is no member that can be changed by application.</p>
 <pre>
-typedef struct _DIR {
-    WORD    id;        /* Owner file system mount ID */
-    WORD    index;     /* Current index number */
-    FATFS*  fs;        /* Pointer to the owner file system object */
-    DWORD   sclust;    /* Table start cluster (0:Static table) */
-    DWORD   clust;     /* Current cluster */
-    DWORD   sect;      /* Current sector */
-    BYTE*   dir;       /* Pointer to the current SFN entry in the win[] */
-    BYTE*   fn;        /* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */
+typedef struct _DIR_ {
+    FATFS*  fs;         /* Pointer to the owner file system object */
+    WORD    id;         /* Owner file system mount ID */
+    WORD    index;      /* Current read/write index number */
+    DWORD   sclust;     /* Table start cluster (0:Static table) */
+    DWORD   clust;      /* Current cluster */
+    DWORD   sect;       /* Current sector */
+    BYTE*   dir;        /* Pointer to the current SFN entry in the win[] */
+    BYTE*   fn;         /* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */
 #if _USE_LFN
-    WCHAR*  lfn;       /* Pointer to the LFN working buffer */
-    WORD    lfn_idx;   /* Last matched LFN index (0xFFFF:No LFN) */
+    WCHAR*  lfn;        /* Pointer to the LFN working buffer */
+    WORD    lfn_idx;    /* Last matched LFN index (0xFFFF:No LFN) */
 #endif
 } DIR;
 </pre>

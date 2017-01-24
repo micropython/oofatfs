@@ -14,15 +14,15 @@
 <h2>FILINFO</h2>
 <p><tt>FILINFO</tt>構造体は、<tt>f_stat(), f_readdir()</tt>で返されるファイル情報を保持します。</p>
 <pre>
-typedef struct _FILINFO {
+typedef struct _FILINFO_ {
     DWORD fsize;     /* File size */
     WORD fdate;      /* Last modified date */
     WORD ftime;      /* Last modified time */
     BYTE fattrib;    /* Attribute */
     char fname[13];  /* Short file name (8.3 format) */
 #if _USE_LFN
-    char* lfname;    /* Pointer to the LFN buffer */
-    int lfsize;      /* Size of LFN buffer [bytes] */
+    XCHAR* lfname;   /* Pointer to the LFN buffer */
+    int lfsize;      /* Size of LFN buffer [characters] */
 #endif
 } FILINFO;
 </pre>
@@ -58,6 +58,10 @@ typedef struct _FILINFO {
 <dd>属性フラグが格納されます。フラグは<tt>AM_DIR, AM_RDO, AM_HID, AM_SYS, AM_ARC</tt>の組み合わせとなります。</dd>
 <dt>fname[]</dt>
 <dd>8.3形式の名前が<tt>'\0'</tt>で終わる文字列として格納されます。</dd>
+<dt>lfname</dt>
+<dd>返される長いファイル名を格納するバッファへのポインタ。この構造体を使用する前にアプリケーションにより初期化されなければなりません。非LFN構成のときは存在しません。</dd>
+<dt>lfsize</dt>
+<dd>長いファイル名を格納するバッファのサイズ(文字数)。この構造体を使用する前にアプリケーションにより初期化されなければなりません。非LFN構成のときは存在しません。</dd>
 </dl>
 
 <p class="foot"><a href="../00index_j.html">戻る</a></p>

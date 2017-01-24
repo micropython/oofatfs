@@ -15,13 +15,12 @@
 <p><tt>FATFS</tt>構造体は、個々の論理ドライブのダイナミック・ワーク・エリアを保持し、f_mount()でFatFsモジュールに登録されます。標準状態では次のようなメンバになっています。アプリケーションから書き換え可能なメンバはありません。</p>
 
 <pre>
-typedef struct _FATFS {
+typedef struct _FATFS_ {
     BYTE    fs_type;      /* FAT sub type */
     BYTE    drive;        /* Physical drive number */
     BYTE    csize;        /* Number of sectors per cluster */
     BYTE    n_fats;       /* Number of FAT copies */
     BYTE    wflag;        /* win[] dirty flag (1:must be written back) */
-    BYTE    pad1;
     WORD    id;           /* File system mount ID */
     WORD    n_rootdir;    /* Number of root directory entries (0 on FAT32) */
 #if _FS_REENTRANT
@@ -32,7 +31,6 @@ typedef struct _FATFS {
 #endif
 #if !_FS_READONLY
     BYTE    fsi_flag;     /* fsinfo dirty flag (1:must be written back) */
-    BYTE    pad2;
     DWORD   last_clust;   /* Last allocated cluster */
     DWORD   free_clust;   /* Number of free clusters */
     DWORD   fsi_sector;   /* fsinfo sector */

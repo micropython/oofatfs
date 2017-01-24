@@ -15,7 +15,7 @@
 <p>論理ドライブ上の未使用クラスタ数を得ます。</p>
 <pre>
 FRESULT f_getfree (
-  const char* <em>Path</em>,        /* 対象ドライブのルート・ディレクトリ */
+  const XCHAR* <em>Path</em>,       /* 対象ドライブのルート・ディレクトリ */
   DWORD* <em>Clusters</em>,         /* 空きクラスタ数を格納する変数へのポインタ */
   FATFS** <em>FileSystemObject</em> /* ファイル・システム・オブジェクトを指すポインタへのポインタ */
 );
@@ -67,18 +67,21 @@ FRESULT f_getfree (
 <h4>使用例</h4>
 <pre>
     FATFS *fs;
-    DWORD clust;
+    DWORD fre_clust, fre_sect, tot_sect;
 
 
-    // Get free clusters
-    res = f_getfree("", &amp;clust, &amp;fs);
+    // Get drive information and free clusters
+    res = f_getfree("/", &amp;fre_clust, &amp;fs);
     if (res) die(res);
 
-    // Get free space
-    printf("%lu KB total disk space.\n"
-           "%lu KB available on the disk.\n",
-           (DWORD)(fs->max_clust - 2) * fs->csize / 2,
-           clust * fs->csize / 2);
+    // Get total sectors and free sectors
+    tot_sect = (fs->max_clust - 2) * fs->csize;
+    fre_sect = fre_clust * fs->csize;
+
+    // Print free space in unit of KB (assuming 512B/sector)
+    printf("%lu KB total drive space.\n"
+           "%lu KB available.\n",
+           fre_sect / 2, tot_sect / 2);
 </pre>
 </div>
 

@@ -28,7 +28,7 @@ FRESULT f_lseek (
 <dt>FileObject</dt>
 <dd>Pointer to the open file object.</dd>
 <dt>Offset</dt>
-<dd>Number of bytes where from start of file</dd>
+<dd>Number of bytes where from start of the file</dd>
 </dl>
 </div>
 
@@ -66,28 +66,28 @@ FRESULT f_lseek (
     // Move to offset of 5000 from top of the file.
     res = f_lseek(&amp;file, 5000);
 
+    // Move to end of the file to append data
+    res = f_lseek(&amp;file, file.fsize);
+
     // Forward 3000 bytes
     res = f_lseek(&amp;file, file.fptr + 3000);
 
     // Rewind 2000 bytes (take care on overflow)
     res = f_lseek(&amp;file, file.fptr - 2000);
-
-    // Move to end of the file to append data
-    res = f_lseek(&amp;file, file.fsize);
 </pre>
 <pre>
-    // Cluster pre-allocation (to prevent data overrun on streaming write)
+    // Cluster pre-allocation (to prevent buffer overrun on streaming write)
 
     res = f_open(&amp;file, recfile, FA_CREATE_NEW | FA_WRITE); // Create a file
 
-    res = f_lseek(&amp;file, PRE_SIZE);    // Pre-allocate clusters
+    res = f_lseek(&amp;file, PRE_SIZE);        // Pre-allocate clusters
     if (res || file.fptr != PRE_SIZE) .... // Check if the file is extended corrctly
 
-    res = f_lseek(&amp;file, DATA_START);  // Record data stream without cluster allocation delay
+    res = f_lseek(&amp;file, DATA_START);      // Record data stream without cluster allocation delay
     ...
 
-    res = f_truncate(&amp;file);           // Truncate unused area
-    res = f_lseek(&amp;file, 0);           // Put file header
+    res = f_truncate(&amp;file);               // Truncate unused area
+    res = f_lseek(&amp;file, 0);               // Put file header
     ...
 
     res = f_close(&amp;file);

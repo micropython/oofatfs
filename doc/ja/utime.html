@@ -15,7 +15,7 @@
 <p>ファイルまたはディレクトリのタイムスタンプを変更します。</p>
 <pre>
 FRESULT f_utime (
-  const char* <em>FileName</em>,    /* ファイルまたはディレクトリ名へのポインタ */
+  const XCHAR* <em>FileName</em>,   /* ファイルまたはディレクトリ名へのポインタ */
   const FILINFO* <em>TimeDate</em>  /* 設定する日付 */
 );
 </pre>
@@ -25,7 +25,7 @@ FRESULT f_utime (
 <h4>引数</h4>
 <dl class="par">
 <dt>FileName</dt>
-<dd>変更対象のファイルまたはディレクトリの<a href="filename.html">フルパス名</a>の入った<tt>'\0'</tt>で終わる文字列を指定します。</dd>
+<dd>変更対象のファイルまたはディレクトリへの<a href="filename.html">パス名</a>の入った<tt>'\0'</tt>で終わる文字列を指定します。</dd>
 <dt>TimeDate</dt>
 <dd>設定する日付と時間をfdateとftimeメンバに設定されたFILINFO構造体へのポインタ。他のメンバはDon't careです。</dd>
 </dl>

@@ -14,15 +14,15 @@
 <h2>FILINFO</h2>
 <p>The <tt>FILINFO</tt> structure holds a file information returned by f_stat and f_readdir function.</p>
 <pre>
-typedef struct _FILINFO {
-    DWORD fsize;     /* File size */
-    WORD fdate;      /* Last modified date */
-    WORD ftime;      /* Last modified time */
-    BYTE fattrib;    /* Attribute */
-    char fname[13];  /* Short file name (8.3 format) */
+typedef struct _FILINFO_ {
+    DWORD fsize;      /* File size */
+    WORD  fdate;      /* Last modified date */
+    WORD  ftime;      /* Last modified time */
+    BYTE  fattrib;    /* Attribute */
+    char  fname[13];  /* Short file name (8.3 format) */
 #if _USE_LFN
-    char* lfname;    /* Pointer to the LFN buffer */
-    int lfsize;      /* Size of LFN buffer [bytes] */
+    XCHAR* lfname;    /* Pointer to the LFN buffer */
+    int   lfsize;     /* Size of LFN buffer [characters] */
 #endif
 } FILINFO;
 </pre>
@@ -59,9 +59,9 @@ typedef struct _FILINFO {
 <dt>fname[]</dt>
 <dd>Indicates the file/directory name in 8.3 format null-terminated string.</dd>
 <dt>lfname</dt>
-<dd>Pointer to the buffer to store the long file name. This member must be initialized by application.</dd>
+<dd>Pointer to the LFN buffer to store the read LFN. This member must be initialized by application prior to use this structure. Not available on non-LFN configuration.</dd>
 <dt>lfsize</dt>
-<dd>Size of long file name buffer. This member must be initialized by application.</dd>
+<dd>Size of the LFN buffer in unit of chars. This member must be initialized by application prior to use this structure. Not available on non-LFN configuration.</dd>
 </dl>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

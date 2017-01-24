@@ -15,8 +15,8 @@
 <p>ファイルまたはディレクトリの名前の変更または移動。</p>
 <pre>
 FRESULT f_rename (
-  const char* <em>OldName</em>, /* 古いファイルまたはディレクトリ名 */
-  const char* <em>NewName</em>  /* 新しいファイルまたはディレクトリ名 */
+  const XCHAR* <em>OldName</em>, /* 古いファイルまたはディレクトリ名 */
+  const XCHAR* <em>NewName</em>  /* 新しいファイルまたはディレクトリ名 */
 );
 </pre>
 </div>
@@ -25,7 +25,7 @@ FRESULT f_rename (
 <h4>引数</h4>
 <dl class="par">
 <dt>OldName</dt>
-<dd>変更対象のオブジェクト(ファイルまたはディレクトリ)の<a href="filename.html">フルパス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dd>変更対象のオブジェクト(ファイルまたはディレクトリ)への<a href="filename.html">パス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>NewName</dt>
 <dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在するものと同じ名前は使えません。また、ドライブ番号は指定できず、<tt>OldName</tt>で指定されたドライブ上のオブジェクトとして扱われます。<br>
 </dl>

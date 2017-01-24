@@ -15,7 +15,7 @@
 <p>The f_getfree function gets number of the free clusters.</p>
 <pre>
 FRESULT f_getfree (
-  const char* <em>Path</em>,         /* Root directory of the drive */
+  const XCHAR* <em>Path</em>,        /* Root directory of the drive */
   DWORD* <em>Clusters</em>,          /* Pointer to the variable to store number of free clusters */
   FATFS** <em>FileSystemObject</em>  /* Pointer to pointer to file system object */
 );
@@ -26,7 +26,7 @@ FRESULT f_getfree (
 <h4>Parameters</h4>
 <dl class="par">
 <dt>Path</dt>
-<dd>Pinter to the null-terminated string that specifies the <a href="filename.html">root directory</a> of the logical drive. Always specify a null-string for Tiny-FatFs.</dd>
+<dd>Pinter to the null-terminated string that specifies the <a href="filename.html">root directory</a> of the logical drive.</dd>
 <dt>Clusters</dt>
 <dd>Pointer to the DWORD variable to store number of free clusters.</dd>
 <dt>FileSystemObject</dt>
@@ -58,7 +58,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>Descriptions</h4>
-<p>The f_getfree function gets number of free clusters on the drive. The member <tt>csize</tt> in the file system object is refreting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When FSInfo structure on FAT32 volume is not in sync, this function can return an incorrect free cluster count.</p>
+<p>The f_getfree function gets number of free clusters on the drive. The member <tt>csize</tt> in the file system object is refrecting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When FSInfo structure on FAT32 volume is not in sync, this function can return an incorrect free cluster count.</p>
 <p>This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
 </div>
 
@@ -67,18 +67,21 @@ FRESULT f_getfree (
 <h4>Example</h4>
 <pre>
     FATFS *fs;
-    DWORD clust;
+    DWORD fre_clust, fre_sect, tot_sect;
 
 
-    // Get free clusters
-    res = f_getfree("", &amp;clust, &amp;fs);
+    // Get drive information and free clusters
+    res = f_getfree("/", &amp;fre_clust, &amp;fs);
     if (res) die(res);
 
-    // Get free space
-    printf("%lu KB total disk space.\n"
-           "%lu KB available on the disk.\n",
-           (DWORD)(fs->max_clust - 2) * fs->csize / 2,
-           clust * fs->csize / 2);
+    // Get total sectors and free sectors
+    tot_sect = (fs->max_clust - 2) * fs->csize;
+    fre_sect = fre_clust * fs->csize;
+
+    // Print free space in unit of KB (assuming 512B/sector)
+    printf("%lu KB total drive space.\n"
+           "%lu KB available.\n",
+           fre_sect / 2, tot_sect / 2);
 </pre>
 </div>
 

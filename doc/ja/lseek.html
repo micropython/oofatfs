@@ -66,28 +66,28 @@ FRESULT f_lseek (
     // ファイル・オフセット5000へ移動
     res = f_lseek(&amp;file, 5000);
 
+    // ファイル追記の準備 (ファイル終端へ移動)
+    res = f_lseek(&amp;file, file.fsize);
+
     // 3000バイト進める
     res = f_lseek(&amp;file, file.fptr + 3000);
 
     // 2000バイト戻す (オーバーフローに注意)
     res = f_lseek(&amp;file, file.fptr - 2000);
-
-    // ファイル追記の準備 (ファイル終端へ移動)
-    res = f_lseek(&amp;file, file.fsize);
 </pre>
 <pre>
-    // クラスタ先行割り当て (データ・オーバーランの防止)
+    // クラスタ先行割り当て (ストリーミング・ライト時のバッファ・オーバーラン防止)
 
     res = f_open(&amp;file, "record.wav", FA_CREATE_NEW | FA_WRITE); // ファイル作成
 
-    res = f_lseek(&amp;file, MAX_SIZE);    // 十分なクラスタの先行割り当て
+    res = f_lseek(&amp;file, MAX_SIZE);        // 十分なクラスタの先行割り当て
     if (res || file.fptr != PRE_SIZE) .... // 正しくファイルが拡張されたかチェック
 
-    res = f_lseek(&amp;file, DATA_START);  // データ・ストリームの記録(アロケーションディレイ無し)
+    res = f_lseek(&amp;file, DATA_START);      // データ・ストリームの記録(アロケーションディレイ無し)
     ...
 
-    res = f_truncate(&amp;file);          // 不要領域の切り捨て
-    res = f_lseek(&amp;file, 0);          // ヘッダの記録
+    res = f_truncate(&amp;file);              // 不要領域の切り捨て
+    res = f_lseek(&amp;file, 0);              // ヘッダの記録
     ...
 
     res = f_close(&amp;file);

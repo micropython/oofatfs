@@ -15,9 +15,9 @@
 <p>The f_open function creates a <em>file object</em> to be used to access the file.</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,      /* Pointer to the blank file object structure */
-  const char* <em>FileName</em>, /* Pointer to the file neme */
-  BYTE <em>ModeFlags</em>        /* Mode flags */
+  FIL* <em>FileObject</em>,       /* Pointer to the blank file object structure */
+  const XCHAR* <em>FileName</em>, /* Pointer to the file neme */
+  BYTE <em>ModeFlags</em>         /* Mode flags */
 );
 </pre>
 </div>
@@ -83,7 +83,7 @@ FRESULT f_open (
 
 <div class="para">
 <h4>Description</h4>
-<p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If modified file is not closed, the file may be collapsed.</p>
+<p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function. If the modified file is not closed, the file may be collapsed.</p>
 <p>Before using any file function, a work area (file system object) must be given to the logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
 <p>The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>, are not available in read-only configuration.</p>
 </div>
@@ -92,24 +92,25 @@ FRESULT f_open (
 <div class="para">
 <h4>Example (File Copy)</h4>
 <pre>
-void main ()
+void main (void)
 {
-    FATFS fs;            // Work area (file system object) for logical drive
+    FATFS fs[2];         // Work area (file system object) for logical drives
     FIL fsrc, fdst;      // file objects
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
     UINT br, bw;         // File R/W count
 
 
-    // Register a work area for logical drive 0
-    f_mount(0, &amp;fs);
+    // Register work area for logical drives
+    f_mount(0, &amp;fs[0]);
+    f_mount(1, &amp;fs[1]);
 
-    // Open source file
-    res = f_open(&amp;fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
+    // Open source file on the drive 1
+    res = f_open(&amp;fsrc, "1:srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
-    // Create destination file
-    res = f_open(&amp;fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    // Create destination file on the drive 0
+    res = f_open(&amp;fdst, "0:dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
     // Copy source to destination
@@ -124,8 +125,9 @@ void main ()
     f_close(&amp;fsrc);
     f_close(&amp;fdst);
 
-    // Unregister a work area before discard it
+    // Unregister work area before discard it
     f_mount(0, NULL);
+    f_mount(1, NULL);
 }
 </pre>
 </div>

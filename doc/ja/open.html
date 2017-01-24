@@ -15,9 +15,9 @@
 <p>ファイルをオープンまたは作成します。</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,      /* 空のファイル・オブジェクト構造体へのポインタ */
-  const char* <em>FileName</em>, /* ファイルのフルパス名へのポインタ */
-  BYTE <em>ModeFlags</em>        /* モードフラグ */
+  FIL* <em>FileObject</em>,       /* 空のファイル・オブジェクト構造体へのポインタ */
+  const XCHAR* <em>FileName</em>, /* ファイルのフルパス名へのポインタ */
+  BYTE <em>ModeFlags</em>         /* モードフラグ */
 );
 </pre>
 </div>
@@ -89,23 +89,24 @@ FRESULT f_open (
 <div class="para">
 <h4>使用例（ファイル・コピー）</h4>
 <pre>
-void main ()
+void main (void)
 {
-    FATFS fs;            // 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト)
+    FATFS fs[2];         // 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト)
     FIL fsrc, fdst;      // ファイル・オブジェクト
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
     UINT br, bw;         // File R/W count
 
-    // ドライブ0のワーク・エリアを与える
-    f_mount(0, &amp;fs);
+    // ドライブ0,1にワーク・エリアを与える
+    f_mount(0, &amp;fs[0]);
+    f_mount(1, &amp;fs[1]);
 
-    // ソース・ファイルを開く
-    res = f_open(&amp;fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
+    // ドライブ1のソース・ファイルを開く
+    res = f_open(&amp;fsrc, "1:srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
-    // デスティネーション・ファイルを作成する
-    res = f_open(&amp;fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    // ドライブ0にデスティネーション・ファイルを作成する
+    res = f_open(&amp;fdst, "0:dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
     // ソースからデスティネーションにコピーする
@@ -122,6 +123,7 @@ void main ()
 
     // ワーク・エリアを開放する
     f_mount(0, NULL);
+    f_mount(1, NULL);
 }
 </pre>
 </div>
