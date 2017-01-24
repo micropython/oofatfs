@@ -11,17 +11,17 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>disk_status</h2>
 <p>The disk_status function returns the current disk status.</p>
 <pre>
 DSTATUS disk_status (
-  BYTE <em>Drive</em>     <span>/* Physical drive number */</span>
+  BYTE <em>Drive</em>     <span class="c">/* Physical drive number */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>Parameter</h4>
 <dl class="par">
 <dt>Drive</dt>
@@ -30,7 +30,7 @@ DSTATUS disk_status (
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>Return Values</h4>
 <p>The disk status is returned in combination of following flags. FatFs refers only <tt>STA_NOINIT</tt> and <tt>STA_PROTECTED</tt>.</p>
 <dl class="ret">

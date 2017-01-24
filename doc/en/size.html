@@ -4,54 +4,51 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
-<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/truncate.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/size.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - f_truncate</title>
+<title>FatFs - f_size</title>
 </head>
 
 <body>
 
 <div class="para func">
-<h2>f_truncate</h2>
-<p>The f_truncate function truncates the file size.</p>
+<h2>f_size</h2>
+<p>The f_size function gets the size of a file.</p>
 <pre>
-FRESULT f_truncate (
-  FIL* <em>FileObject</em>     <span class="c">/* Pointer to the file object */</span>
+DWORD f_size (
+  FIL* <em>FileObject</em>   <span class="c">/* File object */</span>
 );
 </pre>
 </div>
 
+
 <div class="para arg">
-<h4>Parameter</h4>
+<h4>Parameters</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>Pointer to the open file object to be truncated.</dd>
+<dd>Pointer to the open file object structure.</dd>
 </dl>
 </div>
 
 
 <div class="para ret">
 <h4>Return Values</h4>
-<p>
-<a href="rc.html#ok">FR_OK</a>,
-<a href="rc.html#de">FR_DISK_ERR</a>,
-<a href="rc.html#ie">FR_INT_ERR</a>,
-<a href="rc.html#nr">FR_NOT_READY</a>,
-<a href="rc.html#io">FR_INVALID_OBJECT</a>,
-<a href="rc.html#tm">FR_TIMEOUT</a>
-</p>
+<p>Returns the size of the file in unit of byte.</p>
 </div>
 
 
 <div class="para desc">
 <h4>Description</h4>
-<p>The f_truncate function truncates the file size to the current file read/write point. This function has no effect if the file read/write pointer is already pointing end of the file.</p>
+<p>In this revision, the f_size function is implemented as a macro.</p>
+<pre>
+<span class="k">#define</span> f_size(fp) ((fp)->fsize)
+</pre>
 </div>
 
 
 <div class="para comp">
 <h4>QuickInfo</h4>
-<p>Available when <tt>_FS_READONLY == 0</tt> and <tt>_FS_MINIMIZE == 0</tt>.</p>
+<p>Always available.</p>
 </div>
 
 
@@ -59,7 +56,6 @@ FRESULT f_truncate (
 <h4>See Also</h4>
 <p><tt><a href="open.html">f_open</a>, <a href="lseek.html">f_lseek</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
-
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>
 </body>

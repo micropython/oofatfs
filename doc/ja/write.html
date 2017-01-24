@@ -11,20 +11,20 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>f_write</h2>
 <p>ファイルにデータを書き込みます。</p>
 <pre>
 FRESULT f_write (
-  FIL* <em>FileObject</em>,     <span>/* ファイル・オブジェクト */</span>
-  const void* <em>Buffer</em>,  <span>/* 書き込みデータ */</span>
-  UINT <em>ByteToWrite</em>,    <span>/* 書き込むバイト数 */</span>
-  UINT* <em>ByteWritten</em>    <span>/* 書き込まれたバイト数 */</span>
+  FIL* <em>FileObject</em>,     <span class="c">/* ファイル・オブジェクト */</span>
+  const void* <em>Buffer</em>,  <span class="c">/* 書き込みデータ */</span>
+  UINT <em>ByteToWrite</em>,    <span class="c">/* 書き込むバイト数 */</span>
+  UINT* <em>ByteWritten</em>    <span class="c">/* 書き込まれたバイト数 */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
@@ -39,38 +39,33 @@ FRESULT f_write (
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>戻り値</h4>
-<dl class="ret">
-<dt>FR_OK (0)</dt>
-<dd>正常終了。</dd>
-<dt>FR_DISK_ERR</dt>
-<dd>ディスク・エラーによる失敗。</dd>
-<dt>FR_INT_ERR</dt>
-<dd>不正なFAT構造または内部エラーによる失敗。</dd>
-<dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
-<dt>FR_DENIED</dt>
-<dd>非書き込みモードで開かれたファイルに書き込もうとした。</dd>
-<dt>FR_INVALID_OBJECT</dt>
-<dd>無効なファイルオブジェクト。</dd>
-</dl>
+<p>
+<a href="rc.html#ok">FR_OK</a>,
+<a href="rc.html#de">FR_DISK_ERR</a>,
+<a href="rc.html#ie">FR_INT_ERR</a>,
+<a href="rc.html#nr">FR_NOT_READY</a>,
+<a href="rc.html#de">FR_DENIED</a>,
+<a href="rc.html#io">FR_INVALID_OBJECT</a>,
+<a href="rc.html#tm">FR_TIMEOUT</a>
+</p>
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>解説</h4>
 <p>書き込み開始位置は、リード/ライト・ポインタの位置からになります。リード/ライト・ポインタは実際に書き込まれたバイト数だけ進みます。関数が正常終了した後、要求したバイト数が書き込まれたかどうか<tt>*ByteWritten</tt>をチェックすべきです。<tt>*ByteWritten &lt; ByteToWrite</tt>のときは、ディスク・フルを意味します。ディスク・フルが発生しているときまたはそれに近いときは、制御が帰るまで時間がかかる場合があります。</p>
 </div>
 
 
-<div class="para">
+<div class="para comp">
 <h4>対応情報</h4>
 <p><tt>_FS_READONLY == 0</tt>のときに使用可能です。</p>
 </div>
 
 
-<div class="para">
+<div class="para ref">
 <h4>参照</h4>
 <p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="putc.html">fputc</a>, <a href="puts.html">fputs</a>, <a href="printf.html">fprintf</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>

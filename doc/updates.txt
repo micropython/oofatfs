@@ -1,3 +1,9 @@
+R0.08b, Jan 15, 2011
+  Fast seek feature is also applied to f_read() and f_write().
+  f_lseek() reports required table size on creating CLMP.
+  Extended format syntax of f_printf function.
+  Ignores duplicated directory separators in given path names.
+
 R0.08a, Aug 16, 2010
   Added f_getcwd(). (_FS_RPATH = 2)
   Added sector erase feature. (_USE_ERASE)

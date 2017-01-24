@@ -11,19 +11,19 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>f_mkfs</h2>
 <p>物理ドライブ上にFATボリュームを作成(フォーマット)します。</p>
 <pre>
 FRESULT f_mkfs (
-  BYTE  <em>Drive</em>,              <span>/* 論理ドライブ番号 */</span>
-  BYTE  <em>PartitioningRule</em>,   <span>/* 区画作成方法 */</span>
-  UINT  <em>AllocSize</em>           <span>/* クラス・タサイズ */</span>
+  BYTE  <em>Drive</em>,              <span class="c">/* 論理ドライブ番号 */</span>
+  BYTE  <em>PartitioningRule</em>,   <span class="c">/* 区画作成方法 */</span>
+  UINT  <em>AllocSize</em>           <span class="c">/* クラス・タサイズ */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>引数</h4>
 <dl class="par">
 <dt>Drive</dt>
@@ -35,33 +35,18 @@ FRESULT f_mkfs (
 </dl>
 </div>
 
-<div class="para">
+<div class="para ret">
 <h4>戻り値</h4>
-<dl class="ret">
-<dt>FR_OK (0)</dt>
-<dd>正常終了。</dd>
-<dt>FR_INVALID_DRIVE</dt>
-<dd>ドライブ番号が無効。</dd>
-<dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
-<dt>FR_WRITE_PROTECTED</dt>
-<dd>メディアが書き込み禁止状態。</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>その論理ドライブにワーク・エリアが割り当てられていない。</dd>
-<dt>FR_DISK_ERR</dt>
-<dd>ディスク・エラーによる失敗。</dd>
-<dt>FR_MKFS_ABORTED</dt>
-<dd>次の理由で開始前に処理が中断された。
-<ul>
-<li>ディスク・サイズが小さすぎる。</li>
-<li>何らかの引数が不正。</li>
-<li>そのクラスタ・サイズが使えない。クラスタ数がFATタイプの境界に近くなるとき発生する可能性がある。</li>
-</ul>
-</dd>
-</dl>
+<p>
+<a href="rc.html#ok">FR_OK</a>,
+<a href="rc.html#de">FR_DISK_ERR</a>,
+<a href="rc.html#nr">FR_NOT_READY</a>,
+<a href="rc.html#ne">FR_NOT_ENABLED</a>,
+<a href="rc.html#ma">FR_MKFS_ABORTED</a>
+</p>
 </div>
 
-<div class="para">
+<div class="para desc">
 <h4>説明</h4>
 <p>f_mkfs関数は物理ドライブ上にFATボリュームを作成します。リムーバブル・メディアのパーテーショニング・ルールとしてはFDISK形式とSFD形式があり、メモリ・カードではFDISK形式が普通です。この関数は<em>複数区画には対応していない</em>ので、その物理ドライブの既存の区画は全て削除され、全体が一つの区画になります。</p>
 <p>FATタイプ(FAT12/FAT16/FAT32)は、その論理ドライブ上の<em>クラスタ数によってのみ決定</em>される決まり[FAT仕様書より]になっていて、それ以外の要因はありません。したがって、どのFATタイプになるかはドライブ・サイズとクラスタ・サイズに依存します。クラスタ・サイズは大きくするほど性能が上がり、逆にディスク利用効率は落ちます。</p>
@@ -69,7 +54,7 @@ FRESULT f_mkfs (
 </div>
 
 
-<div class="para">
+<div class="para comp">
 <h4>対応情報</h4>
 <p><tt>_FS_READONLY == 0</tt>で、且つ<tt>_USE_MKFS == 1</tt>のとき使用可能です。</p>
 </div>

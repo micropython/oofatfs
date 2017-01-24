@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file   (C)ChaN, 2010
+/  Low level disk interface modlue include file
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO

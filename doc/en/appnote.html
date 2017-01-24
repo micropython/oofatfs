@@ -43,24 +43,14 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 <p>You need to provide only low level disk I/O functions that required by FatFs module and nothing else. If a working disk module for the target is already existing, you need to write only glue functions to attach it to the FatFs module. If not, you need to port any other disk module or write it from scratch. All defined functions are not that always required. For example, disk write function is not required in read-only configuration. Following table shows which function is required depends on configuration options.</p>
 <table class="lst2">
 <tr><th>Function</th><th>Required when:</th><th>Note</th></tr>
-<tr><td>disk_initialize</td><td>Always</td><td rowspan="10">Disk I/O functions.<br>Samples available in ffsample.zip.<br>There are many implementations on the web.</td></tr>
-<tr><td>disk_status</td><td>Always</td></tr>
-<tr><td>disk_read</td><td>Always</td></tr>
-<tr><td>disk_write</td><td>_FS_READONLY == 0</td></tr>
-<tr><td>disk_ioctl (CTRL_SYNC)</td><td>_FS_READONLY == 0</td></tr>
-<tr><td>disk_ioctl (GET_SECTOR_COUNT)</td><td>_USE_MKFS == 1</td></tr>
-<tr><td>disk_ioctl (GET_SECTOR_SIZE)</td><td>_MAX_SS &gt;= 1024</td></tr>
-<tr><td>disk_ioctl (GET_BLOCK_SIZE)</td><td>_USE_MKFS == 1</td></tr>
+<tr><td>disk_initialize<br>disk_status<br>disk_read</td><td>Always</td><td rowspan="5">Disk I/O functions.<br>Samples available in ffsample.zip.<br>There are many implementations on the web.</td></tr>
+<tr><td>disk_write<br>get_fattime<br>disk_ioctl (CTRL_SYNC)</td><td>_FS_READONLY == 0</td></tr>
+<tr><td>disk_ioctl (GET_SECTOR_COUNT)<br>disk_ioctl (GET_BLOCK_SIZE)</td><td>_USE_MKFS == 1</td></tr>
+<tr><td>disk_ioctl (GET_SECTOR_SIZE)</td><td>_MAX_SS &gt; 512</td></tr>
 <tr><td>disk_ioctl (CTRL_ERASE_SECTOR)</td><td>_USE_ERASE == 1</td></tr>
-<tr><td>get_fattime</td><td>_FS_READONLY == 0</td></tr>
-<tr><td>ff_convert</td><td>_USE_LFN &gt;= 1</td><td rowspan="2">Unicode support functions.<br>Available in option/cc*.c.</td></tr>
-<tr><td>ff_wtoupper</td><td>_USE_LFN &gt;= 1</td></tr>
-<tr><td>ff_cre_syncobj</td><td>_FS_REENTRANT == 1</td><td rowspan="6">O/S dependent functions.<br>Samples available in option/syscall.c.</td></tr>
-<tr><td>ff_del_syncobj</td><td>_FS_REENTRANT == 1</td></tr>
-<tr><td>ff_req_grant</td><td>_FS_REENTRANT == 1</td></tr>
-<tr><td>ff_rel_grant</td><td>_FS_REENTRANT == 1</td></tr>
-<tr><td>ff_mem_alloc</td><td>_USE_LFN == 3</td></tr>
-<tr><td>ff_mem_free</td><td>_USE_LFN == 3</td></tr>
+<tr><td>ff_convert<br>ff_wtoupper</td><td>_USE_LFN &gt;= 1</td><td>Unicode support functions.<br>Available in option/cc*.c.</td></tr>
+<tr><td>ff_cre_syncobj<br>ff_del_syncobj<br>ff_req_grant<br>ff_rel_grant</td><td>_FS_REENTRANT == 1</td><td rowspan="2">O/S dependent functions.<br>Samples available in option/syscall.c.</td></tr>
+<tr><td>ff_mem_alloc<br>ff_mem_free</td><td>_USE_LFN == 3</td></tr>
 </table>
 </div>
 
@@ -78,20 +68,20 @@ The FatFs module assumes that size of char/short/long are 8/16/32 bit and int is
 </div>
 
 <div class="para" id="memory">
-<h3>Memory Usage (R0.08a)</h3>
+<h3>Memory Usage (R0.08b)</h3>
 <table class="lst2">
-<tr><th></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>V850ES</th><th>SH-2A</th><th>ARM7</th><th>x86</th></tr>
-<tr><td>Compiler</td><td>WinAVR(gcc)</td><td>CH38</td><td>C30(gcc)</td><td>CA850</td><td>SHC</td><td>WinARM(gcc)</td><td>VC6</td></tr>
-<tr><td>_WORD_ACCESS</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
-<tr class="lst3"><td>text (Full, R/W)</td><td>12646</td><td>10686</td><td>11430</td><td>7732</td><td>8752</td><td>10560</td><td>7545</td></tr>
-<tr> <td>text (Min, R/W)</td><td>8306</td><td>6986</td><td>7413</td><td>4938</td><td>5576</td><td>6680</td><td>4923</td></tr>
-<tr><td>text (Full, R/O)</td><td>5960</td><td>4876</td><td>5250</td><td>3554</td><td>3804</td><td>4688</td><td>3450</td></tr>
-<tr> <td>text (Min, R/O)</td><td>4366</td><td>3770</td><td>3939</td><td>2684</td><td>2940</td><td>3452</td><td>2664</td></tr>
-<tr><td>bss</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 0)</td><td>D*560 +<br>F*544</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*544</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td><td>D*560 +<br>F*550</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 1)</td><td>D*560 +<br>F*32</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*32</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td><td>D*560 +<br>F*36</td></tr>
+<tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>Cortex-M3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX62N</th><th>IA-32</th></tr>
+<tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
+<tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+<tr class="lst3"><td>text (Full, R/W)</td><td>10495</td><td>7205</td><td>6661</td><td>12646</td><td>10686</td><td>11430</td><td>12967</td><td>7732</td><td>8752</td><td>5747</td><td>7545</td></tr>
+<tr> <td>text (Min, R/W)</td><td>6523</td><td>4749</td><td>4335</td><td>8306</td><td>6986</td><td>7413</td><td>8745</td><td>4938</td><td>5576</td><td>3746</td><td>4923</td></tr>
+<tr><td>text (Full, R/O)</td><td>4539</td><td>3183</td><td>2893</td><td>5960</td><td>4876</td><td>5250</td><td>6060</td><td>3554</td><td>3804</td><td>2659</td><td>3450</td></tr>
+<tr> <td>text (Min, R/O)</td><td>3307</td><td>2495</td><td>2191</td><td>4366</td><td>3770</td><td>3939</td><td>4604</td><td>2684</td><td>2940</td><td>2025</td><td>2664</td></tr>
+<tr><td>bss</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
+<tr><td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
+<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
 </table>
-<p>These are the memory usage on some target systems with following condition. The memory sizes are in unit of byte, D means number of volumes and F means number of open files. All samples are optimezed in code size.</p>
+<p>These are the memory usage on some target systems with following condition. The memory sizes are in unit of byte, <em>V</em> means number of mounted volumes and <em>F</em> means number of open files. All samples are optimezed in code size.</p>
 <pre>
 _FS_READONLY     0 (R/W), 1 (R/O)
 _FS_MINIMIZE     0 (Full function), 3 (Minimized function)
@@ -103,6 +93,7 @@ _CODE_PAGE       932 (Japanese Shift-JIS)
 _USE_LFN         0 (Disable LFN)
 _MAX_SS          512 (Fixed sector size)
 _FS_RPATH        0 (Disable relative path)
+_VOLUMES         D (Number of logical drives to be used)
 _MULTI_PARTITION 0 (Single partition per drive)
 _FS_REENTRANT    0 (Disable reentrancy)
 _FS_SHARE        0 (Disable shareing control)
@@ -114,7 +105,7 @@ _FS_SHARE        0 (Disable shareing control)
 <p>Follwing table shows which API function is removed by configuration options for the module size reduction.</p>
 <table class="lst2">
 <tr><td rowspan="2">Function</td><td colspan="4">_FS_MINIMIZE</td><td colspan="2">_FS_READONLY</td><td colspan="2">_USE_STRFUNC</td><td colspan="3">_FS_RPATH</td><td colspan="2">_USE_MKFS</td><td colspan="2">_USE_FORWARD</td></tr>
-<tr><td>0</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>0&nbsp;&nbsp;</td><td>1/2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
 <tr class="lst3"><td>f_mount</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_open</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>f_close</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -156,8 +147,8 @@ _FS_SHARE        0 (Disable shareing control)
 <tr><td>949(Korean)</td><td>+139K</td></tr>
 <tr><td>950(Big5)</td><td>+111K</td></tr>
 </table>
-<p>When the LFN feature is enabled, the module size will be increased depends on the selected code page. Right table shows how many bytes increased when LFN feature is enabled with some code pages. We are the Japanese, Chinese and Korean have tens of thousands of characters. Unfortunately, it requires a huge OEM-Unicode bidirectional conversion table and the module size will be drastically increased that shown in the table. As the result, the FatFs with LFN feature with DBCS will not able to be implemented to most 8-bit microcontrollers. <small>This is the reason why I had not been interested in implementing the LFN feature for a long time :-)</small></p>
-<p>Note that the LFN feature on the FAT file system is a patent of Microsoft Corporation. When enable it on the commercial products, a license from Microsoft may be required depends on the final destination.</p>
+<p>When the LFN feature is enabled, the module size will be increased depends on the selected code page. Right table shows how many bytes increased when LFN feature is enabled with some code pages. We are the East-Asians have tens of thousands of characters. Unfortunately, it requires a huge OEM-Unicode bidirectional conversion table and the module size will be drastically increased that shown in the table. As the result, the FatFs with LFN feature with DBCS will not able to be implemented to most 8-bit microcontrollers. <small>This is the reason why I had not been interested in implementing the LFN feature for a long time :-)</small></p>
+<p>Note that the LFN feature on the FAT file system is a patent of Microsoft Corporation. This is not the case on FAT32. When enable LFN feature on the commercial products, a license from Microsoft may be required depends on the final destination.</p>
 </div>
 
 <div class="para" id="unicode">
@@ -168,15 +159,15 @@ _FS_SHARE        0 (Disable shareing control)
 <div class="para" id="reentrant">
 <h3>Re-entrancy</h3>
 <p>The file operations to the different volume is always re-entrant ant can work simultaneously. The file operations to the same volume is not re-entrant but it can also be configured to thread-safe with <tt>_FS_REENTRANT</tt> option. In this case, also the OS dependent synchronization object control functions, ff_cre_syncobj, ff_del_syncobj, ff_req_grant and ff_rel_grant must be added to the project.</p>
-<p>When a file function is called while the volume is in use by any other task, the access is blocked until the task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported on some RTOS.</p>
+<p>When a file function is called while the volume is in use by any other task, the file function is suspended until that task leaves file function. If wait time exceeded a period defined by <tt>_TIMEOUT</tt>, the file function will abort with <tt>FR_TIMEOUT</tt>. The timeout feature might not be supported on some RTOS.</p>
 <p>There is an exception on f_mount and f_mkfs function. These functions are not re-entrant to the same volume. When use these functions, all other task must close the corresponding file on the volume and avoid to access the volume.</p>
-<p>Note that this section describes on the re-entrancy of the FatFs module itself. There is no assumtion on the re-entrancy of low level disk I/O module.</p>
+<p>Note that this section describes on the re-entrancy of the FatFs module itself but also the low level disk I/O layer must be re-entrant.</p>
 </div>
 
 <div class="para" id="dup">
 <h3>Duplicated File Access</h3>
-<p>FatFs module does not support the shareing controls of duplicated file access in default. It is permitted when open method to a file is only read mode. The duplicated open in write mode to a file is always prohibited and open file must not be renamed, deleted, otherwise the FAT structure on the volume can be collapted. Also current directory must not be deleted.</p>
-<p>The file shareing control can also be available when <tt>_FS_SHARE</tt> is set to 1 or grater. In this case, if any open, rename or remove that violating the file shareing rule that described above is attempted, the file function will fail with <tt>FR_LOCKED</tt>.</p>
+<p>FatFs module does not support the shareing controls of duplicated file access in default. It is permitted when open method to a file is only read mode. The duplicated open in write mode to a file is always prohibited and open file must not be renamed, deleted, or the FAT structure on the volume can be collapted.</p>
+<p>The file shareing control can also be available when <tt>_FS_SHARE</tt> is set to 1 or grater. The value specifies the number of files to manage simultaneously. In this case, if any open, rename or remove that violating the file shareing rule that described above is attempted, the file function will fail with <tt>FR_LOCKED</tt>. If number of open files gets larger than <tt>_FS_SHARE</tt>, the f_open function will fail with <tt>FR_TOO_MANY_OPEN_FILES</tt>.</p>
 </div>
 
 <div class="para" id="fs1">
@@ -236,13 +227,13 @@ Figure 5. Minimized critical section<br>
 <h3>About FatFs License</h3>
 <p>This is a copy of the FatFs license document that included in the source codes.</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.08a                    (C)ChaN, 2010
+/  FatFs - FAT file system module  R0.08b                    (C)ChaN, 2011
 /-----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial
 / developments under license policy of following trems.
 /
-/  Copyright (C) 2010, ChaN, all right reserved.
+/  Copyright (C) 2011, ChaN, all right reserved.
 /
 / * The FatFs module is a free software and there is NO WARRANTY.
 / * No restriction on use. You can use, modify and redistribute it for

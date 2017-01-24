@@ -15,16 +15,16 @@
 <h2>FILINFO</h2>
 <p><tt>FILINFO</tt>構造体は、<tt>f_stat(), f_readdir()</tt>で返されるファイル情報を保持します。</p>
 <pre>
-typedef struct {
-    DWORD fsize;     <span>/* ファイル・サイズ */</span>
-    WORD fdate;      <span>/* 最後に更新された日付 */</span>
-    WORD ftime;      <span>/* 最後に更新された時刻  */</span>
-    BYTE fattrib;    <span>/* アトリビュート */</span>
-    TCHAR fname[13]; <span>/* 短いファイル名 (8.3フォーマット) */</span>
-#if _USE_LFN
-    TCHAR* lfname;   <span>/* 長いファイル名のバッファへのポインタ */</span>
-    int lfsize;      <span>/* 長いファイル名のバッファのサイズ [文字数] */</span>
-#endif
+<span class="k">typedef</span> <span class="k">struct</span> {
+    DWORD fsize;     <span class="c">/* ファイル・サイズ */</span>
+    WORD fdate;      <span class="c">/* 最後に更新された日付 */</span>
+    WORD ftime;      <span class="c">/* 最後に更新された時刻  */</span>
+    BYTE fattrib;    <span class="c">/* アトリビュート */</span>
+    TCHAR fname[13]; <span class="c">/* 短いファイル名 (8.3フォーマット) */</span>
+<span class="k">#if</span> _USE_LFN
+    TCHAR* lfname;   <span class="c">/* 長いファイル名のバッファへのポインタ */</span>
+    int lfsize;      <span class="c">/* 長いファイル名のバッファのサイズ [文字数] */</span>
+<span class="k">#endif</span>
 } FILINFO;
 </pre>
 </div>

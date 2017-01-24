@@ -11,19 +11,19 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>disk_ioctl</h2>
 <p>The disk_ioctl function cntrols device specified features and miscellaneous functions other than disk read/write.</p>
 <pre>
 DRESULT disk_ioctl (
-  BYTE <em>Drive</em>,      <span>/* Drive number */</span>
-  BYTE <em>Command</em>,    <span>/* Control command code */</span>
-  void* <em>Buffer</em>     <span>/* Parameter and data buffer */</span>
+  BYTE <em>Drive</em>,      <span class="c">/* Drive number */</span>
+  BYTE <em>Command</em>,    <span class="c">/* Control command code */</span>
+  void* <em>Buffer</em>     <span class="c">/* Parameter and data buffer */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>Parameters</h4>
 <dl class="par">
 <dt>Drive</dt>
@@ -36,7 +36,7 @@ DRESULT disk_ioctl (
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>Return Value</h4>
 <dl class="ret">
 <dt>RES_OK (0)</dt>
@@ -51,7 +51,7 @@ DRESULT disk_ioctl (
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>Description</h4>
 <p>The FatFs module uses only device independent commands described below. Any device dependent function is not used.</p>
 <table class="lst">

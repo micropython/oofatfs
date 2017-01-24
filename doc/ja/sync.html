@@ -11,17 +11,17 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>f_sync</h2>
 <p>書き込み中のファイルのキャッシュされた情報をフラッシュします。</p>
 <pre>
 FRESULT f_sync (
-  FIL* <em>FileObject</em>     <span>/* ファイル・オブジェクト構造体へのポインタ */</span>
+  FIL* <em>FileObject</em>     <span class="c">/* ファイル・オブジェクト構造体へのポインタ */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
@@ -30,36 +30,32 @@ FRESULT f_sync (
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>戻り値</h4>
-<dl class="ret">
-<dt>FR_OK (0)</dt>
-<dd>正常終了。</dd>
-<dt>FR_DISK_ERR</dt>
-<dd>ディスク・エラーによる失敗。</dd>
-<dt>FR_INT_ERR</dt>
-<dd>不正なFAT構造または内部エラーによる失敗。</dd>
-<dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
-<dt>FR_INVALID_OBJECT</dt>
-<dd>ファイル・オブジェクトが無効。</dd>
-</dl>
+<p>
+<a href="rc.html#ok">FR_OK</a>,
+<a href="rc.html#de">FR_DISK_ERR</a>,
+<a href="rc.html#ie">FR_INT_ERR</a>,
+<a href="rc.html#nr">FR_NOT_READY</a>,
+<a href="rc.html#io">FR_INVALID_OBJECT</a>,
+<a href="rc.html#tm">FR_TIMEOUT</a>
+</p>
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>解説</h4>
 <p>この関数は<tt>f_close()</tt>と同じ処理を実行しますが、ファイルは引き続き開かれたままになり、読み書きを続行できます。ロギングなど、書き込みモードで長時間ファイルが開かれているアプリケーションにおいて、定期的または区切りの良いところでこの関数を使用することにより、不意の電源断やメディアの取り外しにより失われるデータを最小にすることができます。実際のところ、<tt>f_close()</tt>内ではこの関数を呼び出した後ファイル・オブジェクトを無効化しているだけなので、<tt>f_close()</tt>直前の<tt>f_sync()</tt>は意味がありません。</p>
 </div>
 
 
-<div class="para">
+<div class="para comp">
 <h4>対応情報</h4>
 <p><tt>_FS_READONLY == 0</tt>のときに使用可能です。</p>
 </div>
 
 
-<div class="para">
+<div class="para ref">
 <h4>参照</h4>
 <p><tt><a href="close.html">f_close</a></tt></p>
 </div>

@@ -13,9 +13,10 @@ p {text-indent: 1em; margin: 0 0 0.3em 0.5em;}
 em {font-style: normal; font-weight: bold; margin: 0 0.1em;}
 pre em {font-style: italic; font-weight: normal;}
 strong {}
-pre {border: 1px dashed gray; margin: 0.5em 1em; padding: 0.5em; line-height: 1.2em; letter-spacing: 0; background-color: white;}
-pre span {color: green;}
-tt {margin: 0 0.2em; letter-spacing: 0;}
+pre {border: 1px dashed gray; margin: 0.5em 1em; padding: 0.5em; line-height: 1.2em; letter-spacing: 0; font-family: monospace; background-color: white;}
+pre span.c {color: green;}
+pre span.k {color: blue;}
+tt {margin: 0 0.2em; letter-spacing: 0; font-family: monospace; }
 ol {margin: 0 2.5em;}
 ul {margin: 0 2em;}
 dl {margin: 0 1em;}
@@ -26,6 +27,7 @@ dd {margin: 0 2em;}
 hr {border-width: 1px; margin: 1em;}
 div.abst {font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif;}
 div.para {clear: both; font-family: "‚l‚r ‚o–¾’©",serif;}
+div.ret a {font-family: monospace; }
 .equ {text-indent: 0; margin: 1em 2em 1em;}
 .indent {margin-left: 2em;}
 .rset {float: right; margin: 0 0 0.5em 0.5em;}
@@ -41,7 +43,7 @@ h1 {line-height: 1em; font-size: 2em; font-family: sans-serif; padding: 0.3em 0 
 p.hdd {float: right; text-align: right; margin-top: 0.5em;}
 hr.hds {clear: both; margin-bottom: 1em;}
 
-h2 {font-size: 1.5em; color: blueviolet; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 0 0 0.5em;}
+h2 {font-size: 1.6em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; background-color: #d8d8FF; padding: 0.2em 0.5em; margin: 0 0 0.5em;}
 h3 {font-size: 1.5em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 1.5em 0 0.5em;}
 h4 {font-size: 1.2em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 1em 0 0.2em;}
 h5 {font-size: 1em; font-family: "‚l‚r ‚oƒSƒVƒbƒN",sans-serif; margin: 0.5em 0 0em;}

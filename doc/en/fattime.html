@@ -11,7 +11,7 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>get_fattime</h2>
 <p>The get_fattime function gets current time.</p>
 <pre>
@@ -20,7 +20,7 @@ DWORD get_fattime (void);
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>Return Value</h4>
 <p>Currnet time is returned with packed into a DWORD value. The bit field is as follows:</p>
 <dl class="ret">
@@ -40,7 +40,7 @@ DWORD get_fattime (void);
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>Description</h4>
 <p>The get_fattime function must return any valid time even if the system does not support a real time clock. If a zero is returned, the file will not have a valid time. This fucntion is not required in read only configuration.</p>
 </div>

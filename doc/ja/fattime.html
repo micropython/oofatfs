@@ -11,7 +11,7 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>get_fattime</h2>
 <p>現在時刻を取得します。</p>
 <pre>
@@ -20,7 +20,7 @@ DWORD get_fattime (void);
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>戻り値</h4>
 <p>現在のローカル・タイムが<tt>DWORD</tt>値にパックされて返されます。ビット・フィールドは次に示すようになります。</p>
 <dl>
@@ -40,7 +40,7 @@ DWORD get_fattime (void);
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>解説</h4>
 <p>RTCをサポートしないシステムでも、何らかの日付として有効な値を返さなければなりません。0を返した場合、そのファイルは日付を持ちません。リード・オンリー構成ではこの関数は必要とされません。</p>
 </div>

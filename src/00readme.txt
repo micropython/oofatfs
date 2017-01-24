@@ -1,4 +1,4 @@
-FatFs Module Source Files R0.08a                       (C)ChaN, 2010
+FatFs Module Source Files R0.08b                       (C)ChaN, 2011
 
 
 FILES
@@ -23,7 +23,7 @@ AGREEMENTS
  small embedded systems. This is a free software and is opened for education,
  research and commercial developments under license policy of following trems.
 
-  Copyright (C) 2010, ChaN, all right reserved.
+  Copyright (C) 2011, ChaN, all right reserved.
 
  * The FatFs module is a free software and there is NO WARRANTY.
  * No restriction on use. You can use, modify and redistribute it for
@@ -121,3 +121,7 @@ REVISION HISTORY
                        Fixed a wrong directory entry is created on non-LFN cfg when the given name contains ';'.
                        Fixed f_mkfs() creates wrong FAT32 volume.
 
+  Jan 15,'11 R0.08b    Fast seek feature is also applied to f_read() and f_write().
+                       f_lseek() reports required table size on creating CLMP.
+                       Extended format syntax of f_printf function.
+                       Ignores duplicated directory separators in given path names.

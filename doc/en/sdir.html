@@ -15,19 +15,19 @@
 <h2>DIR</h2>
 <p>The <tt>DIR</tt> structure is used for the work area to read a directory by f_oepndir, f_readdir function. There is no member that can be changed by application.</p>
 <pre>
-typedef struct {
-    FATFS*  fs;         <span>/* Pointer to the owner file system object */</span>
-    WORD    id;         <span>/* Owner file system mount ID */</span>
-    WORD    index;      <span>/* Directory index number to be read/write next */</span>
-    DWORD   sclust;     <span>/* Table start cluster (0:Root dir) */</span>
-    DWORD   clust;      <span>/* Current cluster */</span>
-    DWORD   sect;       <span>/* Current sector */</span>
-    BYTE*   dir;        <span>/* Pointer to the current SFN entry in the win[] */</span>
-    BYTE*   fn;         <span>/* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */</span>
-#if _USE_LFN
-    WCHAR*  lfn;        <span>/* Pointer to the LFN working buffer */</span>
-    WORD    lfn_idx;    <span>/* Last matched LFN index (0xFFFF:No LFN) */</span>
-#endif
+<span class="k">typedef</span> <span class="k">struct</span> {
+    FATFS*  fs;         <span class="c">/* Pointer to the owner file system object */</span>
+    WORD    id;         <span class="c">/* Owner file system mount ID */</span>
+    WORD    index;      <span class="c">/* Directory index number to be read/write next */</span>
+    DWORD   sclust;     <span class="c">/* Table start cluster (0:Root dir) */</span>
+    DWORD   clust;      <span class="c">/* Current cluster */</span>
+    DWORD   sect;       <span class="c">/* Current sector */</span>
+    BYTE*   dir;        <span class="c">/* Pointer to the current SFN entry in the win[] */</span>
+    BYTE*   fn;         <span class="c">/* Pointer to the SFN (in/out) {file[8],ext[3],status[1]} */</span>
+<span class="k">#if</span> _USE_LFN
+    WCHAR*  lfn;        <span class="c">/* Pointer to the LFN working buffer */</span>
+    WORD    lfn_idx;    <span class="c">/* Last matched LFN index (0xFFFF:No LFN) */</span>
+<span class="k">#endif</span>
 } DIR;
 </pre>
 </div>

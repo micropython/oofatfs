@@ -11,17 +11,17 @@
 
 <body>
 
-<div class="para">
+<div class="para func">
 <h2>f_close</h2>
 <p>The f_close function closes an open file.</p>
 <pre>
 FRESULT f_close (
-  FIL* <em>FileObject</em>     <span>/* Pointer to the file object structure */</span>
+  FIL* <em>FileObject</em>     <span class="c">/* Pointer to the file object structure */</span>
 );
 </pre>
 </div>
 
-<div class="para">
+<div class="para arg">
 <h4>Parameter</h4>
 <dl class="par">
 <dt>FileObject</dt>
@@ -30,36 +30,32 @@ FRESULT f_close (
 </div>
 
 
-<div class="para">
+<div class="para ret">
 <h4>Return Values</h4>
-<dl class="ret">
-<dt>FR_OK (0)</dt>
-<dd>The file object has been closed successfuly.</dd>
-<dt>FR_DISK_ERR</dt>
-<dd>The function failed due to an error in the disk function.</dd>
-<dt>FR_INT_ERR</dt>
-<dd>The function failed due to a wrong FAT structure or an internal error.</dd>
-<dt>FR_NOT_READY</dt>
-<dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
-<dt>FR_INVALID_OBJECT</dt>
-<dd>The file object is invalid.</dd>
-</dl>
+<p>
+<a href="rc.html#ok">FR_OK</a>,
+<a href="rc.html#de">FR_DISK_ERR</a>,
+<a href="rc.html#ie">FR_INT_ERR</a>,
+<a href="rc.html#nr">FR_NOT_READY</a>,
+<a href="rc.html#io">FR_INVALID_OBJECT</a>,
+<a href="rc.html#tm">FR_TIMEOUT</a>
+</p>
 </div>
 
 
-<div class="para">
+<div class="para desc">
 <h4>Description</h4>
 <p>The f_close function closes an open file object. If any data has been written to the file, the cached information of the file is written back to the disk. After the function succeeded, the file object is no longer valid and it can be discarded.</p>
 </div>
 
 
-<div class="para">
+<div class="para comp">
 <h4>QuickInfo</h4>
 <p>Always available.</p>
 </div>
 
 
-<div class="para">
+<div class="para ref">
 <h4>See Also</h4>
 <p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="write.html">f_write</a>,  <a href="sync.html">f_sync</a>, <a href="sfile.html">FIL</a>, <a href="sfatfs.html">FATFS</a></tt></p>
 </div>
