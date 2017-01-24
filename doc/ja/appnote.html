@@ -44,15 +44,17 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <h4>システム構成</h4>
 <p>下に示す依存関係図は、FatFsモジュール利用の組み込みシステムにおける代表的な構成を示します。</p>
 <p><img src="../img/modules.png" width="580" height="280" alt="システム構成図"></p>
+<p>(a) FatFs用に書かれたディスク・モジュールがある場合は、そのまま接続するだけです。 (b) しかし、多くの既存のディスク・モジュールはそのAPIをFatFsに合わせるため、グルー関数が必要になるでしょう。</p>
+<p><img src="../img/funcs.png" width="680" height="450" alt="functional diagram"></p>
 
 <h4>ユーザの作成する関数</h4>
 <p>必要なのは FatFsモジュールの要求するディスク関数を用意することだけで、それ以外にすることはありません。既に動作しているディスク関数があるなら、その APIを FatFsに合わせるかグルー関数でつなぐだけで済みますが、無い場合はほかから移植するか最初から書くかする必要があります。定義されている全ての関数が常に必要なわけではありません。例えば、リード・オンリー構成では書き込み系関数は必要ありません。次の表に構成オプションと要求される関数の対応を示します。</p>
 <table class="lst2">
 <tr><th>ユーザ作成関数</th><th>必要となる条件</th><th>備考</th></tr>
-<tr><td>disk_initialize<br>disk_status<br>disk_read</td><td>常時</td><td rowspan="5">ffsample.zip (サンプル)<br>その他web上に多数</td></tr>
+<tr><td>disk_status<br>disk_initialize<br>disk_read</td><td>常時</td><td rowspan="5">ffsample.zip (サンプル)<br>その他web上に多数</td></tr>
 <tr><td>disk_write<br>get_fattime<br>disk_ioctl (CTRL_SYNC)</td><td>_FS_READONLY == 0</td></tr>
 <tr><td>disk_ioctl (GET_SECTOR_COUNT)<br>disk_ioctl (GET_BLOCK_SIZE)</td><td>_USE_MKFS == 1</td></tr>
-<tr><td>disk_ioctl (GET_SECTOR_SIZE)</td><td>_MAX_SS &gt;= 1024</td></tr>
+<tr><td>disk_ioctl (GET_SECTOR_SIZE)</td><td>_MAX_SS != _MIN_SS</td></tr>
 <tr><td>disk_ioctl (CTRL_ERASE_SECTOR)</td><td>_USE_ERASE == 1</td></tr>
 <tr><td>ff_convert<br>ff_wtoupper</td><td>_USE_LFN &gt;= 1</td><td>option/cc*.c</td></tr>
 <tr><td>ff_cre_syncobj<br>ff_rel_grant<br>ff_req_grant<br>ff_del_syncobj</td><td>_FS_REENTRANT == 1</td><td rowspan="2">option/syscall.c (サンプル)</td></tr>
@@ -69,7 +71,7 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <li>ファイル・サイズ: FAT規格に依存。(最大 4G-1バイト)</li>
 <li>ボリューム・サイズ: FAT規格に依存。(最大 2Tバイト(512バイト/セクタ時))</li>
 <li>クラスタ・サイズ: FAT規格に依存。(最大 64Kバイト(512バイト/セクタ時))</li>
-<li>セクタ・サイズ: FAT規格に依存。(最大 4Kバイト)</li>
+<li>セクタ・サイズ: FAT規格に依存。(512～4096バイト)</li>
 </ul>
 </div>
 
@@ -78,33 +80,33 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <p>次の表にいくつかのターゲットにおけるメモリ使用量の例を示します。テスト時の構成オプションはその下の通りです。数値の単位はバイトで、<em>V</em>はボリューム数、<em>F</em>は同時オープン・ファイル数を示します。コンパイラの最適化オプションはコード・サイズとしています。</p>
 <table class="lst2">
 <tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>CM3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
-<tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
-<tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         *RL78       *V850ES       *SH-2A       *RX600       *IA-32   -->
-<tr class="lst3"><td>text (Full, R/W)</td><td>10591</td><td>7119</td><td>6565</td><td>13240</td><td>10864</td><td>11619</td><td>13192</td><td>8031</td><td>8960</td><td>5977</td><td>7856</td></tr>
-<tr>             <td>text (Min, R/W)</td>  <td>6671</td><td>4595</td><td>4293</td> <td>8512</td> <td>7232</td> <td>7674</td> <td>9033</td><td>5235</td><td>5768</td><td>3923</td><td>5129</td></tr>
-<tr>             <td>text (Full, R/O)</td> <td>4695</td><td>3121</td><td>2861</td> <td>6218</td> <td>5162</td> <td>5466</td> <td>6418</td><td>3799</td><td>3964</td><td>2847</td><td>3687</td></tr>
-<tr>             <td>text (Min, R/O)</td>  <td>3523</td><td>2463</td><td>2275</td> <td>4558</td> <td>4058</td> <td>4212</td> <td>4948</td><td>2959</td><td>3096</td><td>2199</td><td>2857</td></tr>
-<tr>             <td>bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
-<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
+<tr class="cal">     <td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
+<tr class="cal">     <td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+<!--                                                          ARM           Thumb        CM3          AVR           H8            PIC24         RL78          V850ES       SH-2A        RX600        IA-32   -->
+<tr class="lst3 ral"><td class="cal">text (Full, R/W)</td><td>10675</td><td>7171</td><td>6617</td><td>13355</td><td>10940</td><td>11722</td><td>13262</td><td>8113</td><td>9048</td><td>6032</td><td>7952</td></tr>
+<tr class="ral">     <td class="cal">text (Min, R/W)</td>  <td>6727</td><td>4631</td><td>4331</td> <td>8569</td> <td>7262</td> <td>7720</td> <td>9088</td><td>5287</td><td>5800</td><td>3948</td><td>5183</td></tr>
+<tr class="ral">     <td class="cal">text (Full, R/O)</td> <td>4731</td><td>3147</td><td>2889</td> <td>6235</td> <td>5170</td> <td>5497</td> <td>6482</td><td>3833</td><td>3972</td><td>2862</td><td>3719</td></tr>
+<tr class="ral">     <td class="cal">text (Min, R/O)</td>  <td>3559</td><td>2485</td><td>2295</td> <td>4575</td> <td>4064</td> <td>4240</td> <td>5019</td><td>2993</td><td>3104</td><td>2214</td><td>2889</td></tr>
+<tr class="ral">     <td class="cal">bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
+<tr class="ral">     <td class="cal">Work area<br>(_FS_TINY == 0)</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*544</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*544</td><td>V*560<br>+ F*544</td><td>V*560<br>+ F*544</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*550</td><td>V*560<br>+ F*550</td></tr>
+<tr class="ral">     <td class="cal">Work area<br>(_FS_TINY == 1)</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*32</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*32</td><td>V*560<br>+ F*32</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*36</td><td>V*560<br>+ F*36</td></tr>
 </table>
 <pre>
-FatFs R0.10 options:
-_FS_READONLY     0 (R/W), 1 (R/O)
-_FS_MINIMIZE     0 (Full function), 3 (Minimized function)
+FatFs R0.10a options:
+_FS_READONLY     0 (R/W) or 1 (R/O)
+_FS_MINIMIZE     0 (Full function) or 3 (Minimized function)
 _USE_STRFUNC     0 (Disable string functions)
 _USE_MKFS        0 (Disable f_mkfs function)
 _USE_FORWARD     0 (Disable f_forward function)
 _USE_FASTSEEK    0 (Disable fast seek feature)
 _CODE_PAGE       932 (Japanese Shift-JIS)
-_USE_LFN         0 (Disable LFN)
+_USE_LFN         0 (Disable LFN feature)
 _MAX_SS          512 (Fixed sector size)
 _FS_RPATH        0 (Disable relative path feature)
 _FS_LABEL        0 (Disable volume label functions)
 _VOLUMES         V (Number of logical drives to be used)
 _MULTI_PARTITION 0 (Single partition per drive)
-_FS_REENTRANT    0 (Disable reentrancy)
+_FS_REENTRANT    0 (Disable thread safe)
 _FS_LOCK         0 (Disable file lock control)
 </pre>
 </div>
@@ -186,7 +188,7 @@ _FS_LOCK         0 (Disable file lock control)
 <div class="para" id="dup">
 <h3>多重ファイル・アクセス</h3>
 <p>FatFsモジュールではデフォルトでは多重アクセス制御機能をサポートしていません。ファイルに対する多重アクセスは、そのアクセス・モードによって制限されます。一つのファイルに対する多重オープンは、それらが全てリード・モードのときに限って許可されます。書き込みモードを含む多重オープン、また開かれているファイルに対するリネームや削除を行ってはなりません。さもないと、そのボリュームのFAT構造が破壊される可能性があります。</p>
-<p><tt>_FS_LOCK</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位のアクセス制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。また、<tt>_FS_LOCK</tt>を越える数のファイルやディレクトリを同時にオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
+<p><tt>_FS_LOCK</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位のアクセス制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。また、<tt>_FS_LOCK</tt>を越える数のファイルやサブ・ディレクトリを同時にオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
 </div>
 
 <div class="para" id="fs1">
@@ -249,6 +251,7 @@ _FS_LOCK         0 (Disable file lock control)
 <li><a href="../img/app1.c">追記モードでのオープン/新規作成</a></li>
 <li><a href="../img/app2.c">ディレクトリを空にする</a></li>
 <li><a href="../img/app3.c">ファイルに連続領域を割り当てる</a></li>
+<li><a href="../img/app4.c">ディスクI/Oモジュールの機能/互換性チェッカー</a></li>
 </ol>
 </div>
 
@@ -256,13 +259,13 @@ _FS_LOCK         0 (Disable file lock control)
 <h3>FatFsのライセンスについて</h3>
 <p>ソース・ファイルのヘッダにライセンス条件が記述されているので、利用の際はそれに従うこと。英語を読めない方のために以下に日本語訳を示しておきます。</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.10                    (C)ChaN, 2013
+/  FatFs - FAT file system module  R0.10a                   (C)ChaN, 2014
 /-----------------------------------------------------------------------------/
 / FatFsモジュールは、小規模な組み込みシステム向けの汎用FATファイルシステム・
 / モジュールです。これはフリー・ソフトウェアとして、教育・研究・開発のために
 / 以下のライセンス・ポリシーの下で公開されています。
 /
-/  Copyright (C) 2013, ChaN, all right reserved.
+/  Copyright (C) 2014, ChaN, all right reserved.
 /
 / * FatFsモジュールはフリー・ソフトウェアであり、また<em>無保証です</em>。
 / * 用途に制限はありません。<em>あなたの責任の下において</em>、個人的・非営利的な

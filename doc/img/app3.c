@@ -6,7 +6,7 @@
 / If the file has been opened without FA_WRITE flag, it only checks if
 / the file is contiguous and returns the resulut. */
 
-#if _FATFS != 80960 /* Check if R0.10 */
+#if _FATFS != 29000 /* Check if R0.10a */
 #error This function may not be compatible with this revision of FatFs module.
 #endif
 
@@ -96,7 +96,7 @@ int main (void)
 
     /* Now you can read/write the file with disk functions bypassing the file system layer. */
 
-    dr = disk_write(fil.fs->drv, Buff, org, 1024);   /* Write 512Ki bytes from top of the file */
+    dr = disk_write(fil.fs->drv, Buff, org, 1024);   /* Write 512KiB from top of the file */
 
     ...
 

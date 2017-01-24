@@ -35,6 +35,7 @@
 <tr><td>dir1/..</td><td>Invalid name</td><td>The current directory</td></tr>
 <tr><td>/..</td><td>Invalid name</td><td>The root directory (sticks the top level)</td></tr>
 </table>
+<p>When option <tt>_STR_VOLUME_ID</tt> is specified, also pre-defined strings can be used as drive identifier in the path name instead of a numeral.</p>
 </div>
 
 <p><br></p>
@@ -63,12 +64,13 @@ PARTITION VolToPart[] = {
     {0, 3},     <span class="c">/* Logical drive 2 ==> Physical drive 0, 3rd partition */</span>
     {1, 0}      <span class="c">/* Logical drive 3 ==> Physical drive 1 (auto detection) */</span>
 };
-</pre>
+
 <img src="../img/f7.png" width="828" height="288" alt="relationship between logical drive and physical drive">
+</pre>
 <p>There are some considerations on using <tt>_MULTI_PARTITION</tt> configuration.</p>
 <ul>
 <li>Only four primary partitions can be specified. Logical partition is not supported.</li>
-<li>The physical drive that has two or more partitions must be non-removable class.</li>
+<li>The physical drive that has two or more mounted partitions must be non-removable. Media change while a system operation is prohibited.</li>
 </ul>
 </div>
 

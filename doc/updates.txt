@@ -1,3 +1,12 @@
+R0.10a, Jan 15,'14
+  Added arbitrary strings as drive number in the path name. (_STR_VOLUME_ID)
+  Added a configuration option of minimum sector size. (_MIN_SS)
+  2nd argument of f_rename() can have a drive number and it will be ignored.
+  Fixed f_mount() with forced mount fails when drive number is >= 1.
+  Fixed f_close() invalidates the file object without volume lock.
+  Fixed f_closedir() returns but the volume lock is left acquired.
+  Fixed creation of an entry with LFN fails on too many SFN collisions.
+
 R0.10, Oct 02,'13
   Added selection of character encoding on the file. (_STRF_ENCODE)
   Added f_closedir().

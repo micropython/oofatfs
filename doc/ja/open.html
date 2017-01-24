@@ -103,15 +103,15 @@ int main (void)
     f_mount(&amp;FatFs, "", 0);
 
     <span class="c">/* テキスト・ファイルを開く */</span>
-    fr = f_open(&fil, "message.txt", FA_READ);
+    fr = f_open(&amp;fil, "message.txt", FA_READ);
     if (fr) return (int)fr;
 
     <span class="c">/* 1行ずつ読み出して表示 */</span>
-    while (f_gets(line, sizeof line, &fil))
+    while (f_gets(line, sizeof line, &amp;fil))
         printf(line);
 
     <span class="c">/* ファイルを閉じる */</span>
-    f_close(&fil);
+    f_close(&amp;fil);
 
     return 0;
 }

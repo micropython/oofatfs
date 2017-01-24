@@ -39,7 +39,7 @@ FRESULT f_chmod (
 </table>
 </dd>
 <dt>mask</dt>
-<dd>Attribute mask that specifies which attribute is changed. The specified aattributes are set or cleard.</dd>
+<dd>Attribute mask that specifies which attribute is changed. The specified attributes are set or cleard and others are left unchanged.</dd>
 </dl>
 </div>
 
@@ -79,7 +79,7 @@ FRESULT f_chmod (
 <div class="para use">
 <h4>Example</h4>
 <pre>
-    <span class="c">/* Set read-only flag, clear archive flag and others are retained. */</span>
+    <span class="c">/* Set read-only flag, clear archive flag and others are left unchanged. */</span>
     f_chmod("file.txt", AR_RDO, AR_RDO | AR_ARC);
 </pre>
 </div>

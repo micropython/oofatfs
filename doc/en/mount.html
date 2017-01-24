@@ -60,7 +60,7 @@ FRESULT f_mount (
 <p>If forced mount is not specified, this function always succeeds regardless of the physical drive status due to delayed mount feature. It only clears (de-initializes) the given work area and registers its address to the internal table. No activity of the physical drive in this function. It can also be used to force de-initialized the registered work area of a logical drive. The volume mount processes, initialize the corresponding physical drive, find the FAT volume in it and initialize the work area, is performed in the subsequent file access functions when either or both of following condition is true.</p>
 <ul>
 <li>File system object is not initialized. It is cleared by <tt>f_mount()</tt>.</li>
-<li>Physical drive is not initialized. It is de-initialized by system reset or media removal.</li>
+<li>Physical drive is not initialized. It is de-initialized by system reset or media change.</li>
 </ul>
 <p>If the function with forced mount failed, it means that the file system object is registered but the volume is currently not available. Mount process will also be attempted in subsequent file access functions.</p>
 <p>If implementation of the disk I/O layer lacks media change detection, application program needs to perform a <tt>f_mount()</tt> after media change to force cleared the file system object.</p>
