@@ -35,7 +35,7 @@ FRESULT f_open (
 <tr><th>値</th><th>意味</th></td>
 <tr><td>FA_READ</td><td>読み出しモードで開きます。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
 <tr><td>FA_WRITE</td><td>書き込みモードで開きます。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
-<tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。</td></tr>
+<tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。(デフォルト)</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。</td></tr>
 <tr><td>FA_CREATE_NEW</td><td>ファイルを作成します。同名のファイルがある場合は、エラーになります。</td></tr>
 <tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。同名のファイルがある場合は、サイズを0にしてから開きます。</td></tr>
@@ -93,9 +93,9 @@ void main ()
     FIL fsrc, fdst;      // ファイル・オブジェクト
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
-    WORD br, bw;         // File R/W count
+    UINT br, bw;         // File R/W count
 
-    // ドライブ0にワーク・エリアを与える
+    // ドライブ0のワーク・エリアを与える
     f_mount(0, &fs);
 
     // ソース・ファイルを開く

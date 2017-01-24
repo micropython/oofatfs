@@ -15,10 +15,10 @@
 <p>ファイルからデータを読み出します。</p>
 <pre>
 FRESULT f_read (
-  FIL* <em>FileObject</em>,    // ファイル・オブジェクト構造体
-  void* <em>Buffer</em>,       // 読み出したデータを格納するバッファ
-  WORD <em>ByteToRead</em>,    // 読み出すバイト数
-  WORD* <em>ByteRead</em>      // 読み出されたバイト数
+  FIL* <em>FileObject</em>,    /* ファイル・オブジェクト構造体 */
+  void* <em>Buffer</em>,       /* 読み出したデータを格納するバッファ */
+  UINT <em>ByteToRead</em>,    /* 読み出すバイト数 */
+  UINT* <em>ByteRead</em>      /* 読み出されたバイト数 */
 );
 </pre>
 </div>
@@ -31,7 +31,7 @@ FRESULT f_read (
 <dt>Buffer</dt>
 <dd>読み出したデータを格納するバッファを指すポインタを指定します。</dd>
 <dt>ByteToRead</dt>
-<dd>読み出すバイト数(0～65535)を指定します。</dd>
+<dd>読み出すバイト数(0～UINTの最大値)を指定します。</dd>
 <dt>ByteRead</dt>
 <dd>実際に読み出されたバイト数を格納する変数を指すポインタを指定します。</dd>
 </dt>

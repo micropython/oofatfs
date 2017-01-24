@@ -35,7 +35,7 @@ FRESULT f_open (
 <tr><th>Value</th><th>Description</th></tr>
 <tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file.<br>Combine with FA_WRITE for read-write access.</td></tr>
 <tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file.<br>Combine with FA_READ for read-write access.</td></tr>
-<tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing.</td></tr>
+<tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing. (Default)</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>Opens the file, if it is existing. If not, the function creates the new file.</td></tr>
 <tr><td>FA_CREATE_NEW</td><td>Creates a new file. The function fails if the file is already existing.</td></tr>
 <tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
@@ -93,10 +93,10 @@ void main ()
     FIL fsrc, fdst;      // file objects
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
-    WORD br, bw;         // File R/W count
+    UINT br, bw;         // File R/W count
 
 
-    // Register a work area to logical drive 0
+    // Register a work area for logical drive 0
     f_mount(0, &fs);
 
     // Open source file
@@ -110,7 +110,7 @@ void main ()
     // Copy source to destination
     for (;;) {
         res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-        if (res || br == 0) break;      // error or eof
+        if (res || br == 0) break;   // error or eof
         res = f_write(&fdst, buffer, br, &bw);
         if (res || bw &lt; br) break;   // error or disk full
     }

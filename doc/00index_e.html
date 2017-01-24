@@ -14,20 +14,20 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>FatFs module is an experimental project to implement a FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into most 8-bit microcontrollers, such as 8051, PIC, AVR, H8, Z80 and etc..., without any change. I created two modules in different configurations in consideration of various use.</p>
+<p>FatFs module is an experimental project to implement the FAT file system to small embedded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into cheap microcontrollers, such as 8051, PIC, AVR, SH, Z80, H8, ARM and etc..., without any change.</p>
 
 <h4>Features of FatFs Module</h4>
 <ol>
  <li>Separated buffer for FAT structure and each file, suitable for fast multiple file accsess.</li>
  <li>Supports multiple drives/partitions.</li>
- <li>Supports FAT12, FAT16(+FAT64) and FAT32. <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
- <li>Supports 8.3 format file name and NT lower case flag. (LFN is not supported)</li>
+ <li>Supports FAT12, FAT16 and FAT32.</li>
+ <li>Supports 8.3 format file name. (LFN is not supported)</li>
  <li>Supports two partitioning rules: FDISK and Super-floppy.</li>
  <li>Optimized for 8/16-bit microcontrollers.</li>
 </ol>
 <h4>Features of Tiny-FatFs Module (different to FatFs)</h4>
 <ol>
- <li>Very low memory consumption, suitable for small memory system. (RAM:1KB)</li>
+ <li>Very low memory consumption, suitable for small memory system. (1KB RAM)</li>
  <li>Supports only single drive.</li>
 </ol>
 </div>
@@ -59,7 +59,7 @@
 
 <div class="para">
 <h3>Disk I/O Interface</h3>
-<p>Since the FatFs/Tiny-FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time. These functions must be provided by user. The low level disk I/O module that have this interace must be provided by user. The sample projects are also available.</p>
+<p>Since the FatFs/Tiny-FatFs module is completely separated from disk I/O layer, it requires following functions to lower layer to read/write physical disk and to get current time. The low level disk I/O module with this interface must be provided by user. The sample drivers are also available in the next resources.</p>
 <ul>
 <li><a href="en/dinit.html">disk_initialize</a> - Initialize disk drive</li>
 <li><a href="en/dstat.html">disk_status</a> - Get disk status</li>
@@ -75,7 +75,6 @@
 <h3>Resources</h3>
 <p>The FatFs/Tiny-FatFs module is a free software and is opened for education, research and development. You can use, modify and/or republish it for personal, non-profit or profit use without any restriction under your responsibility.</p>
 <ul>
-<li><a href="http://elm-chan.org/fsw/ff/00index_e.html">FatFs home page</a></li>
 <li><a href="en/appnote.html">FatFs module application note</a></li>
 <li><a href="img/rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="img/rw_mmc.jpeg">MMC</a>/<a href="img/rw_ata.jpeg">HDD</a>/<a href="img/rw_cfc.jpeg">CFC</a>)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification</a> (Microsoft)</li>

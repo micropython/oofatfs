@@ -14,13 +14,13 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, H8, Z80などほとんどの8ビット・マイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高機能版（<strong>FatFs</strong>）と省メモリ版（<strong>Tiny-FatFs</strong>）の2通りを作成してみました。</p>
+<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, SH, Z80, H8, ARMなど安価なマイコンでそのまま使用可能です。</p>
 <h4>FatFsの特徴</h4>
 <ol>
  <li>ファイル・システム用とファイルI/O用バッファを分離し、複数ファイルの高速アクセスに適する</li>
- <li>複数のドライブ・パーテーションをサポート</li>
- <li>FAT12, FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
- <li>8.3形式ファイル名とNT小文字フラグに対応(LFN未対応)</li>
+ <li>複数ドライブ、複数パーテーションをサポート</li>
+ <li>FAT12, FAT16, FAT32に対応</li>
+ <li>8.3形式ファイル名に対応(LFN未対応)</li>
  <li>FDISKフォーマットおよびSFDフォーマットに対応</li>
  <li>8/16ビットマイコン向けにコードを最適化</li>
 </ol>
@@ -58,7 +58,7 @@
 
 <div class="para">
 <h3>下位レイヤI/F</h3>
-<p>FatFs/Tiny-FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。これらのインターフェースを持つそれぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザにより用意する必要があります。（サンプルもあり）</p>
+<p>FatFs/Tiny-FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。これらのインターフェースを持つそれぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザにより用意する必要があります。資料にサンプル・ドライバあり。</p>
 <ul>
 <li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
 <li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
@@ -74,7 +74,6 @@
 <h3>資料</h3>
 <p>FatFs/Tiny-FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
 <ul>
-<li><a href="http://elm-chan.org/fsw/ff/00index_j.html">FatFsホームページ</a></li>
 <li><a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a></li>
 <li><a href="img/rwtest.png">パフォーマンス・テスト</a>（テスト・ボード：ATmega64/9.2MHz with <a href="img/rw_mmc.jpeg">MMC</a>/<a href="img/rw_ata.jpeg">HDD</a>/<a href="img/rw_cfc.jpeg">CFC</a>）</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32仕様書</a> (Microsoft)</li>

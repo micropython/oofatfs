@@ -17,7 +17,7 @@
 FRESULT f_mkfs (
   BYTE  <em>Drive</em>,            /* Logical drive number */
   BYTE  <em>PartitioningRule</em>, /* Partitioning rule */
-  BYTE  <em>AllocSize</em>         /* Allocation unit size */
+  WORD  <em>AllocSize</em>         /* Allocation unit size */
 );
 </pre>
 </div>
@@ -30,7 +30,7 @@ FRESULT f_mkfs (
 <dt>PartitioningRule</dt>
 <dd>When 0 is given, a partition table is created into first sector on the drive and then the file system is created on the partition. This is called FDISK format. When 1 is given, the file system starts from the first sector without partition table. This is often called super floppy (SFD) format.</dd>
 <dt>AllocSize</dt>
-<dd>Specifies allocation unit size (number of sectors per cluster). The value must be power of 2 in range of from 1 to 64.</dd>
+<dd>Specifies allocation unit size (number of bytes per cluster). The value must be power of 2 in range of from 512 to 32768.</dd>
 </dl>
 </div>
 
@@ -62,8 +62,8 @@ FRESULT f_mkfs (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mkfs function creates a FAT file system on the drive. There are two partitioning rules, FDISK and SFD, for removable media. It can be selected with a parameter and FDISK format is recommended for most case. This function currently does not support multiple partition, so that existing partitions on the physical dirve will be deleted and re-created a partition occupies entire disk space.</p>
-<p>The FAT type, FAT12/FAT16/FAT32, is determined by only how many clusters on the drive and nothing else, according to FAT specification. Thus which FAT type is selected, is depends on the drive size and specified cluster size. The cluster size affects performance of file system and large cluster increases the performance, so that 64 sectors per cluster is recommended except for small drive.</p>
+<p>The f_mkfs function creates a FAT file system on the drive. There are two partitioning rules, FDISK and SFD, for removable media. It can be selected with an argument. The FDISK format is recommended for most case. This function currently does not support multiple partition, so that existing partitions on the physical dirve will be deleted and re-created a partition occupies entire disk space.</p>
+<p>The FAT type, FAT12/FAT16/FAT32, is determined by only how many clusters on the drive and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT type is selected, is depends on the drive size and specified cluster size. The cluster size affects performance of file system and large cluster increases the performance, so that 32768 bytes per cluster is recommended for most case except for small drive.</p>
 <p>This function is supported on only FatFs with _USE_MKFS option.<p>
 </div>
 

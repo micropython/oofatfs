@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.04b                    (C)ChaN, 2007
+/  FatFs - FAT file system module  R0.05                     (C)ChaN, 2007
 /---------------------------------------------------------------------------/
 / The FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -35,6 +35,9 @@
 /                       Added FSInfo support.
 /                       Fixed DBCS name can result FR_INVALID_NAME.
 /                       Fixed short seek (<= csize) collapses the file object.
+/  Aug 25, 2007  R0.05  Changed arguments of f_read(), f_write() and f_mkfs().
+/                       Fixed f_mkfs() on FAT32 creates incorrect FSInfo.
+/                       Fixed f_mkdir() on FAT32 creates incorrect directory.
 /---------------------------------------------------------------------------*/
 
 #include <string.h>
@@ -109,7 +112,8 @@ FRESULT sync (          /* FR_OK: successful, FR_RW_ERROR: failed */
     fs->winflag = 1;
     if (!move_window(fs, 0)) return FR_RW_ERROR;
 #if _USE_FSINFO
-    if (fs->fs_type == FS_FAT32 && fs->fsi_flag) {      /* Update FSInfo sector if needed */
+    /* Update FSInfo sector if needed */
+    if (fs->fs_type == FS_FAT32 && fs->fsi_flag) {
         fs->winsect = 0;
         memset(fs->win, 0, 512);
         ST_WORD(&fs->win[BS_55AA], 0xAA55);
@@ -117,10 +121,11 @@ FRESULT sync (          /* FR_OK: successful, FR_RW_ERROR: failed */
         ST_DWORD(&fs->win[FSI_StrucSig], 0x61417272);
         ST_DWORD(&fs->win[FSI_Free_Count], fs->free_clust);
         ST_DWORD(&fs->win[FSI_Nxt_Free], fs->last_clust);
-        disk_write(0, fs->win, fs->fsi_sector, 1);
+        disk_write(fs->drive, fs->win, fs->fsi_sector, 1);
         fs->fsi_flag = 0;
     }
 #endif
+    /* Make sure that no pending write process in the physical drive */
     if (disk_ioctl(fs->drive, CTRL_SYNC, NULL) != RES_OK) return FR_RW_ERROR;
     return FR_OK;
 }
@@ -601,7 +606,7 @@ BYTE check_fs (     /* 0:The FAT boot record, 1:Valid boot record but not an FAT
 {
     if (disk_read(fs->drive, fs->win, sect, 1) != RES_OK)   /* Load boot record */
         return 2;
-    if (LD_WORD(&fs->win[BS_55AA]) != 0xAA55)               /* Check record signature (always offset 510) */
+    if (LD_WORD(&fs->win[BS_55AA]) != 0xAA55)               /* Check record signature (always placed at offset 510 even if the sector size is >512) */
         return 2;
 
     if (!memcmp(&fs->win[BS_FilSysType], "FAT", 3))         /* Check FAT signature */
@@ -623,7 +628,7 @@ static
 FRESULT auto_mount (        /* FR_OK(0): successful, !=0: any error occured */
     const char **path,      /* Pointer to pointer to the path name (drive number) */
     FATFS **rfs,            /* Pointer to pointer to the found file system object */
-    BYTE chk_wp             /* !=0: Check media write protection for wrinting fuctions */
+    BYTE chk_wp             /* !=0: Check media write protection for write access */
 )
 {
     BYTE drv, fmt, *tbl;
@@ -639,7 +644,7 @@ FRESULT auto_mount (        /* FR_OK(0): successful, !=0: any error occured */
     if (drv <= 9 && p[1] == ':')
         p += 2;         /* Found a drive number, get and strip it */
     else
-        drv = 0;        /* No drive number is given, select drive 0 in default */
+        drv = 0;        /* No drive number is given, use drive number 0 as default */
     if (*p == '/') p++; /* Strip heading slash */
     *path = p;          /* Return pointer to the path name */
 
@@ -720,7 +725,7 @@ FRESULT auto_mount (        /* FR_OK(0): successful, !=0: any error occured */
     /* Load fsinfo sector if needed */
     if (fmt == FS_FAT32) {
         fs->fsi_sector = bootsect + LD_WORD(&fs->win[BPB_FSInfo]);
-        if (disk_read(0, fs->win, fs->fsi_sector, 1) == RES_OK &&
+        if (disk_read(fs->drive, fs->win, fs->fsi_sector, 1) == RES_OK &&
             LD_WORD(&fs->win[BS_55AA]) == 0xAA55 &&
             LD_DWORD(&fs->win[FSI_LeadSig]) == 0x41615252 &&
             LD_DWORD(&fs->win[FSI_StrucSig]) == 0x61417272) {
@@ -893,20 +898,20 @@ FRESULT f_open (
 FRESULT f_read (
     FIL *fp,        /* Pointer to the file object */
     void *buff,     /* Pointer to data buffer */
-    WORD btr,       /* Number of bytes to read */
-    WORD *br        /* Pointer to number of bytes read */
+    UINT btr,       /* Number of bytes to read */
+    UINT *br        /* Pointer to number of bytes read */
 )
 {
     DWORD clust, sect, remain;
-    WORD rcnt;
-    BYTE cc, *rbuff = buff;
+    UINT rcnt, cc;
+    BYTE *rbuff = buff;
     FRESULT res;
     FATFS *fs = fp->fs;
 
 
     *br = 0;
     res = validate(fs, fp->id);                     /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;   /* Check error flag */
     if (!(fp->flag & FA_READ)) return FR_DENIED;    /* Check access mode */
     remain = fp->fsize - fp->fptr;
@@ -937,11 +942,12 @@ FRESULT f_read (
             cc = btr / S_SIZ;                       /* When left bytes >= S_SIZ, */
             if (cc) {                               /* Read maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_read(fs->drive, rbuff, sect, cc) != RES_OK)
+                if (disk_read(fs->drive, rbuff, sect, (BYTE)cc) != RES_OK)
                     goto fr_error;
-                fp->sect_clust -= cc - 1;
+                fp->sect_clust -= (BYTE)(cc - 1);
                 fp->curr_sect += cc - 1;
-                rcnt = cc * S_SIZ; continue;
+                rcnt = cc * S_SIZ;
+                continue;
             }
             if (disk_read(fs->drive, fp->buffer, sect, 1) != RES_OK)    /* Load the sector into file I/O buffer */
                 goto fr_error;
@@ -969,21 +975,20 @@ fr_error:   /* Abort this file due to an unrecoverable error */
 FRESULT f_write (
     FIL *fp,            /* Pointer to the file object */
     const void *buff,   /* Pointer to the data to be written */
-    WORD btw,           /* Number of bytes to write */
-    WORD *bw            /* Pointer to number of bytes written */
+    UINT btw,           /* Number of bytes to write */
+    UINT *bw            /* Pointer to number of bytes written */
 )
 {
     DWORD clust, sect;
-    WORD wcnt;
-    BYTE cc;
-    FRESULT res;
+    UINT wcnt, cc;
     const BYTE *wbuff = buff;
+    FRESULT res;
     FATFS *fs = fp->fs;
 
 
     *bw = 0;
     res = validate(fs, fp->id);                     /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;   /* Check error flag */
     if (!(fp->flag & FA_WRITE)) return FR_DENIED;   /* Check access mode */
     if (fp->fsize + btw < fp->fsize) return FR_OK;  /* File size cannot reach 4GB */
@@ -1016,11 +1021,12 @@ FRESULT f_write (
             cc = btw / S_SIZ;                       /* When left bytes >= S_SIZ, */
             if (cc) {                               /* Write maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_write(fs->drive, wbuff, sect, cc) != RES_OK)
+                if (disk_write(fs->drive, wbuff, sect, (BYTE)cc) != RES_OK)
                     goto fw_error;
-                fp->sect_clust -= cc - 1;
+                fp->sect_clust -= (BYTE)(cc - 1);
                 fp->curr_sect += cc - 1;
-                wcnt = cc * S_SIZ; continue;
+                wcnt = cc * S_SIZ;
+                continue;
             }
             if (fp->fptr < fp->fsize &&             /* Fill sector buffer with file data if needed */
                 disk_read(fs->drive, fp->buffer, sect, 1) != RES_OK)
@@ -1045,7 +1051,7 @@ fw_error:   /* Abort this file due to an unrecoverable error */
 
 
 /*-----------------------------------------------------------------------*/
-/* Synchronize between File and Disk                                     */
+/* Synchronize the file object                                           */
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_sync (
@@ -1130,7 +1136,7 @@ FRESULT f_lseek (
 
 
     res = validate(fs, fp->id);         /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;
 #if !_FS_READONLY
     if (fp->flag & FA__DIRTY) {         /* Write-back dirty buffer if needed */
@@ -1252,7 +1258,7 @@ FRESULT f_readdir (
 
 
     res = validate(fs, dirobj->id);         /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
 
     finfo->fname[0] = 0;
     while (dirobj->sect) {
@@ -1469,14 +1475,12 @@ FRESULT f_mkdir (
     tim = get_fattime();
     ST_DWORD(&fw[DIR_WrtTime], tim);
     memcpy(&fw[32], &fw[0], 32); fw[33] = '.';  /* Create ".." entry */
-    pclust = dirobj.sclust;
-#if _FAT32
-    ST_WORD(&fw[   DIR_FstClusHI], dclust >> 16);
-    if (fs->fs_type == FS_FAT32 && pclust == fs->dirbase) pclust = 0;
-    ST_WORD(&fw[32+DIR_FstClusHI], pclust >> 16);
-#endif
     ST_WORD(&fw[   DIR_FstClusLO], dclust);
+    ST_WORD(&fw[   DIR_FstClusHI], dclust >> 16);
+    pclust = dirobj.sclust;
+    if (fs->fs_type == FS_FAT32 && pclust == fs->dirbase) pclust = 0;
     ST_WORD(&fw[32+DIR_FstClusLO], pclust);
+    ST_WORD(&fw[32+DIR_FstClusHI], pclust >> 16);
     fs->winflag = 1;
 
     if (!move_window(fs, sect)) return FR_RW_ERROR;
@@ -1582,17 +1586,16 @@ FRESULT f_rename (
 /* Create File System on the Drive                                       */
 /*-----------------------------------------------------------------------*/
 
-#define N_ROOTDIR 512
-#define N_FATS 1
-#define MAX_SECTOR 64000000UL
-#define MIN_SECTOR 2000UL
-#define ERASE_BLK 32
+#define N_ROOTDIR   512         /* Multiple of 32 and <= 2048 */
+#define N_FATS      1           /* 1 or 2 */
+#define MAX_SECTOR  64000000UL  /* Maximum partition size */
+#define MIN_SECTOR  2000UL      /* Minimum partition size */
 
 
 FRESULT f_mkfs (
     BYTE drv,           /* Logical drive number */
     BYTE partition,     /* Partitioning rule 0:FDISK, 1:SFD */
-    BYTE allocsize      /* Allocation unit size [sectors] */
+    WORD allocsize      /* Allocation unit size [bytes] */
 )
 {
     BYTE fmt, m, *tbl;
@@ -1603,16 +1606,17 @@ FRESULT f_mkfs (
     DSTATUS stat;
 
 
-    /* Check and mounted drive and clear work area */
+    /* Check validity of the parameters */
     if (drv >= _DRIVES) return FR_INVALID_DRIVE;
+    if (partition >= 2) return FR_MKFS_ABORTED;
+    for (n = 512; n <= 32768U && n != allocsize; n <<= 1);
+    if (n != allocsize) return FR_MKFS_ABORTED;
+
+    /* Check mounted drive and clear work area */
     fs = FatFs[drv];
     if (!fs) return FR_NOT_ENABLED;
     memset(fs, 0, sizeof(FATFS));
     drv = LD2PD(drv);
-
-    /* Check validity of the parameters */
-    for (n = 1; n <= 64 && allocsize != n; n <<= 1);
-    if (n > 64 || partition >= 2) return FR_MKFS_ABORTED;
 
     /* Get disk statics */
     stat = disk_initialize(drv);
@@ -1621,20 +1625,23 @@ FRESULT f_mkfs (
     if (disk_ioctl(drv, GET_SECTOR_COUNT, &n_part) != RES_OK || n_part < MIN_SECTOR)
         return FR_MKFS_ABORTED;
     if (n_part > MAX_SECTOR) n_part = MAX_SECTOR;
-    b_part = (!partition) ? 63 : 0;
+    b_part = (!partition) ? 63 : 0;     /* Boot sector */
     n_part -= b_part;
 #if S_MAX_SIZ > 512                     /* Check disk sector size */
     if (disk_ioctl(drv, GET_SECTOR_SIZE, &S_SIZ) != RES_OK
         || S_SIZ > S_MAX_SIZ
-        || (DWORD)S_SIZ * allocsize > 32768U)
+        || S_SIZ > allocsize)
         return FR_MKFS_ABORTED;
 #endif
+    allocsize /= S_SIZ;     /* Number of sectors per cluster */
 
     /* Pre-compute number of clusters and FAT type */
     n_clust = n_part / allocsize;
     fmt = FS_FAT12;
     if (n_clust >= 0xFF7) fmt = FS_FAT16;
     if (n_clust >= 0xFFF7) fmt = FS_FAT32;
+
+    /* Determine offset and size of FAT structure */
     switch (fmt) {
     case FS_FAT12:
         n_fat = ((n_clust * 3 + 1) / 2 + 3 + S_SIZ - 1) / S_SIZ;
@@ -1655,14 +1662,14 @@ FRESULT f_mkfs (
     b_dir = b_fat + n_fat * N_FATS; /* Directory start sector */
     b_data = b_dir + n_dir;         /* Data start sector */
 
-#ifdef ERASE_BLK
-    /* Round up data start sector to erase block boundary */
-    n = (b_data + ERASE_BLK - 1) & ~(ERASE_BLK - 1);
-    b_dir += n - b_data;
+    /* Align data start sector to erase block boundary (for flash memory media) */
+    if (disk_ioctl(drv, GET_BLOCK_SIZE, &n) != RES_OK) return FR_MKFS_ABORTED;
+    n = (b_data + n - 1) & ~(n - 1);
     n_fat += (n - b_data) / N_FATS;
-#endif
+    /* b_dir and b_data are no longer used below */
+
     /* Determine number of cluster and final check of validity of the FAT type */
-    n_clust = (n_part - n_rsv - n_fat * 2 - n_dir) / allocsize;
+    n_clust = (n_part - n_rsv - n_fat * N_FATS - n_dir) / allocsize;
     if (   (fmt == FS_FAT16 && n_clust < 0xFF7)
         || (fmt == FS_FAT32 && n_clust < 0xFFF7))
         return FR_MKFS_ABORTED;
@@ -1693,7 +1700,8 @@ FRESULT f_mkfs (
     }
 
     /* Create boot record */
-    memset(tbl = fs->win, 0, S_SIZ);
+    tbl = fs->win;                              /* Clear buffer */
+    memset(tbl, 0, S_SIZ);
     ST_DWORD(&tbl[BS_jmpBoot], 0x90FEEB);       /* Boot code (jmp $, nop) */
     ST_WORD(&tbl[BPB_BytsPerSec], S_SIZ);       /* Sector size */
     tbl[BPB_SecPerClus] = (BYTE)allocsize;      /* Sectors per cluster */
@@ -1750,10 +1758,11 @@ FRESULT f_mkfs (
     }
 
     /* Initialize Root directory */
-    for (m = 0; m < 64; m++) {
+    m = (BYTE)((fmt == FS_FAT32) ? allocsize : n_dir);
+    do {
         if (disk_write(drv, tbl, b_fat++, 1) != RES_OK)
             return FR_RW_ERROR;
-    }
+    } while (--m);
 
     /* Create FSInfo record if needed */
     if (fmt == FS_FAT32) {

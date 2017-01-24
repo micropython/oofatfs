@@ -17,8 +17,8 @@
 FRESULT f_read (
   FIL* <em>FileObject</em>,    /* Pointer to the file object structure */
   void* <em>Buffer</em>,       /* Pointer to the buffer to store read data */
-  WORD <em>ByteToRead</em>,    /* Number of bytes to read */
-  WORD* <em>ByteRead</em>      /* Pointer to the variable to return number of bytes read */
+  UINT <em>ByteToRead</em>,    /* Number of bytes to read */
+  UINT* <em>ByteRead</em>      /* Pointer to the variable to return number of bytes read */
 );
 </pre>
 </div>
@@ -31,9 +31,9 @@ FRESULT f_read (
 <dt>Buffer</dt>
 <dd>Pointer to the buffer to store read data</dd>
 <dt>ByteToRead</dt>
-<dd>Number of bytes to read</dd>
+<dd>Number of bytes to read in range of UINT.</dd>
 <dt>ByteRead</dt>
-<dd>Pointer to the WORD variable to return number of bytes read.</dd>
+<dd>Pointer to the UINT variable to return number of bytes read.</dd>
 </dt>
 </div>
 

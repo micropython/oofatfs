@@ -66,9 +66,9 @@ void scan_files (char* path)
         i = strlen(path);
         while ((f_readdir(&dirs, &finfo) == FR_OK) && finfo.fname[0]) {
             if (finfo.fattrib & AM_DIR) {
-                sprintf(path+i, "/%s", &finfo.fname[0]);
+                sprintf(&path[i], "/%s", &finfo.fname[0]);
                 scan_files(path);
-                *(path+i) = '\0';
+                path[i] = 0;
             } else {
                 printf("%s/%s\n", path, &finfo.fname[0]);
             }

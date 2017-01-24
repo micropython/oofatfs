@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.04b   (C)ChaN, 2007
+FatFs/Tiny-FatFs Module Source Files R0.05   (C)ChaN, 2007
 
 
 FILES
@@ -8,6 +8,7 @@ FILES
   tff.h      Common include file for Tiny-FatFs and application module.
   tff.c      Tiny-FatFs module.
   diskio.h   Common include file for (Tiny-)FatFs and disk I/O module.
+  diskio.c   Skeleton of low level disk I/O module.
   integer.h  Alternative type definitions for integer variables.
 
   Low level disk I/O module is not included in this archive because the
@@ -33,8 +34,8 @@ CONFIGURATION OPTIONS
   - Muti-byte integers (short, long) are stored in Big-Endian.
   - Address miss-aligned memory access results in an incorrect behavior.
 
-  If not the case, this can be set to 1 for good code efficiency. The initial
-  value is 0. (must be set to 1 or 2 properly)
+  If not the case, this can also be set to 1 for good code efficiency. The
+  initial value is 0. (must be set to 1 or 2 properly)
 
 
   _FS_READONLY
@@ -133,26 +134,31 @@ REVISION HISTORY
 
   Jun 10, 2006  R0.02a Added a configuration option _FS_MINIMUM.
 
-  Sep 22, 2006  R0.03  Added f_rename().
+  Sep 22, 2006  R0.03  Added f_rename.
                        Changed option _FS_MINIMUM to _FS_MINIMIZE.
 
   Dec 11, 2006  R0.03a Improved cluster scan algolithm to write files fast.
-                       Fixed f_mkdir() creates incorrect directory on FAT32.
+                       Fixed f_mkdir creates incorrect directory on FAT32.
 
   Feb 04, 2007  R0.04  Supported multiple drive system. (FatFs)
                        Changed some APIs for multiple drive system.
-                       Added f_mkfs(). (FatFs)
+                       Added f_mkfs. (FatFs)
                        Added _USE_FAT32 option. (Tiny-FatFs)
 
   Apr 01, 2007  R0.04a Supported multiple partitions on a plysical drive. (FatFs)
-                       Fixed an endian sensitive code in f_mkfs(). (FatFs)
-                       Added a capability of extending the file size to f_lseek().
+                       Fixed an endian sensitive code in f_mkfs. (FatFs)
+                       Added a capability of extending the file size to f_lseek.
                        Added minimization level 3.
                        Fixed a problem that can collapse a sector when recreate an
                        existing file in any sub-directory at non FAT32 cfg. (Tiny-FatFs)
 
-  May 05, 2007  R0.04b  Added _USE_NTFLAG option.
-                        Added FSInfo support.
-                        Fixed some problems corresponds to FAT32. (Tiny-FatFs)
-                        Fixed DBCS name can result FR_INVALID_NAME.
-                        Fixed short seek (<= csize) collapses the file object.
+  May 05, 2007  R0.04b Added _USE_NTFLAG option.
+                       Added FSInfo support.
+                       Fixed some problems corresponds to FAT32. (Tiny-FatFs)
+                       Fixed DBCS name can result FR_INVALID_NAME.
+                       Fixed short seek (0 < ofs <= csize) collapses the file object.
+
+  Aug 25, 2007  R0.05  Changed arguments of f_read, f_write.
+                       Changed arguments of f_mkfs. (FatFs)
+                       Fixed f_mkfs on FAT32 creates incorrect FSInfo. (FatFs)
+                       Fixed f_mkdir on FAT32 creates incorrect directory. (FatFs)

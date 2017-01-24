@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.04b       (C)ChaN, 2007
+/  FatFs - FAT file system module include file  R0.05        (C)ChaN, 2007
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -21,8 +21,8 @@
 /  1: Enable word access.
 /  2: Disable word access and use byte-by-byte access instead.
 /  When the architectural byte order of the MCU is big-endian and/or address
-/  miss-aligned access is prohibited, the _MCU_ENDIAN must be set to 2.
-/  If it is not the case, it can be set to 1 for good code efficiency. */
+/  miss-aligned access results incorrect behavior, the _MCU_ENDIAN must be set
+/  to 2. If it is not the case, it can be set to 1 for good code efficiency. */
 
 #define _FS_READONLY    0
 /* Setting _FS_READONLY to 1 defines read only configuration. This removes
@@ -193,8 +193,8 @@ typedef enum {
 
 FRESULT f_mount (BYTE, FATFS*);                     /* Mount/Unmount a logical drive */
 FRESULT f_open (FIL*, const char*, BYTE);           /* Open or create a file */
-FRESULT f_read (FIL*, void*, WORD, WORD*);          /* Read data from a file */
-FRESULT f_write (FIL*, const void*, WORD, WORD*);   /* Write data to a file */
+FRESULT f_read (FIL*, void*, UINT, UINT*);          /* Read data from a file */
+FRESULT f_write (FIL*, const void*, UINT, UINT*);   /* Write data to a file */
 FRESULT f_lseek (FIL*, DWORD);                      /* Move file pointer of a file object */
 FRESULT f_close (FIL*);                             /* Close an open file object */
 FRESULT f_opendir (DIR*, const char*);              /* Open an existing directory */
@@ -206,7 +206,7 @@ FRESULT f_unlink (const char*);                     /* Delete an existing file o
 FRESULT f_mkdir (const char*);                      /* Create a new directory */
 FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file/dir attriburte */
 FRESULT f_rename (const char*, const char*);        /* Rename/Move a file or directory */
-FRESULT f_mkfs (BYTE, BYTE, BYTE);                  /* Create a file system on the drive */
+FRESULT f_mkfs (BYTE, BYTE, WORD);                  /* Create a file system on the drive */
 
 
 /* User defined function to give a current time to fatfs module */
@@ -315,10 +315,10 @@ DWORD get_fattime (void);   /* 31-25: Year(0-127 org.1980), 24-21: Month(1-12), 
 #define ST_DWORD(ptr,val)   *(DWORD*)(BYTE*)(ptr)=(DWORD)(val)
 #else
 #if _MCU_ENDIAN == 2    /* Use byte-by-byte access */
-#define LD_WORD(ptr)        (WORD)(((WORD)*(BYTE*)((ptr)+1)<<8)|(WORD)*(BYTE*)(ptr))
-#define LD_DWORD(ptr)       (DWORD)(((DWORD)*(BYTE*)((ptr)+3)<<24)|((DWORD)*(BYTE*)((ptr)+2)<<16)|((WORD)*(BYTE*)((ptr)+1)<<8)|*(BYTE*)(ptr))
-#define ST_WORD(ptr,val)    *(BYTE*)(ptr)=(BYTE)(val); *(BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8)
-#define ST_DWORD(ptr,val)   *(BYTE*)(ptr)=(BYTE)(val); *(BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8); *(BYTE*)((ptr)+2)=(BYTE)((DWORD)(val)>>16); *(BYTE*)((ptr)+3)=(BYTE)((DWORD)(val)>>24)
+#define LD_WORD(ptr)        (WORD)(((WORD)*(volatile BYTE*)((ptr)+1)<<8)|(WORD)*(volatile BYTE*)(ptr))
+#define LD_DWORD(ptr)       (DWORD)(((DWORD)*(volatile BYTE*)((ptr)+3)<<24)|((DWORD)*(volatile BYTE*)((ptr)+2)<<16)|((WORD)*(volatile BYTE*)((ptr)+1)<<8)|*(volatile BYTE*)(ptr))
+#define ST_WORD(ptr,val)    *(volatile BYTE*)(ptr)=(BYTE)(val); *(volatile BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8)
+#define ST_DWORD(ptr,val)   *(volatile BYTE*)(ptr)=(BYTE)(val); *(volatile BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8); *(volatile BYTE*)((ptr)+2)=(BYTE)((DWORD)(val)>>16); *(volatile BYTE*)((ptr)+3)=(BYTE)((DWORD)(val)>>24)
 #else
 #error Do not forget to set _MCU_ENDIAN properly!
 #endif

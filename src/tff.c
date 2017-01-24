@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - Tiny FAT file system module  R0.04b                (C)ChaN, 2007
+/  FatFs - Tiny FAT file system module  R0.05                 (C)ChaN, 2007
 /---------------------------------------------------------------------------/
 / The FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -33,6 +33,7 @@
 /                       Fixed some problems corresponds to FAT32 support.
 /                       Fixed DBCS name can result FR_INVALID_NAME.
 /                       Fixed short seek (<= csize) collapses the file object.
+/  Aug 25, 2007  R0.05  Changed arguments of f_read() and f_write().
 /---------------------------------------------------------------------------*/
 
 #include <string.h>
@@ -108,7 +109,8 @@ FRESULT sync (void)     /* FR_OK: successful, FR_RW_ERROR: failed */
     fs->winflag = 1;
     if (!move_window(0)) return FR_RW_ERROR;
 #if _USE_FSINFO
-    if (fs->fs_type == FS_FAT32 && fs->fsi_flag) {      /* Update FSInfo sector if needed */
+    /* Update FSInfo sector if needed */
+    if (fs->fs_type == FS_FAT32 && fs->fsi_flag) {
         fs->winsect = 0;
         memset(fs->win, 0, 512);
         ST_WORD(&fs->win[BS_55AA], 0xAA55);
@@ -120,6 +122,7 @@ FRESULT sync (void)     /* FR_OK: successful, FR_RW_ERROR: failed */
         fs->fsi_flag = 0;
     }
 #endif
+    /* Make sure that no pending write process in the physical drive */
     if (disk_ioctl(0, CTRL_SYNC, NULL) != RES_OK) return FR_RW_ERROR;
     return FR_OK;
 }
@@ -633,7 +636,7 @@ BYTE check_fs (     /* 0:The FAT boot record, 1:Valid boot record but not an FAT
 static
 FRESULT auto_mount (        /* FR_OK(0): successful, !=0: any error occured */
     const char **path,      /* Pointer to pointer to the path name (drive number) */
-    BYTE chk_wp             /* !=0: Check media write protection for wrinting fuctions */
+    BYTE chk_wp             /* !=0: Check media write protection for write access */
 )
 {
     BYTE fmt;
@@ -901,21 +904,21 @@ FRESULT f_open (
 FRESULT f_read (
     FIL *fp,        /* Pointer to the file object */
     void *buff,     /* Pointer to data buffer */
-    WORD btr,       /* Number of bytes to read */
-    WORD *br        /* Pointer to number of bytes read */
+    UINT btr,       /* Number of bytes to read */
+    UINT *br        /* Pointer to number of bytes read */
 )
 {
     DWORD sect, remain;
-    WORD rcnt;
+    UINT rcnt, cc;
     CLUST clust;
-    BYTE cc, *rbuff = buff;
+    BYTE *rbuff = buff;
     FRESULT res;
     FATFS *fs = fp->fs;
 
 
     *br = 0;
     res = validate(fs, fp->id);                     /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;   /* Check error flag */
     if (!(fp->flag & FA_READ)) return FR_DENIED;    /* Check access mode */
     remain = fp->fsize - fp->fptr;
@@ -939,11 +942,12 @@ FRESULT f_read (
             cc = btr / 512;                         /* When left bytes >= 512, */
             if (cc) {                               /* Read maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_read(0, rbuff, sect, cc) != RES_OK)
+                if (disk_read(0, rbuff, sect, (BYTE)cc) != RES_OK)
                     goto fr_error;
-                fp->sect_clust -= cc - 1;
+                fp->sect_clust -= (BYTE)(cc - 1);
                 fp->curr_sect += cc - 1;
-                rcnt = cc * 512; continue;
+                rcnt = cc * 512;
+                continue;
             }
         }
         if (!move_window(fp->curr_sect)) goto fr_error; /* Move sector window */
@@ -970,14 +974,13 @@ fr_error:   /* Abort this function due to an unrecoverable error */
 FRESULT f_write (
     FIL *fp,            /* Pointer to the file object */
     const void *buff,   /* Pointer to the data to be written */
-    WORD btw,           /* Number of bytes to write */
-    WORD *bw            /* Pointer to number of bytes written */
+    UINT btw,           /* Number of bytes to write */
+    UINT *bw            /* Pointer to number of bytes written */
 )
 {
     DWORD sect;
-    WORD wcnt;
+    UINT wcnt, cc;
     CLUST clust;
-    BYTE cc;
     FRESULT res;
     const BYTE *wbuff = buff;
     FATFS *fs = fp->fs;
@@ -985,7 +988,7 @@ FRESULT f_write (
 
     *bw = 0;
     res = validate(fs, fp->id);                     /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;   /* Check error flag */
     if (!(fp->flag & FA_WRITE)) return FR_DENIED;   /* Check access mode */
     if (fp->fsize + btw < fp->fsize) return FR_OK;  /* File size cannot reach 4GB */
@@ -1013,11 +1016,12 @@ FRESULT f_write (
             cc = btw / 512;                         /* When left bytes >= 512, */
             if (cc) {                               /* Write maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
-                if (disk_write(0, wbuff, sect, cc) != RES_OK)
+                if (disk_write(0, wbuff, sect, (BYTE)cc) != RES_OK)
                     goto fw_error;
-                fp->sect_clust -= cc - 1;
+                fp->sect_clust -= (BYTE)(cc - 1);
                 fp->curr_sect += cc - 1;
-                wcnt = cc * 512; continue;
+                wcnt = cc * 512;
+                continue;
             }
             if (fp->fptr >= fp->fsize) {            /* Flush R/W window if needed */
                 if (!move_window(0)) goto fw_error;
@@ -1026,7 +1030,7 @@ FRESULT f_write (
         }
         if (!move_window(fp->curr_sect))            /* Move sector window */
             goto fw_error;
-        wcnt = 512 - (WORD)(fp->fptr % 512);            /* Copy fractional bytes bytes to sector window */
+        wcnt = 512 - (WORD)(fp->fptr % 512);        /* Copy fractional bytes bytes to sector window */
         if (wcnt > btw) wcnt = btw;
         memcpy(&fs->win[(WORD)fp->fptr % 512], wbuff, wcnt);
         fs->winflag = 1;
@@ -1045,7 +1049,7 @@ fw_error:   /* Abort this function due to an unrecoverable error */
 
 
 /*-----------------------------------------------------------------------*/
-/* Synchronize between File and Disk                                     */
+/* Synchronize the file object                                           */
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_sync (
@@ -1128,7 +1132,7 @@ FRESULT f_lseek (
 
 
     res = validate(fs, fp->id);         /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
 
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;
 #if !_FS_READONLY
@@ -1247,7 +1251,7 @@ FRESULT f_readdir (
 
 
     res = validate(fs, dirobj->id);         /* Check validity of the object */
-    if (res) return res;
+    if (res != FR_OK) return res;
 
     finfo->fname[0] = 0;
     while (dirobj->sect) {

@@ -1,5 +1,6 @@
 #ifndef _INTEGER
 
+/* These types are assumed as 16-bit or larger integer */
 typedef signed int      INT;
 typedef unsigned int    UINT;
 

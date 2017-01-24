@@ -17,8 +17,8 @@
 FRESULT f_write (
   FIL* <em>FileObject</em>,     /* ファイル・オブジェクト */
   const void* <em>Buffer</em>,  /* 書き込みデータ */
-  WORD <em>ByteToWrite</em>,    /* 書き込むバイト数 */
-  WORD* <em>ByteWritten</em>    /* 書き込まれたバイト数 */
+  UINT <em>ByteToWrite</em>,    /* 書き込むバイト数 */
+  UINT* <em>ByteWritten</em>    /* 書き込まれたバイト数 */
 );
 </pre>
 </div>
@@ -31,7 +31,7 @@ FRESULT f_write (
 <dt>Buffer</dt>
 <dd>書き込むデータを格納したバッファを指すポインタを指定します。</dd>
 <dt>ByteToWrite</dt>
-<dd>書き込むバイト数(0～65535)を指定します。</dd>
+<dd>書き込むバイト数(0～UINTの最大値)を指定します。</dd>
 <dt>ByteWritten</dt>
 <dd>書き込まれたバイト数を格納する変数を指すポインタを指定します。</dd>
 </dl>

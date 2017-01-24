@@ -17,8 +17,8 @@
 FRESULT f_write (
   FIL* <em>FileObject</em>,     /* Pointer to the file object structure */
   const void* <em>Buffer</em>,  /* Pointer to the data to be written */
-  WORD <em>ByteToWrite</em>,    /* Number of bytes to write */
-  WORD* <em>ByteWritten</em>    /* Pointer to the variable to return number of bytes written */
+  UINT <em>ByteToWrite</em>,    /* Number of bytes to write */
+  UINT* <em>ByteWritten</em>    /* Pointer to the variable to return number of bytes written */
 );
 </pre>
 </div>
@@ -31,9 +31,9 @@ FRESULT f_write (
 <dt>Buffer</dt>
 <dd>Pointer to the data to be written.</dd>
 <dt>ByteToWrite</dt>
-<dd>Specifies number of bytes to write.</dd>
+<dd>Specifies number of bytes to write in range of UINT.</dd>
 <dt>ByteWritten</dt>
-<dd>Pointer to the WORD variable to return number of bytes written.</dd>
+<dd>Pointer to the UINT variable to return number of bytes written.</dd>
 </dl>
 </div>
 
@@ -57,7 +57,7 @@ FRESULT f_write (
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer in the file object is increased in number of bytes written. The <tt>ByteWritten</tt> will become less than <tt>ByteToWrite</tt> when disk gets full during write function. This function is not supported in read-only configuration.</p>
+<p>The read/write pointer in the file object is increased in number of bytes written. The <tt>ByteWritten</tt> will become less than <tt>ByteToWrite</tt> when the drive gets full during the write operation. This function is not supported in read-only configuration.</p>
 </div>
 
 
