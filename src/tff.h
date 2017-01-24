@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  Tiny-FatFs - FAT file system module include file  R0.04a   (C)ChaN, 2007
+/  Tiny-FatFs - FAT file system module include file  R0.04b   (C)ChaN, 2007
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -37,21 +37,30 @@
 /  3: f_lseek is removed in addition to level 2. */
 
 #define _FAT32  0
-/* To add FAT32 support, set _FAT32 to 1. */
+/* To enable FAT32 support in addition of FAT12/16, set _FAT32 to 1. */
+
+#define _USE_FSINFO 0
+/* To enable FSInfo support on FAT32 volume, set _USE_FSINFO to 1. */
 
 #define _USE_SJIS   1
 /* When _USE_SJIS is set to 1, Shift-JIS code transparency is enabled, otherwise
 /  only US-ASCII(7bit) code can be accepted as file/directory name. */
+
+#define _USE_NTFLAG 1
+/* When _USE_NTFLAG is set to 1, upper/lower case of the file name is preserved.
+/  Note that the files are always accessed in case insensitive. */
 
 
 #include "integer.h"
 
 
 /* Type definition for cluster number */
-#if _FAT32 == 0
-typedef WORD    CLUST;
-#else
+#if _FAT32
 typedef DWORD   CLUST;
+#else
+typedef WORD    CLUST;
+#undef _USE_FSINFO
+#define _USE_FSINFO 0
 #endif
 
 
@@ -65,7 +74,15 @@ typedef struct _FATFS {
     DWORD   database;       /* Data start sector */
     CLUST   sects_fat;      /* Sectors per fat */
     CLUST   max_clust;      /* Maximum cluster# + 1 */
+#if !_FS_READONLY
     CLUST   last_clust;     /* Last allocated cluster */
+    CLUST   free_clust;     /* Number of free clusters */
+#if _USE_FSINFO
+    DWORD   fsi_sector;     /* fsinfo sector */
+    BYTE    fsi_flag;       /* fsinfo dirty flag (1:must be written back) */
+    BYTE    pad1;
+#endif
+#endif
     BYTE    fs_type;        /* FAT sub type */
     BYTE    sects_clust;    /* Sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
@@ -96,7 +113,7 @@ typedef struct _FIL {
     CLUST   org_clust;      /* File start cluster */
     CLUST   curr_clust;     /* Current cluster */
     DWORD   curr_sect;      /* Current sector */
-#if _FS_READONLY == 0
+#if !_FS_READONLY
     DWORD   dir_sect;       /* Sector containing the directory entry */
     BYTE*   dir_ptr;        /* Ponter to the directory entry in the window */
 #endif
@@ -164,7 +181,7 @@ DWORD get_fattime (void);   /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-
 
 #define FA_READ             0x01
 #define FA_OPEN_EXISTING    0x00
-#if _FS_READONLY == 0
+#if !_FS_READONLY
 #define FA_WRITE            0x02
 #define FA_CREATE_NEW       0x04
 #define FA_CREATE_ALWAYS    0x08
@@ -228,6 +245,11 @@ DWORD get_fattime (void);   /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-
 #define BS_VolID32          67
 #define BS_VolLab32         71
 #define BS_FilSysType32     82
+
+#define FSI_LeadSig         0
+#define FSI_StrucSig        484
+#define FSI_Free_Count      488
+#define FSI_Nxt_Free        492
 
 #define MBR_Table           446
 

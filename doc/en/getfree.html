@@ -56,7 +56,8 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>Descriptions</h4>
-<p>The f_getfree function gets number of free clusters on the drive. The <tt>sects_clust</tt> member in the file system object refreting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
+<p>The f_getfree function gets number of free clusters on the drive. The <tt>sects_clust</tt> member in the file system object refreting number of sectors per cluster, so that the free space in unit of sector can be calcurated with this. When _USE_FSINFO option is enabled, this function can return inaccurate free cluster count on FAT32 volume. When _USE_FSINFO option is disabled, this function will take a time on FAT32 volume.</p>
+<p>This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
 </div>
 
 

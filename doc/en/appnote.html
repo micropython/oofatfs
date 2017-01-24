@@ -18,30 +18,30 @@
 <ul>
 <li>ANSI C<br>
 The FatFs module is a middleware that written in ANSI C. There is no platform dependence, so long as the compiler is in compliance with ANSI C. However it handles the system portable FAT structures. You must take the <strong>endian</strong> into consideration. This setting is defined in ff.h (tff.h). It must be changed for your platform first or the compiler will abort with an error.</li>
-<li>Size of char/short/long are 8/16/32 bit.<br>
+<li>Size of char/short/long are 8/16/32 bit and int is 16 bit or grater.<br>
 These correspondence are defined in integer.h. This will not be a problem on most compilers. When any conflict of the definitions between the integer.h and existing definitions is occured, you must resolve the confrict with care.</li>
 </ul>
 </div>
 
 <div class="para">
-<h3>Memory Usage (R0.04a)</h3>
+<h3>Memory Usage (R0.04b)</h3>
 <p>These are the memory usage on some target systems. The memory sizes are in unit of byte, D means number of logical drives and F means number of open files. All samples are optimezed in code size.</p>
 <table class="lst2">
 <tr><th></th><th>AVR</th><th>H8/300H</th><th>MSP430</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th></tr>
 <tr><td>Compiler</td><td>gcc</td><td>CH38</td><td>CL430</td><td>CC870C</td><td>CA850</td><td>SHC</td></tr>
 <tr><td>_MCU_ENDIAN</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
-<tr><td>FatFs Code<br>(Full, R/W cfg.)</td><td>8672</td><td>8746</td><td></td><td></td><td>6384</td><td>7390</td></tr>
-<tr><td>FatFs Code<br>(Full, R/O cfg.)</td><td>4230</td><td>4100</td><td></td><td></td><td>3012</td><td>3510</td></tr>
-<tr><td>FatFs Code<br>(Mininum, R/W cfg.)</td><td>5706</td><td>5678</td><td></td><td></td><td>4042</td><td>4882</td></tr>
-<tr><td>FatFs Code<br>(Minimum, R/O cfg.)</td><td>3016</td><td>3116</td><td></td><td></td><td>2198</td><td>2702</td></tr>
+<tr><td>FatFs Code<br>(Standard, R/W cfg.)</td><td>8722</td><td>8776</td><td></td><td></td><td>6402</td><td>7338</td></tr>
+<tr><td>FatFs Code<br>(Minimum, R/W cfg.)</td><td>5814</td><td>5722</td><td></td><td></td><td>4094</td><td>4906</td></tr>
+<tr><td>FatFs Code<br>(Standard, R/O cfg.)</td><td>4248</td><td>4096</td><td></td><td></td><td>3010</td><td>3506</td></tr>
+<tr><td>FatFs Code<br>(Minimum, R/O cfg.)</td><td>3038</td><td>3110</td><td></td><td></td><td>2210</td><td>2698</td></tr>
 <tr><td>FatFs Work (Static)</td><td>D*2 + 2</td><td>D*4 + 2</td><td></td><td></td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
-<tr><td>FatFs Work (Dynamic)</td><td>D*550 + F*544</td><td>D*550 + F*550</td><td></td><td></td><td>D*550 + F*550</td><td>D*550 + F*550</td></tr>
-<tr><td>Tiny-FatFs Code<br>(Full, R/W cfg.)</td><td>7188</td><td>7206</td><td>6590</td><td>8799</td><td></td><td></td></tr>
-<tr><td>Tiny-FatFs Code<br>(Full, R/O cfg.)</td><td>3592</td><td>3560</td><td>3162</td><td>4353</td><td></td><td></td></tr>
-<tr><td>Tiny-FatFs Code<br>(Minimum, R/W cfg.)</td><td>4670</td><td>4772</td><td>4322</td><td>6073</td><td></td><td></td></tr>
-<tr><td>Tiny-FatFs Code<br>(Minimum, R/O cfg.)</td><td>2576</td><td>2714</td><td>2378</td><td>3324</td><td></td><td></td></tr>
+<tr><td>FatFs Work (Dynamic)</td><td>D*554 + F*544</td><td>D*554 + F*550</td><td></td><td></td><td>D*554 + F*550</td><td>D*554 + F*550</td></tr>
+<tr><td>Tiny-FatFs Code<br>(Standard, R/W cfg.)</td><td>7264</td><td>7240</td><td>6634</td><td>8837</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs Code<br>(Minimum, R/W cfg.)</td><td>4750</td><td>4806</td><td>4366</td><td>6163</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs Code<br>(Standard, R/O cfg.)</td><td>3600</td><td>3548</td><td>3212</td><td>4347</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs Code<br>(Minimum, R/O cfg.)</td><td>2568</td><td>2702</td><td>2394</td><td>3322</td><td></td><td></td></tr>
 <tr><td>Tiny-FatFs Wrok (Static)</td><td>4</td><td>6</td><td>4</td><td>4</td><td></td><td></td></tr>
-<tr><td>Tiny-FatFs Work (Dynamic)</td><td>542 + F*28</td><td>542 + F*32</td><td>542 + F*28</td><td>542 + F*28</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs Work (Dynamic)</td><td>544 + F*28</td><td>544 + F*32</td><td>544 + F*28</td><td>544 + F*28</td><td></td><td></td></tr>
 </table>
 </div>
 
@@ -110,8 +110,6 @@ Figure 5. Minimized critical section<br>
 Currently the file object structure is held by application layer. This is not a problem for Tiny-FatFs, it consumes the task stack only 26 bytes per file. But FatFs requires 550 bytes per file. When managed the file objects in file handle, stack consumption at application module will able to be reduced. In this case, the work area for file objects is managed in FatFs module. This has a disadvantage that direct access to the file object structure cannot be used and additional file functions, such as feof and ftell, will be needed.</li>
 <li>Efficient sector buffer management<br>
 The FatFs module has only one sector buffer per logical drive. There is an ineffciency on random file access with many files simultanesously. When additional memory for the sector buffer is available, the file access performance will able to be improved with an advanced cache mechanism.</li>
-<li>FSInfo sector<br>
-On FAT32 file system, the cluster search to create a file as new or get number of free clusters takes time due to a great many clusters. The FSInfo sector that has last allocated cluster number and number of free clusters is provided to prevent the silly cluster search. However the FatFs module does not support this feature.</li>
 <li>Long file name<br>
 There is an extended feature to handle long file name (LFN) up to 255 characters, in addition to 8.3 format file name, on FAT file system. To support this, 512 byte string buffer for file name and UCS-2 - Shift_JIS mutual conversion table are required. Therefore memory consumption of code and work area will be increased drastically. The FatFs module does not support this feature. The LFN on the FAT file system is a patent of Microsoft. When support it on the commercial products, you have to be licensed.</li>
 <li>Porting to RTOS<br>

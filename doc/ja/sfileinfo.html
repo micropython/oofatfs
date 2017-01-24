@@ -15,9 +15,9 @@
 <p><tt>FILINFO</tt>構造体は、<tt>f_stat(), f_readdir()</tt>で返されるファイル情報を保持します。</p>
 <pre>
 typedef struct _FILINFO {
-    DWORD fsize;            /* Size */
-    WORD fdate;             /* Date */
-    WORD ftime;             /* Time */
+    DWORD fsize;            /* Size [bytes] */
+    WORD fdate;             /* Date [15-9]:Year-1980, [8-5]:Month, [4-0]:Mday */
+    WORD ftime;             /* Time [15-11]:Hour, [10-5]:Minute, [4-0]:Sec/2 */
     BYTE fattrib;           /* Attribute */
     char fname[8+1+3+1];    /* Name */
 } FILINFO;

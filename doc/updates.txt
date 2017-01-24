@@ -1,9 +1,16 @@
+R0.04b, May 05, 2007
+  Added _USE_NTFLAG option.
+  Added FSInfo support.
+  Fixed some problems corresponds to FAT32. (Tiny-FatFs)
+  Fixed DBCS name can result FR_INVALID_NAME.
+  Fixed short seek (<= csize) collapses the file object.
+
 R0.04a, Apr 01, 2007
   Supported multiple partitions on a plysical drive. (FatFs)
-  Fixed an endian sensitive code in f_mkfs(). (FatFs)
-  Added a capability of extending file size to f_lseek().
   Added minimization level 3.
-  Fixed a problem that can collapse a sector when recreate an existing file in any sub-directory at non FAT32 cfg. (Tiny-FatFs)
+  Added a capability of extending file size to f_lseek().
+  Fixed an endian sensitive code in f_mkfs(). (FatFs)
+  Fixed a problem corresponds to FAT32 support. (Tiny-FatFs)
 
 R0.04, Feb 04, 2007
   Supported multiple drive system. (FatFs)

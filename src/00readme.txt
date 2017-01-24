@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.04a   (C)ChaN, 2007
+FatFs/Tiny-FatFs Module Source Files R0.04b   (C)ChaN, 2007
 
 
 FILES
@@ -48,27 +48,38 @@ CONFIGURATION OPTIONS
   _FS_MINIMIZE
 
   When application program requires only file read/write function, _FS_MINIMIZE
-  can be defined to eliminate some functions to reduce the module size. The
+  can be changed to eliminate some functions to reduce the module size. The
   initial value is 0. (full function)
 
 
   _DRIVES
 
-  Number of drives to be used. This option is not supported on Tiny-FatFs.
+  Number of drives to be used. This option is not available on Tiny-FatFs.
   The initial value is 2.
 
   _FAT32
 
   When _FAT32 is set to 1, the FAT32 support is added with an additional
-  code size. This is for only Tiny-FatFs and not supported on FatFs. FatFs
-  always supports all FAT type. The initial value is 0. (disabled)
+  code size. This option is for only Tiny-FatFs. FatFs always supports all
+  FAT sub-types. The initial value is 0. (no FAT32 support)
+
+
+  _USE_FSINFO
+
+  When _USE_FSINFO is set to 1, FSInfo is used for FAT32 volume.
 
 
   _USE_SJIS
 
-  When _USE_SJIS is set to 1, Shift-JIS code set can be used as a file name,
+  When _USE_SJIS is set to 1, Shift_JIS code set can be used as a file name,
   otherwire second byte of double-byte characters will be collapted.
   The initial value is 1.
+
+
+  _USE_NTFLAG
+
+  When _USE_NTFLAG is set to 1, upper/lower case of the file/dir name is
+  preserved. Note that the files are always accessed in case insensitive.
 
 
   _USE_MKFS
@@ -97,7 +108,7 @@ CONFIGURATION OPTIONS
    f_mkdir       x    x    x         x                 
    f_chmod       x    x    x         x                 
    f_rename      x    x    x         x                 
-   f_mkfs                            x          x      
+   f_mkfs        x    x    x         x          x      
 
 
 
@@ -140,3 +151,8 @@ REVISION HISTORY
                        Fixed a problem that can collapse a sector when recreate an
                        existing file in any sub-directory at non FAT32 cfg. (Tiny-FatFs)
 
+  May 05, 2007  R0.04b  Added _USE_NTFLAG option.
+                        Added FSInfo support.
+                        Fixed some problems corresponds to FAT32. (Tiny-FatFs)
+                        Fixed DBCS name can result FR_INVALID_NAME.
+                        Fixed short seek (<= csize) collapses the file object.
