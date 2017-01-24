@@ -16,8 +16,8 @@
 <p>ファイルに文字を書き込みます。</p>
 <pre>
 int f_putc (
-  TCHAR <em>Chr</em>,        <span class="c">/* 書き込む文字 */</span>
-  FIL* <em>FileObject</em>   <span class="c">/* ファイル・オブジェクト */</span>
+  TCHAR <span class="arg">chr</span>,  <span class="c">/* [IN] 書き込む文字 */</span>
+  FIL* <span class="arg">fp</span>     <span class="c">/* [IN] ファイル・オブジェクト */</span>
 );
 </pre>
 </div>
@@ -25,9 +25,9 @@ int f_putc (
 <div class="para arg">
 <h4>引数</h4>
 <dl class="par">
-<dt>Chr</dt>
+<dt>chr</dt>
 <dd>書き込む文字を指定します。</dd>
-<dt>FileObject</dt>
+<dt>fp</dt>
 <dd>ファイル・オブジェクト構造体へのポインタを指定します。</dd>
 </dl>
 </div>
@@ -42,7 +42,7 @@ int f_putc (
 
 <div class="para desc">
 <h4>解説</h4>
-<p>1文字をファイルに書き込みます。この関数は<a href="write.html">f_write()</a>のラッパー関数です。</p>
+<p>1文字をファイルに書き込みます。この関数は<a href="write.html"><tt>f_write()</tt></a>のラッパー関数です。</p>
 </div>
 
 

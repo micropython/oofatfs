@@ -16,7 +16,7 @@
 <p>書き込み中のファイルのキャッシュされた情報をフラッシュします。</p>
 <pre>
 FRESULT f_sync (
-  FIL* <em>FileObject</em>     <span class="c">/* ファイル・オブジェクト構造体へのポインタ */</span>
+  FIL* <span class="arg">fp</span>     <span class="c">/* [IN] ファイル・オブジェクト構造体へのポインタ */</span>
 );
 </pre>
 </div>
@@ -24,7 +24,7 @@ FRESULT f_sync (
 <div class="para arg">
 <h4>引数</h4>
 <dl class="par">
-<dt>FileObject</dt>
+<dt>fp</dt>
 <dd>syncするファイルのファイル・オブジェクト構造体へのポインタを指定します。</dd>
 </dl>
 </div>

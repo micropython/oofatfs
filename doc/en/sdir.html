@@ -13,7 +13,7 @@
 
 <div class="para">
 <h2>DIR</h2>
-<p>The <tt>DIR</tt> structure is used for the work area to read a directory by f_oepndir, f_readdir function. There is no member that can be changed by application program.</p>
+<p>The <tt>DIR</tt> structure is used for the work area to read a directory by <tt>f_oepndir()/f_readdir()</tt> function. Application program must not modify any member in this structure.</p>
 <pre>
 <span class="k">typedef</span> <span class="k">struct</span> {
     FATFS*  fs;         <span class="c">/* Pointer to the owner file system object */</span>

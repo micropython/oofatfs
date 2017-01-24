@@ -13,7 +13,7 @@
 
 <div class="para">
 <h2>FATFS</h2>
-<p><tt>FATFS</tt>構造体(ファイル・システム・オブジェクト)は、個々の論理ドライブのダイナミック・ワーク・エリアを保持し、f_mount()でFatFsモジュールに登録されます。初期化が行われるタイミングは、f_mount()またはメディア交換の後の最初のファイル・アクセスの時です。アプリケーションから書き換え可能なメンバはありません。</p>
+<p><tt>FATFS</tt>構造体(ファイル・システム・オブジェクト)は、個々の論理ドライブのダイナミック・ワーク・エリアを保持し、<tt>f_mount()</tt>でFatFsモジュールに登録されます。初期化が行われるタイミングは、<tt>f_mount()</tt>またはメディア交換の後の最初のファイル・アクセスの時です。アプリケーションは、この構造体のメンバを書き換えてはなりません。</p>
 
 <pre>
 <span class="k">typedef</span> <span class="k">struct</span> {
@@ -41,9 +41,10 @@
 <span class="k">#endif</span>
     DWORD   n_fatent;     <span class="c">/* FATのエントリ数 (== クラスタ数 + 2) */</span>
     DWORD   fsize;        <span class="c">/* FAT 1個当たりのセクタ数 */</span>
+    DWORD   volbase;      <span class="c">/* ボリューム開始セクタ */</span>
     DWORD   fatbase;      <span class="c">/* FAT領域開始セクタ */</span>
-    DWORD   dirbase;      <span class="c">/* ルート・ディレクトリ開始セクタ (FAT32: クラスタ番号) */</span>
-    DWORD   database;     <span class="c">/* データ領域開始区セクタ */</span>
+    DWORD   dirbase;      <span class="c">/* ルート・ディレクトリ開始セクタ/クラスタ */</span>
+    DWORD   database;     <span class="c">/* データ領域開始セクタ */</span>
     DWORD   winsect;      <span class="c">/* win[]に現れているセクタ番号 */</span>
     BYTE    win[_MAX_SS]; <span class="c">/* ディスク・アクセス・ウィンドウ */</span>
 } FATFS;

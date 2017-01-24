@@ -16,8 +16,8 @@
 <p>ディレクトリを開きます。</p>
 <pre>
 FRESULT f_opendir (
-  DIR* <em>DirObject</em>,       <span class="c">/* ディレクトリ・ブジェクト構造体へのポインタ */</span>
-  const TCHAR* <em>DirName</em>  <span class="c">/* ディレクトリ名へのポインタ */</span>
+  DIR* <span class="arg">dj</span>,           <span class="c">/* [OUT] ディレクトリ・ブジェクト構造体へのポインタ */</span>
+  const TCHAR* <span class="arg">path</span>  <span class="c">/* [IN] ディレクトリ名へのポインタ */</span>
 );
 </pre>
 </div>
@@ -25,10 +25,10 @@ FRESULT f_opendir (
 <div class="para arg">
 <h4>引数</h4>
 <dl class="par">
-<dt>DirObject</dt>
+<dt>dj</dt>
 <dd>初期化するディレクトリ・オブジェクト構造体へのポインタを指定します。</dd>
-<dt>DirName</dt>
-<dd>オープンするディレクトリへの<a href="filename.html">パス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dt>path</dt>
+<dd>オープンするディレクトリの<a href="filename.html">パス名</a>を示すヌル文字<tt>'\0'</tt>終端の文字列へのポインタを指定します。</dd>
 </dl>
 </div>
 
@@ -53,7 +53,7 @@ FRESULT f_opendir (
 
 <div class="para desc">
 <h4>解説</h4>
-<p>ディレクトリを開きます。正常終了したら、<tt>DirObject</tt>構造体を使ってこのディレクトリの項目を順次読み出せます。<tt>DirObject</tt>構造体は使用後は任意の時点で破棄できます。</p>
+<p>ディレクトリを開きます。正常終了したら、作成された<tt>DIR</tt>構造体を使ってこのディレクトリの項目を順次読み出せます。作成されたディレクトリ・オブジェクトは、不要になったら任意の時点で破棄できます。</p>
 </div>
 
 

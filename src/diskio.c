@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------*/
-/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2012        */
+/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2013        */
 /*-----------------------------------------------------------------------*/
 /* If a working storage control module is available, it should be        */
 /* attached to the FatFs via a glue function rather than modifying it.   */
@@ -23,13 +23,13 @@
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
-    BYTE drv                /* Physical drive nmuber (0..) */
+    BYTE pdrv               /* Physical drive nmuber (0..) */
 )
 {
     DSTATUS stat;
     int result;
 
-    switch (drv) {
+    switch (pdrv) {
     case ATA :
         result = ATA_disk_initialize();
 
@@ -61,13 +61,13 @@ DSTATUS disk_initialize (
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
-    BYTE drv        /* Physical drive nmuber (0..) */
+    BYTE pdrv       /* Physical drive nmuber (0..) */
 )
 {
     DSTATUS stat;
     int result;
 
-    switch (drv) {
+    switch (pdrv) {
     case ATA :
         result = ATA_disk_status();
 
@@ -99,7 +99,7 @@ DSTATUS disk_status (
 /*-----------------------------------------------------------------------*/
 
 DRESULT disk_read (
-    BYTE drv,       /* Physical drive nmuber (0..) */
+    BYTE pdrv,      /* Physical drive nmuber (0..) */
     BYTE *buff,     /* Data buffer to store read data */
     DWORD sector,   /* Sector address (LBA) */
     BYTE count      /* Number of sectors to read (1..128) */
@@ -108,7 +108,7 @@ DRESULT disk_read (
     DRESULT res;
     int result;
 
-    switch (drv) {
+    switch (pdrv) {
     case ATA :
         // translate the arguments here
 
@@ -147,7 +147,7 @@ DRESULT disk_read (
 
 #if _USE_WRITE
 DRESULT disk_write (
-    BYTE drv,           /* Physical drive nmuber (0..) */
+    BYTE pdrv,          /* Physical drive nmuber (0..) */
     const BYTE *buff,   /* Data to be written */
     DWORD sector,       /* Sector address (LBA) */
     BYTE count          /* Number of sectors to write (1..128) */
@@ -156,7 +156,7 @@ DRESULT disk_write (
     DRESULT res;
     int result;
 
-    switch (drv) {
+    switch (pdrv) {
     case ATA :
         // translate the arguments here
 
@@ -195,19 +195,19 @@ DRESULT disk_write (
 
 #if _USE_IOCTL
 DRESULT disk_ioctl (
-    BYTE drv,       /* Physical drive nmuber (0..) */
-    BYTE ctrl,      /* Control code */
+    BYTE pdrv,      /* Physical drive nmuber (0..) */
+    BYTE cmd,       /* Control code */
     void *buff      /* Buffer to send/receive control data */
 )
 {
     DRESULT res;
     int result;
 
-    switch (drv) {
+    switch (pdrv) {
     case ATA :
         // pre-process here
 
-        result = ATA_disk_ioctl(ctrl, buff);
+        result = ATA_disk_ioctl(cmd, buff);
 
         // post-process here
 
@@ -216,7 +216,7 @@ DRESULT disk_ioctl (
     case MMC :
         // pre-process here
 
-        result = MMC_disk_ioctl(ctrl, buff);
+        result = MMC_disk_ioctl(cmd, buff);
 
         // post-process here
 
@@ -225,7 +225,7 @@ DRESULT disk_ioctl (
     case USB :
         // pre-process here
 
-        result = USB_disk_ioctl(ctrl, buff);
+        result = USB_disk_ioctl(cmd, buff);
 
         // post-process here
 

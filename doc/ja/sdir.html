@@ -13,7 +13,7 @@
 
 <div class="para">
 <h2>DIR</h2>
-<p><tt>DIR</tt>構造体は、f_opendir(), f_readdir()のワーク・エリアとして使用されます。アプリケーションから変更可能なメンバはありません。</p>
+<p><tt>DIR</tt>構造体は、<tt>f_opendir(), f_readdir()</tt>のワーク・エリアとして使用されます。アプリケーションは、この構造体のメンバを書き換えてはなりません。</p>
 <pre>
 <span class="k">typedef</span> <span class="k">struct</span> {
     FATFS*  fs;        <span class="c">/* 親ファイル・システム・オブジェクトへのポインタ */</span>

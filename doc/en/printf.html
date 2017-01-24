@@ -16,8 +16,8 @@
 <p>The f_printf function writes formatted string to the file.</p>
 <pre>
 int f_printf (
-  FIL* <em>FileObject</em>,      <span class="c">/* File object */</span>
-  const TCHAR* <em>Foramt</em>,  <span class="c">/* Format stirng */</span>
+  FIL* <span class="arg">fp</span>,          <span class="c">/* [IN] File object */</span>
+  const TCHAR* <span class="arg">fmt</span>, <span class="c">/* [IN] Format stirng */</span>
   ...
 );
 </pre>
@@ -26,9 +26,9 @@ int f_printf (
 <div class="para arg">
 <h4>Parameters</h4>
 <dl class="par">
-<dt>FileObject</dt>
+<dt>fp</dt>
 <dd>Pointer to the open file object structure.</dd>
-<dt>Format</dt>
+<dt>fmt</dt>
 <dd>Pointer to the null terminated format string.</dd>
 <dt>...</dt>
 <dd>Optional arguments.</dd>
@@ -45,7 +45,7 @@ int f_printf (
 
 <div class="para desc">
 <h4>Description</h4>
-<p>The f_printf() is a wrapper function of <a href="putc.html">f_putc()</a> and <a href="puts.html">f_puts()</a>. The format control directive is a sub-set of standard library shown as follos:</p>
+<p>The <tt>f_printf()</tt> is a wrapper function of <a href="putc.html"><tt>f_putc()</tt></a> and <a href="puts.html"><tt>f_puts()</tt></a>. The format control directive is a sub-set of standard library shown as follos:</p>
 <ul>
 <li>Type: <tt>c C s S d D u U x X b B</tt></li>
 <li>Size: <tt>l L</tt></li>
@@ -57,7 +57,7 @@ int f_printf (
 <div class="para comp">
 <h4>QuickInfo</h4>
 <p>Available when <tt>_FS_READONLY == 0</tt> and <tt>_USE_STRFUNC</tt> is 1 or 2. When it is set to 2, <tt>'\n'</tt>s contained in the output are converted to <tt>"\r\n"</tt>.</p>
-<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the generated UCS-2 characters are written to the file in UTF-8 encoding. If not the case, the byte characters will be written directly.</p>
+<p>When the FatFs is configured to Unicode API (<tt>_LFN_UNICODE == 1</tt>), the generated UCS-2 string is written to the file in UTF-8 encoding. If not the case, the byte characters will be written directly.</p>
 </div>
 
 

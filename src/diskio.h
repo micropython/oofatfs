@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file   (C)ChaN, 2012
+/  Low level disk interface modlue include file   (C)ChaN, 2013
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO_DEFINED
@@ -32,11 +32,11 @@ typedef enum {
 /* Prototypes for disk control functions */
 
 
-DSTATUS disk_initialize (BYTE);
-DSTATUS disk_status (BYTE);
-DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
-DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
-DRESULT disk_ioctl (BYTE, BYTE, void*);
+DSTATUS disk_initialize (BYTE pdrv);
+DSTATUS disk_status (BYTE pdrv);
+DRESULT disk_read (BYTE pdrv, BYTE*buff, DWORD sector, BYTE count);
+DRESULT disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, BYTE count);
+DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
 
 /* Disk Status Bits (DSTATUS) */

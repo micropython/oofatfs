@@ -16,7 +16,7 @@
 <p>ファイルを閉じます。</p>
 <pre>
 FRESULT f_close (
-  FIL* <em>FileObject</em>     <span class="c">/* ファイル・オブジェクトへのポインタ */</span>
+  FIL* <span class="arg">fp</span>     <span class="c">/* [IN] ファイル・オブジェクトへのポインタ */</span>
 );
 </pre>
 </div>
@@ -24,7 +24,7 @@ FRESULT f_close (
 <div class="para arg">
 <h4>引数</h4>
 <dl class="par">
-<dt>FileObject</dt>
+<dt>fp</dt>
 <dd>閉じようとするファイルのファイル・オブジェクト構造体へのポインタを指定します。</dd>
 </dl>
 </div>
