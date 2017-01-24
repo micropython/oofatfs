@@ -1,4 +1,4 @@
-#define _FFCONF         80186
+#define _FFCONF         68020
 #define _FS_READONLY    0
 #define _FS_MINIMIZE    0
 #define _USE_STRFUNC    0
