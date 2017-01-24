@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.04   (C)ChaN, 2007
+FatFs/Tiny-FatFs Module Source Files R0.04a   (C)ChaN, 2007
 
 
 FILES
@@ -26,28 +26,30 @@ CONFIGURATION OPTIONS
   _MCU_ENDIAN
 
   This is the most impotant option that depends on the processor architecture.
-  When target device corresponds to either or both of following terms, the
+  When the target device corresponds to either or both of following terms, the
   _MCU_ENDIAN must be set to 2 to force FatFs to access FAT structure in
-  byte-by-byte. If not the case, this can be set to 1 for good code efficiency.
-  The initial value is 0 (must be set to 1 or 2 properly).
+  byte-by-byte.
 
   - Muti-byte integers (short, long) are stored in Big-Endian.
   - Address miss-aligned memory access results in an incorrect behavior.
+
+  If not the case, this can be set to 1 for good code efficiency. The initial
+  value is 0. (must be set to 1 or 2 properly)
 
 
   _FS_READONLY
 
   When application program does not require any write function, _FS_READONLY
-  can be set to 1 to eliminate writing code to reduce module size. This
+  can be set to 1 to eliminate writing code to reduce the module size. This
   setting should be reflected to configurations of low level disk I/O module
-  if available. The initial value is 0 (R/W).
+  if available. The initial value is 0. (Read and Write)
 
 
   _FS_MINIMIZE
 
   When application program requires only file read/write function, _FS_MINIMIZE
   can be defined to eliminate some functions to reduce the module size. The
-  initial value is 0 (full function).
+  initial value is 0. (full function)
 
 
   _DRIVES
@@ -59,43 +61,43 @@ CONFIGURATION OPTIONS
 
   When _FAT32 is set to 1, the FAT32 support is added with an additional
   code size. This is for only Tiny-FatFs and not supported on FatFs. FatFs
-  always supports all FAT type. The initial value is 0 (disabled).
+  always supports all FAT type. The initial value is 0. (disabled)
 
 
   _USE_SJIS
 
-  When _USE_SJIS is defined, Shift-JIS code set can be used as a file name,
-  otherwire second byte of double-byte characters will be collapted. This is
-  initially defined.
+  When _USE_SJIS is set to 1, Shift-JIS code set can be used as a file name,
+  otherwire second byte of double-byte characters will be collapted.
+  The initial value is 1.
 
 
   _USE_MKFS
 
-  When _USE_MKFS is defined and _FS_READONLY is set to 0, f_mkfs function
+  When _USE_MKFS is set to 1 and _FS_READONLY is set to 0, f_mkfs function
   is enabled. This is for only FatFs module and not supported on Tiny-FatFs.
-  This is initialy undefined (not available).
+  The initial value is 0. (f_mkfs is not available)
 
 
   Following table shows which function is removed by configuratin options.
 
-               _FS_MINIMIZE  _FS_MINIMIZE  _FS_READONLY  _USE_MKFS
-                    (1)           (2)          (1)        (undef)
-   f_mount
-   f_open
-   f_close
-   f_read
-   f_lseek
-   f_write                                     x
-   f_sync                                      x
-   f_opendir                      x
-   f_readdir                      x
-   f_stat            x            x
-   f_getfree         x            x            x
-   f_unlink          x            x            x
-   f_mkdir           x            x            x
-   f_chmod           x            x            x
-   f_rename          x            x            x
-   f_mkfs                                      x            x
+                _FS_MINIMIZE   _FS_READONLY  _USE_MKFS 
+                (1)  (2)  (3)       (1)         (0)    
+   f_mount                                             
+   f_open                                              
+   f_close                                             
+   f_read                                              
+   f_write                           x                 
+   f_sync                            x                 
+   f_lseek                 x                           
+   f_opendir          x    x                           
+   f_readdir          x    x                           
+   f_stat        x    x    x                           
+   f_getfree     x    x    x         x                 
+   f_unlink      x    x    x         x                 
+   f_mkdir       x    x    x         x                 
+   f_chmod       x    x    x         x                 
+   f_rename      x    x    x         x                 
+   f_mkfs                            x          x      
 
 
 
@@ -112,9 +114,10 @@ REVISION HISTORY
 
   Feb 26, 2006  R0.00  Prototype
 
-  Apr 29, 2006  R0.01  First stable version
+  Apr 29, 2006  R0.01  First release.
 
-  Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
+  Jun 01, 2006  R0.02  Added FAT12.
+                       Removed unbuffered mode.
                        Fixed a problem on small (<32M) patition.
 
   Jun 10, 2006  R0.02a Added a configuration option _FS_MINIMUM.
@@ -125,6 +128,15 @@ REVISION HISTORY
   Dec 11, 2006  R0.03a Improved cluster scan algolithm to write files fast.
                        Fixed f_mkdir() creates incorrect directory on FAT32.
 
-  Feb 04, 2007  R0.04  Supported multiple drive system.
+  Feb 04, 2007  R0.04  Supported multiple drive system. (FatFs)
                        Changed some APIs for multiple drive system.
-                       Added f_mkfs().
+                       Added f_mkfs(). (FatFs)
+                       Added _USE_FAT32 option. (Tiny-FatFs)
+
+  Apr 01, 2007  R0.04a Supported multiple partitions on a plysical drive. (FatFs)
+                       Fixed an endian sensitive code in f_mkfs(). (FatFs)
+                       Added a capability of extending the file size to f_lseek().
+                       Added minimization level 3.
+                       Fixed a problem that can collapse a sector when recreate an
+                       existing file in any sub-directory at non FAT32 cfg. (Tiny-FatFs)
+

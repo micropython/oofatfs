@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<h1>FatFsƒ‚ƒWƒ…[ƒ‹ ƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒm[ƒg (for R0.04)</h1>
+<h1>FatFsƒ‚ƒWƒ…[ƒ‹ ƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒm[ƒg</h1>
 <hr>
 
 <div class="para">
@@ -19,14 +19,35 @@
 <li>ˆ—Œn‚ÍANSI C€‹’‚Å‚ ‚é‚±‚ÆB<br>
 FatFsƒ‚ƒWƒ…[ƒ‹‚ÍANSI C€‹’‚Å‹Lq‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAANSI C€‹’‚ÌƒRƒ“ƒpƒCƒ‰‚È‚ç“Á‚Éˆ—ŒnˆË‘¶‚È“_‚Í‚ ‚è‚Ü‚¹‚ñB‚½‚¾‚µAFAT‚Æ‚¢‚¤ƒVƒXƒeƒ€ŠÔ‚Åƒ|[ƒ^ƒuƒ‹‚È\‘¢‘Ì‚ð‘€ì‚·‚é‚½‚ßAƒvƒƒZƒbƒT‚ÌƒGƒ“ƒfƒBƒAƒ“‚Ìˆá‚¢‚ÍˆÓŽ¯‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B‚±‚ê‚Í ff.h(tff.h) ‚Å’è‹`‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAÅ‰‚É‚±‚ê‚ð“KØ‚ÉÝ’è‚µ‚Ü‚·(–Y‚ê‚Ä‚¢‚éê‡‚ÍƒGƒ‰[‚ðo‚·)B</li>
 <li>char/short/long ‚ÌƒTƒCƒY‚ÍA‚»‚ê‚¼‚ê  8/16/32ƒrƒbƒg‚Å‚ ‚é‚±‚ÆB<br>
-®”‚ÌŒ^‚ÆƒTƒCƒY‚ÉŠÖ‚µ‚Ä‚Í‚Ü‚Á‚Æ‚¤‚ÈƒRƒ“ƒpƒCƒ‰‚È‚ç–â‘è‚È‚¢‚ÆŽv‚¢‚Ü‚·Binteger.h“à‚Ì typedef‚ÆŠù‘¶‚Ì’è‹`‚ªÕ“Ë‚µ‚½ê‡‚Í–µ‚‚ª‚È‚¢‚æ‚¤‚É’ˆÓ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB</li>
+integer.h“à‚Åtypedef‚³‚ê‚Ä‚¢‚Ü‚·B®”‚ÌŒ^‚ÆƒTƒCƒY‚ÉŠÖ‚µ‚Ä‚ÍA‚Ü‚Á‚Æ‚¤‚Èˆ—Œn‚È‚ç–â‘è‚È‚¢‚Í‚¸‚Å‚·‚ªAŠù‘¶‚Ì’è‹`‚ÆÕ“Ë‚µ‚½ê‡‚Í–µ‚‚ª‚È‚¢‚æ‚¤‚É’ˆÓ‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB</li>
 </ul>
 </div>
 
 <div class="para">
+<h3>ƒƒ‚ƒŠŽg—p—Ê (R0.04a)</h3>
+<p>ŠeŽíŠÂ‹«‚Å‚Ìƒ‚ƒWƒ…[ƒ‹‚Ìƒƒ‚ƒŠŽg—p—Ê‚Ì—á‚ðŽ¦‚µ‚Ü‚·B”’l‚Ì’PˆÊ‚ÍƒoƒCƒg‚ÅAD‚Í˜_—ƒhƒ‰ƒCƒu”AF‚Í“¯ŽžƒI[ƒvƒ“Eƒtƒ@ƒCƒ‹”‚ðŽ¦‚µ‚Ü‚·BÅ“K‰»ƒIƒvƒVƒ‡ƒ“‚ÍA‘S‚ÄƒR[ƒhEƒTƒCƒY‚Æ‚µ‚Ä‚¢‚Ü‚·B</p>
+<table class="lst2">
+<tr><th></th><th>AVR</th><th>H8/300H</th><th>MSP430</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th></tr>
+<tr><td>ƒRƒ“ƒpƒCƒ‰</td><td>gcc</td><td>CH38</td><td>CL430</td><td>CC870C</td><td>CA850</td><td>SHC</td></tr>
+<tr><td>_MCU_ENDIAN</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
+<tr><td>FatFs ƒR[ƒh<br>(•W€, R/W\¬)</td><td>8672</td><td>8746</td><td></td><td></td><td>6384</td><td>7390</td></tr>
+<tr><td>FatFs ƒR[ƒh<br>(•W€, R/O\¬)</td><td>4232</td><td>4100</td><td></td><td></td><td>3012</td><td>3510</td></tr>
+<tr><td>FatFs ƒR[ƒh<br>(Å¬, R/W\¬)</td><td>5706</td><td>5678</td><td></td><td></td><td>4042</td><td>4882</td></tr>
+<tr><td>FatFs ƒR[ƒh<br>(Å¬, R/O\¬)</td><td>3018</td><td>3116</td><td></td><td></td><td>2198</td><td>2702</td></tr>
+<tr><td>FatFs Ã“Iƒ[ƒN</td><td>D*2 + 2</td><td>D*4 + 2</td><td></td><td></td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
+<tr><td>FatFs “®“Iƒ[ƒN</td><td>D*550 + F*544</td><td>D*550 + F*550</td><td></td><td></td><td>D*550 + F*550</td><td>D*550 + F*550</td></tr>
+<tr><td>Tiny-FatFs ƒR[ƒh<br>(•W€, R/W\¬)</td><td>7188</td><td>7206</td><td>6590</td><td>8799</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs ƒR[ƒh<br>(•W€, R/O\¬)</td><td>3592</td><td>3560</td><td>3162</td><td>4353</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs ƒR[ƒh<br>(Å¬, R/W\¬)</td><td>4670</td><td>4772</td><td>4322</td><td>6073</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs ƒR[ƒh<br>(Å¬, R/O\¬)</td><td>2576</td><td>2714</td><td>2378</td><td>3324</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs Ã“Iƒ[ƒN</td><td>4</td><td>6</td><td>4</td><td>4</td><td></td><td></td></tr>
+<tr><td>Tiny-FatFs “®“Iƒ[ƒN</td><td>542 + F*28</td><td>542 + F*32</td><td>542 + F*28</td><td>542 + F*28</td><td></td><td></td></tr>
+</table>
+</div>
+
+<div class="para">
 <h3>FatFs vs. Tiny-FatFs</h3>
-<p>ƒ|[ƒ^ƒuƒ‹EƒI[ƒfƒBƒI‚âƒf[ƒ^EƒƒK[‚È‚ÇA‚æ‚­‚ ‚é—p“r‚Å‚ÍTiny-FatFs‚Å\•ª‚Å‚·B‚µ‚©‚µATiny-FatFs‚ÍƒfƒtƒHƒ‹ƒg‚Å‚ÍFAT32‚É‘Î‰ž‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅAŽg—p‚Å‚«‚éƒfƒBƒXƒN‚Í2GB(FAT64‚Å4GB)‚Ü‚Å‚Æ‚¢‚¤§–ñ‚ª‚ ‚è‚Ü‚·B<tt>_USE_FAT32</tt>ƒIƒvƒVƒ‡ƒ“‚ÅFAT32‚ªƒTƒ|[ƒg‚³‚ê‚Ü‚·‚ªAƒR[ƒhEƒTƒCƒY‚ª–c‚ç‚Ý‚Ü‚·B</p>
-<p>ƒtƒ‹‹@”\‚ÌFatFs‚ÍA•¡”ƒtƒ@ƒCƒ‹‚ð‚‘¬ƒAƒNƒZƒX‚·‚éê‡‚âA•¡”ƒhƒ‰ƒCƒu‚Ì‘Î‰ž‚ª•K—v‚Èê‡‚É—LŒø‚Å‚·B</p>
+<p>ƒ|[ƒ^ƒuƒ‹EƒI[ƒfƒBƒI‚âƒf[ƒ^EƒƒK[‚È‚ÇA‚æ‚­‚ ‚é—p“r‚Å‚ÍTiny-FatFs‚Å\•ª‚Å‚·B‚µ‚©‚µATiny-FatFs‚Í•W€\¬‚Å‚ÍFAT32‚É‘Î‰ž‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅAŽg—p‚Å‚«‚éƒfƒBƒXƒN‚Í2GB(FAT64‚Å4GB)‚Ü‚Å‚Æ‚¢‚¤§–ñ‚ª‚ ‚è‚Ü‚·B<tt>_USE_FAT32</tt>ƒIƒvƒVƒ‡ƒ“‚ÅFAT32‚ð’Ç‰Á‚Å‚«‚Ü‚·‚ªA‚»‚Ì•ªƒR[ƒhEƒTƒCƒY‚ª–c‚ç‚Ý‚Ü‚·Bƒtƒ‹‹@”\‚ÌFatFs‚ÍA•¡”ƒtƒ@ƒCƒ‹‚ð‚‘¬ƒAƒNƒZƒX‚·‚éê‡‚âA•¡”ƒhƒ‰ƒCƒu‚Ì‘Î‰ž‚ª•K—v‚Èê‡‚É—LŒø‚Å‚·B</p>
 <div class="rset">
 <table class="lst2">
 <tr><th>ƒƒ‚ƒŠ—e—Ê</th><th>FATƒ^ƒCƒv</th></tr>
@@ -55,33 +76,31 @@ FatFsƒ‚ƒWƒ…[ƒ‹‚ÍANSI C€‹’‚Å‹Lq‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAANSI C€‹’‚ÌƒRƒ“ƒpƒCƒ‰‚È‚ç“Á‚É
 <br class="clr">
 <p>‚±‚±‚Åƒtƒ@ƒCƒ‹I/Oƒoƒbƒtƒ@‚Æ‚ÍAƒf[ƒ^EƒZƒNƒ^‚Ìˆê•”‚ð“Ç‚Ý‘‚«‚·‚é‚½‚ß‚Ì1ƒZƒNƒ^’·‚Ìƒoƒbƒtƒ@‚ÅAFatFs‚Å‚Í‚»‚Ìƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg“à‚ÌATiny-FatFs‚Å‚Íƒ[ƒNƒGƒŠƒA“à‚Ìƒoƒbƒtƒ@‚Ì‚±‚Æ‚ðŽw‚µ‚Ä‚¢‚Ü‚·B</p>
 <p>Tiny-FatFs‚Å‚ÍA‘S‚Ä‚Ìƒf[ƒ^“]‘—‚ÆFAT‚âƒfƒBƒŒƒNƒgƒŠ‚Ö‚ÌƒAƒNƒZƒX‚ð‚½‚¾ˆê‚Â‚ÌƒZƒNƒ^Eƒoƒbƒtƒ@‚Ås‚Á‚Ä‚¢‚é‚½‚ßAƒf[ƒ^“]‘—‚É‚æ‚èFAT‚ÌƒLƒƒƒbƒVƒ…‚ªŽ¸‚í‚êAƒNƒ‰ƒXƒ^‹«ŠE‚ð’Ê‰ß‚·‚é‚½‚Ñ‚ÉFATƒZƒNƒ^‚ð“Ç‚Ý’¼‚·•K—v‚ª‚ ‚è‚Ü‚·BFatFs‚Ìê‡‚ÍAƒf[ƒ^—pƒoƒbƒtƒ@‚ÍFAT—p‚Æ‚Í•Ê‚È‚Ì‚ÅAFATƒZƒNƒ^‚ð“Ç‚Þ•p“x‚ÍTiny-FatFs‚Ì 1/341, 1/256 ‚Ü‚½‚Í 1/128‚ÅÏ‚Ý‚Ü‚·(ƒNƒ‰ƒXƒ^‚ª˜A‘±‚µ‚Ä‚¢‚éê‡)B‚Â‚Ü‚èATiny-FatFs‚Í«”\’á‰º‚Ì‘ãž‚ð•¥‚Á‚ÄRAMŽg—p—Ê‚ðíŒ¸‚µ‚Ä‚¢‚é‚í‚¯‚Å‚·B</p>
-<p>“]‘——Ìˆæ‚Ì‚¤‚¿ƒZƒNƒ^‘S‘Ì‚ðŠÜ‚Þ•”•ª‚Í(}2)‚Ì‚æ‚¤‚Éƒtƒ@ƒCƒ‹I/Oƒoƒbƒtƒ@‚ð‰î‚³‚¸AƒfƒBƒXƒN‚Æ‚ÌŠÔ‚Å’¼Ú“]‘—‚³‚ê‚Ü‚·BŠ®‘S‚ÈƒZƒNƒ^EƒAƒ‰ƒCƒƒ“ƒgEƒAƒNƒZƒX‚Ìê‡(}3)‚ÍAƒtƒ@ƒCƒ‹I/Oƒoƒbƒtƒ@‚Í‘S‚­Žg—p‚³‚ê‚Ü‚¹‚ñB’¼Ú“]‘—‚Å‚ÍA‰Â”\‚È‚çdisk_read()‚É•¡”ƒZƒNƒ^‚ðŽw’è‚µ‚ÄÅ‘åŒÀ‚Ìƒ}ƒ‹ƒ`EƒZƒNƒ^“]‘—‚ªs‚í‚ê‚Ü‚·B‚½‚¾‚µAƒNƒ‰ƒXƒ^‹«ŠE‚ð‚Ü‚½‚®‚Æ‚«‚ÍA‚½‚Æ‚¦ƒZƒNƒ^‚ª˜A‘±‚µ‚Ä‚¢‚½‚Æ‚µ‚Ä‚à“]‘—‚Í•ªŠ„‚³‚ê‚Ü‚·B</p>
-<p>‚±‚Ì‚æ‚¤‚ÉA‹É—ÍƒZƒNƒ^EƒAƒ‰ƒCƒƒ“ƒgEƒAƒNƒZƒX‚É‚È‚é‚æ‚¤‚É”z—¶‚·‚ê‚ÎA–³‘Ê‚Èƒf[ƒ^“]‘—‚ªŒ¸‚Á‚Ä«”\‚ªŒüã‚µ‚Ü‚·B‚³‚ç‚ÉATiny-FatFs‚Å‚ÍFAT‚ÌƒLƒƒƒbƒVƒ…‚ª¶‚«‚é‚æ‚¤‚É‚È‚èAFatFs‚Æ“¯‚¶«”\‚ÆÈƒƒ‚ƒŠ“Á«‚ª“¯Žž‚É“¾‚ç‚ê‚Ü‚·B</p>
+<p>“]‘——Ìˆæ‚Ì‚¤‚¿ƒZƒNƒ^‘S‘Ì‚ðŠÜ‚Þ•”•ª‚Í(}2)‚Ì‚æ‚¤‚Éƒtƒ@ƒCƒ‹I/Oƒoƒbƒtƒ@‚ð‰î‚³‚¸AƒfƒBƒXƒN‚Æ‚ÌŠÔ‚Å’¼Ú“]‘—‚³‚ê‚Ü‚·BŠ®‘S‚ÈƒZƒNƒ^EƒAƒ‰ƒCƒƒ“ƒgEƒAƒNƒZƒX‚Ìê‡(}3)‚ÍAƒtƒ@ƒCƒ‹I/Oƒoƒbƒtƒ@‚Í‘S‚­Žg—p‚³‚ê‚Ü‚¹‚ñB’¼Ú“]‘—‚Å‚ÍA‰Â”\‚È‚çdisk_read()‚É•¡”ƒZƒNƒ^‚ðŽw’è‚µ‚ÄÅ‘åŒÀ‚Ìƒ}ƒ‹ƒ`EƒZƒNƒ^“]‘—‚ªs‚í‚ê‚Ü‚·B‚½‚¾‚µAƒNƒ‰ƒXƒ^‹«ŠE‚ð‚Ü‚½‚®‚Æ‚«‚ÍƒNƒ‰ƒXƒ^‚ª—×Ú‚µ‚Ä‚¢‚½‚Æ‚µ‚Ä‚à“]‘—‚Í•ªŠ„‚³‚ê‚Ü‚·B</p>
+<p>‚±‚Ì‚æ‚¤‚ÉA‹É—ÍƒZƒNƒ^EƒAƒ‰ƒCƒƒ“ƒgEƒAƒNƒZƒX‚É‚È‚é‚æ‚¤‚É”z—¶‚·‚ê‚ÎA–³‘Ê‚Èƒƒ‚ƒŠEƒRƒs[‚ªŒ¸‚Á‚Ä«”\‚ªŒüã‚µ‚Ü‚·B‚³‚ç‚ÉATiny-FatFs‚Å‚ÍFAT‚ÌƒLƒƒƒbƒVƒ…‚ª¶‚«‚é‚æ‚¤‚É‚È‚èAÈƒƒ‚ƒŠ“Á«‚ÆFatFs‚Ì«”\‚Æ‚ª“¯Žž‚É“¾‚ç‚ê‚Ü‚·B</p>
 </div>
 
 <div class="para">
 <h3>ƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“</h3>
-<p>ƒfƒBƒXƒNã‚ÌFAT\‘¢‚ð‘€ì‚µ‚Ä‚¢‚é“r’†‚ÅA’â“dA•s³‚ÈƒƒfƒBƒA‚ÌŽæ‚èŠO‚µA‰ñ•œ•s”\‚Èƒf[ƒ^ƒGƒ‰[“™‚ÌáŠQ‚ª”­¶‚·‚é‚ÆAXV‚ª’†“r”¼’[‚Èó‘Ô‚Å’†’f‚³‚êA‚»‚ÌŒ‹‰Ê‚Æ‚µ‚ÄFAT\‘¢‚ª”j‰ó‚³‚ê‚é‰Â”\«‚ª‚ ‚è‚Ü‚·BŽŸ‚ÉFatFsƒ‚ƒWƒ…[ƒ‹‚É‚¨‚¯‚éƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“‚ÆA‚»‚ÌŠÔ‚ÌáŠQ‚É‚æ‚è‹N‚«‚¤‚éƒGƒ‰[‚Ìó‘Ô‚ðŽ¦‚µ‚Ü‚·B</p>
+<p>ƒfƒBƒXƒNã‚ÌFAT\‘¢‚ð‘€ì‚µ‚Ä‚¢‚é“r’†‚ÅA’â“dA•s³‚ÈƒƒfƒBƒA‚ÌŽæ‚èŠO‚µA‰ñ•œ•s”\‚Èƒf[ƒ^EƒGƒ‰[“™‚ÌáŠQ‚ª”­¶‚·‚é‚ÆAˆ—‚ª’†“r”¼’[‚Èó‘Ô‚Å’†’f‚³‚êA‚»‚ÌŒ‹‰Ê‚Æ‚µ‚ÄFAT\‘¢‚ª”j‰ó‚³‚ê‚é‰Â”\«‚ª‚ ‚è‚Ü‚·BŽŸ‚ÉFatFsƒ‚ƒWƒ…[ƒ‹‚É‚¨‚¯‚éƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“‚ÆA‚»‚ÌŠÔ‚ÌáŠQ‚É‚æ‚è‹N‚«‚¤‚éƒGƒ‰[‚Ìó‘Ô‚ðŽ¦‚µ‚Ü‚·B</p>
 <div class="lset">
 }4. ’·‚¢ƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“<br>
-<img src="../img/f4.png" width="320" height="470" alt="fig.4">
+<img src="../img/f4.png" width="320" height="436" alt="fig.4">
 </div>
 <div class="lset">
 }5. ’Z‚­‚µ‚½ƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“<br>
-<img src="../img/f5.png" width="320" height="470" alt="fig.5">
+<img src="../img/f5.png" width="320" height="436" alt="fig.5">
 </div>
 <br class="clr">
-<p>Ô‚ÅŽ¦‚µ‚½ƒZƒNƒVƒ‡ƒ“‚ðŽÀs’†‚ÉáŠQ‚ª”­¶‚µ‚½ê‡AƒNƒƒXƒŠƒ“ƒN‚ª”­¶‚µ‚Ä‘€ì‘ÎÛ‚Ìƒtƒ@ƒCƒ‹EƒfƒBƒŒƒNƒgƒŠ‚ªŽ¸‚í‚ê‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B‰©F‚ÅŽ¦‚µ‚½ƒZƒNƒVƒ‡ƒ“‚ðŽÀs’†‚ÉáŠQ‚ª”­¶‚µ‚½ê‡A‚Â‚¬‚Ì‚¤‚¿‚¢‚¸‚ê‚©‚Ü‚½‚Í•¡”‚ÌŒ‹‰Ê‚ª¶‚¶‚é‰Â”\«‚ªl‚¦‚ç‚ê‚Ü‚·B</p>
+<p>Ô‚ÅŽ¦‚µ‚½ƒZƒNƒVƒ‡ƒ“‚ðŽÀs’†‚ÉáŠQ‚ª”­¶‚µ‚½ê‡AƒNƒƒXEƒŠƒ“ƒN‚ª”­¶‚µ‚Ä‘€ì‘ÎÛ‚Ìƒtƒ@ƒCƒ‹EƒfƒBƒŒƒNƒgƒŠ‚ªŽ¸‚í‚ê‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B‰©F‚ÅŽ¦‚µ‚½ƒZƒNƒVƒ‡ƒ“‚ðŽÀs’†‚ÉáŠQ‚ª”­¶‚µ‚½ê‡A‚Â‚¬‚Ì‚¤‚¿‚¢‚¸‚ê‚©‚Ü‚½‚Í•¡”‚ÌŒ‹‰Ê‚ª¶‚¶‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B</p>
 <ul>
-<li>‘‚«Š·‚¦’†‚Ìƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^\‘¢‚ª”j‰ó‚³‚ê‚éB</li>
+<li>‘‚«Š·‚¦’†‚Ìƒtƒ@ƒCƒ‹‚Ì“à—e‚ª”j‰ó‚³‚ê‚éB</li>
 <li>’Ç‹L’†‚Ìƒtƒ@ƒCƒ‹‚ªƒI[ƒvƒ“‘O‚Ìó‘Ô‚É–ß‚éB</li>
 <li>V‹K‚Éì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ªÁ‚¦‚éB</li>
-<li>V‹K‚Éì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì’·‚³‚ªƒ[ƒ‚É‚È‚Á‚ÄŽc‚éB</li>
-<li>ã‘‚«‚Åì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì’·‚³‚ªƒ[ƒ‚É‚È‚Á‚ÄŽc‚éB</li>
-<li>ã‘‚«‚Åì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ªì¬‘O‚Ìó‘Ô‚É–ß‚éB</li>
+<li>V‹K‚Ü‚½‚Íã‘‚«‚Åì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Ì’·‚³‚ªƒ[ƒ‚É‚È‚Á‚ÄŽc‚éB</li>
 <li>ƒƒXƒgƒ`ƒF[ƒ“‚Ì”­¶‚É‚æ‚èƒfƒBƒXƒN‚Ì—˜—pŒø—¦‚ªˆ«‰»‚·‚éB</li>
 </ul>
-<p>‚¢‚¸‚ê‚à‘‚«ž‚Ý’†‚Å‚È‚¢ƒtƒ@ƒCƒ‹‚É‚Í‰e‹¿‚Í‚ ‚è‚Ü‚¹‚ñB‚±‚ê‚ç‚ÌƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“‚ÍAƒtƒ@ƒCƒ‹‚ð‘‚«ž‚Ýƒ‚[ƒh‚ÅŠJ‚¢‚Ä‚¢‚éŽžŠÔ‚ðÅ¬ŒÀ‚É‚·‚é‚©Af_sync()‚ð“K‹XŽg—p‚·‚é‚±‚Æ‚Å}5‚Ì‚æ‚¤‚ÉÅ¬‰»‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B</p>
+<p>‚¢‚¸‚ê‚à‘‚«ž‚Ý’†‚â‘€ì‘ÎÛ‚Å‚È‚¢ƒtƒ@ƒCƒ‹‚É‚Í‰e‹¿‚Í‚ ‚è‚Ü‚¹‚ñB‚±‚ê‚ç‚ÌƒNƒŠƒ`ƒJƒ‹EƒZƒNƒVƒ‡ƒ“‚ÍAƒtƒ@ƒCƒ‹‚ð‘‚«ž‚Ýƒ‚[ƒh‚ÅŠJ‚¢‚Ä‚¢‚éŽžŠÔ‚ðÅ¬ŒÀ‚É‚·‚é‚©Af_sync()‚ð“K‹XŽg—p‚·‚é‚±‚Æ‚Å}5‚Ì‚æ‚¤‚ÉƒŠƒXƒN‚ðÅ¬‰»‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B</p>
 </div>
 
 
@@ -89,18 +108,18 @@ FatFsƒ‚ƒWƒ…[ƒ‹‚ÍANSI C€‹’‚Å‹Lq‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAANSI C€‹’‚ÌƒRƒ“ƒpƒCƒ‰‚È‚ç“Á‚É
 <h3>Œ»ƒŠƒrƒWƒ‡ƒ“‚Ì–â‘è“_‚Æ‚»‚Ì‰ü‘PˆÄ</h3>
 <ul>
 <li>ƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚Ì’ŠÛ‰»<br>
-Œ»Ý‚Íƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚ÌŽÀ‘Ì‚ðƒAƒvƒŠƒP[ƒVƒ‡ƒ“‘¤‚ÅŠÇ—‚µ‚Ä‚¢‚é‚Ì‚ÅAƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒ‚ƒWƒ…[ƒ‹‚Å‚ÌƒXƒ^ƒbƒNÁ”ï—Ê‚ª‘½‚­‚È‚è‚Ü‚·(Tiny-FatFs‚Å‚Í–â‘è‚É‚Í‚È‚ç‚È‚¢)B‚±‚ê‚ðƒnƒ“ƒhƒ‹‚ÅŠÇ—‚·‚é‚È‚Ç‚æ‚è’ŠÛ‰»‚·‚ê‚ÎƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒ‚ƒWƒ…[ƒ‹‚Å‚ÌƒXƒ^ƒbƒNÁ”ï—Ê‚ðŒ¸‚ç‚¹‚Ü‚·B‚±‚Ìê‡AFatFs“à‚Åƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚Ì—Ìˆæ‚ðÃ“I‚ÉŠm•Û‚µ‚Ä‚¨‚­‚©Amalloc()‚·‚é‚±‚Æ‚É‚È‚è‚Ü‚·B‚½‚¾‚µA‚±‚Ì‚æ‚¤‚É‚·‚é‚Æƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚ð’¼ÚŽQÆ‚Å‚«‚È‚­‚È‚èAfeof‚âftell‚È‚Çƒ€ƒ_‚ÈŠÖ”‚ªV‚½‚É•K—v‚É‚È‚è‚Ü‚·B</li>
+Œ»Ý‚Íƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚ÌŽÀ‘Ì‚ðƒAƒvƒŠƒP[ƒVƒ‡ƒ“‘¤‚ÅŠÇ—‚µ‚Ä‚¢‚é‚Ì‚ÅAƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒ‚ƒWƒ…[ƒ‹‚Å‚ÌƒXƒ^ƒbƒNÁ”ï—Ê‚ª‘½‚­‚È‚è‚Ü‚·(Tiny-FatFs‚Å‚Í–â‘è‚É‚È‚ç‚È‚¢)B‚±‚ê‚ðƒnƒ“ƒhƒ‹‚ÅŠÇ—‚·‚é‚È‚Ç‚æ‚è’ŠÛ‰»‚·‚ê‚ÎƒAƒvƒŠƒP[ƒVƒ‡ƒ“Eƒ‚ƒWƒ…[ƒ‹‚Å‚ÌƒXƒ^ƒbƒNÁ”ï—Ê‚ðŒ¸‚ç‚¹‚é‚µA‘¼‚Ìƒtƒ@ƒCƒ‹EƒVƒXƒeƒ€‚Ö‚Ì‘Î‰ž‚à—eˆÕ‚É‚È‚è‚Ü‚·B‚±‚Ìê‡AFatFs“à‚Åƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚Ì—Ìˆæ‚ðÃ“I‚ÉŠm•Û‚µ‚Ä‚¨‚­‚©Amalloc()‚·‚é‚±‚Æ‚É‚È‚è‚Ü‚·B‚½‚¾‚µA‚±‚Ì‚æ‚¤‚É‚·‚é‚Æƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg‚ð’¼ÚŽQÆ‚Å‚«‚È‚­‚È‚èAfeof‚âftell‚È‚Çƒ€ƒ_‚ÈŠÖ”‚ªV‚½‚É•K—v‚É‚È‚è‚Ü‚·B</li>
 <li>ƒZƒNƒ^Eƒoƒbƒtƒ@ŠÇ—‚Ì‰ü‘P<br>
 Œ»Ý‚ÍƒZƒNƒ^Eƒoƒbƒtƒ@‚ðŒÅ’è‚µ‚ÄŽg—p‚µ‚Ä‚¢‚é‚½‚ßA–³‘Ê‚ÈƒfƒBƒXƒNƒAƒNƒZƒX‚ª‘½‚­Œø—¦‚ªˆ«‚¢Bƒƒ‚ƒŠ‚Ì‘ò‚ÈƒVƒXƒeƒ€‚Å‚ÍA•¡”‚ÌƒZƒNƒ^Eƒoƒbƒtƒ@‚ðŽg—p‚µ‚ÄƒfƒBƒXƒNEƒLƒƒƒbƒVƒ…‚ð\¬‚·‚ê‚Î«”\‚ðŒüã‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B</li>
 <li>FSInfo‚Ö‚Ì‘Î‰ž<br>
 FAT32‚Å‚Í‚»‚Ì–c‘å‚ÈƒNƒ‰ƒXƒ^”‚Ì‚½‚ßAƒtƒ@ƒCƒ‹V‹Kì¬‚â‹ó‚«ƒXƒy[ƒXŽæ“¾Žž‚ÌƒNƒ‰ƒXƒ^EƒT[ƒ`‚É‚©‚È‚è‚ÌŽžŠÔ‚ð—v‚µ‚Ü‚·B‚±‚Ì‚½‚ßAÅIŠ„‚è“–‚ÄƒNƒ‰ƒXƒ^”Ô†‚âŽc‚èƒNƒ‰ƒXƒ^”‚ªFSInfoƒZƒNƒ^‚É‹L˜^‚³‚ê‚Ä‚¢‚ÄA‰„X‚ÆƒNƒ‰ƒXƒ^EƒT[ƒ`‚·‚é‚Ì‚ð”ð‚¯‚ç‚ê‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚Ü‚·BŒ»Ý‚ÍFSInfo‚É–¢‘Î‰ž‚È‚Ì‚ÅA‹ó‚«ƒXƒy[ƒXŽæ“¾Žž‚âAƒfƒBƒXƒNŽg—p—Ê‚ª‘½‚¢ó‘Ô‚Å‚Ìƒtƒ@ƒCƒ‹ì¬(ì¬Œã‚ÌÅ‰‚Ì‘‚«ž‚Ý)ˆ—ŽžŠÔ‚Í–â‘è‚É‚È‚éƒŒƒxƒ‹‚Å‚·B</li>
 <li>’·‚¢ƒtƒ@ƒCƒ‹–¼‚Ö‚Ì‘Î‰ž<br>
-FAT‚ÌŠg’£Žd—l‚Å‚Í]—ˆ‚Ì8.3Œ`Ž®ƒtƒ@ƒCƒ‹–¼‚É‰Á‚¦A255•¶Žš‚Ü‚Å‚Ì’·‚¢ƒtƒ@ƒCƒ‹–¼‚ðˆµ‚¦‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚Ü‚·‚ªAŒ»ƒŠƒrƒWƒ‡ƒ“‚Å‚Í–¢‘Î‰ž‚Å8.3Œ`Ž®‚µ‚©Žg—p‚Å‚«‚Ü‚¹‚ñB‚±‚ê‚É‘Î‰ž‚·‚é‚É‚ÍAƒtƒ@ƒCƒ‹–¼‚¾‚¯‚Å‚à500ƒoƒCƒgˆÈã‚Ìƒoƒbƒtƒ@‚ª•K—v‚É‚È‚Á‚½‚èAUCS-2‚ÆShift_JIS‚Ì‘ŠŒÝ•ÏŠ·(‹‘å‚È•ÏŠ·ƒe[ƒuƒ‹)‚ª•K—v‚Æ‚È‚é‚È‚ÇAƒƒ‚ƒŠ‚ÌÁ”ï‚ª”š”­“I‚É‘‚¦‚Ä‚µ‚Ü‚¢‚Ü‚·B‚È‚¨A’·‚¢ƒtƒ@ƒCƒ‹–¼‚Ì‹@”\‚ÍMicrosoftŽÐ‚Ì“Á‹–‚É‚È‚Á‚Ä‚¢‚é‚½‚ßA‚±‚ê‚ð»•i‚ÉŽg‚¤‚É‚Íƒ‰ƒCƒZƒ“ƒXŒ_–ñ‚ª•K—v‚Å‚·B</li>
+FAT‚ÌŠg’£Žd—l‚Å‚ÍMS-DOS‚Ì8.3Œ`Ž®ƒtƒ@ƒCƒ‹–¼‚É‰Á‚¦A255•¶Žš‚Ü‚Å‚Ì’·‚¢ƒtƒ@ƒCƒ‹–¼(LFN)‚ðˆµ‚¦‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚Ü‚·‚ªAŒ»ƒŠƒrƒWƒ‡ƒ“‚Å‚Í–¢‘Î‰ž‚Å8.3Œ`Ž®‚µ‚©Žg—p‚Å‚«‚Ü‚¹‚ñB‚±‚ê‚É‘Î‰ž‚·‚é‚É‚ÍAƒtƒ@ƒCƒ‹–¼‚¾‚¯‚Å‚à500ƒoƒCƒgˆÈã‚Ìƒoƒbƒtƒ@‚ª•K—v‚É‚È‚Á‚½‚èAUCS-2‚ÆShift_JIS‚Ì‘ŠŒÝ•ÏŠ·(‹‘å‚È•ÏŠ·ƒe[ƒuƒ‹‚ðŽg‚¤)‚ª•K—v‚Æ‚È‚é‚È‚ÇAƒƒ‚ƒŠ‚ÌÁ”ï‚ª”š”­“I‚É‘‚¦‚Ä‚µ‚Ü‚¢‚Ü‚·B‚È‚¨ALFN‚Ì‹@”\‚ÍMicrosoftŽÐ‚Ì“Á‹–‚É‚È‚Á‚Ä‚¢‚é‚½‚ßA‚±‚ê‚ð»•i‚ÉŽg‚¤‚É‚Íƒ‰ƒCƒZƒ“ƒXŒ_–ñ‚ª•K—v‚Å‚·B</li>
 <li>RTOS‚Ö‚Ì‘Î‰ž<br>
-FatFsƒ‚ƒWƒ…[ƒ‹‚ðŽg—p‚·‚éƒ^ƒXƒN‚ðˆê‚Â‚ÉŒÀ‚é‚È‚ç“Á‚ÉˆÓŽ¯‚·‚é•K—v‚Í‚ ‚è‚Ü‚¹‚ñ‚ªA•¡”‚Ìƒ^ƒXƒN‚©‚çŽg—p‚·‚é‚É‚ÍA‰½‚ç‚©‚Ì”r‘¼§Œä‚ª•K—v‚É‚È‚Á‚Ä‚«‚Ü‚·BFatFsƒ‚ƒWƒ…[ƒ‹‚ÌRTOS‚Ö‚Ì‘Î‰žì‹Æ‚ÍA<a href="http://www.toppers.jp/">TOPPERSƒvƒƒWƒFƒNƒg</a>‚Ås‚í‚ê‚Ä‚¢‚Ü‚·B</li>
+FatFsƒ‚ƒWƒ…[ƒ‹‚ðŽg—p‚·‚éƒ^ƒXƒN‚ðˆê‚Â‚ÉŒÀ‚é‚È‚ç“Á‚ÉˆÓŽ¯‚·‚é•K—v‚Í‚ ‚è‚Ü‚¹‚ñ‚ªA“¯‚¶˜_—ƒhƒ‰ƒCƒu‚É•¡”‚Ìƒ^ƒXƒN‚©‚ç“¯ŽžƒAƒNƒZƒX‚·‚é‚É‚ÍA‰½‚ç‚©‚Ì”r‘¼§Œä‚ª•K—v‚É‚È‚Á‚Ä‚«‚Ü‚·BFatFsƒ‚ƒWƒ…[ƒ‹‚ÌRTOS‚Ö‚Ì‘Î‰žì‹Æ‚ÍA<a href="http://www.toppers.jp/">TOPPERSƒvƒƒWƒFƒNƒg</a>‚Ås‚í‚ê‚Ä‚¢‚Ü‚·B</li>
 </ul>
 <br>
-<p>‚»‚µ‚ÄA‚±‚ê‚ç‚Ì‹@”\Šg’£‚ðs‚¤‚Æ‚»‚ê‚¾‚¯‘½‚­‚ÌƒŠƒ\[ƒX‚ª—v‹‚³‚ê‚é‚æ‚¤‚É‚È‚èA‚±‚ÌƒvƒƒWƒFƒNƒg‚ª‘ÎÛ‚Æ‚µ‚Ä‚¢‚é8/16ƒrƒbƒgEƒ}ƒCƒRƒ“‚ÌƒVƒXƒeƒ€‚ÉÚ‚¹‚ç‚ê‚È‚­‚È‚Á‚Ä‚µ‚Ü‚¤‚Æ‚¢‚¤–â‘è‚à‚ ‚è‚Ü‚·(‚±‚ê‚ªˆê”Ô‚Ì–â‘è‚©‚à’m‚ê‚Ü‚¹‚ñ)B</p>
+<p>‚»‚µ‚ÄA‚±‚ê‚ç‚Ì‹@”\Šg’£‚ðs‚¤‚Æ‚»‚ê‚¾‚¯‘½‚­‚ÌƒŠƒ\[ƒX‚ª—v‹‚³‚ê‚é‚æ‚¤‚É‚È‚èA‚±‚ÌƒvƒƒWƒFƒNƒg‚Ì‘ÎÛ‚Æ‚·‚é8/16ƒrƒbƒgEƒ}ƒCƒRƒ“‚ÌƒVƒXƒeƒ€‚ÉÚ‚¹‚ç‚ê‚È‚­‚È‚Á‚Ä‚µ‚Ü‚¤‚Æ‚¢‚¤–â‘è‚à‚ ‚è‚Ü‚·(‚±‚ê‚ªˆê”Ô‚Ì–â‘è‚©‚à’m‚ê‚Ü‚¹‚ñ)B</p>
 </div>
 
 <p class="foot"><a href="../00index_j.html">–ß‚é</a></p>

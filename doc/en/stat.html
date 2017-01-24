@@ -25,7 +25,7 @@ FRESULT f_stat (
 <h4>Parameters</h4>
 <dl class="par">
 <dt>FileName</dt>
-<dd>Pointer to the null-terminated string that specifies the <a href="filename.html">file or directory</a> to get its information. Do not specify root directory.</dd>
+<dd>Pointer to the null-terminated string that specifies the <a href="filename.html">file or directory</a> to get its information.</dd>
 <dt>FileInfo</dt>
 <dd>Pointer to the blank <tt>FILINFO</tt> structure to store the information.</dd>
 </dl>
@@ -48,7 +48,7 @@ FRESULT f_stat (
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>

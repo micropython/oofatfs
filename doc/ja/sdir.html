@@ -16,23 +16,23 @@
 <h4>FatFs</h4>
 <pre>
 typedef struct _DIR {
+    WORD    id;          /* Owner file system mount ID (inverted) */
+    WORD    index;       /* Current index */
     FATFS*  fs;          /* Pointer to the owner file system object */
     DWORD   sclust;      /* Start cluster */
     DWORD   clust;       /* Current cluster */
     DWORD   sect;        /* Current sector */
-    WORD    index;       /* Current index */
-    WORD    id;          /* Sum of owner file system mount ID */
 } DIR;
 </pre>
 <h4>Tiny-FatFs</h4>
 <pre>
 typedef struct _DIR {
+    WORD    id;          /* Owner file system mount ID (inverted) */
+    WORD    index;       /* Current index */
     FATFS*  fs;          /* Pointer to the owner file system object */
     CLUST   sclust;      /* Start cluster */
     CLUST   clust;       /* Current cluster */
     DWORD   sect;        /* Current sector */
-    WORD    index;       /* Current index */
-    WORD    id;          /* Sum of owner file system mount ID */
 } DIR;
 </pre>
 </div>

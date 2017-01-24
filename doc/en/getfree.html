@@ -45,7 +45,7 @@ FRESULT f_getfree (
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -74,7 +74,7 @@ FRESULT f_getfree (
     // Get free space
     printf("%lu KB total disk space.\n"
            "%lu KB available on the disk.\n",
-           (fs->max_clust - 2) * fs->sects_clust / 2,
+           (DWORD)(fs->max_clust - 2) * fs->sects_clust / 2,
            clust * fs->sects_clust / 2);
 </pre>
 </div>

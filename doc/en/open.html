@@ -36,8 +36,9 @@ FRESULT f_open (
 <tr><td>FA_READ</td><td>Specifies read access to the object. Data can be read from the file.<br>Combine with FA_WRITE for read-write access.</td></tr>
 <tr><td>FA_WRITE</td><td>Specifies write access to the object. Data can be written to the file.<br>Combine with FA_READ for read-write access.</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing.</td></tr>
-<tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>Opens the file, if it is existing. If not, the function creates the new file.</td></tr>
+<tr><td>FA_CREATE_NEW</td><td>Creates a new file. The function fails if the file is already existing.</td></tr>
+<tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
 </table>
 </dd>
 </dl>
@@ -57,6 +58,8 @@ FRESULT f_open (
 <dd>The file name is invalid.</dd>
 <dt>FR_INVALID_DRIVE</dt>
 <dd>The drive number is invalid.</dd>
+<dt>FR_EXIST</dt>
+<dd>The file is already existing.</dd>
 <dt>FR_DENIED</dt>
 <dd>The required access was denied due to any of following reasons: write mode open of a file that has read-only attribute, file creation under existing a same name directory or read-only file, cannot be created due to the directory table or disk full.</dd>
 <dt>FR_NOT_READY</dt>
@@ -64,7 +67,7 @@ FRESULT f_open (
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>Write mode open or creation under the medium is write protected.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -77,7 +80,7 @@ FRESULT f_open (
 <h4>Description</h4>
 <p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function.</p>
 <p>Before using any file function, work area (file system object) must be given to each logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
-<p>Flags <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt> are not supported in read-only configuration.</p>
+<p>The mode flags, <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>, are not supported in read-only configuration.</p>
 </div>
 
 

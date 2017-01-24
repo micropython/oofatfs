@@ -15,9 +15,9 @@
 <p>ドライブ上にFATファイル・システムを作成(フォーマット)します。</p>
 <pre>
 FRESULT f_mkfs (
-  BYTE  <em>Drive</em>,            /* Logical drive number */
-  BYTE  <em>PartitioningRule</em>, /* Partitioning rule */
-  BYTE  <em>AllocSize</em>         /* Allocation unit size */
+  BYTE  <em>Drive</em>,              /* Logical drive number */
+  BYTE  <em>PartitioningRule</em>,   /* Partitioning rule */
+  BYTE  <em>AllocSize</em>           /* Allocation unit size */
 );
 </pre>
 </div>
@@ -45,14 +45,16 @@ FRESULT f_mkfs (
 <dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
+<dt>FR_NOT_ENABLED</dt>
+<dd>その論理ドライブにワーク・エリアが割り当てられていない。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_MKFS_ABORTED</dt>
-<dd>次の理由で処理が中断された。
+<dd>次の理由で開始前に処理が中断された。
 <ul>
 <li>ディスク・サイズが小さすぎる。</li>
 <li>何らかの引数が無効。</li>
-<li>そのクラスタ・サイズが使えない。クラスタ数が0xFF7と0xFFF7近辺になると発生する可能性がある。</li>
+<li>そのクラスタ・サイズが使えない。クラスタ数が0xFF7と0xFFF7近辺になるとき発生する可能性がある。</li>
 </ul>
 </dd>
 </dl>
@@ -60,8 +62,9 @@ FRESULT f_mkfs (
 
 <div class="para">
 <h4>説明</h4>
-<p>f_mkfs関数はFATファイル・システムをドライブ上に作成します。リムーバブル・メディアのパーテーショニング・ルールとしては、FDISK形式とSFD形式がありますが、多くの場合はFDISK形式が推奨されます。FATタイプ(FAT12/FAT16/FAT32)は、ディスク上のクラスタ数によってのみ決定される決まりになっていて、それ以外の要因はありません。したがって、どのFATタイプになるかは、ディスク・サイズとクラスタ・サイズに依存します。</p>
-<p>この関数は、FatFsで_USE_MKFSを選択したときにサポートされます。<p>
+<p>f_mkfs関数はFATファイル・システムをドライブ上に作成します。リムーバブル・メディアのパーテーショニング・ルールとしては、FDISK形式とSFD形式がありますが、FDISK形式が一般的です。この関数は<em>複数区画には対応していない</em>ので、その物理ドライブの既存の区画は全て削除され、全体が一つの区画になります。</p>
+<p>FATタイプ(FAT12/FAT16/FAT32)は、ディスク上の<em>クラスタ数によってのみ決定</em>される[FAT仕様書より]決まりになっていて、それ以外の要因はありません。したがって、どのFATタイプになるかは、ディスク・サイズとクラスタ・サイズに依存します。クラスタ・サイズは大きいほど性能が上がるので、特に小容量のドライブでなければ64セクタを選択しておけばよいです。</p>
+<p>この関数は、FatFsで構成オプション<tt>_USE_MKFS</tt>を選択したときにサポートされます。また、Tiny-FatFsではサポートされません。<p>
 </div>
 
 

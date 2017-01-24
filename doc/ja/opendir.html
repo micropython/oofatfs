@@ -48,7 +48,7 @@ FRESULT f_opendir (
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -59,7 +59,7 @@ FRESULT f_opendir (
 
 <div class="para">
 <h4>解説</h4>
-<p>ディレクトリをオープンします。正常終了したら、<tt><em>DirObject</em></tt>構造体を使ってこのディレクトリの項目を順次読み出せます。<tt><em>DirObject</em></tt>構造体は使用後は任意の時点で破棄できます。<tt>_FS_MINIMIZE == 2</tt>ではこの関数はサポートされません。</p>
+<p>ディレクトリをオープンします。正常終了したら、<tt>DirObject</tt>構造体を使ってこのディレクトリの項目を順次読み出せます。<tt>DirObject</tt>構造体は使用後は任意の時点で破棄できます。<tt>_FS_MINIMIZE >= 2</tt>ではこの関数はサポートされません。</p>
 </div>
 
 

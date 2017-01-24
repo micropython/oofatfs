@@ -33,11 +33,12 @@ FRESULT f_open (
 <dd>ファイルのアクセス方法やオープン方法を決めるフラグです。このパラメータには次の組み合わせを指定します。<br>
 <table class="lst">
 <tr><th>値</th><th>意味</th></td>
-<tr><td>FA_READ</td><td>読み出しモードでオープンします。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
-<tr><td>FA_WRITE</td><td>書き込みモードでオープンします。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
+<tr><td>FA_READ</td><td>読み出しモードで開きます。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
+<tr><td>FA_WRITE</td><td>書き込みモードで開きます。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。</td></tr>
-<tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。既存のファイルがある場合は、サイズを0にしてから開きます。</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。</td></tr>
+<tr><td>FA_CREATE_NEW</td><td>ファイルを作成します。同名のファイルがある場合は、エラーになります。</td></tr>
+<tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。同名のファイルがある場合は、サイズを0にしてから開きます。</td></tr>
 </table>
 </dd>
 </dl>
@@ -48,7 +49,7 @@ FRESULT f_open (
 <h4>戻り値</h4>
 <dl class="ret">
 <dt>FR_OK (0)</dt>
-<dd>正常終了。以降、<tt><em>FileObject</em></tt>構造体を使ってこのファイルを操作できます。</dd>
+<dd>正常終了。以降、<tt>FileObject</tt>構造体を使ってこのファイルを操作できます。</dd>
 <dt>FR_NO_FILE</dt>
 <dd>ファイルが見つからない。</dd>
 <dt>FR_NO_PATH</dt>
@@ -57,6 +58,8 @@ FRESULT f_open (
 <dd>ファイル名が不正。</dd>
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
+<dt>FR_EXIST</dt>
+<dd>同名のファイルが既にある。</dd>
 <dt>FR_DENIED</dt>
 <dd>アクセスが拒否された。リード・オンリー・ファイルの書き込みモード・オープン、同名のディレクトリまたはリード・オンリー・ファイルがある状態でのファイル作成、ディスクまたはディレクトリ・テーブルが満杯でファイルを作成できないなど。</dd>
 <dt>FR_NOT_READY</dt>
@@ -64,7 +67,7 @@ FRESULT f_open (
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態で書き込み系オープンをした。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
@@ -77,7 +80,7 @@ FRESULT f_open (
 <h4>解説</h4>
 <p>作成されたファイル・オブジェクトは、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。</p>
 <p>ファイル操作関数を使用する前にまず、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与えなければなりません。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
-<p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
+<p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
 </div>
 
 

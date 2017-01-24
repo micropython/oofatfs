@@ -38,7 +38,7 @@ FRESULT f_chmod (
 </table>
 </dd>
 <dt>AttributeMask</dt>
-<dd>変更する属性のマスク。指定した属性が設定または解除され、指定されなかった属性は保持されます。<tt>Attribute</tt>と同じ値を使います。</dd>
+<dd>変更する属性のマスク。指定した属性が設定または解除され、指定されなかった属性は状態が保持されます。<tt>Attribute</tt>と同じ値を使います。</dd>
 </dl>
 </div>
 
@@ -61,7 +61,7 @@ FRESULT f_chmod (
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>

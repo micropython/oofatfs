@@ -45,7 +45,7 @@ FRESULT f_mount (
 <div class="para">
 <h4>Description</h4>
 <p>The f_mount function registers/unregisters a work area to the FatFs module. The work area must be given to the logical drive with this function before using any file function. To unregister a work area, specify a NULL to the <em>FileSystemObject</em>, and then the work area can be discarded.</p>
-<p>This function only initializes the work area and registers its address to the internal table, any access to the disk I/O layer does not occure. Actual mounting process is performed in any other file funcitons when it is needed.<p>
+<p>This function only initializes the work area and registers its address to the internal table, any access to the disk I/O layer does not occure. Actual mounting process is performed in any other file funcitons with path name when it is needed.<p>
 </div>
 
 

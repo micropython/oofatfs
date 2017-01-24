@@ -41,13 +41,15 @@ FRESULT f_mkdir (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_DENIED</dt>
-<dd>同名のディレクトリやファイルの存在、ディスクやディレクトリ・エントリが満杯の場合など。</dd>
+<dd>ディスクやディレクトリ・エントリが満杯の場合など。</dd>
+<dt>FR_EXIST</dt>
+<dd>同名のディレクトリやファイルが存在する。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>

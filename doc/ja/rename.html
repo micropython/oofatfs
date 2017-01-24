@@ -27,7 +27,7 @@ FRESULT f_rename (
 <dt>OldName</dt>
 <dd>変更対象のファイルまたはディレクトリの<a href="filename.html">フルパス名</a>の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>NewName</dt>
-<dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在するものと同じ名前は使えません。また、ドライブ番号は指定できず、<em>OldName</em>で指定されたドライブ上として扱われます。<br>
+<dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在するものと同じ名前は使えません。また、ドライブ番号は指定できず、<tt>OldName</tt>で指定されたドライブ上のオブジェクトとして扱われます。<br>
 </dl>
 </div>
 
@@ -46,13 +46,15 @@ FRESULT f_rename (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_DENIED</dt>
-<dd>新しい名前が作れない。</dd>
+<dd>新しい名前のオブジェクトが作れない。</dd>
+<dt>FR_EXIST</dt>
+<dd>NewNameと同じ名前のオブジェクトが既にある。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>メディアが書き込み禁止状態。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dd>ディスク・エラーまたは内部エラーによる失敗。</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>論理ドライブにワークエリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>

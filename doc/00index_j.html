@@ -3,8 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="start" title="Site Top" href="../../index_j.html">
-<link rel="up" title="Freewares" href="../../fsw.html">
 <link rel="alternate" hreflang="en" title="English version" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - 汎用FATファイルシステム・モジュール</title>
@@ -16,46 +14,21 @@
 
 <div class="abst">
 <img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
-<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高機能版（<strong>FatFs</strong>）と省メモリ版（<strong>Tiny-FatFs</strong>）の2通りを作成してみました。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュール（サンプルあり）を用意する必要があります。</p>
+<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, PIC, AVR, H8, Z80などほとんどの8ビット・マイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高機能版（<strong>FatFs</strong>）と省メモリ版（<strong>Tiny-FatFs</strong>）の2通りを作成してみました。</p>
 <h4>FatFsの特徴</h4>
-<ul>
+<ol>
  <li>ファイル・システム用とファイルI/O用バッファを分離し、複数ファイルの高速アクセスに適する</li>
+ <li>複数のドライブ・パーテーションをサポート</li>
  <li>FAT12, FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
- <li>複数ドライブをサポート</li>
- <li>8.3形式ファイル名とNT小文字フラグに対応</li>
- <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
+ <li>8.3形式ファイル名とNT小文字フラグに対応(LFN未対応)</li>
+ <li>FDISKフォーマットおよびSFDフォーマットに対応</li>
  <li>8/16ビットマイコン向けにコードを最適化</li>
-</ul>
+</ol>
 <h4>Tiny-FatFsの特徴(FatFsとの相違)</h4>
-<ul>
+<ol>
  <li>RAMの使用量を削減し、小メモリ・システム(RAM:1KB)にも対応</li>
  <li>単一ドライブのみサポート</li>
-</ul>
-</div>
-
-
-<div class="para">
-<h3>メモリ使用量</h3>
-<p>いくつかのコンフィギュレーション・オプションにより、不要な関数を削ってモジュール・サイズを削減できます。次に実際のメモリ使用量[バイト]を示します(avrgccの例)。</p>
-
-<div class="lset">
-<table class="lst2">
- <caption>FatFs</caption>
- <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>プログラム(R/W構成)</td><td>8574</td><td>6094</td></tr>
- <tr><td>プログラム(R/O構成)</td><td>4268</td><td>3494</td></tr>
- <tr><td>静的ワークエリア</td><td colspan="2">2 + 2*&lt;drives&gt;</td>
- <tr><td>動的ワークエリア</td><td colspan="2">550*&lt;drives&gt; + 544*&lt;files&gt;</td>
-</table>
-</div>
-<table class="lst2">
- <caption>Tiny-FatFs</caption>
- <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>プログラム(R/W構成)</td><td>7164</td><td>4890</td></tr>
- <tr><td>プログラム(R/O構成)</td><td>3660</td><td>2946</td></tr>
- <tr><td>静的ワークエリア</td><td colspan="2">4</td></tr>
- <tr><td>動的ワークエリア</td><td colspan="2">542 + 28*&lt;files&gt;</td></tr>
-</table>
+</ol>
 </div>
 
 
@@ -85,12 +58,13 @@
 
 <div class="para">
 <h3>下位レイヤI/F</h3>
-<p>FatFs/Tiny-FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。</p>
+<p>FatFs/Tiny-FatFsモジュールは、物理ドライブへのアクセスや現在時刻を得るため、下位レイヤに次のインターフェースを要求します。これらのインターフェースを持つそれぞれの記録メディアに対応したディスクI/Oモジュールは、ユーザにより用意する必要があります。（サンプルもあり）</p>
 <ul>
 <li><a href="ja/dinit.html">disk_initialize</a> - ディスク・ドライブの初期化</li>
 <li><a href="ja/dstat.html">disk_status</a> - ディスク・ドライブの状態取得</li>
 <li><a href="ja/dread.html">disk_read</a> - ディスクからの読み込み</li>
 <li><a href="ja/dwrite.html">disk_write</a> - ディスクへの書き込み</li>
+<li><a href="ja/dioctl.html">disk_ioctl</a> - その他のドライブ制御</li>
 <li><a href="ja/fattime.html">get_fattime</a> - 日付・時刻の取得</li>
 </ul>
 </div>
@@ -108,7 +82,5 @@
 </div>
 
 
-<hr>
-<p class="foot"><a href="../../cc.html">戻る</a></p>
 </body>
 </html>

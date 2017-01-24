@@ -16,10 +16,6 @@
 <h4>FatFs</h4>
 <pre>
 typedef struct _FATFS {
-    BYTE    fs_type;        /* FAT type (0:Not mouted) */
-    BYTE    sects_clust;    /* Sectors per cluster */
-    BYTE    n_fats;         /* Number of FAT copies */
-    BYTE    drive;          /* Physical drive number */
     WORD    id;             /* File system mount ID */
     WORD    n_rootdir;      /* Number of root directory entries */
     DWORD   winsect;        /* Current sector appearing in the win[] */
@@ -29,7 +25,12 @@ typedef struct _FATFS {
     DWORD   dirbase;        /* Root directory start sector (cluster# for FAT32) */
     DWORD   database;       /* Data start sector */
     DWORD   last_clust;     /* Last allocated cluster */
+    BYTE    fs_type;        /* FAT type (0:Not mounted) */
+    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    n_fats;         /* Number of FAT copies */
+    BYTE    drive;          /* Physical drive number */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
+    BYTE    pad1;
     BYTE    win[512];       /* Disk access window for Directory/FAT */
 } FATFS;
 </pre>
@@ -37,10 +38,6 @@ typedef struct _FATFS {
 <h4>Tiny-FatFs</h4>
 <pre>
 typedef struct _FATFS {
-    BYTE    fs_type;        /* FAT type (0:Not mouted) */
-    BYTE    sects_clust;    /* Sectors per cluster */
-    BYTE    n_fats;         /* Number of FAT copies */
-    BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     WORD    id;             /* File system mount ID */
     WORD    n_rootdir;      /* Number of root directory entries */
     DWORD   winsect;        /* Current sector appearing in the win[] */
@@ -50,6 +47,10 @@ typedef struct _FATFS {
     CLUST   sects_fat;      /* Sectors per fat */
     CLUST   max_clust;      /* Maximum cluster# + 1 */
     CLUST   last_clust;     /* Last allocated cluster */
+    BYTE    fs_type;        /* FAT type (0:Not mounted) */
+    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    n_fats;         /* Number of FAT copies */
+    BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    win[512];       /* Disk access window for Directory/FAT/File */
 } FATFS;
 </pre>

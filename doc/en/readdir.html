@@ -15,8 +15,8 @@
 <p>The f_readdir function reads directory entries.</p>
 <pre>
 FRESULT f_readdir (
-  DIR* <em>DirObject</em>,    /* Pointer to the directory object strcture */
-  FILINFO* <em>FileInfo</em>  /* Pointer to the blank file information structure */
+  DIR* <em>DirObject</em>,    /* Pointer to the directory object structure */
+  FILINFO* <em>FileInfo</em>  /* Pointer to the file information structure */
 );
 </pre>
 </div>
@@ -40,7 +40,7 @@ FRESULT f_readdir (
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_INVALID_OBJECT</dt>
 <dd>The directory object is invalid.</dd>
 </dl>
@@ -49,7 +49,7 @@ FRESULT f_readdir (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_readdir function reads directory entries in sequence. All items in the directory can be read by calling f_readdir function repeatedly. When all directory items have been read and no item to read, the function returns a null string into <tt>f_name[]</tt> member without any error. For details of the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimization level of 2.</p>
+<p>The f_readdir function reads directory entries in sequence. All items in the directory can be read by calling f_readdir function repeatedly. When all directory items have been read and no item to read, the function returns a null string into <tt>f_name[]</tt> member without any error. For details of the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimization level of &gt;=2.</p>
 </div>
 
 

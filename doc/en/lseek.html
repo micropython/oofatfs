@@ -38,7 +38,7 @@ FRESULT f_lseek (
 <dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_INVALID_OBJECT</dt>
@@ -49,8 +49,13 @@ FRESULT f_lseek (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_lseek function moves the file read/write pointer of an open file object. The offset can be specified in only origin from top of the file and cannot moved to above end of the file. When an offset above the file size was specified, the read/write pointer moves to end of the file.</p>
-</div>
+<p>The f_lseek function moves the file R/W pointer of an open file. The offset can be specified in only origin from top of the file. When an offset above the file size is specified in write mode, the file is extended to the offset and the data in the extended area is undefined. After the function succeeded, member fptr in the file object should be checked in order to make sure the R/W pointer has been moved correctry. In case of fptr is less than Offset, any of the followings has been occured.</p>
+<ul>
+<li>In read-only mode, the Offset was clipped in file size.</li>
+<li>The drive gets full during the file extending process.</li>
+<li>There is any error in the FAT structure.</li>
+</ul>
+<p>This function is not supported in minimization level of &gt;= 3.</p></div>
 
 
 <div class="para">
@@ -62,7 +67,7 @@ FRESULT f_lseek (
     // Forward 3000 bytes
     res = f_lseek(&file, file.fptr + 3000);
 
-    // Rewind 2000 bytes
+    // Rewind 2000 bytes (take care on overflow)
     res = f_lseek(&file, file.fptr - 2000);
 
     // Move to end of the file

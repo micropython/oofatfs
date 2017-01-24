@@ -17,6 +17,9 @@
 <h4>FatFs</h4>
 <pre>
 typedef struct _FIL {
+    WORD    id;             /* Owner file system mount ID (inverted) */
+    BYTE    flag;           /* File status flags */
+    BYTE    sect_clust;     /* Left sectors in cluster */
     FATFS*  fs;             /* Pointer to the owner file system object */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
@@ -25,9 +28,6 @@ typedef struct _FIL {
     DWORD   curr_sect;      /* Current sector */
     DWORD   dir_sect;       /* Sector containing the directory entry */
     BYTE*   dir_ptr;        /* Ponter to the directory entry in the window */
-    WORD    id;             /* Sum of owner file system mount ID */
-    BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
     BYTE    buffer[512];    /* File R/W buffer */
 } FIL;
 </pre>
@@ -35,6 +35,9 @@ typedef struct _FIL {
 <h4>Tiny-FatFs</h4>
 <pre>
 typedef struct _FIL {
+    WORD    id;             /* Owner file system mount ID (inverted) */
+    BYTE    flag;           /* File status flags */
+    BYTE    sect_clust;     /* Left sectors in cluster */
     FATFS*  fs;             /* Pointer to owner file system */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
@@ -43,9 +46,6 @@ typedef struct _FIL {
     DWORD   curr_sect;      /* Current sector */
     DWORD   dir_sect;       /* Sector containing the directory entry */
     BYTE*   dir_ptr;        /* Ponter to the directory entry in the window */
-    WORD    id;             /* Sum of owner file system mount ID */
-    BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
 } FIL;
 </pre>
 </div>

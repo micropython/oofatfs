@@ -41,13 +41,15 @@ FRESULT f_mkdir (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>The drive number is invalid.</dd>
 <dt>FR_DENIED</dt>
-<dd>The function was denied due to any of following reasons: any file or directory that has same name is existing, cannot be created due to directory table or disk is full.</dd>
+<dd>The directory cannot be created due to directory table or disk is full.</dd>
+<dt>FR_EXIST</dt>
+<dd>A file or directory that has same name is already existing.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
 <dd>The medium is write protected.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>The function failed due to a disk error or an internal error.</dd>
 <dt>FR_NOT_ENABLED</dt>
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>

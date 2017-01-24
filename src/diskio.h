@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file  R0.04    (C)ChaN, 2007
+/  Low level disk interface modlue include file  R0.04a   (C)ChaN, 2007
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO
@@ -8,8 +8,18 @@
 
 #include "integer.h"
 
-typedef unsigned char   DSTATUS;
-typedef unsigned char   DRESULT;
+
+/* Status of Disk Functions */
+typedef BYTE    DSTATUS;
+
+/* Results of Disk Functions */
+typedef enum {
+    RES_OK = 0,     /* 0: Successful */
+    RES_ERROR,      /* 1: R/W Error */
+    RES_WRPRT,      /* 2: Write Protected */
+    RES_NOTRDY,     /* 3: Not Ready */
+    RES_PARERR      /* 4: Invalid Parameter */
+} DRESULT;
 
 
 /*---------------------------------------*/
@@ -25,13 +35,6 @@ DRESULT disk_ioctl (BYTE, BYTE, void*);
 void    disk_timerproc (void);
 
 
-/* Results of Disk Functions (DRESULT) */
-
-#define RES_OK          0       /* Successful */
-#define RES_ERROR       1       /* R/W Error */
-#define RES_WRPRT       2       /* Write Protected */
-#define RES_NOTRDY      3       /* Not Ready */
-#define RES_PARERR      4       /* Invalid Parameter */
 
 
 /* Disk Status Bits (DSTATUS) */
@@ -43,16 +46,18 @@ void    disk_timerproc (void);
 
 /* Command code for disk_ioctrl() */
 
-#define GET_SECTORS     1
-#define CTRL_POWER      2
-#define CTRL_LOCK       3
-#define CTRL_EJECT      4
-#define MMC_GET_CSD     10
-#define MMC_GET_CID     11
-#define MMC_GET_OCR     12
-#define ATA_GET_REV     20
-#define ATA_GET_MODEL   21
-#define ATA_GET_SN      22
+#define GET_SECTOR_COUNT    1
+#define GET_SECTOR_SIZE     2
+#define CTRL_SYNC           3
+#define CTRL_POWER          4
+#define CTRL_LOCK           5
+#define CTRL_EJECT          6
+#define MMC_GET_CSD         10
+#define MMC_GET_CID         11
+#define MMC_GET_OCR         12
+#define ATA_GET_REV         20
+#define ATA_GET_MODEL       21
+#define ATA_GET_SN          22
 
 
 #define _DISKIO
