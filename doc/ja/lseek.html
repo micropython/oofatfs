@@ -106,7 +106,7 @@ FRESULT f_lseek (
 
     DWORD lktbl[SZ_TBL];                   <span>/* リンク・マップ・テーブル格納バッファ */</span>
 
-    res = f_lseek(&amp;file, ofs1);            <span>/* 通常シーク (オープン時は file.cltbl == NULL) */</span>
+    res = f_lseek(&amp;file, ofs1);            <span>/* 通常シーク (オープン時、file.cltbl == NULL) */</span>
 
     file.cltbl = lktbl;                    <span>/* 高速シーク機能の有効化 */</span>
     lktbl[0] = SZ_TBL;                     <span>/* 先頭要素に配列要素数をセット */</span>

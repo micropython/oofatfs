@@ -23,7 +23,7 @@ typedef struct {
     TCHAR fname[13];  <span>/* Short file name (8.3 format) */</span>
 #if _USE_LFN
     TCHAR* lfname;    <span>/* Pointer to the LFN buffer */</span>
-    int   lfsize;     <span>/* Size of LFN buffer [characters] */</span>
+    int   lfsize;     <span>/* Size of the LFN buffer in unit of TCHAR */</span>
 #endif
 } FILINFO;
 </pre>

@@ -31,7 +31,7 @@ typedef struct {
     BYTE*   dir_ptr;      <span>/* Ponter to the directory entry in the window */</span>
 #endif
 #if _USE_FASTSEEK
-    DWORD*  cltbl;        <span>/* Pointer to the cluster link map table */</span>
+    DWORD*  cltbl;        <span>/* Pointer to the cluster link map table (Nulled on file open) */</span>
 #endif
 #if _FS_SHARE
     UINT    lockid;       <span>/* File lock ID */</span>

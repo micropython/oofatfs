@@ -44,7 +44,7 @@ FRESULT f_unlink (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_DENIED</dt>
-<dd>対象オブジェクトがリード・オンリー属性、ディレクトリの場合は空でない場合など。</dd>
+<dd>対象オブジェクトがリード・オンリー属性、空でないディレクトリやカレント・ディレクトリ。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -58,14 +58,14 @@ FRESULT f_unlink (
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>有効なFATボリュームが見つからない。</dd>
 <dt>FR_LOCKED</dt>
-<dd>ファイル共有機能によるアクセス拒否。</dd>
+<dd>ファイル共有機能(_FS_SHARE)によるアクセス拒否。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>オブジェクトを削除します。<em>開かれているオブジェクトやカレント・ディレクトリは削除してはなりません</em>。</p>
+<p>オブジェクトを削除します。<em>開かれているオブジェクトは削除してはなりません</em>。</p>
 </div>
 
 <div class="para">

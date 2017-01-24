@@ -81,7 +81,7 @@ FRESULT f_getfree (
     if (res) die(res);
 
     <span>/* 全セクタ数と空きセクタ数を計算 */</span>
-    tot_sect = (fs->max_clust - 2) * fs->csize;
+    tot_sect = (fs->n_fatent - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
     <span>/* ドライブサイズと空きサイズの表示 (512バイト/セクタと仮定) */</span>

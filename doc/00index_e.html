@@ -4,15 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="description" content="Open souece FAT file system module for embedded projects">
-<link rel="start" title="Site Top" href="../../">
-<link rel="up" title="Freewares" href="../../fsw_e.html">
 <link rel="alternate" hreflang="ja" title="Japanese version" href="00index_j.html">
 <link rel="stylesheet" href="css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>ELM - FAT File System Module</title>
+<title>ELM - FatFs Generic File System Module</title>
 </head>
 
 <body>
-<h1>FAT File System Module</h1>
+<h1>FatFs Generic File System Module</h1>
 <hr>
 
 <div class="abst">
@@ -28,7 +26,7 @@
   <ul>
    <li>Multiple volumes (physical drives and partitions).</li>
    <li>Multiple ANSI/OEM code pages including DBCS.</li>
-   <li>Long file name support in SBCS/DBCS or Unicode.</li>
+   <li>Long file name support in ANSI/OEM or Unicode.</li>
    <li>RTOS support.</li>
    <li>Multiple sector size support.</li>
    <li>Read-only, minimized API, I/O buffer and etc...</li>
@@ -42,27 +40,28 @@
 <h3>Application Interface</h3>
 <p>FatFs module provides following functions to the applications. In other words, this list describes what FatFs can do to access the FAT volumes.</p>
 <ul>
-<li><a href="en/mount.html">f_mount</a> - Register/Unregister a Work Area</li>
-<li><a href="en/open.html">f_open</a> - Open/Create a File</li>
-<li><a href="en/close.html">f_close</a> - Close a File</li>
-<li><a href="en/read.html">f_read</a> - Read File</li>
-<li><a href="en/write.html">f_write</a> - Write File</li>
-<li><a href="en/lseek.html">f_lseek</a> - Move R/W Pointer, Expand File Size</li>
-<li><a href="en/truncate.html">f_truncate</a> - Truncate File Size</li>
-<li><a href="en/sync.html">f_sync</a> - Flush Cached Data</li>
-<li><a href="en/opendir.html">f_opendir</a> - Open a Directory</li>
-<li><a href="en/readdir.html">f_readdir</a> - Read a Directory Item</li>
-<li><a href="en/getfree.html">f_getfree</a> - Get Free Clusters</li>
-<li><a href="en/stat.html">f_stat</a> - Get File Status</li>
-<li><a href="en/mkdir.html">f_mkdir</a> - Create a Directory</li>
-<li><a href="en/unlink.html">f_unlink</a> - Remove a File or Directory</li>
-<li><a href="en/chmod.html">f_chmod</a> - Change Attribute</li>
-<li><a href="en/utime.html">f_utime</a> - Change Timestamp</li>
-<li><a href="en/rename.html">f_rename</a> - Rename/Move a File or Directory</li>
-<li><a href="en/mkfs.html">f_mkfs</a> - Create a File System on the Drive</li>
+<li><a href="en/mount.html">f_mount</a> - Register/Unregister a work area</li>
+<li><a href="en/open.html">f_open</a> - Open/Create a file</li>
+<li><a href="en/close.html">f_close</a> - Close a file</li>
+<li><a href="en/read.html">f_read</a> - Read file</li>
+<li><a href="en/write.html">f_write</a> - Write file</li>
+<li><a href="en/lseek.html">f_lseek</a> - Move read/write pointer, Expand file zize</li>
+<li><a href="en/truncate.html">f_truncate</a> - Truncate file size</li>
+<li><a href="en/sync.html">f_sync</a> - Flush cached data</li>
+<li><a href="en/opendir.html">f_opendir</a> - Open a directory</li>
+<li><a href="en/readdir.html">f_readdir</a> - Read a directory item</li>
+<li><a href="en/getfree.html">f_getfree</a> - Get free clusters</li>
+<li><a href="en/stat.html">f_stat</a> - Get file status</li>
+<li><a href="en/mkdir.html">f_mkdir</a> - Create a directory</li>
+<li><a href="en/unlink.html">f_unlink</a> - Remove a file or directory</li>
+<li><a href="en/chmod.html">f_chmod</a> - Change attribute</li>
+<li><a href="en/utime.html">f_utime</a> - Change timestamp</li>
+<li><a href="en/rename.html">f_rename</a> - Rename/Move a file or directory</li>
+<li><a href="en/mkfs.html">f_mkfs</a> - Create a file system on the drive</li>
 <li><a href="en/forward.html">f_forward</a> - Forward file data to the stream directly</li>
 <li><a href="en/chdir.html">f_chdir</a> - Change current directory</li>
 <li><a href="en/chdrive.html">f_chdrive</a> - Change current drive</li>
+<li><a href="en/getcwd.html">f_getcwd</a> - Retrieve the current directory</li>
 <li><a href="en/gets.html">f_gets</a> - Read a string</li>
 <li><a href="en/putc.html">f_putc</a> - Write a character</li>
 <li><a href="en/puts.html">f_puts</a> - Write a string</li>
@@ -90,8 +89,9 @@
 <p>The FatFs module is a free software opened for education, research and development. You can use, modify and/or redistribute it for personal projects or commercial products without any restriction under your responsibility. For further information, refer to the application note.</p>
 <ul>
 <li><a href="http://elm-chan.org/fsw/ff/bd/"><em>FatFs User Forum</em></a></li>
-<li>Read first: <a href="en/appnote.html">FatFs module application note</a> <span class="mfd">May 15, 2010</span></li>
-<li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
+<li>Read first: <a href="en/appnote.html">FatFs module application note</a></li>
+<li>Download: <a href="ffsample.zip">FatFs sample projects</a> (AVR, PIC24, LPC2000, H8/300H, SH-2A, V850ES and Win32)</li>
+<li><a href="http://www.siwawi.arubi.uni-kl.de/avr_projects/arm_projects/arm_memcards/index.html">ARM-Projects by Martin THOMAS</a> (examples for LPC2000, AT91SAM and STM32)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification by Microsoft</a> (The reference document on FAT file system)</li>
 <li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use MMC/SDC</a></li>
 <li><a href="img/rwtest.png">Benchmark 1</a> (ATmega64/9.2MHz with MMC via SPI, HDD/CFC via GPIO)</li>

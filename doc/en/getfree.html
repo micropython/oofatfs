@@ -81,7 +81,7 @@ FRESULT f_getfree (
     if (res) die(res);
 
     <span>/* Get total sectors and free sectors */</span>
-    tot_sect = (fs->max_clust - 2) * fs->csize;
+    tot_sect = (fs->n_fatent - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
 
     <span>/* Print free space in unit of KB (assuming 512 bytes/sector) */</span>

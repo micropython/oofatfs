@@ -4,19 +4,20 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
-<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/chdir.html">
+<link rel="alternate" hreflang="ja" title="Japanese" href="../ja/getcwd.html">
 <link rel="stylesheet" href="../css_e.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - f_chdir</title>
+<title>FatFs - f_getcwd</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>f_chdir</h2>
-<p>The f_chdir function changes the current directory of a drive.</p>
+<h2>f_getcwd</h2>
+<p>The f_getcwd function retrieves the current directory.</p>
 <pre>
-FRESULT f_chdir (
-  const TCHAR* <em>Path</em> <span>/* Pointer to the path name */</span>
+FRESULT f_getcwd (
+  TCHAR* <em>Buffer</em>,  <span>/* Pointer to the buffer */</span>
+  UINT <em>BufferLen</em>  <span>/* The length of the buffer */</span>
 );
 </pre>
 </div>
@@ -24,8 +25,10 @@ FRESULT f_chdir (
 <div class="para">
 <h4>Parameters</h4>
 <dl class="par">
-<dt>Path</dt>
-<dd>Pointer to the null-terminated string that specifies a <a href="filename.html">directory</a> to go.</dd>
+<dt>Buffer</dt>
+<dd>Pointer to the buffer to receive the current directory string.</dd>
+<dt>BufferLen</dt>
+<dd>Size of the buffer in unit of TCHAR.</dd>
 </dl>
 </div>
 
@@ -35,12 +38,6 @@ FRESULT f_chdir (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
-<dt>FR_NO_PATH</dt>
-<dd>Could not find the path.</dd>
-<dt>FR_INVALID_NAME</dt>
-<dd>The path name is invalid.</dd>
-<dt>FR_INVALID_DRIVE</dt>
-<dd>The drive number is invalid.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_DISK_ERR</dt>
@@ -51,36 +48,27 @@ FRESULT f_chdir (
 <dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT volume on the drive.</dd>
+<dt>FR_NOT_ENOUGH_CORE</dt>
+<dd>Insufficient size of Buffer.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_chdir function changes the current directory of the logical drive. The current directory of a drive is initialized to the root directory when the drive is auto-mounted. Note that the current directory is retained in the each file system object so that it also affects other tasks that using the drive.</p>
+<p>The f_getcwd function retrieves the current directory of the current drive in full path string including drive number.</p>
 </div>
 
 
 <div class="para">
 <h4>QuickInfo</h4>
-<p>Available when <tt>_FS_RPATH >= 1</tt>.</p>
+<p>Available when <tt>_FS_RPATH == 2</tt>.</p>
 </div>
 
-
-<div class="para">
-<h4>Example</h4>
-<pre>
-    <span>/* Change current direcoty of the current drive (dir1 under root dir) */</span>
-    f_chdir("/dir1");
-
-    <span>/* Change current direcoty of drive 2 (parent dir) */</span>
-    f_chdir("2:..");
-</pre>
-</div>
 
 <div class="para">
 <h4>See Also</h4>
-<p><tt><a href="chdrive.html">f_chdrive</a>, <a href="getcwd.html">f_getcwd</a></tt></p>
+<p><tt><a href="chdrive.html">f_chdrive</a>, <a href="chdir.html">f_chdir</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.08     (C)ChaN, 2010
+/  FatFs - FAT file system module include file  R0.08a    (C)ChaN, 2010
 /----------------------------------------------------------------------------/
 / FatFs module is a generic FAT file system module for small embedded systems.
 / This is a free software that opened for education, research and commercial
@@ -15,7 +15,7 @@
 /----------------------------------------------------------------------------*/
 
 #ifndef _FATFS
-#define _FATFS  8085    /* Revision ID */
+#define _FATFS  8255    /* Revision ID */
 
 #ifdef __cplusplus
 extern "C" {
@@ -224,20 +224,20 @@ extern "C" {
 
 
 
-/* Definitions corresponds to volume management */
+/* Definitions of volume management */
 
 #if _MULTI_PARTITION        /* Multiple partition configuration */
-#define LD2PD(drv) (Drives[drv].pd) /* Get physical drive# */
-#define LD2PT(drv) (Drives[drv].pt) /* Get partition# */
+#define LD2PD(vol) (VolToPart[vol].pd)  /* Get physical drive# */
+#define LD2PT(vol) (VolToPart[vol].pt)  /* Get partition# */
 typedef struct {
     BYTE pd;    /* Physical drive# */
     BYTE pt;    /* Partition # (0-3) */
 } PARTITION;
-extern const PARTITION Drives[];    /* Logical drive# to physical location conversion table */
+extern const PARTITION VolToPart[]; /* Volume - Physical location resolution table */
 
 #else                       /* Single partition configuration */
-#define LD2PD(drv) (drv)    /* Physical drive# is equal to the logical drive# */
-#define LD2PT(drv) 0        /* Always mounts the 1st partition */
+#define LD2PD(vol) (vol)    /* Logical drive# is bound to the same physical drive# */
+#define LD2PT(vol) 0        /* Always mounts the 1st partition */
 
 #endif
 
@@ -262,21 +262,6 @@ typedef char TCHAR;
 #define _TEXT(x) x
 #endif
 
-#endif
-
-
-
-/* Definitions corresponds to file shareing feature */
-
-#if _FS_SHARE
-#if _FS_READONLY
-#error _FS_SHARE must be 0 on R/O cfg.
-#endif
-typedef struct {
-    DWORD clu;              /* File ID 1, directory */
-    WORD idx;               /* File ID 2, index in the directory */
-    WORD ctr;               /* File open counter, 0:none, 0x01..0xFF:read open count, 0x100:in write open */
-} FILESEM;
 #endif
 
 
@@ -313,9 +298,6 @@ typedef struct {
     DWORD   database;       /* Data start sector */
     DWORD   winsect;        /* Current sector appearing in the win[] */
     BYTE    win[_MAX_SS];   /* Disk access window for Directory, FAT (and Data on tiny cfg) */
-#if _FS_SHARE
-    FILESEM flsem[_FS_SHARE];   /* File lock semaphores */
-#endif
 } FATFS;
 
 
@@ -327,7 +309,7 @@ typedef struct {
     WORD    id;             /* Owner file system mount ID */
     BYTE    flag;           /* File status flags */
     BYTE    pad1;
-    DWORD   fptr;           /* File read/write pointer */
+    DWORD   fptr;           /* File read/write pointer (0 on file open) */
     DWORD   fsize;          /* File size */
     DWORD   org_clust;      /* File start cluster (0 when fsize==0) */
     DWORD   curr_clust;     /* Current cluster */
@@ -337,10 +319,10 @@ typedef struct {
     BYTE*   dir_ptr;        /* Ponter to the directory entry in the window */
 #endif
 #if _USE_FASTSEEK
-    DWORD*  cltbl;          /* Pointer to the cluster link map table */
+    DWORD*  cltbl;          /* Pointer to the cluster link map table (null on file open) */
 #endif
 #if _FS_SHARE
-    UINT    lockid;         /* File lock ID */
+    UINT    lockid;         /* File lock ID (index of file semaphore table) */
 #endif
 #if !_FS_TINY
     BYTE    buf[_MAX_SS];   /* File data read/write buffer */
@@ -378,7 +360,7 @@ typedef struct {
     TCHAR   fname[13];      /* Short file name (8.3 format) */
 #if _USE_LFN
     TCHAR*  lfname;         /* Pointer to the LFN buffer */
-    int     lfsize;         /* Size of LFN buffer [chrs] */
+    UINT    lfsize;         /* Size of LFN buffer in TCHAR */
 #endif
 } FILINFO;
 
@@ -421,6 +403,7 @@ FRESULT f_close (FIL*);                             /* Close an open file object
 FRESULT f_opendir (DIR*, const TCHAR*);             /* Open an existing directory */
 FRESULT f_readdir (DIR*, FILINFO*);                 /* Read a directory item */
 FRESULT f_stat (const TCHAR*, FILINFO*);            /* Get file status */
+
 #if !_FS_READONLY
 FRESULT f_write (FIL*, const void*, UINT, UINT*);   /* Write data to a file */
 FRESULT f_getfree (const TCHAR*, DWORD*, FATFS**);  /* Get number of free clusters on the drive */
@@ -432,27 +415,35 @@ FRESULT f_chmod (const TCHAR*, BYTE, BYTE);         /* Change attriburte of the 
 FRESULT f_utime (const TCHAR*, const FILINFO*);     /* Change timestamp of the file/dir */
 FRESULT f_rename (const TCHAR*, const TCHAR*);      /* Rename/Move a file or directory */
 #endif
+
 #if _USE_FORWARD
 FRESULT f_forward (FIL*, UINT(*)(const BYTE*,UINT), UINT, UINT*);   /* Forward data to the stream */
 #endif
+
 #if _USE_MKFS
 FRESULT f_mkfs (BYTE, BYTE, UINT);                  /* Create a file system on the drive */
 #endif
+
 #if _FS_RPATH
-FRESULT f_chdir (const TCHAR*);                     /* Change current directory */
 FRESULT f_chdrive (BYTE);                           /* Change current drive */
+FRESULT f_chdir (const TCHAR*);                     /* Change current directory */
+FRESULT f_getcwd (TCHAR*, UINT);                    /* Get current directory */
 #endif
+
 #if _USE_STRFUNC
 int f_putc (TCHAR, FIL*);                           /* Put a character to the file */
 int f_puts (const TCHAR*, FIL*);                    /* Put a string to the file */
 int f_printf (FIL*, const TCHAR*, ...);             /* Put a formatted string to the file */
 TCHAR* f_gets (TCHAR*, int, FIL*);                  /* Get a string from the file */
-#define f_eof(fp) (((fp)->fptr == (fp)->fsize) ? 1 : 0)
-#define f_error(fp) (((fp)->flag & FA__ERROR) ? 1 : 0)
 #ifndef EOF
 #define EOF (-1)
 #endif
 #endif
+
+#define f_eof(fp) (((fp)->fptr == (fp)->fsize) ? 1 : 0)
+#define f_error(fp) (((fp)->flag & FA__ERROR) ? 1 : 0)
+#define f_tell(fp) ((fp)->fptr)
+#define f_size(fp) ((fp)->fsize)
 
 
 
@@ -526,69 +517,6 @@ void ff_rel_grant (_SYNC_t);        /* Unlock sync object */
 
 /* Fast seek function */
 #define CREATE_LINKMAP  0xFFFFFFFF
-
-
-/* FatFs refers the members in the FAT structures with byte offset instead of
-/ structure member because there are incompatibility of the packing option
-/ between various compilers. */
-
-#define BS_jmpBoot          0
-#define BS_OEMName          3
-#define BPB_BytsPerSec      11
-#define BPB_SecPerClus      13
-#define BPB_RsvdSecCnt      14
-#define BPB_NumFATs         16
-#define BPB_RootEntCnt      17
-#define BPB_TotSec16        19
-#define BPB_Media           21
-#define BPB_FATSz16         22
-#define BPB_SecPerTrk       24
-#define BPB_NumHeads        26
-#define BPB_HiddSec         28
-#define BPB_TotSec32        32
-#define BS_55AA             510
-
-#define BS_DrvNum           36
-#define BS_BootSig          38
-#define BS_VolID            39
-#define BS_VolLab           43
-#define BS_FilSysType       54
-
-#define BPB_FATSz32         36
-#define BPB_ExtFlags        40
-#define BPB_FSVer           42
-#define BPB_RootClus        44
-#define BPB_FSInfo          48
-#define BPB_BkBootSec       50
-#define BS_DrvNum32         64
-#define BS_BootSig32        66
-#define BS_VolID32          67
-#define BS_VolLab32         71
-#define BS_FilSysType32     82
-
-#define FSI_LeadSig         0
-#define FSI_StrucSig        484
-#define FSI_Free_Count      488
-#define FSI_Nxt_Free        492
-
-#define MBR_Table           446
-
-#define DIR_Name            0
-#define DIR_Attr            11
-#define DIR_NTres           12
-#define DIR_CrtTime         14
-#define DIR_CrtDate         16
-#define DIR_FstClusHI       20
-#define DIR_WrtTime         22
-#define DIR_WrtDate         24
-#define DIR_FstClusLO       26
-#define DIR_FileSize        28
-#define LDIR_Ord            0
-#define LDIR_Attr           11
-#define LDIR_Type           12
-#define LDIR_Chksum         13
-#define LDIR_FstClusLO      26
-
 
 
 /*--------------------------------*/

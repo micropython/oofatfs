@@ -21,9 +21,9 @@ typedef struct {
     WORD    id;           <span>/* 親ファイル・システム・オブジェクトのマウントID */</span>
     BYTE    flag;         <span>/* ファイル・ステータス・フラグ */</span>
     BYTE    pad1;
-    DWORD   fptr;         <span>/* ファイル読み書きポインタ(ファイル先頭からのバイト・オフセット) */</span>
+    DWORD   fptr;         <span>/* ファイル読み書きポインタ (ファイル先頭からのバイト・オフセット) */</span>
     DWORD   fsize;        <span>/* ファイル・サイズ(バイト単位) */</span>
-    DWORD   org_clust;    <span>/* ファイル開始クラスタ番号 (0: fsize==0) */</span>
+    DWORD   org_clust;    <span>/* ファイル開始クラスタ番号 (0 on fsize==0) */</span>
     DWORD   curr_clust;   <span>/* 現在のクラスタ */</span>
     DWORD   dsect;        <span>/* 現在のデータ・セクタ */</span>
 #if _FS_READONLY == 0
@@ -31,7 +31,7 @@ typedef struct {
     BYTE*   dir_ptr;      <span>/* このファイルのディレクトリへのポインタ */</span>
 #endif
 #if _USE_FASTSEEK
-    DWORD*  cltbl;        <span>/* ファイルのクラスタ・リンク情報へのポインタ */</span>
+    DWORD*  cltbl;        <span>/* ファイルのクラスタ・リンク情報へのポインタ (Nulled on file open) */</span>
 #endif
 #if _FS_SHARE
     UINT    lockid;       <span>/* ファイル・ロックID */</span>

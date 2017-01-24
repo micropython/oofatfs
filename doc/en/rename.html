@@ -63,14 +63,14 @@ FRESULT f_rename (
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT volume on the drive.</dd>
 <dt>FR_LOCKED</dt>
-<dd>The function was rejected due to file shareing policy.</dd>
+<dd>The function was rejected due to file shareing policy (_FS_SHARE).</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>Renames an object and can also move it to other directory. The logical drive number is determined by old name, new name must not contain a logical drive number. <em>Do not rename open objects</em>.</p>
+<p>Renames an object (file or directory) and can also move it to other directory. The logical drive number is determined by old name, new name must not contain a logical drive number. <em>Do not rename open objects</em>.</p>
 </div>
 
 

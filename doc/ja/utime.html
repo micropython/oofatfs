@@ -86,7 +86,7 @@ FRESULT set_timestamp (
     fno.fdate = (WORD)(((year - 1980) * 512U) | month * 32U | mday);
     fno.ftime = (WORD)(hour * 2048U | min * 32U | sec / 2U);
 
-    return f_utime(obj, &fno);
+    return f_utime(obj, &amp;fno);
 }
 </pre>
 </div>

@@ -30,11 +30,11 @@ DRESULT disk_write (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the byte array to be written. The memory address specified by upper layer may or may not be aligned to word boundary.</dd>
+<dd>Pointer to the <em>byte array</em> to be written. Note that the specified memory address is not that always aligned to word boundary. If the hardware does not support misaligned data transfer, it must be solved in this function.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
-<dd>Specifies the number of sectors to write. The value can be 1 to 255.</dd>
+<dd>Specifies the number of sectors to write. The value can be 1 to 128. Generally, a multiple sector transfer request must not be split into single sector transactions to the device, or you will never get good write performance.</dd>
 </dl>
 </div>
 

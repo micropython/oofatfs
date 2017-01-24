@@ -55,7 +55,7 @@ FRESULT f_mkfs (
 <ul>
 <li>The disk size is too small.</li>
 <li>Invalid parameter was given to any parameter.</li>
-<li>Not allowable cluster size for this drive. This can occure when number of clusters becomes around 0xFF7 and 0xFFF7.</li>
+<li>Not allowable cluster size for this drive. This can occure when number of clusters gets near the 0xFF7 and 0xFFF7.</li>
 </ul>
 </dd>
 </dl>
@@ -65,6 +65,7 @@ FRESULT f_mkfs (
 <h4>Description</h4>
 <p>The f_mkfs function creates an FAT volume on the drive. There are two partitioning rules, FDISK and SFD, for removable media. The FDISK format is recommended for the most case. This function currently <em>does not support multiple partition</em>, so that existing partitions on the physical dirve will be deleted and re-created a new partition occupies entire disk space.</p>
 <p>The FAT sub-type, FAT12/FAT16/FAT32, is determined by number of clusters on the volume and nothing else, according to the FAT specification issued by Microsoft. Thus which FAT sub-type is selected, is depends on the volume size and the specified cluster size. The cluster size affects performance of the file system and large cluster increases the performance.</p>
+<p>When the number of clusters gets near the FAT sub-type boundaries, the function can fail with FR_MKFS_ABORTED.</p>
 </div>
 
 

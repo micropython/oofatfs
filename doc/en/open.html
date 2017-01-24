@@ -39,7 +39,7 @@ FRESULT f_open (
 <tr><td>FA_OPEN_EXISTING</td><td>Opens the file. The function fails if the file is not existing. (Default)</td></tr>
 <tr><td>FA_OPEN_ALWAYS</td><td>Opens the file if it is existing. If not, a new file is created.<br>
 To append data to the file, use f_lseek function after file open in this method.</td></tr>
-<tr><td>FA_CREATE_NEW</td><td>Creates a new file. The function fails if the file is already existing.</td></tr>
+<tr><td>FA_CREATE_NEW</td><td>Creates a new file. The function fails with FR_EXIST if the file is existing.</td></tr>
 <tr><td>FA_CREATE_ALWAYS</td><td>Creates a new file. If the file is existing, it is truncated and overwritten.</td></tr>
 </table>
 </dd>
@@ -65,8 +65,8 @@ To append data to the file, use f_lseek function after file open in this method.
 <dt>FR_DENIED</dt>
 <dd>The required access was denied due to one of the following reasons:
 <ul><li>Write mode open against a read-only file.</li>
-<li>File cannot be created due to a read-only file or same directory name is existing.</li>
-<li>File cannot be created due to the directory table or volume is full.</li></ul></dd>
+<li>File cannot be created due to a directory or read-only file is existing.</li>
+<li>File cannot be created due to the directory table is full.</li></ul></dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -80,7 +80,7 @@ To append data to the file, use f_lseek function after file open in this method.
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT volume on the drive.</dd>
 <dt>FR_LOCKED</dt>
-<dd>The function was rejected due to file shareing policy.</dd>
+<dd>The function was rejected due to file shareing policy (_FS_SHARE).</dd>
 </dl>
 </div>
 
@@ -110,7 +110,7 @@ void main (void)
     UINT br, bw;         <span>/* File read/write count */</span>
 
 
-    <span>/* Register work area for logical drives */</span>
+    <span>/* Register work area for each volume (Always succeeds regardless of disk status) */</span>
     f_mount(0, &amp;fs[0]);
     f_mount(1, &amp;fs[1]);
 

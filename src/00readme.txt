@@ -1,4 +1,4 @@
-FatFs Module Source Files R0.08                        (C)ChaN, 2010
+FatFs Module Source Files R0.08a                       (C)ChaN, 2010
 
 
 FILES
@@ -7,7 +7,6 @@ FILES
   ff.h       Common include file for FatFs and application module.
   ff.c       FatFs module.
   diskio.h   Common include file for FatFs and disk I/O module.
-  diskio.c   Skeleton of low level disk I/O module.
   integer.h  Alternative type definitions for integer variables.
   option     Optional external functions.
 
@@ -115,3 +114,10 @@ REVISION HISTORY
                        Changed some types on the API, XCHAR->TCHAR.
                        Changed fname member in the FILINFO structure on Unicode cfg.
                        String functions support UTF-8 encoding files on Unicode cfg.
+
+  Aug 16,'10 R0.08a    Added f_getcwd(). (_FS_RPATH = 2)
+                       Added sector erase feature. (_USE_ERASE)
+                       Moved file lock semaphore table from fs object to the bss.
+                       Fixed a wrong directory entry is created on non-LFN cfg when the given name contains ';'.
+                       Fixed f_mkfs() creates wrong FAT32 volume.
+

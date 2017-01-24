@@ -37,8 +37,8 @@ FRESULT f_open (
 <tr><td>FA_READ</td><td>読み出しモードで開きます。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
 <tr><td>FA_WRITE</td><td>書き込みモードで開きます。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。(デフォルト)</td></tr>
-<tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。追記する場合は、この方法でオープンした後、<tt>f_lseek()</tt>でファイルの最後尾に移動してください。</td></tr>
-<tr><td>FA_CREATE_NEW</td><td>ファイルを作成します。同名のファイルがある場合は、エラーになります。</td></tr>
+<tr><td>FA_OPEN_ALWAYS</td><td>既存のファイルを開きます。ファイルが無いときはファイルを作成します。追記操作する場合は、この方法でオープンした後、<tt>f_lseek()</tt>でファイルの最後尾に移動してください。</td></tr>
+<tr><td>FA_CREATE_NEW</td><td>ファイルを作成します。同名のファイルがある場合は、エラー(FR_EXIST)になります。</td></tr>
 <tr><td>FA_CREATE_ALWAYS</td><td>ファイルを作成します。同名のファイルがある場合は、サイズを0にしてから開きます。</td></tr>
 </table>
 </dd>
@@ -60,9 +60,15 @@ FRESULT f_open (
 <dt>FR_INVALID_DRIVE</dt>
 <dd>ドライブ番号が不正。</dd>
 <dt>FR_EXIST</dt>
-<dd>同名のファイルが既にある。</dd>
+<dd>同名のファイルが既に存在する。</dd>
 <dt>FR_DENIED</dt>
-<dd>アクセスが拒否された。リード・オンリー・ファイルの書き込みモード・オープン、同名のディレクトリまたはリード・オンリー・ファイルがある状態でのファイル作成、ディスクまたはディレクトリ・テーブルが満杯でファイルを作成できないなど。</dd>
+<dd>アクセスが拒否された。
+<ul>
+<li>リード・オンリー・ファイルの書き込みモード・オープン。</li>
+<li>同名のディレクトリまたはリード・オンリー・ファイルがある状態でのファイル作成。</li>
+<li>ディレクトリ・テーブルが満杯でファイルを作成できない。</li>
+</ul>
+</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、物理ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
@@ -76,7 +82,7 @@ FRESULT f_open (
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>有効なFATボリュームが見つからない。</dd>
 <dt>FR_LOCKED</dt>
-<dd>ファイル共有機能によるアクセス拒否。</dd>
+<dd>ファイル共有機能(_FS_SHARE)によるアクセス拒否。</dd>
 </dl>
 </div>
 
@@ -105,7 +111,7 @@ void main (void)
     FRESULT res;         <span>/* FatFs function common result code */</span>
     UINT br, bw;         <span>/* File R/W count */</span>
 
-    <span>/* ドライブ0,1にワーク・エリアを与える */</span>
+    <span>/* ドライブ0,1にワーク・エリアを与える (常に成功する) */</span>
     f_mount(0, &amp;fs[0]);
     f_mount(1, &amp;fs[1]);
 
