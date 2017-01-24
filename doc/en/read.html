@@ -54,7 +54,7 @@ FRESULT f_read (
 
 <div class="para desc">
 <h4>Description</h4>
-<p>The file pointer of the file object increases in number of bytes read. After the function succeeded, <tt>*ByteRead</tt> should be checked to detect the end of file. In case of <tt>*ByteRead &lt; ByteToRead</tt>, it means the read/write pointer reached end of the file during read operation.</p>
+<p>The file read/write pointer of the file object advances number of bytes read. After the function succeeded, <tt>*ByteRead</tt> should be checked to detect the end of file. In case of <tt>*ByteRead &lt; ByteToRead</tt>, it means the read/write pointer reached end of the file during read operation.</p>
 </div>
 
 

@@ -30,7 +30,7 @@ DRESULT disk_read (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the <em>byte array</em> to store the read data. The buffer size of number of bytes to be read, sector size * sector count, is required. Note that the specified memory address is not that always aligned to word boundary. If the hardware does not support misaligned data transfer, it must be solved in this function.</dd>
+<dd>Pointer to the <em>byte array</em> to store the read data. The size of buffer must be in sector size * sector count.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
@@ -51,6 +51,17 @@ DRESULT disk_read (
 <dt>RES_NOTRDY</dt>
 <dd>The disk drive has not been initialized.</dd>
 </dl>
+</div>
+
+
+<div class="para desc">
+<h4>Description</h4>
+<p>The specified memory address is not that always aligned to word boundary because the type of pointer is defined as BYTE. The misaligned read/write request can occure at <a href="appnote.html#fs1">direct transfer</a>. If the bus architecture, especially DMA controller, does not allow misaligned memory access, it should be solved in this function. There are some workarounds below to avoid this problem.</p>
+<ul>
+<li>In this function, convert word transfer to byte transfer. - Recommended.</li>
+<li>On f_read(), avoid long read request that includes a whole of sector. - Direct transfer will never occure.</li>
+<li>On f_read(), make sure that the lower two bits of start address is equal to the lower two bits of file read/write pointer. - Word aligned direct transfer is guaranteed.</li>
+</ul>
 </div>
 
 

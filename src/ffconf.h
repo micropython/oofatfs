@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------/
-/  FatFs - FAT file system module configuration file  R0.09  (C)ChaN, 2011
+/  FatFs - FAT file system module configuration file  R0.09a (C)ChaN, 2012
 /----------------------------------------------------------------------------/
 /
 / CAUTION! Do not forget to make clean the project after any changes to
@@ -7,7 +7,7 @@
 /
 /----------------------------------------------------------------------------*/
 #ifndef _FFCONF
-#define _FFCONF 6502    /* Revision ID */
+#define _FFCONF 4004    /* Revision ID */
 
 
 /*---------------------------------------------------------------------------/
@@ -182,9 +182,9 @@
 /      function must be added to the project. */
 
 
-#define _FS_SHARE   0   /* 0:Disable or >=1:Enable */
-/* To enable file shareing feature, set _FS_SHARE to 1 or greater. The value
-   defines how many files can be opened simultaneously. */
+#define _FS_LOCK    0   /* 0:Disable or >=1:Enable */
+/* To enable file lock control feature, set _FS_LOCK to 1 or greater.
+   The value defines how many files can be opened simultaneously. */
 
 
 #endif /* _FFCONFIG */

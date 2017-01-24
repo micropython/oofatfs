@@ -30,7 +30,7 @@ DRESULT disk_write (
 <dt>Drive</dt>
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
-<dd>Pointer to the <em>byte array</em> to be written. Note that the specified memory address is not that always aligned to word boundary. If the hardware does not support misaligned data transfer, it must be solved in this function.</dd>
+<dd>Pointer to the <em>byte array</em> to be written.</dd>
 <dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
@@ -58,7 +58,7 @@ DRESULT disk_write (
 
 <div class="para desc">
 <h4>Description</h4>
-<p>This function is not required in read only configuration.</p>
+<p>This function is not required in read only configuration. The specified memory address is not that always aligned to word boundary because the type of pointer is defined as BYTE. For more information, read <a href="dread.html">description in disk_read function</a>.</p>
 </div>
 
 

@@ -42,7 +42,7 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、ANSI C�
 
 <h4>システム構成</h4>
 <p>下に示す依存関係図は、FatFsモジュール利用の組み込みシステムにおける代表的な構成を示します。</p>
-<img src="../img/modules.png" width="507" height="224" alt="システム構成図">
+<p><img src="../img/modules.png" width="507" height="224" alt="システム構成図"></p>
 
 <h4>ユーザの作成する関数</h4>
 <p>必要なのは FatFsモジュールの要求するディスク関数を用意することだけで、それ以外にすることはありません。既に動作しているディスク関数があるならその APIを FatFsに合わせるだけで済みますが、無い場合はほかから移植するか、最初から書くかする必要があります。定義されている全ての関数が常に必要なわけではありません。例えば、リード・オンリー構成では書き込み系関数は必要ありません。次の表に構成オプションと要求される関数の対応を示します。</p>
@@ -73,21 +73,22 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、ANSI C�
 </div>
 
 <div class="para" id="memory">
-<h3>メモリ使用量 (R0.09)</h3>
+<h3>メモリ使用量</h3>
 <p>次の表にいくつかのターゲットにおけるメモリ使用量の例を示します。テスト時の構成オプションはその下の通りです。数値の単位はバイトで、<em>V</em>は同時マウント・ボリューム数、<em>F</em>は同時オープン・ファイル数を示します。コンパイラの最適化オプションはコード・サイズとしています。</p>
 <table class="lst2">
-<tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>Cortex-M3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
+<tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>CM3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
 <tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
 <tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<tr class="lst3"><td>text (Full, R/W)</td><td>10459</td><td>7201</td><td>6623</td><td>12646</td><td>10686</td><td>11466</td><td>12967</td><td>7732</td><td>8752</td><td>5747</td><td>7545</td></tr>
-<tr><td>text (Min, R/W)</td><td>6503</td><td>4745</td><td>4297</td><td>8306</td><td>6986</td><td>7440</td><td>8745</td><td>4938</td><td>5576</td><td>3746</td><td>4923</td></tr>
-<tr><td>text (Full, R/O)</td><td>4535</td><td>3181</td><td>2869</td><td>5960</td><td>4876</td><td>5286</td><td>6060</td><td>3554</td><td>3804</td><td>2659</td><td>3450</td></tr>
-<tr><td>text (Min, R/O)</td><td>3303</td><td>2493</td><td>2171</td><td>4366</td><td>3770</td><td>3984</td><td>4604</td><td>2684</td><td>2940</td><td>2025</td><td>2664</td></tr>
-<tr><td>bss</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
-<tr><td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
+<tr class="lst3"><td>text (Full, R/W)</td><td>10375</td><td>7019</td><td>6561</td><td>13267</td><td>10525</td><td>11205</td><td>12812</td><td>7783</td><td>8715</td><td>5782</td><td>7615</td></tr>
+<tr>             <td>text (Min, R/W)</td>  <td>6487</td><td>4727</td><td>4283</td> <td>8521</td> <td>6967</td> <td>7398</td> <td>8800</td><td>5019</td><td>5635</td><td>3784</td><td>5003</td></tr>
+<tr>             <td>text (Full, R/O)</td> <td>4551</td><td>3125</td><td>2895</td> <td>6219</td> <td>4895</td> <td>5268</td> <td>6123</td><td>3629</td><td>3843</td><td>2699</td><td>3527</td></tr>
+<tr>             <td>text (Min, R/O)</td>  <td>3321</td><td>2457</td><td>2197</td> <td>4527</td> <td>3797</td> <td>3999</td> <td>4663</td><td>2773</td><td>2999</td><td>2064</td><td>2736</td></tr>
+<tr>             <td>bss</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*2 + 2</td><td>D*2 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td><td>D*4 + 2</td></tr>
+<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
 <tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
 </table>
 <pre>
+FatFs R0.09a options:
 _FS_READONLY     0 (R/W), 1 (R/O)
 _FS_MINIMIZE     0 (Full function), 3 (Minimized function)
 _USE_STRFUNC     0 (Disable string functions)
@@ -101,7 +102,7 @@ _FS_RPATH        0 (Disable relative path)
 _VOLUMES         D (Number of logical drives to be used)
 _MULTI_PARTITION 0 (Single partition per drive)
 _FS_REENTRANT    0 (Disable reentrancy)
-_FS_SHARE        0 (Disable shareing control)
+_FS_LOCK         0 (Disable file lock control)
 </pre>
 </div>
 
@@ -179,7 +180,7 @@ _FS_SHARE        0 (Disable shareing control)
 <div class="para" id="dup">
 <h3>多重ファイル・アクセス</h3>
 <p>FatFsモジュールではデフォルトでは多重アクセス制御機能をサポートしていません。ファイルに対する多重アクセスは、そのアクセス・モードによって制限されます。一つのファイルに対する多重オープンは、それらが全てリード・モードのときに限って許可されます。書き込みモードを含む多重オープン、また開かれているファイルに対するリネームや削除を行ってはなりません。さもないと、そのボリュームのFAT構造が破壊される可能性があります。</p>
-<p><tt>_FS_SHARE</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位の排他制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。<tt>_FS_SHARE</tt>を越えた数のファイルをオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
+<p><tt>_FS_LOCK</tt>に1以上の値(値は同時に管理できるファイル数)をセットすることで多重アクセス制御機能が有効になり、ファイル単位の排他制御を自動で行うこともできます。この場合、上記のルールを破ったオープン・リネーム・削除を試みると、その関数は<tt>FR_LOCKED</tt>で失敗します。<tt>_FS_LOCK</tt>を越えた数のファイルをオープンしようとすると、<tt>FR_TOO_MANY_OPEN_FILES</tt>で失敗します。</p>
 </div>
 
 <div class="para" id="fs1">

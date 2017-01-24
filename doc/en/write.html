@@ -54,7 +54,7 @@ FRESULT f_write (
 
 <div class="para desc">
 <h4>Description</h4>
-<p>The read/write pointer in the file object is increased in number of bytes written. After the function succeeded, <tt>*ByteWritten</tt> should be checked to detect the disk full. In case of <tt>*ByteWritten &lt; ByteToWrite</tt>, it means the volume got full during the write operation. The function can take a time when the volume is full or close to full.</p>
+<p>The read/write pointer of the file object advances number of bytes written. After the function succeeded, <tt>*ByteWritten</tt> should be checked to detect the disk full. In case of <tt>*ByteWritten &lt; ByteToWrite</tt>, it means the volume got full during the write operation. The function can take a time when the volume is full or close to full.</p>
 </div>
 
 
