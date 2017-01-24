@@ -12,21 +12,24 @@
 
 <div class="para">
 <h2>disk_write</h2>
-<p>ディスクにセクタデータを書き込みます。</p>
+<p>ディスクにデータを書き込みます。</p>
 <pre>
 DRESULT disk_write (
-  const BYTE* <em>Buffer</em>,  // 書き込むデータへのポインタ
-  DWORD <em>SectorNumber</em>,  // 書き込み開始セクタ番号
-  BYTE <em>SectorCount</em>     // 書き込みセクタ数
+  BYTE <em>Drive</em>,          /* 物理ドライブ番号 */
+  const BYTE* <em>Buffer</em>,  /* 書き込むデータへのポインタ */
+  DWORD <em>SectorNumber</em>,  /* 書き込み開始セクタ番号 */
+  BYTE <em>SectorCount</em>     /* 書き込みセクタ数 */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
+<dt>Drive</dt>
+<dd>書き込むドライブ番号を指定します。</dd>
 <dt>Buffer</dt>
-<dd>ディスクに書き込むセクタデータを指定します。</dd>
+<dd>ディスクに書き込むデータを指定します。</dd>
 <dt>SectorNumber</dt>
 <dd>書き込みを開始するセクタ番号。LBAで指定します。</dd>
 <dt>SectorCount</dt>
@@ -54,7 +57,7 @@ DRESULT disk_write (
 
 <div class="para">
 <h4>解説</h4>
-<p>リードオンリー構成ではこの関数は必要とされません。</p>
+<p>リード・オンリー構成ではこの関数は必要とされません。</p>
 </div>
 
 

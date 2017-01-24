@@ -12,12 +12,12 @@
 
 <div class="para">
 <h2>f_open</h2>
-<p>The f_open function creates or opens the file and initialize a file object structure to be used to access the file.</p>
+<p>The f_open function creates a <em>file object</em> to be used to access the file.</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,      // Pointer to the file object structure
-  const char* <em>FileName</em>, // Pointer to the file neme
-  BYTE <em>ModeFlags</em>        // Mode flags
+  FIL* <em>FileObject</em>,      /* Pointer to the blank file object structure */
+  const char* <em>FileName</em>, /* Pointer to the file neme */
+  BYTE <em>ModeFlags</em>        /* Mode flags */
 );
 </pre>
 </div>
@@ -26,9 +26,9 @@ FRESULT f_open (
 <h4>Parameters</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>Pointer to the blank file object structure to be initialized. After the f_open() succeeded, the file can be accessed with the file object structure until it is closed.</dd>
+<dd>Pointer to the file object structure to be created. After the f_open funciton succeeded, the file can be accessed with the file object structure until it is closed.</dd>
 <dt>FileName</dt>
-<dd>Pointer to a null-terminated string specifies the full-path file name to create or open. The directory separator is <tt>'/'</tt>. Because the FatFs module does not have a concept of current directory, a full-path name that followed from the root directory must be used. Leading space charactors are skipped if exist, and heading <tt>'/'</tt> can be exist or omitted.</dd>
+<dd>Pointer to a null-terminated string that specifies the <a href="filename.html">file name</a> to create or open.</dd>
 <dt>ModeFlags</dt>
 <dd>Specifies the type of access and open method for the file. It is specified by a combination of following flags.<br>
 <table class="lst">
@@ -48,13 +48,15 @@ FRESULT f_open (
 <h4>Return Values</h4>
 <dl class="ret">
 <dt>FR_OK (0)</dt>
-<dd>The function succeeded. The <tt><em>FileObject</em></tt> structure is used for subsequent calls to refer to the file. When close the file, use function <tt><a href="close.html">f_close()</a></tt>.</dd>
+<dd>The function succeeded and the file object is valid.</dd>
 <dt>FR_NO_FILE</dt>
 <dd>Could not find the file.</dd>
 <dt>FR_NO_PATH</dt>
 <dd>Could not find the path.</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>The file name is invalid.</dd>
+<dt>FR_INVALID_DRIVE</dt>
+<dd>The drive number is invalid.</dd>
 <dt>FR_DENIED</dt>
 <dd>The required access was denied due to any of following reasons: write mode open of a file that has read-only attribute, file creation under existing a same name directory or read-only file, cannot be created due to the directory table or disk full.</dd>
 <dt>FR_NOT_READY</dt>
@@ -63,10 +65,8 @@ FRESULT f_open (
 <dd>Write mode open or creation under the medium is write protected.</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal/change has occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module is not enabled.</dd>
+<dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -75,7 +75,8 @@ FRESULT f_open (
 
 <div class="para">
 <h4>Description</h4>
-<p>To start FatFs module, prepare a work area (<tt>FATFS</tt> structure), fill it with zero and set its address to the global variable <em>FatFs</em> to give the work area to the FatFs module. All file functions can work after the initialization. <a href="mountdrv.html">f_mountdrv()</a> can also be used instead of the zero filling, however, the physical drive must be ready at that time. To terminate use of the FatFs module, close all files, clear <em>FatFs</em> and then the work area can be discarded.</p>
+<p>The created file object is used for subsequent calls to refer to the file. When close an open file object, use <a href="close.html">f_close</a> function.</p>
+<p>Before using any file function, work area (file system object) must be given to each logical drive with <a href="mount.html">f_mount</a> function. All file functions can work after this procedure.</p>
 <p>Flags <tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt> are not supported in read-only configuration.</p>
 </div>
 
@@ -85,16 +86,15 @@ FRESULT f_open (
 <pre>
 void main ()
 {
-    FATFS fs;            // FatFs work area
-    FIL fsrc, fdst;      // file structures
+    FATFS fs;            // Work area (file system object) for logical drive
+    FIL fsrc, fdst;      // file objects
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
     WORD br, bw;         // File R/W count
 
 
-    // Give a work area to FatFs module (activate FatFs module)
-    FatFs = &fs;
-    memset(&fs, 0, sizeof(FATFS));  // Clear work area. f_mountdrv() can also be used instead.
+    // Register a work area to logical drive 0
+    f_mount(0, &fs);
 
     // Open source file
     res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
@@ -107,7 +107,7 @@ void main ()
     // Copy source to destination
     for (;;) {
         res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-        if (res || br == 0) break;   // error or eof
+        if (res || br == 0) break;      // error or eof
         res = f_write(&fdst, buffer, br, &bw);
         if (res || bw &lt; br) break;   // error or disk full
     }
@@ -116,8 +116,8 @@ void main ()
     f_close(&fsrc);
     f_close(&fdst);
 
-    // Deactivate FatFs module
-    FatFs = NULL;
+    // Unregister a work area before discard it
+    f_mount(0, NULL);
 }
 </pre>
 </div>

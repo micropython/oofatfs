@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="up" title="FatFs" href="../00index_j.html">
+<link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
+<title>FatFs - ファイル・ディレクトリの指定方法</title>
+</head>
+
+<body>
+<h2>ファイル・ディレクトリの指定方法</h2>
+
+<div class="para">
+<p>FatFsモジュールでのファイル、ディレクトリ、ドライブの指定方法はMS-DOSとほぼ同じです。ただし、MS-DOSのようなカレント・ディレクトリの概念は無いので、常にルート・ディレクトリから辿る絶対パスでの指定となります。パス名の指定方法と例は次の通りです。</p>
+<pre>
+
+ "[<em>論理ドライブ番号</em>:][/]<em>ディレクトリ名</em>/<em>ファイル名</em>"
+
+ "file1.txt"           ファイル(drive0)
+ "/file1.txt"          ↑と同じ
+ "dir1/dir2/file1.txt" ファイル(drive0)
+ "2:dir3/file2.txt"    ファイル(drive2)
+ "2:/dir5"             ディレクトリ(drive2)
+ ""                    ルート・ディレクトリ(drive2)
+ "/"                   ↑と同じ
+ "2:"                  ルート・ディレクトリ(drive2)
+
+</pre>
+<p>FatFsモジュールは8.3形式ファイル名にのみ対応しています。長いファイル名には対応していないので、ファイル名やディレクトリ名は8.3形式の範囲内で指定します。ディレクトリ・セパレータには'/'を使用します。パス名先頭の'/'は、あってもなくても同じです。</p>
+<p>論理ドライブ番号は、'0'～'9'の一文字の数字とコロンで指定します。省略した場合は"0:"を指定したことになります。FatFsでは論理ドライブ毎にファイル・システム・オブジェクトというワーク・エリアを持っています。現在のところ、論理ドライブは同じ番号の物理ドライブに結びつけられています。</p>
+<p>Tiny-FatFsでは一つのファイル・システム・オブジェクトしか持てず、常に論理ドライブ0として動作します。また、パス名中に論理ドライブ番号を使用できません。</p>
+</div>
+
+</body>
+</html>

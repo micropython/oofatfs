@@ -15,10 +15,10 @@
 <p>The f_write writes data to a file.</p>
 <pre>
 FRESULT f_write (
-  FIL* <em>FileObject</em>,     // Pointer to the file object structure
-  const void* <em>Buffer</em>,  // Pointer to the data to be written
-  WORD <em>ByteToWrite</em>,    // Number of bytes to write
-  WORD* <em>ByteWritten</em>    // Pointer to the variable to return number of bytes written
+  FIL* <em>FileObject</em>,     /* Pointer to the file object structure */
+  const void* <em>Buffer</em>,  /* Pointer to the data to be written */
+  WORD <em>ByteToWrite</em>,    /* Number of bytes to write */
+  WORD* <em>ByteWritten</em>    /* Pointer to the variable to return number of bytes written */
 );
 </pre>
 </div>
@@ -27,7 +27,7 @@ FRESULT f_write (
 <h4>Parameter</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>Pointer to the valid file object structure.</dd>
+<dd>Pointer to the open file object structure.</dd>
 <dt>Buffer</dt>
 <dd>Pointer to the data to be written.</dd>
 <dt>ByteToWrite</dt>
@@ -46,18 +46,18 @@ FRESULT f_write (
 <dt>FR_DENIED</dt>
 <dd>The function denied due to the file has been opened in read only mode.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
+<dd>Any error has occured in low level disk I/O layer.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module is not enabled.</dd>
+<dt>FR_INVALID_OBJECT</dt>
+<dd>The file object is invalid.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer increases in number of bytes written. The <tt>ByteWritten</tt> will be less than <tt>ByteToWrite</tt> when disk gets full during write function. This function is not supported in read-only configuration.</p>
+<p>The read/write pointer in the file object is increased in number of bytes written. The <tt>ByteWritten</tt> will become less than <tt>ByteToWrite</tt> when disk gets full during write function. This function is not supported in read-only configuration.</p>
 </div>
 
 

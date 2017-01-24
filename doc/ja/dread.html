@@ -15,18 +15,21 @@
 <p>ディスクからセクタを読み出します。</p>
 <pre>
 DRESULT disk_read (
-  BYTE* <em>Buffer</em>,        // 読み出しバッファへのポインタ
-  DWORD <em>SectorNumber</em>,  // 読み出し開始セクタ番号
-  BYTE <em>SectorCount</em>     // 読み出しセクタ数
+  BYTE <em>Drive</em>,          /* 物理ドライブ番号 */
+  BYTE* <em>Buffer</em>,        /* 読み出しバッファへのポインタ */
+  DWORD <em>SectorNumber</em>,  /* 読み出し開始セクタ番号 */
+  BYTE <em>SectorCount</em>     /* 読み出しセクタ数 */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
+<dt>Drive</dt>
+<dd>物理ドライブ番号(0-9)を指定します。</dd>
 <dt>Buffer</dt>
-<dd>ディスクから読み出したセクタデータを格納するバッファ。<tt>SectorCount * 512</tt>バイトのサイズが必要です。</dd>
+<dd>ディスクから読み出したデータを格納するバッファ。<tt>SectorCount * 512</tt>バイトのサイズが必要です。</dd>
 <dt>SectorNumber</dt>
 <dd>読み出しを開始するセクタ番号。LBAで指定します。</dd>
 <dt>SectorCount</dt>

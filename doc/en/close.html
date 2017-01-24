@@ -12,10 +12,10 @@
 
 <div class="para">
 <h2>f_close</h2>
-<p>Function f_close closes a file.</p>
+<p>The f_close function closes an open file.</p>
 <pre>
 FRESULT f_close (
-  FIL* <em>FileObject</em>     // Pointer to the file object structure
+  FIL* <em>FileObject</em>     /* Pointer to the file object structure */
 );
 </pre>
 </div>
@@ -24,7 +24,7 @@ FRESULT f_close (
 <h4>Parameter</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>Pointer to the file object structure to be closed.</dd>
+<dd>Pointer to the open file object structure to be closed.</dd>
 </dl>
 </div>
 
@@ -33,20 +33,20 @@ FRESULT f_close (
 <h4>Return Values</h4>
 <dl class="ret">
 <dt>FR_OK (0)</dt>
-<dd>The file has been closed successfuly.</dd>
+<dd>The file object has been closed successfuly.</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>Any error occured in low level disk I/O.</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal/change occured.</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module is not enabled.</dd>
+<dd>Any error has occured in low level disk I/O.</dd>
+<dt>FR_NOT_READY</dt>
+<dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
+<dt>FR_INVALID_OBJECT</dt>
+<dd>The file object is invalid.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>Function f_close closes a file. If any data has been written, the cached information of the file is written back to the disk. When the function succeeded, the file object is no longer valid and structure can be discarded.</p>
+<p>The f_close function closes an open file object. If any data has been written to the file, the cached information of the file is written back to the disk. After the function succeeded, the file object is no longer valid and it can be discarded.</p>
 </div>
 
 

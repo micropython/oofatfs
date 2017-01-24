@@ -12,19 +12,25 @@
 
 <div class="para">
 <h2>f_getfree</h2>
-<p>ディスクの未使用領域を得ます。</p>
+<p>ディスクの未使用クラスタ数を得ます。</p>
 <pre>
 FRESULT f_getfree (
-  DWORD* <em>Clusters</em>     // 空きクラスタ数を格納する変数へのポインタ
+  const char* <em>Path</em>,        /* 対象ドライブのルート・ディレクトリ */
+  DWORD* <em>Clusters</em>,         /* 空きクラスタ数を格納する変数へのポインタ */
+  FATFS** <em>FileSystemObject</em> /* ファイル・システム・オブジェクトを指すポインタへのポインタ */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
+<dt>Path</dt>
+<dd>情報を得る論理ドライブのルートディレクトリの<a href="filename.html">パス名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>Clusters</dt>
 <dd>空きクラスタ数を格納するDWORD変数へのポインタを指定します。</dd>
+<dt>FileSystemObject</dt>
+<dd>対象ドライブのファイル・システム・オブジェクトを指すポインタを格納するポインタへのポインタを指定します。</dd>
 </dl>
 </div>
 
@@ -34,14 +40,14 @@ FRESULT f_getfree (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>正常終了。<tt><em>*Clusters</em></tt>に空きクラスタ数が返されます。</dd>
+<dt>FR_INVALID_DRIVE</dt>
+<dd>ドライブ番号が不正。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
+<dd>ディスク・アクセスでエラーが発生した。</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFsモジュールが停止状態。</dd>
+<dd>その論理ドライブにワーク・エリアが与えられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
 </dl>
@@ -50,21 +56,26 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルシステム上の空きクラスタ数を取得します。<tt>FatFs.sects_clust</tt> がクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
+<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>sects_clust</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
+    FATFS *fs;
     DWORD clust;
 
+
     // Get free clusters
-    res = f_getfree(&clust);
+    res = f_getfree("", &clust, &fs);
     if (res) die(res);
 
-    // Get free bytes
-    printf("%lu bytes available on the disk.\n", clust * FatFs->sects_clust * 512);
+    // Get free space
+    printf("%lu KB total disk space.\n"
+           "%lu KB available on the disk.\n",
+           (fs->max_clust - 2) * fs->sects_clust / 2,
+           clust * fs->sects_clust / 2);
 </pre>
 </div>
 

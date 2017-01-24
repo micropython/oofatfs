@@ -1,10 +1,10 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file  R0.02    (C)ChaN, 2006
+/  Low level disk interface modlue include file  R0.04    (C)ChaN, 2007
 /-----------------------------------------------------------------------*/
 
-#ifndef _DISKIF
+#ifndef _DISKIO
 
-//#define _READONLY /* Define this for read-only use */
+#define _READONLY   0   /* 1: Read-only mode */
 
 #include "integer.h"
 
@@ -15,15 +15,14 @@ typedef unsigned char   DRESULT;
 /*---------------------------------------*/
 /* Prototypes for disk control functions */
 
-DSTATUS disk_initialize ();
-DSTATUS disk_shutdown ();
-DSTATUS disk_status ();
-DRESULT disk_read (BYTE*, DWORD, BYTE);
-#ifndef _READONLY
-DRESULT disk_write (const BYTE*, DWORD, BYTE);
+DSTATUS disk_initialize (BYTE);
+DSTATUS disk_status (BYTE);
+DRESULT disk_read (BYTE, BYTE*, DWORD, BYTE);
+#if _READONLY == 0
+DRESULT disk_write (BYTE, const BYTE*, DWORD, BYTE);
 #endif
-DRESULT disk_ioctl (BYTE, void*);
-void    disk_timerproc ();
+DRESULT disk_ioctl (BYTE, BYTE, void*);
+void    disk_timerproc (void);
 
 
 /* Results of Disk Functions (DRESULT) */
@@ -45,7 +44,9 @@ void    disk_timerproc ();
 /* Command code for disk_ioctrl() */
 
 #define GET_SECTORS     1
-#define PUT_IDLE_STATE  2
+#define CTRL_POWER      2
+#define CTRL_LOCK       3
+#define CTRL_EJECT      4
 #define MMC_GET_CSD     10
 #define MMC_GET_CID     11
 #define MMC_GET_OCR     12
@@ -54,5 +55,5 @@ void    disk_timerproc ();
 #define ATA_GET_SN      22
 
 
-#define _DISKIF
+#define _DISKIO
 #endif

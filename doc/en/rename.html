@@ -15,8 +15,8 @@
 <p>Rename file or directory.</p>
 <pre>
 FRESULT f_rename (
-  const char* <em>OldName</em>, // Pointer to old object name
-  const char* <em>NewName</em>  // Pointer to new object name
+  const char* <em>OldName</em>, /* Pointer to old file/directory name */
+  const char* <em>NewName</em>  /* Pointer to new file/directory name */
 );
 </pre>
 </div>
@@ -25,9 +25,9 @@ FRESULT f_rename (
 <h4>Parameter</h4>
 <dl class="par">
 <dt>OldName</dt>
-<dd>Pointer to a null-terminated string specifies the old object name to be renamed.</dd>
+<dd>Pointer to a null-terminated string specifies the old <a href="filename.html">file/directory name</a> to be renamed.</dd>
 <dt>NewName</dt>
-<dd>Pointer to a null-terminated string specifies the new object name. Existing name cannot be used.</dd>
+<dd>Pointer to a null-terminated string specifies the new file/directory name without drive number. Existing object nannot be specified.</dd>
 </dl>
 </div>
 
@@ -38,11 +38,13 @@ FRESULT f_rename (
 <dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>FR_NO_FILE</dt>
-<dd>Could not find the file or directory.</dd>
+<dd>Could not find the file nor directory.</dd>
 <dt>FR_NO_PATH</dt>
 <dd>Could not find the path.</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>The file name is invalid.</dd>
+<dt>FR_INVALID_DRIVE</dt>
+<dd>The drive number is invalid.</dd>
 <dt>FR_NOT_READY</dt>
 <dd>The disk drive cannot work due to no medium in the drive or any other reason.</dd>
 <dt>FR_DENIED</dt>
@@ -51,10 +53,8 @@ FRESULT f_rename (
 <dd>The medium is write protected.</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal/change has occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module is not enabled.</dd>
+<dd>The logical drive has no work area.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -63,8 +63,8 @@ FRESULT f_rename (
 
 <div class="para">
 <h4>Description</h4>
-<p>Rename a file or directory and can move it to other directory. This function is not supported in read-only configuration or minimization level of &gt;= 1.</p>
-<p>Note: In this revision, moving any directory to other directory collapses the file system.</p>
+<p>Rename a file or directory and can move it to other directory. Logical drive number is determined by old name, new name must not contain logical drive number. This function is not supported in read-only configuration or minimization level of &gt;= 1.</p>
+<p>Note: In this revision, moving any directory to other directory collapses the FAT structure on the disk.</p>
 </div>
 
 

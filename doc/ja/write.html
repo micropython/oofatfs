@@ -15,19 +15,19 @@
 <p>ファイルにデータを書き込みます。</p>
 <pre>
 FRESULT f_write (
-  FIL* <em>FileObject</em>,     // ファイルオブジェクト構造体
-  const void* <em>Buffer</em>,  // 書き込みデータ
-  WORD <em>ByteToWrite</em>,    // 書き込むバイト数
-  WORD* <em>ByteWritten</em>    // 書き込まれたバイト数
+  FIL* <em>FileObject</em>,     /* ファイル・オブジェクト */
+  const void* <em>Buffer</em>,  /* 書き込みデータ */
+  WORD <em>ByteToWrite</em>,    /* 書き込むバイト数 */
+  WORD* <em>ByteWritten</em>    /* 書き込まれたバイト数 */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>ファイルオブジェクト構造体へのポインタを指定します。</dd>
+<dd>ファイル・オブジェクト構造体へのポインタを指定します。</dd>
 <dt>Buffer</dt>
 <dd>書き込むデータを格納したバッファを指すポインタを指定します。</dd>
 <dt>ByteToWrite</dt>
@@ -46,18 +46,18 @@ FRESULT f_write (
 <dt>FR_DENIED</dt>
 <dd>読み込み専用モードで開いたファイルに書き込もうとした。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
+<dd>ディスク・アクセスでエラーが発生した。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>FatFsモジュールが停止状態。</dd>
+<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dt>FR_INVALID_OBJECT</dt>
+<dd>無効なファイルオブジェクト。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>書き込み開始位置は、ファイルR/Wポインタの現在位置からになります。ファイルR/Wポインタは実際に書き込まれたバイト数だけ進みます。書き込み中にディスクが一杯になったときは、<tt>*ByteWritten</tt>は<tt>ByteToWrite</tt>よりも小さくなります。リードオンリー構成ではこの関数はサポートされません。</p>
+<p>書き込み開始位置は、ファイルR/Wポインタの現在位置からになります。ファイルR/Wポインタは実際に書き込まれたバイト数だけ進みます。書き込み中にディスクが一杯になったときは、<tt>*ByteWritten</tt>は<tt>ByteToWrite</tt>よりも小さくなります。リード・オンリー構成ではこの関数はサポートされません。</p>
 </div>
 
 

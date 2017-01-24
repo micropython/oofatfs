@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.03a  (C)ChaN, 2006
+FatFs/Tiny-FatFs Module Source Files R0.04   (C)ChaN, 2007
 
 
 FILES
@@ -23,45 +23,64 @@ CONFIGURATION OPTIONS
   requirement. The configuration options are defined in header files, ff.h
   and tff.h.
 
-  _BYTE_ACC
+  _MCU_ENDIAN
 
   This is the most impotant option that depends on the processor architecture.
-  When your microcontroller corresponds to either or both of following terms,
-  the _BYTE_ACC must be defined to force FatFs to access FAT structure in
-  byte-by-byte. If not, this can be undefined to improve code size. This is
-  UNDEFINED in default.
+  When target device corresponds to either or both of following terms, the
+  _MCU_ENDIAN must be set to 2 to force FatFs to access FAT structure in
+  byte-by-byte. If not the case, this can be set to 1 for good code efficiency.
+  The initial value is 0 (must be set to 1 or 2 properly).
 
   - Muti-byte integers (short, long) are stored in Big-Endian.
-  - Address miss-aligned memory access causes an address error or any
-    incorrect behavior.
+  - Address miss-aligned memory access results in an incorrect behavior.
 
 
   _FS_READONLY
 
   When application program does not require any write function, _FS_READONLY
-  can be defined to eliminate writing code to reduce module size. This is
-  UNDEFINED in default. This setting should be reflected to configurations for
-  low level disk function if available.
+  can be set to 1 to eliminate writing code to reduce module size. This
+  setting should be reflected to configurations of low level disk I/O module
+  if available. The initial value is 0 (R/W).
 
 
   _FS_MINIMIZE
 
   When application program requires only file read/write function, _FS_MINIMIZE
-  can be defined to eliminate some functions to reduce the module size.  The
-  default value is 0 (full function).
+  can be defined to eliminate some functions to reduce the module size. The
+  initial value is 0 (full function).
+
+
+  _DRIVES
+
+  Number of drives to be used. This option is not supported on Tiny-FatFs.
+  The initial value is 2.
+
+  _FAT32
+
+  When _FAT32 is set to 1, the FAT32 support is added with an additional
+  code size. This is for only Tiny-FatFs and not supported on FatFs. FatFs
+  always supports all FAT type. The initial value is 0 (disabled).
 
 
   _USE_SJIS
 
   When _USE_SJIS is defined, Shift-JIS code set can be used as a file name,
   otherwire second byte of double-byte characters will be collapted. This is
-  DEFINED in default.
+  initially defined.
+
+
+  _USE_MKFS
+
+  When _USE_MKFS is defined and _FS_READONLY is set to 0, f_mkfs function
+  is enabled. This is for only FatFs module and not supported on Tiny-FatFs.
+  This is initialy undefined (not available).
 
 
   Following table shows which function is removed by configuratin options.
 
-               _FS_MINIMIZE  _FS_MINIMIZE  _FS_READONLY
-                    (1)           (2)
+               _FS_MINIMIZE  _FS_MINIMIZE  _FS_READONLY  _USE_MKFS
+                    (1)           (2)          (1)        (undef)
+   f_mount
    f_open
    f_close
    f_read
@@ -76,7 +95,7 @@ CONFIGURATION OPTIONS
    f_mkdir           x            x            x
    f_chmod           x            x            x
    f_rename          x            x            x
-   f_mountdrv
+   f_mkfs                                      x            x
 
 
 
@@ -92,11 +111,20 @@ AGREEMENTS
 REVISION HISTORY
 
   Feb 26, 2006  R0.00  Prototype
+
   Apr 29, 2006  R0.01  First stable version
+
   Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
                        Fixed a problem on small (<32M) patition.
+
   Jun 10, 2006  R0.02a Added a configuration option _FS_MINIMUM.
+
   Sep 22, 2006  R0.03  Added f_rename().
                        Changed option _FS_MINIMUM to _FS_MINIMIZE.
+
   Dec 11, 2006  R0.03a Improved cluster scan algolithm to write files fast.
                        Fixed f_mkdir() creates incorrect directory on FAT32.
+
+  Feb 04, 2007  R0.04  Supported multiple drive system.
+                       Changed some APIs for multiple drive system.
+                       Added f_mkfs().

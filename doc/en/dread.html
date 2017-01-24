@@ -12,12 +12,13 @@
 
 <div class="para">
 <h2>disk_read</h2>
-<p>The disk_read reads sector(s) from the disk drive.</p>
+<p>The disk_read function reads sector(s) from the disk drive.</p>
 <pre>
 DRESULT disk_read (
-  BYTE* <em>Buffer</em>,        // Pointer to the read buffer.
-  DWORD <em>SectorNumber</em>,  // Sector number to read from.
-  BYTE <em>SectorCount</em>     // Number of sectros to read.
+  BYTE <em>Drive</em>,          /* Physical drive number */
+  BYTE* <em>Buffer</em>,        /* Pointer to the read buffer */
+  DWORD <em>SectorNumber</em>,  /* Sector number to read from */
+  BYTE <em>SectorCount</em>     /* Number of sectros to read */
 );
 </pre>
 </div>
@@ -25,6 +26,8 @@ DRESULT disk_read (
 <div class="para">
 <h4>Parameters</h4>
 <dl class="par">
+<dt>Drive</dt>
+<dd>Specifies the physical drive number to read.</dd>
 <dt>Buffer</dt>
 <dd>Pointer to the read buffer to store the read data. <tt>SectorCount * 512</tt> bytes is required for the size of the read buffer.</dd>
 <dt>SectorNumber</dt>

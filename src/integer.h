@@ -1,14 +1,19 @@
 #ifndef _INTEGER
 
-typedef unsigned char   BYTE;
-typedef unsigned char   UCHAR;
+typedef int             INT;
+typedef unsigned int    UINT;
+
 typedef char            CHAR;
-typedef unsigned short  WORD;
-typedef unsigned short  USHORT;
+typedef unsigned char   UCHAR;
+typedef unsigned char   BYTE;
+
 typedef short           SHORT;
-typedef unsigned long   DWORD;
-typedef unsigned long   ULONG;
+typedef unsigned short  USHORT;
+typedef unsigned short  WORD;
+
 typedef long            LONG;
+typedef unsigned long   ULONG;
+typedef unsigned long   DWORD;
 
 typedef unsigned char   BOOL;
 #define FALSE   0

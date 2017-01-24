@@ -12,17 +12,16 @@
 
 <div class="para">
 <h2>FATFS</h2>
-<p>The <tt>FATFS</tt> structure holds dynamic work area of the FatFs modlue and it is allocated by an application program. There is no members that can be changed from the application program.</p>
+<p>The <tt>FATFS</tt> structure holds dynamic work area of individual logical drives. It is given by application program and registerd/unregisterd to the FatFs module with f_mount function. There is no member that can be changed from the application program.</p>
 <h4>FatFs</h4>
 <pre>
 typedef struct _FATFS {
-    BYTE    fs_type;        /* FAT type */
-    BYTE    files;          /* Number of files currently opend */
+    BYTE    fs_type;        /* FAT type (0:Not mouted) */
     BYTE    sects_clust;    /* Sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
-    WORD    n_rootdir;      /* Number of root directory entry */
-    BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
-    BYTE    pad1;
+    BYTE    drive;          /* Physical drive number */
+    WORD    id;             /* File system mount ID */
+    WORD    n_rootdir;      /* Number of root directory entries */
     DWORD   winsect;        /* Current sector appearing in the win[] */
     DWORD   sects_fat;      /* Sectors per fat */
     DWORD   max_clust;      /* Maximum cluster# + 1 */
@@ -30,6 +29,7 @@ typedef struct _FATFS {
     DWORD   dirbase;        /* Root directory start sector (cluster# for FAT32) */
     DWORD   database;       /* Data start sector */
     DWORD   last_clust;     /* Last allocated cluster */
+    BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    win[512];       /* Disk access window for Directory/FAT */
 } FATFS;
 </pre>
@@ -37,20 +37,19 @@ typedef struct _FATFS {
 <h4>Tiny-FatFs</h4>
 <pre>
 typedef struct _FATFS {
-    BYTE    fs_type;        /* FAT type */
-    BYTE    files;          /* Number of files currently opend */
+    BYTE    fs_type;        /* FAT type (0:Not mouted) */
     BYTE    sects_clust;    /* Sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
-    WORD    n_rootdir;      /* Number of root directory entry */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
-    BYTE    pad1;
+    WORD    id;             /* File system mount ID */
+    WORD    n_rootdir;      /* Number of root directory entries */
     DWORD   winsect;        /* Current sector appearing in the win[] */
-    WORD    sects_fat;      /* Sectors per fat */
-    WORD    max_clust;      /* Maximum cluster# + 1 */
     DWORD   fatbase;        /* FAT start sector */
     DWORD   dirbase;        /* Root directory start sector */
     DWORD   database;       /* Data start sector */
-    WORD    last_clust;     /* Last allocated cluster */
+    CLUST   sects_fat;      /* Sectors per fat */
+    CLUST   max_clust;      /* Maximum cluster# + 1 */
+    CLUST   last_clust;     /* Last allocated cluster */
     BYTE    win[512];       /* Disk access window for Directory/FAT/File */
 } FATFS;
 </pre>

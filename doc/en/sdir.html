@@ -12,23 +12,27 @@
 
 <div class="para">
 <h2>DIR</h2>
-<p>The <tt>DIR</tt> structure is used for the work area to read a directory.</p>
+<p>The <tt>DIR</tt> structure is used for the work area to read a directory by f_oepndir and f_readdir functions.</p>
 <h4>FatFs</h4>
 <pre>
 typedef struct _DIR {
-    DWORD   sclust;       // Directory start cluster
-    DWORD   clust;        // Current reading cluster
-    DWORD   sect;         // Current reading sector
-    WORD    index;        // Current index
+    FATFS*  fs;          /* Pointer to the owner file system object */
+    DWORD   sclust;      /* Start cluster */
+    DWORD   clust;       /* Current cluster */
+    DWORD   sect;        /* Current sector */
+    WORD    index;       /* Current index */
+    WORD    id;          /* Sum of owner file system mount ID */
 } DIR;
 </pre>
 <h4>Tiny-FatFs</h4>
 <pre>
 typedef struct _DIR {
-    WORD    sclust;       // Directory start cluster
-    WORD    clust;        // Current reading cluster
-    DWORD   sect;         // Current reading sector
-    WORD    index;        // Current index
+    FATFS*  fs;          /* Pointer to the owner file system object */
+    CLUST   sclust;      /* Start cluster */
+    CLUST   clust;       /* Current cluster */
+    DWORD   sect;        /* Current sector */
+    WORD    index;       /* Current index */
+    WORD    id;          /* Sum of owner file system mount ID */
 } DIR;
 </pre>
 </div>

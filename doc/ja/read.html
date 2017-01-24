@@ -15,7 +15,7 @@
 <p>ファイルからデータを読み出します。</p>
 <pre>
 FRESULT f_read (
-  FIL* <em>FileObject</em>,    // ファイルオブジェクト構造体
+  FIL* <em>FileObject</em>,    // ファイル・オブジェクト構造体
   void* <em>Buffer</em>,       // 読み出したデータを格納するバッファ
   WORD <em>ByteToRead</em>,    // 読み出すバイト数
   WORD* <em>ByteRead</em>      // 読み出されたバイト数
@@ -24,10 +24,10 @@ FRESULT f_read (
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>ファイルオブジェクト構造体へのポインタを指定します。</dd>
+<dd>ファイル・オブジェクト構造体へのポインタを指定します。</dd>
 <dt>Buffer</dt>
 <dd>読み出したデータを格納するバッファを指すポインタを指定します。</dd>
 <dt>ByteToRead</dt>
@@ -46,11 +46,11 @@ FRESULT f_read (
 <dt>FR_DENIED</dt>
 <dd>書き込み専用モードで開いたファイルから読み込もうとした。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
+<dd>ディスク・アクセスでエラーが発生した。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>FatFsモジュールが停止状態。</dd>
+<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dt>FR_INVALID_OBJECT</dt>
+<dd>無効なファイル・オブジェクト。</dd>
 </dl>
 </div>
 

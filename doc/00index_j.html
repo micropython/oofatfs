@@ -3,6 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="start" title="Site Top" href="../../index_j.html">
+<link rel="up" title="Freewares" href="../../fsw.html">
 <link rel="alternate" hreflang="en" title="English version" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - 汎用FATファイルシステム・モジュール</title>
@@ -13,50 +15,46 @@
 <hr>
 
 <div class="abst">
-<img src="layers.png" class="rset" width="245" height="255">
-<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワークエリアが確保できれば、PIC, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高速版（FatFs）と省メモリ版（Tiny-FatFs）の2通りを作成してみました。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュール（サンプルあり）を用意する必要があります。</p>
-<h4>FatFsモジュールの特徴</h4>
+<img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
+<p>小規模な組み込みシステム向けの汎用FATファイルシステム・モジュールです。ANSI C準拠でハードウェア・アーキテクチャには依存しないので、必要なワーク・エリアが確保できれば、8051, AVR, H8, Z80などほとんどのマイコンでそのまま使用可能です。いろいろな使用形態を考慮して、高機能版（<strong>FatFs</strong>）と省メモリ版（<strong>Tiny-FatFs</strong>）の2通りを作成してみました。実際に使用するには、各記録メディア（CFC, MMC, SDC, ATA, USB, SCSI等）に対応したディスクI/Oモジュール（サンプルあり）を用意する必要があります。</p>
+<h4>FatFsの特徴</h4>
 <ul>
- <li>システム用と各ファイル用バッファを分離し、複数ファイルの高速アクセスに適する</li>
- <li>8/16ビットマイコン向けにコードを最適化</li>
- <li>メモリの消費が少ない</li>
+ <li>ファイル・システム用とファイルI/O用バッファを分離し、複数ファイルの高速アクセスに適する</li>
  <li>FAT12, FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
+ <li>複数ドライブをサポート</li>
  <li>8.3形式ファイル名とNT小文字フラグに対応</li>
  <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
-</ul>
-<h4>Tiny-FatFsモジュールの特徴</h4>
-<ul>
- <li>システム用と各ファイル用バッファを共通化し、RAMの使用量を削減</li>
  <li>8/16ビットマイコン向けにコードを最適化</li>
- <li>メモリの消費が少なく、小メモリ・システム(1KB)に対応</li>
- <li>FAT12, FAT16(+FAT64)に対応</li>
- <li>8.3形式ファイル名とNT小文字フラグに対応</li>
- <li>FDISKフォーマット(基本区画)およびSFDフォーマット(512B/sectorのみ)に対応</li>
+</ul>
+<h4>Tiny-FatFsの特徴(FatFsとの相違)</h4>
+<ul>
+ <li>RAMの使用量を削減し、小メモリ・システム(RAM:1KB)にも対応</li>
+ <li>単一ドライブのみサポート</li>
 </ul>
 </div>
 
 
 <div class="para">
-<h3>メモリ使用</h3>
-<p>いくつかのコンフィギュレーション・オプションにより、不要な関数を削ってモジュールサイズを削減できます。次に実際のメモリ使用量[バイト]を示します(avrgccの例)。</p>
+<h3>メモリ使用量</h3>
+<p>いくつかのコンフィギュレーション・オプションにより、不要な関数を削ってモジュール・サイズを削減できます。次に実際のメモリ使用量[バイト]を示します(avrgccの例)。</p>
 
 <div class="lset">
 <table class="lst2">
  <caption>FatFs</caption>
  <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>プログラム(R/W構成)</td><td>8526</td><td>6042</td></tr>
- <tr><td>プログラム(R/O構成)</td><td>4172</td><td>3402</td></tr>
- <tr><td>静的ワークエリア</td><td colspan="2">2</td>
- <tr><td>動的ワークエリア</td><td colspan="2">548 + 540 * &lt;files&gt;</td>
+ <tr><td>プログラム(R/W構成)</td><td>8574</td><td>6094</td></tr>
+ <tr><td>プログラム(R/O構成)</td><td>4268</td><td>3494</td></tr>
+ <tr><td>静的ワークエリア</td><td colspan="2">2 + 2*&lt;drives&gt;</td>
+ <tr><td>動的ワークエリア</td><td colspan="2">550*&lt;drives&gt; + 544*&lt;files&gt;</td>
 </table>
 </div>
 <table class="lst2">
  <caption>Tiny-FatFs</caption>
  <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>プログラム(R/W構成)</td><td>7138</td><td>4862</td></tr>
- <tr><td>プログラム(R/O構成)</td><td>3542</td><td>2778</td></tr>
- <tr><td>静的ワークエリア</td><td colspan="2">2</td></tr>
- <tr><td>動的ワークエリア</td><td colspan="2">540 + 24 * &lt;files&gt;</td></tr>
+ <tr><td>プログラム(R/W構成)</td><td>7164</td><td>4890</td></tr>
+ <tr><td>プログラム(R/O構成)</td><td>3660</td><td>2946</td></tr>
+ <tr><td>静的ワークエリア</td><td colspan="2">4</td></tr>
+ <tr><td>動的ワークエリア</td><td colspan="2">542 + 28*&lt;files&gt;</td></tr>
 </table>
 </div>
 
@@ -65,6 +63,7 @@
 <h3>上位レイヤI/F</h3>
 <p>FatFs/Tiny-FatFsモジュールは、次のファイル操作関数を提供しています。</p>
 <ul>
+<li><a href="ja/mount.html">f_mount</a> - ワークエリアの登録・削除</li>
 <li><a href="ja/open.html">f_open</a> - ファイルのオープン・作成</li>
 <li><a href="ja/close.html">f_close</a> - ファイルのクローズ</li>
 <li><a href="ja/read.html">f_read</a> - ファイルの読み込み</li>
@@ -79,7 +78,7 @@
 <li><a href="ja/unlink.html">f_unlink</a> - ファイルまたはディレクトリの削除</li>
 <li><a href="ja/chmod.html">f_chmod</a> - ファイルまたはディレクトリ属性の変更</li>
 <li><a href="ja/rename.html">f_rename</a> - ファイルまたはディレクトリの名前変更・移動</li>
-<li><a href="ja/mountdrv.html">f_mountdrv</a> - ファイル・システムの明示的初期化</li>
+<li><a href="ja/mkfs.html">f_mkfs</a> - ディスクのフォーマット</li>
 </ul>
 </div>
 
@@ -99,14 +98,17 @@
 
 <div class="para">
 <h3>資料</h3>
-<p>FatFs/Tiny-FatFsモジュールはフリーソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
-<br>
+<p>FatFs/Tiny-FatFsモジュールはフリー・ソフトウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
 <ul>
-<li><a href="rwtest.png">パフォーマンス・テスト</a>（テストボード：ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>）</li>
+<li><a href="ja/appnote.html">FatFsモジュール・アプリケーション・ノート</a></li>
+<li><a href="img/rwtest.png">パフォーマンス・テスト</a>（テスト・ボード：ATmega64/9.2MHz with <a href="img/rw_mmc.jpeg">MMC</a>/<a href="img/rw_ata.jpeg">HDD</a>/<a href="img/rw_cfc.jpeg">CFC</a>）</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32仕様書</a> (Microsoft)</li>
-<li><a href="../../docs/mmc/mmc.html">MMCの使いかた</a></li>
+<li><a href="http://elm-chan.org/docs/mmc/mmc.html">MMCの使いかた</a></li>
 </ul>
 </div>
 
+
+<hr>
+<p class="foot"><a href="../../cc.html">戻る</a></p>
 </body>
 </html>

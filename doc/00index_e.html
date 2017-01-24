@@ -3,6 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
+<link rel="start" title="Site Top" href="../../">
+<link rel="up" title="Freewares" href="../../fsw_e.html">
 <link rel="alternate" hreflang="ja" title="Japanese version" href="00index_j.html">
 <link rel="stylesheet" href="css_e.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - Generic FAT Files System Module</title>
@@ -13,26 +15,22 @@
 <hr>
 
 <div class="abst">
-<img src="layers.png" class="rset" width="245" height="255">
-<p>FatFs module is an experimental project to implement FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into most small microcontrollers, such as 8051, PIC, AVR, H8, Z80 and etc..., without any change. I created two modules in different configurations in consideration of various use. To use the FatFs module, low level disk I/O functions for each media must be provided by user.</p>
+<img src="img/layers.png" class="rset" width="245" height="255" alt="layer">
+<p>FatFs module is an experimental project to implement a FAT file system to small embdded systems. The FatFs module is written in compliance with ANSI C, therefore it is independent of hardware architecture. It can be incorporated into most small microcontrollers, such as 8051, PIC, AVR, H8, Z80 and etc..., without any change. I created two modules in different configurations in consideration of various use. To use the FatFs module, low level disk I/O functions for each media must be provided by user.</p>
 
 <h4>Features of FatFs Module</h4>
 <ul>
- <li>Separated buffer for FAT and each file. Suitable for fast multiple file accsess.</li>
- <li>Optimized for 8/16 bit microcontrollers.</li>
- <li>Low memory consumption</li>
+ <li>Separated buffer for FAT/DIR and each file, suitable for fast multiple file accsess.</li>
  <li>Supports FAT12, FAT16(+FAT64) and FAT32 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
+ <li>Supports multiple drives.</li>
  <li>Supports 8.3 format file name and NT lower capital flags</li>
- <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
-</ul>
-<h4>Features of Tiny-FatFs Module</h4>
-<ul>
- <li>Only a common buffer for FAT and each file to reduce memory consumption.</li>
+ <li>Supports two partitioning rules: FDISK (only 1st primariy partition) and SFD</li>
  <li>Optimized for 8/16 bit microcontrollers.</li>
- <li>Low memory consumption, suitable for small memory system (1KB)</li>
- <li>Supports FAT12 and FAT16(+FAT64)</li>
- <li>Supports 8.3 format file name and NT lower capital flags</li>
- <li>Supports two partitioning formats: FDISK (only 1st primariy partition) and SFD (only 512B/sector)</li>
+</ul>
+<h4>Features of Tiny-FatFs Module (different to FatFs)</h4>
+<ul>
+ <li>Very low memory consumption, suitable for small memory system (RAM:1KB)</li>
+ <li>Supports only single drive.</li>
 </ul>
 </div>
 
@@ -45,19 +43,19 @@
 <table class="lst2">
  <caption>FatFs</caption>
  <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>8526</td><td>6042</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>4172</td><td>3402</td></tr>
- <tr><td>Static Work Area</td><td colspan="2">2</td>
- <tr><td>Dynamic Work Area</td><td colspan="2">548 + 540 * &lt;files&gt;</td>
+ <tr><td>Program (R/W cfg.)</td><td>8574</td><td>6094</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>4268</td><td>3494</td></tr>
+ <tr><td>Static Work Area</td><td colspan="2">2 + 2*&lt;drives&gt;</td>
+ <tr><td>Dynamic Work Area</td><td colspan="2">550*&lt;drives&gt; + 544*&lt;files&gt;</td>
 </table>
 </div>
 <table class="lst2">
  <caption>Tiny-FatFs</caption>
  <tr><th>Section</th><th>Std cfg.</th><th>Min cfg.</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>7138</td><td>4862</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>3542</td><td>2778</td></tr>
- <tr><td>Static Work Area</td><td colspan="2">2</td></tr>
- <tr><td>Dynamic Work Area</td><td colspan="2">540 + 24 * &lt;files&gt;</td></tr>
+ <tr><td>Program (R/W cfg.)</td><td>7164</td><td>4890</td></tr>
+ <tr><td>Program (R/O cfg.)</td><td>3660</td><td>2946</td></tr>
+ <tr><td>Static Work Area</td><td colspan="2">4</td></tr>
+ <tr><td>Dynamic Work Area</td><td colspan="2">542 + 28*&lt;files&gt;</td></tr>
 </table>
 </div>
 
@@ -66,6 +64,7 @@
 <h3>Application Interface</h3>
 <p>FatFs/Tiny-FatFs module provides following functions.</p>
 <ul>
+<li><a href="en/mount.html">f_mount</a> - Register/Unregister a Work Area</li>
 <li><a href="en/open.html">f_open</a> - Open/Create a File</li>
 <li><a href="en/close.html">f_close</a> - Close a File</li>
 <li><a href="en/read.html">f_read</a> - Read File</li>
@@ -80,7 +79,7 @@
 <li><a href="en/unlink.html">f_unlink</a> - Remove a File or Directory</li>
 <li><a href="en/chmod.html">f_chmod</a> - Change Attribute</li>
 <li><a href="en/rename.html">f_rename</a> - Rename/Move a File or Directory</li>
-<li><a href="en/mountdrv.html">f_mountdrv</a> - Force Initialized FatFs Module</li>
+<li><a href="en/mkfs.html">f_mkfs</a> - Create a File System on the Drive</li>
 </ul>
 </div>
 
@@ -101,13 +100,16 @@
 <div class="para">
 <h3>Resources</h3>
 <p>The FatFs/Tiny-FatFs module is a free software and is opened for education, research and development. You can use, modify and/or republish it for personal, non-profit or profit use without any restriction under your responsibility.</p>
-<br>
 <ul>
-<li><a href="rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>)</li>
+<li><a href="en/appnote.html">FatFs module application note</a></li>
+<li><a href="img/rwtest.png">Benchmark</a> (Test Board: ATmega64/9.2MHz with <a href="img/rw_mmc.jpeg">MMC</a>/<a href="img/rw_ata.jpeg">HDD</a>/<a href="img/rw_cfc.jpeg">CFC</a>)</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32 Specification</a> (Microsoft)</li>
-<li><a href="../../docs/mmc/mmc_e.html">How to Use an MMC</a></li>
+<li><a href="http://elm-chan.org/docs/mmc/mmc_e.html">How to Use an MMC</a></li>
 </ul>
 </div>
 
+
+<hr>
+<p class="foot"><a href="../../cc_e.html">Return</a></p>
 </body>
 </html>

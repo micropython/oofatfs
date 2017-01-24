@@ -15,20 +15,20 @@
 <p>ファイルをオープンまたは作成します。</p>
 <pre>
 FRESULT f_open (
-  FIL* <em>FileObject</em>,      // 空のファイルオブジェクト構造体へのポインタ
-  const char* <em>FileName</em>, // ファイルのフルパス名へのポインタ
-  BYTE <em>ModeFlags</em>        // モードフラグ
+  FIL* <em>FileObject</em>,      /* 空のファイル・オブジェクト構造体へのポインタ */
+  const char* <em>FileName</em>, /* ファイルのフルパス名へのポインタ */
+  BYTE <em>ModeFlags</em>        /* モードフラグ */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>新しく作成するファイルオブジェクト構造体へのポインタを指定します。以降、そのファイルを閉じるまでこのファイルオブジェクトを使用してファイル操作をします。</dd>
+<dd>新しく作成するファイル・オブジェクト構造体へのポインタを指定します。以降、そのファイルを閉じるまでこのファイル・オブジェクトを使用してファイル操作をします。</dd>
 <dt>FileName</dt>
-<dd>作成する (またはオープンする) ファイルのフルパス名が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。ディレクトリセパレータには<tt>'/'</tt>を使用します。FatFsモジュールにはカレントディレクトリの概念がないので、パスはルートディレクトリから辿る絶対パスとなります。文字列先頭のスペースはスキップされます。パス先頭の<tt>'/'</tt>はあってもなくてもかまいません。</dd>
+<dd>開く(または作成する)ファイルの <a href="filename.html">ファイル名</a>が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
 <dt>ModeFlags</dt>
 <dd>ファイルのアクセス方法やオープン方法を決めるフラグです。このパラメータには次の組み合わせを指定します。<br>
 <table class="lst">
@@ -48,25 +48,25 @@ FRESULT f_open (
 <h4>戻り値</h4>
 <dl class="ret">
 <dt>FR_OK (0)</dt>
-<dd>正常終了。以降、<tt><em>FileObject</em></tt>構造体を使ってこのファイルを操作できます。ファイルを閉じるときは、<tt><a href="close.html">f_close()</a></tt>を使用します。</dd>
+<dd>正常終了。以降、<tt><em>FileObject</em></tt>構造体を使ってこのファイルを操作できます。</dd>
 <dt>FR_NO_FILE</dt>
 <dd>ファイルが見つからない。</dd>
 <dt>FR_NO_PATH</dt>
 <dd>パスが見つからない。</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>ファイル名が不正。</dd>
+<dt>FR_INVALID_DRIVE</dt>
+<dd>ドライブ番号が不正。</dd>
 <dt>FR_DENIED</dt>
-<dd>アクセスが拒否された。リードオンリーファイルの書き込みモードオープン、同名のディレクトリまたはリードオンリファイルがある状態でのファイル作成、ディスクまたはディレクトリテーブルが満杯でファイルを作成できないなど。</dd>
+<dd>アクセスが拒否された。リード・オンリー・ファイルの書き込みモード・オープン、同名のディレクトリまたはリード・オンリー・ファイルがある状態でのファイル作成、ディスクまたはディレクトリ・テーブルが満杯でファイルを作成できないなど。</dd>
 <dt>FR_NOT_READY</dt>
-<dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
+<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
 <dt>FR_WRITE_PROTECTED</dt>
-<dd>メディアが書き込み禁止状態で書き込みオープンまたはファイル作成をした。</dd>
+<dd>メディアが書き込み禁止状態で書き込み系オープンをした。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
+<dd>ディスク・アクセスでエラーが発生した。</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFsモジュールが停止状態。</dd>
+<dd>その論理ドライブにワーク・エリアが割り当てられていない。</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>ディスク上に有効なFATパーテーションが見つからない。</dd>
 </dl>
@@ -75,26 +75,25 @@ FRESULT f_open (
 
 <div class="para">
 <h4>解説</h4>
-<p>FatFsモジュールの使用を開始するにはまず、FatFsモジュールのグローバル変数<em>FatFs</em>にゼロクリアしたワークエリア(<tt>FATFS</tt>構造体)のアドレスを代入します。このようにしてFatFsモジュールにワークエリアを割り当てるとモジュールは動作可能状態になり、ファイル関数が使えるようになります。ゼロクリアの代わりに<a href="mountdrv.html">f_mountdrv()</a>でもOKですが、少なくともその時点で物理ドライブが動作可能になっていなければなりません。FatFsモジュールの使用を終了するには、全てのファイルを閉じたあと<em>FatFs</em>をクリアします。その後、ワークエリアは破棄できます。</p>
+<p>作成されたファイル・オブジェクトは、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。</p>
+<p>ファイル操作関数を使用する前にまず、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与えなければなりません。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
 <p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
 </div>
 
 
 <div class="para">
-<h4>使用例（ファイルコピー）</h4>
+<h4>使用例（ファイル・コピー）</h4>
 <pre>
 void main ()
 {
-    FATFS fs;            // FatFsワークエリア
-    FIL fsrc, fdst;      // ファイルオブジェクト
+    FATFS fs;            // 論理ドライブのワーク・エリア(ファイル・システム・オブジェクト)
+    FIL fsrc, fdst;      // ファイル・オブジェクト
     BYTE buffer[4096];   // file copy buffer
     FRESULT res;         // FatFs function common result code
     WORD br, bw;         // File R/W count
 
-
-    // FatFsのワークエリアを確保する
-    FatFs = &fs;
-    memset(&fs, 0, sizeof(FATFS));      // ワークエリアの初期化。代わりに f_mountdrv() でもよい
+    // ドライブ0にワーク・エリアを与える
+    f_mount(0, &fs);
 
     // ソース・ファイルを開く
     res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
@@ -116,8 +115,8 @@ void main ()
     f_close(&fsrc);
     f_close(&fdst);
 
-    // FatFsのワークエリアを開放する
-    FatFs = NULL;
+    // ワーク・エリアを開放する
+    f_mount(0, NULL);
 }
 </pre>
 </div>

@@ -15,17 +15,17 @@
 <p>ファイルのR/Wポインタを移動します。</p>
 <pre>
 FRESULT f_lseek (
-  FIL* <em>FileObject</em>,   // ファイルオブジェクト構造体へのポインタ
-  DWORD <em>Offset</em>       // 移動先オフセット
+  FIL* <em>FileObject</em>,   /* ファイル・オブジェクト構造体へのポインタ */
+  DWORD <em>Offset</em>       /* 移動先オフセット */
 );
 </pre>
 </div>
 
 <div class="para">
-<h4>パラメータ</h4>
+<h4>引数</h4>
 <dl class="par">
 <dt>FileObject</dt>
-<dd>対象となるファイルオブジェクト構造体へのポインタを指定します。</dd>
+<dd>対象となるファイル・オブジェクト構造体へのポインタを指定します。</dd>
 <dt>Offset</dt>
 <dd>移動先のオフセット（R/Wポインタ）値。ファイル先頭からのオフセットをバイト単位で指定します。</dd>
 </dl>
@@ -38,18 +38,18 @@ FRESULT f_lseek (
 <dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
 <dt>FR_RW_ERROR</dt>
-<dd>ディスクアクセスでエラーが発生した。</dd>
-<dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>不正なメディアの取り外しがあった。ファイルを開いたままのメディア交換など。</dd>
-<dt>FR_NOT_ENABLED</dt>
-<dd>FatFsモジュールが停止状態。</dd>
+<dd>ディスク・アクセスでエラーが発生した。</dd>
+<dt>FR_NOT_READY</dt>
+<dd>メディアがセットされていないなど、ディスク・ドライブが動作不能状態。</dd>
+<dt>FR_INVALID_OBJECT</dt>
+<dd>無効なファイルオブジェクト。</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルR/Wポインタを移動します。オフセットの指定はファイル先頭からのみです。ファイル末尾以降への移動はできません。ファイルサイズ以上のオフセットを指定した場合、R/Wポインタはファイルサイズと同じになります。</p>
+<p>ファイルR/Wポインタを移動します。オフセットの指定はファイル先頭からのみです。ファイル末尾以降への移動はできません。ファイル・サイズ以上のオフセットを指定した場合、R/Wポインタはファイル・サイズと同じになります。</p>
 </div>
 
 
@@ -66,7 +66,7 @@ FRESULT f_lseek (
     res = f_lseek(&file, file.fptr - 2000);
 
     // ファイル追記の準備
-    res = f_lseek(&file, 0xFFFFFFFF);
+    res = f_lseek(&file, file.fsize);
 </pre>
 </div>
 
