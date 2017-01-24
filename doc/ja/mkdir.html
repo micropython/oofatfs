@@ -24,7 +24,7 @@ FRESULT f_mkdir (
 <h4>パラメータ</h4>
 <dl class="par">
 <dt>DirName</dt>
-<dd>作成するディレクトリのフルパス名が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。ディレクトリセパレータには<tt>'/'</tt>を使用します。FatFsモジュールにはカレントディレクトリの概念がないので、パスはルートディレクトリから辿る絶対パスとなります。文字列先頭のスペースはスキップされます。パス先頭の<tt>'/'</tt>はあってもなくてもかまいません。ミニマム構成ではこの関数はサポートされません。</dd>
+<dd>作成するディレクトリのフルパス名が入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。ディレクトリセパレータには<tt>'/'</tt>を使用します。FatFsモジュールにはカレントディレクトリの概念がないので、パスはルートディレクトリから辿る絶対パスとなります。文字列先頭のスペースはスキップされます。パス先頭の<tt>'/'</tt>はあってもなくてもかまいません。リードオンリー構成および _FS_MINIMIZE &gt;= 1 ではこの関数はサポートされません。</dd>
 </dl>
 </div>
 
@@ -34,7 +34,7 @@ FRESULT f_mkdir (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
-<dt>FR_NOPATH</dt>
+<dt>FR_NO_PATH</dt>
 <dd>パスが見つからない。</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>パス名が不正。</dd>
@@ -58,7 +58,7 @@ FRESULT f_mkdir (
 
 <div class="para">
 <h4>解説</h4>
-<p>空のディレクトリを作成します。リードオンリー構成ではこの関数はサポートされません。</p>
+<p>空のディレクトリを作成します。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 <p>
 </p>
 </div>
@@ -67,11 +67,11 @@ FRESULT f_mkdir (
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    res = f_mkdir("/sub1");
+    res = f_mkdir("sub1");
     if (res) die(res);
-    res = f_mkdir("/sub1/sub2");
+    res = f_mkdir("sub1/sub2");
     if (res) die(res);
-    res = f_mkdir("/sub1/sub2/sub3");
+    res = f_mkdir("sub1/sub2/sub3");
     if (res) die(res);
 </pre>
 </div>

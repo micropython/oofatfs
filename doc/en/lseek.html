@@ -42,7 +42,7 @@ FRESULT f_lseek (
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
 <dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 </dl>
 </div>
 
@@ -54,9 +54,9 @@ FRESULT f_lseek (
 
 
 <div class="para">
-<h4>Sample Code</h4>
+<h4>Example</h4>
 <pre>
-    // Move to offset of 5000 from top of file.
+    // Move to offset of 5000 from top of the file.
     res = f_lseek(&file, 5000);
 
     // Forward 3000 bytes
@@ -65,7 +65,7 @@ FRESULT f_lseek (
     // Rewind 2000 bytes
     res = f_lseek(&file, file.fptr - 2000);
 
-    // Move to end of file
+    // Move to end of the file
     res = f_lseek(&file, 0xFFFFFFFF);
 </pre>
 </div>

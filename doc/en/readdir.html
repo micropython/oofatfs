@@ -42,14 +42,14 @@ FRESULT f_readdir (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 </dl>
 </div>
 
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_readdir reads directory items in sequence. All items in the directory can be read by calling f_readdir repeatedly. When all items have been read and no item to read, the member <tt>f_name[]</tt> in the file information structure gets a null string. For details of the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimum configuration.</p>
+<p>The f_readdir reads directory items in sequence. All items in the directory can be read by calling f_readdir repeatedly. When all items have been read and no item to read, the member <tt>f_name[]</tt> in the file information structure gets a null string. For details of the file informations, refer to the <tt>FILINFO</tt>. This function is not supported in minimization level of 2.</p>
 </div>
 
 

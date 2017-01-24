@@ -5,17 +5,18 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_j.html">
 <link rel="stylesheet" href="../css_j.css" type="text/css" media="screen" title="ELM Default">
-<title>FatFs - f_getfree</title>
+<title>FatFs - f_rename</title>
 </head>
 
 <body>
 
 <div class="para">
-<h2>f_getfree</h2>
-<p>ディスクの未使用領域を得ます。</p>
+<h2>f_chmod</h2>
+<p>ファイルまたはディレクトリの名前の変更または移動。</p>
 <pre>
-FRESULT f_getfree (
-  DWORD* <em>Clusters</em>     // 空きクラスタ数を格納する変数へのポインタ
+FRESULT f_rename (
+  const char* <em>OldName</em>, // 古いファイルまたはディレクトリの文字列へのポインタ
+  const char* <em>NewName</em>  // 新しいファイルまたはディレクトリの文字列へのポインタ
 );
 </pre>
 </div>
@@ -23,8 +24,10 @@ FRESULT f_getfree (
 <div class="para">
 <h4>パラメータ</h4>
 <dl class="par">
-<dt>Clusters</dt>
-<dd>空きクラスタ数を格納するDWORD変数へのポインタを指定します。</dd>
+<dt>OldName</dt>
+<dd>変更対象のファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。</dd>
+<dt>NewName</dt>
+<dd>新しいファイルまたはディレクトリのフルパス名の入った<tt>'\0'</tt>で終わる文字列へのポインタを指定します。既に存在するものと同じ名前は使えません。<br>
 </dl>
 </div>
 
@@ -33,9 +36,19 @@ FRESULT f_getfree (
 <h4>戻り値</h4>
 <dl class="ret">
 <dt>FR_OK (0)</dt>
-<dd>正常終了。<tt><em>*Clusters</em></tt>に空きクラスタ数が返されます。</dd>
+<dd>正常終了。</dd>
+<dt>FR_NO_FILE</dt>
+<dd>ファイルが見つからない。</dd>
+<dt>FR_NO_PATH</dt>
+<dd>パスが見つからない。</dd>
+<dt>FR_INVALID_NAME</dt>
+<dd>パス名が不正。</dd>
+<dt>FR_DENIED</dt>
+<dd>新しい名前が作れない。</dd>
 <dt>FR_NOT_READY</dt>
 <dd>メディアがセットされていないなど、ディスクドライブが動作不能状態。</dd>
+<dt>FR_WRITE_PROTECTED</dt>
+<dd>メディアが書き込み禁止状態。</dd>
 <dt>FR_RW_ERROR</dt>
 <dd>ディスクアクセスでエラーが発生した。</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
@@ -50,28 +63,19 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルシステム上の空きクラスタ数を取得します。<tt>FatFs.sects_clust</tt> がクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
+<p>ファイルまたはディレクトリの名前を変更します。別のディレクトリへの移動も可能です。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 </div>
 
 
 <div class="para">
 <h4>使用例</h4>
 <pre>
-    DWORD clust;
+    // 名前を変更する
+    f_rename("oldname.txt", "newname.txt");
 
-    // Get free clusters
-    res = f_getfree(&clust);
-    if (res) die(res);
-
-    // Get free bytes
-    printf("%lu bytes available on the disk.\n", clust * FatFs->sects_clust * 512);
+    // 名前の変更と同時に別のディレクトリへ移動する
+    f_rename("oldname.txt", "dir1/newname.txt");
 </pre>
-</div>
-
-
-<div class="para">
-<h4>参照</h4>
-<tt><a href="sfatfs.html">FATFS</a></tt>
 </div>
 
 <p class="foot"><a href="../00index_j.html">戻る</a></p>

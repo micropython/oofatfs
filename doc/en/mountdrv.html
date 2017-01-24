@@ -12,9 +12,9 @@
 
 <div class="para">
 <h2>f_mountdrv</h2>
-<p>The f_mountdrv forces mounted the partition.</p>
+<p>The f_mountdrv forces the partition mounted.</p>
 <pre>
-FRESULT f_mountdrv ();
+FRESULT f_mountdrv (void);
 </pre>
 </div>
 
@@ -28,7 +28,7 @@ FRESULT f_mountdrv ();
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -37,7 +37,8 @@ FRESULT f_mountdrv ();
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mountdrv mounts a partition (initializes <tt>FATFS</tt> structure) and put it that can handle all file functions. This function should not be used except for recover FR_INCORRECT_DISK_CHANGE error because the file system is mounted(initialized) automatically in accordance with the necessity when any file function is called. To terminate use of the FatFs module, close all files and then the <tt>FATFS</tt> structure can be discarded. In this function, following process is executed.</p><br>
+<p>The f_mountdrv forces the partition mounted (initializes <tt>FATFS</tt> structure). This function should not be used except for recover FR_INCORRECT_DISK_CHANGE error. The file system is initialized automatically in accordance with the necessity when any file function is called.</p>
+<p>To terminate use of the FatFs module, close all files and then the <tt>FATFS</tt> structure can be discarded. In this function, following process is executed.</p><br>
 <ul>
 <li>Initializes lower level layer (disk I/O module).</li>
 <li>Searches a FAT boot record in order of sector 0 (as SFD format) and first primary partition (as FDISK format).</li>

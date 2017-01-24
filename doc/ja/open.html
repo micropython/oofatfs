@@ -49,9 +49,9 @@ FRESULT f_open (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>正常終了。以降、<tt><em>FileObject</em></tt>構造体を使ってこのファイルを操作できます。ファイルを閉じるときは、<tt><a href="close.html">f_close()</a></tt>を使用します。</dd>
-<dt>FR_NOFILE</dt>
+<dt>FR_NO_FILE</dt>
 <dd>ファイルが見つからない。</dd>
-<dt>FR_NOPATH</dt>
+<dt>FR_NO_PATH</dt>
 <dd>パスが見つからない。</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>ファイル名が不正。</dd>
@@ -97,19 +97,19 @@ void main ()
     FatFs = &fs;
 
     // ソース・ファイルを開く
-    res = f_open(&fsrc, "/srcfile.dat", FA_OPEN_EXISTING | FA_READ);
+    res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
     // デスティネーション・ファイルを作成する
-    res = f_open(&fdst, "/dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    res = f_open(&fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
     // ソースからデスティネーションにコピーする
     for (;;) {
         res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-        if (res || br == 0) break;
+        if (res || br == 0) break;   // error or eof
         res = f_write(&fdst, buffer, br, &bw);
-        if (res || bw &lt; br) break;
+        if (res || bw &lt; br) break;   // error or disk full
     }
 
     // 全てのファイルを閉じる

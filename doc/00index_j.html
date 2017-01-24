@@ -3,8 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
 <meta http-equiv="Content-Style-Type" content="text/css">
-<link rel="start" title="Site Top" href="../../index_j.html">
-<link rel="up" title="Freewares" href="../../fsw.html">
 <link rel="alternate" hreflang="en" title="English version" href="00index_e.html">
 <link rel="stylesheet" href="css_j.css" type="text/css" media="screen" title="ELM Default">
 <title>ELM - 汎用FATファイルシステム・モジュール</title>
@@ -20,6 +18,7 @@
 <h4>FatFsモジュールの特徴</h4>
 <ul>
  <li>システム用と各ファイル用バッファを分離し、複数ファイルの高速アクセスに適する</li>
+ <li>8/16ビットマイコン向けにコードを最適化</li>
  <li>メモリの消費が少ない</li>
  <li>FAT12, FAT16(+FAT64), FAT32に対応 <small>(FAT64: FAT16 in 64KB/cluster)</small></li>
  <li>8.3形式ファイル名とNT小文字フラグに対応</li>
@@ -28,6 +27,7 @@
 <h4>Tiny-FatFsモジュールの特徴</h4>
 <ul>
  <li>システム用と各ファイル用バッファを共通化し、RAMの使用量を削減</li>
+ <li>8/16ビットマイコン向けにコードを最適化</li>
  <li>メモリの消費が少なく、小メモリ・システム(1KB)に対応</li>
  <li>FAT12, FAT16(+FAT64)に対応</li>
  <li>8.3形式ファイル名とNT小文字フラグに対応</li>
@@ -44,19 +44,19 @@
 <table class="lst2">
  <caption>FatFs</caption>
  <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>8282</td><td>6294</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>4482</td><td>3704</td></tr>
- <tr><td>Work Area (static)</td><td colspan="2">2</td>
- <tr><td>Work Area (dynamic)</td><td colspan="2">544 + 540 * &lt;files&gt;</td>
+ <tr><td>プログラム(R/W構成)</td><td>8554</td><td>6020</td></tr>
+ <tr><td>プログラム(R/O構成)</td><td>4170</td><td>3400</td></tr>
+ <tr><td>静的ワークエリア</td><td colspan="2">2</td>
+ <tr><td>動的ワークエリア</td><td colspan="2">544 + 540 * &lt;files&gt;</td>
 </table>
 </div>
 <table class="lst2">
  <caption>Tiny-FatFs</caption>
  <tr><th>セクション</th><th>標準</th><th>最小</th></tr>
- <tr><td>Program (R/W cfg.)</td><td>6868</td><td>5208</td></tr>
- <tr><td>Program (R/O cfg.)</td><td>3804</td><td>3136</td></tr>
- <tr><td>Work Area (static)</td><td colspan="2">2</td></tr>
- <tr><td>Work Area (dynamic)</td><td colspan="2">538 + 24 * &lt;files&gt;</td></tr>
+ <tr><td>プログラム(R/W構成)</td><td>7112</td><td>4836</td></tr>
+ <tr><td>プログラム(R/O構成)</td><td>3538</td><td>2774</td></tr>
+ <tr><td>静的ワークエリア</td><td colspan="2">2</td></tr>
+ <tr><td>動的ワークエリア</td><td colspan="2">538 + 24 * &lt;files&gt;</td></tr>
 </table>
 </div>
 
@@ -78,6 +78,7 @@
 <li><a href="ja/mkdir.html">f_mkdir</a> - ディレクトリの作成</li>
 <li><a href="ja/unlink.html">f_unlink</a> - ファイルまたはディレクトリの削除</li>
 <li><a href="ja/chmod.html">f_chmod</a> - ファイルまたはディレクトリ属性の変更</li>
+<li><a href="ja/rename.html">f_rename</a> - ファイルまたはディレクトリの名前変更・移動</li>
 <li><a href="ja/mountdrv.html">f_mountdrv</a> - ファイル・システムの明示的初期化</li>
 </ul>
 </div>
@@ -101,9 +102,10 @@
 <p>FatFs/Tiny-FatFsモジュールはフリーウェアとして教育・研究・開発用に公開しています。どのような利用目的（個人・非商用・商用）でも使用・改変・配布について一切の制限はありませんが、全て利用者の責任の下での利用とします。</p>
 <br>
 <ul>
+<li><a href="ff003.zip">FatFs/Tiny-FatFs R0.03 ソースファイル</a> <span class="mfd">2006. 9. 22</span></li>
 <li><a href="rwtest.png">パフォーマンス・テスト</a>（テストボード：ATmega64/9.2MHz with <a href="rw_mmc.jpeg">MMC</a>/<a href="rw_ata.jpeg">HDD</a>/<a href="rw_cfc.jpeg">CFC</a>）</li>
 <li><a href="http://www.microsoft.com/whdc/system/platform/firmware/fatgen.mspx">FAT32仕様書</a> (Microsoft)</li>
-<li><a href="../../docs/mmc/mmc.html">MMCの使いかた</a></li>
+<li><a href="http://elm-chan.org/docs/mmc/mmc.html">MMCの使いかた</a></li>
 </ul>
 </div>
 

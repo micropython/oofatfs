@@ -38,7 +38,7 @@ FRESULT f_chmod (
 </table>
 </dd>
 <dt>AttributeMask</dt>
-<dd>変更する属性のマスク。指定した属性が設定または解除されます。<tt>Attribute</tt>と同じ値を使います。</dd>
+<dd>変更する属性のマスク。指定した属性が設定または解除され、指定されなかった属性は保持されます。<tt>Attribute</tt>と同じ値を使います。</dd>
 </dl>
 </div>
 
@@ -48,9 +48,9 @@ FRESULT f_chmod (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>正常終了。</dd>
-<dt>FR_NOFILE</dt>
+<dt>FR_NO_FILE</dt>
 <dd>ファイルが見つからない。</dd>
-<dt>FR_NOPATH</dt>
+<dt>FR_NO_PATH</dt>
 <dd>パスが見つからない。</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>パス名が不正。</dd>
@@ -72,7 +72,7 @@ FRESULT f_chmod (
 
 <div class="para">
 <h4>解説</h4>
-<p>ファイルまたはディレクトリの属性を変更します。リードオンリー構成およびミニマム構成ではこの関数はサポートされません。</p>
+<p>ファイルまたはディレクトリの属性を変更します。リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 </div>
 
 

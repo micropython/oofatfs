@@ -28,7 +28,7 @@ FRESULT f_open (
 <dt>FileObject</dt>
 <dd>Pointer to the blank file object structure to be initialized. After the f_open() succeeded, the file can be accessed with the file object structure until it is closed.</dd>
 <dt>FileName</dt>
-<dd>Pointer to a null-terminated string specifies the full-path file name to create or open. The directory separator is <tt>'/'</tt>. Because the FatFs module does not have a concept of current directory, a full-path name that followed from the root directory must be used. Leading space charactors are skipped if exist and heading <tt>'/'</tt> can be exist or omitted.</dd>
+<dd>Pointer to a null-terminated string specifies the full-path file name to create or open. The directory separator is <tt>'/'</tt>. Because the FatFs module does not have a concept of current directory, a full-path name that followed from the root directory must be used. Leading space charactors are skipped if exist, and heading <tt>'/'</tt> can be exist or omitted.</dd>
 <dt>ModeFlags</dt>
 <dd>Specifies the type of access and open method for the file. It is specified by a combination of following flags.<br>
 <table class="lst">
@@ -49,9 +49,9 @@ FRESULT f_open (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>The function succeeded. The <tt><em>FileObject</em></tt> structure is used for subsequent calls to refer to the file. When close the file, use function <tt><a href="close.html">f_close()</a></tt>.</dd>
-<dt>FR_NOFILE</dt>
+<dt>FR_NO_FILE</dt>
 <dd>Could not find the file.</dd>
-<dt>FR_NOPATH</dt>
+<dt>FR_NO_PATH</dt>
 <dd>Could not find the path.</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>The file name is invalid.</dd>
@@ -64,9 +64,9 @@ FRESULT f_open (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
+<dd>Incorrect disk removal/change has occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -97,19 +97,19 @@ void main ()
     FatFs = &fs;
 
     // Open source file
-    res = f_open(&fsrc, "/srcfile.dat", FA_OPEN_EXISTING | FA_READ);
+    res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
     // Create destination file
-    res = f_open(&fdst, "/dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    res = f_open(&fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
     // Copy source to destination
     for (;;) {
         res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-        if (res || br == 0) break;
+        if (res || br == 0) break;   // error or eof
         res = f_write(&fdst, buffer, br, &bw);
-        if (res || bw &lt; br) break;
+        if (res || bw &lt; br) break;   // error or disk full
     }
 
     // Close all files

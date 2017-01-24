@@ -34,7 +34,7 @@ FRESULT f_mkdir (
 <dl class="ret">
 <dt>FR_OK (0)</dt>
 <dd>The function succeeded.</dd>
-<dt>FR_NOPATH</dt>
+<dt>FR_NO_PATH</dt>
 <dd>Could not find the path.</dd>
 <dt>FR_INVALID_NAME</dt>
 <dd>The path name is invalid.</dd>
@@ -47,9 +47,9 @@ FRESULT f_mkdir (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
+<dd>Incorrect disk removal/change has occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -58,20 +58,20 @@ FRESULT f_mkdir (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_mkdir creates an empty directory. This function is not supported in read-only and minimum configuration.</p>
+<p>The f_mkdir creates an empty directory. This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
 <p>
 </p>
 </div>
 
 
 <div class="para">
-<h4>Sample Code</h4>
+<h4>Example</h4>
 <pre>
-    res = f_mkdir("/sub1");
+    res = f_mkdir("sub1");
     if (res) die(res);
-    res = f_mkdir("/sub1/sub2");
+    res = f_mkdir("sub1/sub2");
     if (res) die(res);
-    res = f_mkdir("/sub1/sub2/sub3");
+    res = f_mkdir("sub1/sub2/sub3");
     if (res) die(res);
 </pre>
 </div>

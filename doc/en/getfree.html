@@ -39,9 +39,9 @@ FRESULT f_getfree (
 <dt>FR_RW_ERROR</dt>
 <dd>Any error occured in low level disk I/O.</dd>
 <dt>FR_INCORRECT_DISK_CHANGE</dt>
-<dd>Incorrect disk removal, such as a medium change during any file is opend, has been occured.</dd>
+<dd>Incorrect disk removal/change has occured.</dd>
 <dt>FR_NOT_ENABLED</dt>
-<dd>FatFs module has not been enabled.</dd>
+<dd>FatFs module is not enabled.</dd>
 <dt>FR_NO_FILESYSTEM</dt>
 <dd>There is no valid FAT partition on the disk.</dd>
 </dl>
@@ -50,7 +50,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>Descriptions</h4>
-<p>The f_getfree gets number of free clusters on the drive. The <tt>FatFs.sects_clust</tt> is indicating number of sectors per cluster, so that the free space in unit of byte can be calcurated with this. This function is not supported in minimum configuration.</p>
+<p>The f_getfree gets number of free clusters on the drive. The <tt>FatFs.sects_clust</tt> is indicating number of sectors per cluster, so that the free space in unit of byte can be calcurated with this. This function is not supported in read-only configuration and minimization level of &gt;= 1.</p>
 </div>
 
 

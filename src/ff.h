@@ -1,26 +1,32 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.02a       (C)ChaN, 2006
+/  FatFs - FAT file system module include file  R0.03        (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
-/ cheap microcontrollers. This is opened for education, reserch and
-/ development. You can use it for non-profit or profit use without any
-/ limitation under your responsibility.
+/ cheap microcontrollers. This is a free software and is opened for education,
+/ research and development. You can use, modify and/or republish it for
+/ non-profit or profit use without any restriction under your responsibility.
 /---------------------------------------------------------------------------*/
 
 #ifndef _FATFS
 
 //#define _BYTE_ACC
-/* This enables byte-by-byte access for multi-byte variables. It must be defined
-on the big-endian processor, or to prevent address error. */
+/* The _BYTE_ACC enables byte-by-byte access for multi-byte variables. This
+/  MUST be defined when multi-byte variable is stored in big-endian and/or
+/  address miss-aligned access is prohibited.  */
 
 //#define _FS_READONLY
-/* Read only configuration. This removes writing code for read-only applications. */
+/* Read only configuration. This removes writing functions, f_write, f_sync,
+/  f_unlink, f_mkdir, f_chmod, f_rename and f_getfree. */
 
-//#define _FS_MINIMUM
-/* Minimum configuration. This removes some functions to reduce module size. */
+#define _FS_MINIMIZE    0
+/* The _FS_MINIMIZE defines minimization level to remove some functions.
+/  0: Not minimized.
+/  1: f_stat, f_getfree, f_unlink, f_mkdir, f_chmod and f_rename are removed.
+/  2: f_opendir and f_readdir are removed in addition to level 1. */
 
 #define _USE_SJIS
-/* This enables Shift-JIS code transparency, or only US-ASCII file name can be accepted. */
+/* When _USE_SJIS is defined, Shift-JIS code transparency is enabled, otherwise
+/  only US-ASCII(7bit) code can be accepted as file/directory name. */
 
 
 #include "integer.h"
@@ -45,7 +51,7 @@ typedef struct _FATFS {
     DWORD   dirbase;        /* Root directory start sector (cluster# for FAT32) */
     DWORD   database;       /* Data start sector */
     DWORD   winsect;        /* Current sector appearing in the win[] */
-    BYTE    win[512];       /* Disk access window for Directory/FAT area */
+    BYTE    win[512];       /* Disk access window for Directory/FAT */
 } FATFS;
 
 
@@ -95,30 +101,27 @@ FRESULT f_open (FIL*, const char*, BYTE);           /* Open or create a file */
 FRESULT f_read (FIL*, void*, WORD, WORD*);          /* Read file */
 FRESULT f_close (FIL*);                             /* Close file */
 FRESULT f_lseek (FIL*, DWORD);                      /* Seek file pointer */
-FRESULT f_opendir (DIR*, const char*);              /* Initialize to read a directory */
+FRESULT f_opendir (DIR*, const char*);              /* Open a directory */
 FRESULT f_readdir (DIR*, FILINFO*);                 /* Read a directory item */
 FRESULT f_stat (const char*, FILINFO*);             /* Get file status */
 FRESULT f_getfree (DWORD*);                         /* Get number of free clusters */
-FRESULT f_mountdrv ();                              /* Force initialized the file system */
-#ifndef _FS_READONLY
+FRESULT f_mountdrv (void);                          /* Force initialized the file system */
 FRESULT f_write (FIL*, const void*, WORD, WORD*);   /* Write file */
-FRESULT f_sync (FIL*);                              /* Flush cached information of a writing file */
+FRESULT f_sync (FIL*);                              /* Flush cached data of a writing file */
 FRESULT f_unlink (const char*);                     /* Delete a file or directory */
 FRESULT f_mkdir (const char*);                      /* Create a directory */
 FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file attriburte */
-#endif
+FRESULT f_rename (const char*, const char*);        /* Rename a file or directory */
 
 
 /* User defined function to give a current time to fatfs module */
 
-#ifndef _FS_READONLY
-DWORD get_fattime();    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: Day(1-31) */
-                        /* 15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */
-#endif
+DWORD get_fattime(void);    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: Day(1-31) */
+                            /* 15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */
 
 
 
-/* File function return code */
+/* File function return code (FRESULT) */
 
 #define FR_OK                       0
 #define FR_NOT_READY                1
@@ -128,13 +131,13 @@ DWORD get_fattime();    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: 
 #define FR_DENIED                   5
 #define FR_DISK_FULL                6
 #define FR_RW_ERROR                 7
-#define FR_INCORRECT_DISK_CHANGE    9
-#define FR_WRITE_PROTECTED          10
-#define FR_NOT_ENABLED              11
-#define FR_NO_FILESYSTEM            12
+#define FR_INCORRECT_DISK_CHANGE    8
+#define FR_WRITE_PROTECTED          9
+#define FR_NOT_ENABLED              10
+#define FR_NO_FILESYSTEM            11
 
 
-/* File access control and file status flags */
+/* File access control and file status flags (FIL.flag) */
 
 #define FA_READ             0x01
 #define FA_OPEN_EXISTING    0x00
@@ -148,19 +151,20 @@ DWORD get_fattime();    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: 
 #define FA__ERROR           0x80
 
 
-/* FAT type signature (fs_type) */
+/* FAT type signature (FATFS.fs_type) */
 
 #define FS_FAT12    1
 #define FS_FAT16    2
 #define FS_FAT32    3
 
 
-/* File attribute mask for directory entry */
+/* File attribute bits for directory entry */
 
-#define AM_RDO  0x01    /* Read Only */
+#define AM_RDO  0x01    /* Read only */
 #define AM_HID  0x02    /* Hidden */
 #define AM_SYS  0x04    /* System */
-#define AM_VOL  0x08    /* Volume Label */
+#define AM_VOL  0x08    /* Volume label */
+#define AM_LFN  0x0F    /* LFN entry */
 #define AM_DIR  0x10    /* Directory */
 #define AM_ARC  0x20    /* Archive */
 
@@ -169,15 +173,15 @@ DWORD get_fattime();    /* 31-25: Year(0-127 +1980), 24-21: Month(1-12), 20-16: 
 /* Multi-byte word access macros  */
 
 #ifdef _BYTE_ACC
-#define LD_WORD(ptr)        (((WORD)*(BYTE*)(ptr+1)<<8)|*(ptr))
-#define LD_DWORD(ptr)       (((DWORD)*(BYTE*)(ptr+3)<<24)|((DWORD)*(BYTE*)(ptr+2)<<16)|((WORD)*(BYTE*)(ptr+1)<<8)|*(BYTE*)(ptr))
-#define ST_WORD(ptr,val)    *(BYTE*)(ptr)=val; *(BYTE*)(ptr+1)=val>>8
-#define ST_DWORD(ptr,val)   *(BYTE*)(ptr)=val; *(BYTE*)(ptr+1)=val>>8; *(BYTE*)(ptr+2)=val>>16; *(BYTE*)(ptr+3)=val>>24
+#define LD_WORD(ptr)        (WORD)(((WORD)*(BYTE*)((ptr)+1)<<8)|(WORD)*(BYTE*)(ptr))
+#define LD_DWORD(ptr)       (DWORD)(((DWORD)*(BYTE*)((ptr)+3)<<24)|((DWORD)*(BYTE*)((ptr)+2)<<16)|((WORD)*(BYTE*)((ptr)+1)<<8)|*(BYTE*)(ptr))
+#define ST_WORD(ptr,val)    *(BYTE*)(ptr)=(BYTE)(val); *(BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8)
+#define ST_DWORD(ptr,val)   *(BYTE*)(ptr)=(BYTE)(val); *(BYTE*)((ptr)+1)=(BYTE)((WORD)(val)>>8); *(BYTE*)((ptr)+2)=(BYTE)((DWORD)(val)>>16); *(BYTE*)((ptr)+3)=(BYTE)((DWORD)(val)>>24)
 #else
-#define LD_WORD(ptr)        (*(WORD*)(BYTE*)(ptr))
-#define LD_DWORD(ptr)       (*(DWORD*)(BYTE*)(ptr))
-#define ST_WORD(ptr,val)    *(WORD*)(BYTE*)(ptr)=(val)
-#define ST_DWORD(ptr,val)   *(DWORD*)(BYTE*)(ptr)=(val)
+#define LD_WORD(ptr)        (WORD)(*(WORD*)(BYTE*)(ptr))
+#define LD_DWORD(ptr)       (DWORD)(*(DWORD*)(BYTE*)(ptr))
+#define ST_WORD(ptr,val)    *(WORD*)(BYTE*)(ptr)=(WORD)(val)
+#define ST_DWORD(ptr,val)   *(DWORD*)(BYTE*)(ptr)=(DWORD)(val)
 #endif
 
 

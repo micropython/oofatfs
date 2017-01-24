@@ -1,22 +1,23 @@
 /*--------------------------------------------------------------------------/
-/  Tiny FatFs - FAT file system module R0.02a                (C)ChaN, 2006
+/  FatFs - FAT file system module  R0.03                     (C)ChaN, 2006
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
-/ cheap microcontrollers. This is a freeware and is opened for education,
-/ research and development. You can use, modify and republish it for
-/ non-profit or profit use without any limitation under your responsibility.
+/ cheap microcontrollers. This is a free software and is opened for education,
+/ research and development. You can use, modify and/or republish it for
+/ non-profit or profit use without any restriction under your responsibility.
 /---------------------------------------------------------------------------/
-/  Feb 26, 2006  R0.00  Prototype
-/  Apr 29, 2006  R0.01  First stable version
+/  Feb 26, 2006  R0.00  Prototype.
+/  Apr 29, 2006  R0.01  First stable version.
 /  Jun 01, 2006  R0.02  Added FAT12. Removed unbuffered mode.
 /                       Fixed a problem on small (<32M) patition.
 /  Jun 10, 2006  R0.02a Added a configuration option (_FS_MINIMUM).
+/  Sep 22, 2006  R0.03  Added f_rename().
+/                       Changed option _FS_MINIMUM to _FS_MINIMIZE.
 /---------------------------------------------------------------------------*/
-
 
 #include <string.h>
 #include "tff.h"        /* Tiny-FatFs declarations */
-#include "diskio.h"     /* Include file for user provided functions */
+#include "diskio.h"     /* Include file for user provided disk functions */
 
 
 FATFS *FatFs;           /* Pointer to the file system object */
@@ -67,7 +68,9 @@ BOOL move_window (
 /* Get a Cluster Status */
 
 static
-WORD get_cluster (WORD clust)       /* Cluster# to get the link information */
+WORD get_cluster (
+    WORD clust          /* Cluster# to get the link information */
+)
 {
     WORD wc, bc;
     DWORD fatsect;
@@ -76,19 +79,21 @@ WORD get_cluster (WORD clust)       /* Cluster# to get the link information */
 
     if ((clust >= 2) && (clust < fs->max_clust)) {      /* Valid cluster# */
         fatsect = fs->fatbase;
-        if (fs->fs_type == FS_FAT12) {
+        switch (fs->fs_type) {
+        case FS_FAT12 :
             bc = clust * 3 / 2;
-            if (!move_window(fatsect + bc / 512)) return 1;
+            if (!move_window(fatsect + bc / 512)) break;
             wc = fs->win[bc % 512]; bc++;
-            if (!move_window(fatsect + bc / 512)) return 1;
+            if (!move_window(fatsect + bc / 512)) break;
             wc |= (WORD)fs->win[bc % 512] << 8;
             return (clust & 1) ? (wc >> 4) : (wc & 0xFFF);
-        } else {
-            if (!move_window(fatsect + clust / 256)) return 1;
+
+        case FS_FAT16 :
+            if (!move_window(fatsect + clust / 256)) break;
             return LD_WORD(&(fs->win[(clust * 2) % 512]));
         }
     }
-    return 1;   /* Return with 1 means function failed */
+    return 1;   /* There is no cluster information, or an error occured */
 }
 
 
@@ -115,7 +120,8 @@ BOOL put_cluster (
         if (!move_window(fatsect + bc / 512)) return FALSE;
         p = &fs->win[bc % 512];
         *p = (clust & 1) ? ((*p & 0x0F) | ((BYTE)val << 4)) : (BYTE)val;
-        fs->winflag = 1; bc++;
+        bc++;
+        fs->winflag = 1;
         if (!move_window(fatsect + bc / 512)) return FALSE;
         p = &fs->win[bc % 512];
         *p = (clust & 1) ? (BYTE)(val >> 4) : ((*p & 0xF0) | ((BYTE)(val >> 8) & 0x0F));
@@ -143,9 +149,11 @@ BOOL remove_chain (
     WORD nxt;
 
 
-    while ((nxt = get_cluster(clust)) >= 2) {
-        if (!put_cluster(clust, 0)) return FALSE;
-        clust = nxt;
+    if (clust) {
+        while ((nxt = get_cluster(clust)) >= 2) {
+            if (!put_cluster(clust, 0)) return FALSE;
+            clust = nxt;
+        }
     }
     return TRUE;
 }
@@ -158,7 +166,7 @@ BOOL remove_chain (
 
 #ifndef _FS_READONLY
 static
-DWORD create_chain (
+WORD create_chain (
     WORD clust       /* Cluster# to stretch, 0 means create new */
 )
 {
@@ -220,7 +228,7 @@ DWORD clust2sect (
 
 static
 BYTE check_fs (
-    DWORD sect          /* Sector# to check if it is a FAT boot record or not */
+    DWORD sect      /* Sector# to check if it is a FAT boot record or not */
 )
 {
     static const char fatsign[] = "FAT12FAT16";
@@ -278,11 +286,11 @@ BOOL next_dir_entry (
 /*--------------------------------------*/
 /* Get File Status from Directory Entry */
 
-#ifndef _FS_MINIMUM
+#if _FS_MINIMIZE <= 1
 static
 void get_fileinfo (
-    FILINFO *finfo,     /* Ptr to Store the File Information */
-    const BYTE *dir     /* Ptr to the Directory Entry */
+    FILINFO *finfo,     /* Ptr to store the File Information */
+    const BYTE *dir     /* Ptr to the directory entry */
 )
 {
     BYTE n, c, a;
@@ -314,11 +322,12 @@ void get_fileinfo (
     finfo->fdate = LD_WORD(dir+24);     /* Date */
     finfo->ftime = LD_WORD(dir+22);     /* Time */
 }
-#endif /* _FS_READONLY */
+#endif /* _FS_MINIMIZE <= 1 */
 
 
-/*-----------------------------------------------------*/
-/* Pick a Paragraph and Create Name in Directory Entry */
+
+/*-------------------------------------------------------------------*/
+/* Pick a Paragraph and Create the Name in Format of Directory Entry */
 
 static
 char make_dirfile (
@@ -399,9 +408,8 @@ FRESULT trace_path (
     FATFS *fs = FatFs;
 
     /* Initialize directory object */
-    clust = fs->dirbase;
     scan->clust = scan->sclust = 0;
-    scan->sect = clust;
+    scan->sect = fs->dirbase;
     scan->index = 0;
 
     while ((*path == ' ') || (*path == '/')) path++;    /* Skip leading spaces */
@@ -516,10 +524,10 @@ FRESULT check_mounted ()
 /*--------------------------------------------------------------------------*/
 
 
-/*--------------------------------------------------------*/
-/* Load File System Information and Initialize the Module */
+/*----------------------------------------------------------*/
+/* Load File System Information and Initialize FatFs Module */
 
-FRESULT f_mountdrv ()
+FRESULT f_mountdrv (void)
 {
     BYTE fat;
     DWORD sect, fatend, maxsect;
@@ -559,7 +567,7 @@ FRESULT f_mountdrv ()
 
     maxsect = LD_DWORD(&(fs->win[0x20]));           /* Calculate maximum cluster number */
     if (!maxsect) maxsect = LD_WORD(&(fs->win[0x13]));
-    fs->max_clust = (maxsect - fs->database + sect) / fs->sects_clust + 2;
+    fs->max_clust = (WORD)((maxsect - fs->database + sect) / fs->sects_clust + 2);
 
     fs->files = 0;
     return FR_OK;
@@ -567,51 +575,8 @@ FRESULT f_mountdrv ()
 
 
 
-/*-----------------------------*/
-/* Get Number of Free Clusters */
-
-FRESULT f_getfree (
-    DWORD *nclust       /* Pointer to the double word to return number of free clusters */
-)
-{
-    DWORD n, sect;
-    WORD clust;
-    BYTE f, *p;
-    FRESULT res;
-    FATFS *fs = FatFs;
-
-
-    if ((res = check_mounted()) != FR_OK) return res;
-
-    /* Count number of free clusters */
-    n = 0;
-    if (fs->fs_type == FS_FAT12) {
-        clust = 2;
-        do {
-            if (get_cluster(clust) == 0) n++;
-        } while (++clust < fs->max_clust);
-    } else {
-        clust = fs->max_clust;
-        sect = fs->fatbase;
-        f = 0; p = 0;
-        do {
-            if (!f) {
-                if (!move_window(sect++)) return FR_RW_ERROR;
-                p = fs->win;
-            }
-            if (LD_WORD(p) == 0) n++;
-            p += 2; f += 1;
-        } while (--clust);
-    }
-
-    *nclust = n;
-    return FR_OK;
-}
-
-
-
-/*---------------------*/
-/* Open or Create File */
+/*-----------------------*/
+/* Open or Create a File */
 
 FRESULT f_open (
     FIL *fp,            /* Pointer to the buffer of new file object to create */
@@ -646,7 +611,7 @@ FRESULT f_open (
             memcpy(dir, fn, 8+3);       /* Initialize the new entry */
             *(dir+12) = fn[11];
             memset(dir+13, 0, 32-13);
-        } else {                /* File already exists */
+        } else {                /* Any object is already existing */
             if ((dir == NULL) || (*(dir+11) & (AM_RDO|AM_DIR))) /* Could not overwrite (R/O or DIR) */
                 return FR_DENIED;
             if (mode & FA_CREATE_ALWAYS) {  /* Resize it to zero */
@@ -716,23 +681,23 @@ FRESULT f_read (
     if (fp->flag & FA__ERROR) return FR_RW_ERROR;   /* Check error flag */
     if (!(fp->flag & FA_READ)) return FR_DENIED;    /* Check access mode */
     ln = fp->fsize - fp->fptr;
-    if (btr > ln) btr = ln;                         /* Truncate read count by number of bytes left */
+    if (btr > ln) btr = (WORD)ln;                   /* Truncate read count by number of bytes left */
 
     for ( ;  btr;                                   /* Repeat until all data transferred */
         rbuff += rcnt, fp->fptr += rcnt, *br += rcnt, btr -= rcnt) {
         if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
-            if (--(fp->sect_clust)) {               /* Decrement sector counter */
-                sect = fp->curr_sect + 1;           /* Next sector */
-            } else {                                /* Next cluster */
+            if (--(fp->sect_clust)) {               /* Decrement left sector counter */
+                sect = fp->curr_sect + 1;           /* Get current sector */
+            } else {                                /* On the cluster boundary, get next cluster */
                 clust = (fp->fptr == 0) ? fp->org_clust : get_cluster(fp->curr_clust);
                 if ((clust < 2) || (clust >= fs->max_clust)) goto fr_error;
                 fp->curr_clust = clust;             /* Current cluster */
-                sect = clust2sect(clust);           /* Current sector */
-                fp->sect_clust = fs->sects_clust;   /* Re-initialize the sector counter */
+                sect = clust2sect(clust);           /* Get current sector */
+                fp->sect_clust = fs->sects_clust;   /* Re-initialize the left sector counter */
             }
             fp->curr_sect = sect;                   /* Update current sector */
-            cc = btr / 512;                         /* When left bytes >= 512 */
-            if (cc) {                               /* Read maximum contiguous sectors */
+            cc = btr / 512;                         /* When left bytes >= 512, */
+            if (cc) {                               /* Read maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
                 if (disk_read(rbuff, sect, cc) != RES_OK) goto fr_error;
                 fp->sect_clust -= cc - 1;
@@ -741,7 +706,7 @@ FRESULT f_read (
             }
         }
         if (!move_window(fp->curr_sect)) goto fr_error; /* Move sector window */
-        rcnt = 512 - (fp->fptr % 512);                  /* Copy fractional bytes from sector window */
+        rcnt = 512 - (WORD)(fp->fptr % 512);            /* Copy fractional bytes from sector window */
         if (rcnt > btr) rcnt = btr;
         memcpy(rbuff, &fs->win[fp->fptr % 512], rcnt);
     }
@@ -783,24 +748,24 @@ FRESULT f_write (
     for ( ;  btw;                                   /* Repeat until all data transferred */
         wbuff += wcnt, fp->fptr += wcnt, *bw += wcnt, btw -= wcnt) {
         if ((fp->fptr % 512) == 0) {                /* On the sector boundary */
-            if (--(fp->sect_clust)) {               /* Decrement sector counter */
-                sect = fp->curr_sect + 1;           /* Next sector */
-            } else {                                /* Next cluster */
-                if (fp->fptr == 0) {                /* Top of the file */
+            if (--(fp->sect_clust)) {               /* Decrement left sector counter */
+                sect = fp->curr_sect + 1;           /* Get current sector */
+            } else {                                /* On the cluster boundary, get next cluster */
+                if (fp->fptr == 0) {                /* Is top of the file */
                     clust = fp->org_clust;
-                    if (clust == 0)                 /* No cluster is created */
+                    if (clust == 0)                 /* No cluster is created yet */
                         fp->org_clust = clust = create_chain(0);    /* Create a new cluster chain */
                 } else {                            /* Middle or end of file */
                     clust = create_chain(fp->curr_clust);           /* Trace or streach cluster chain */
                 }
                 if ((clust < 2) || (clust >= fs->max_clust)) break;
                 fp->curr_clust = clust;             /* Current cluster */
-                sect = clust2sect(clust);           /* Current sector */
-                fp->sect_clust = fs->sects_clust;   /* Re-initialize the sector counter */
+                sect = clust2sect(clust);           /* Get current sector */
+                fp->sect_clust = fs->sects_clust;   /* Re-initialize the left sector counter */
             }
             fp->curr_sect = sect;                   /* Update current sector */
-            cc = btw / 512;                         /* When left bytes >= 512 */
-            if (cc) {                               /* Write maximum contiguous sectors */
+            cc = btw / 512;                         /* When left bytes >= 512, */
+            if (cc) {                               /* Write maximum contiguous sectors directly */
                 if (cc > fp->sect_clust) cc = fp->sect_clust;
                 if (disk_write(wbuff, sect, cc) != RES_OK) goto fw_error;
                 fp->sect_clust -= cc - 1;
@@ -813,7 +778,7 @@ FRESULT f_write (
             }
         }
         if (!move_window(fp->curr_sect)) goto fw_error; /* Move sector window */
-        wcnt = 512 - (fp->fptr % 512);              /* Copy fractional bytes bytes to sector window */
+        wcnt = 512 - (WORD)(fp->fptr % 512);            /* Copy fractional bytes bytes to sector window */
         if (wcnt > btw) wcnt = btw;
         memcpy(&fs->win[fp->fptr % 512], wbuff, wcnt);
         fs->winflag = 1;
@@ -854,7 +819,7 @@ FRESULT f_lseek (
     if (ofs) {
         ofs = (ofs - 1) / 512;              /* Calcurate current sector */
         sc = fs->sects_clust;               /* Number of sectors in a cluster */
-        fp->sect_clust = sc - (ofs % sc);   /* Calcurate sector counter */
+        fp->sect_clust = sc - ((BYTE)ofs % sc); /* Calcurate sector counter */
         ofs /= sc;                          /* Number of clusters to skip */
         clust = fp->org_clust;              /* Seek to current cluster */
         while (ofs--)
@@ -932,11 +897,146 @@ FRESULT f_close (
 
 
 
-#ifndef _FS_MINIMUM
-/*----------------------------*/
-/* Delete a File or Directory */
+#if _FS_MINIMIZE <= 1
+/*---------------------------*/
+/* Initialize directroy scan */
+
+FRESULT f_opendir (
+    DIR *scan,          /* Pointer to directory object to initialize */
+    const char *path    /* Pointer to the directory path, null str means the root */
+)
+{
+    FRESULT res;
+    BYTE *dir;
+    char fn[8+3+1];
+
+
+    if ((res = check_mounted()) != FR_OK) return res;
+
+    res = trace_path(scan, fn, path, &dir); /* Trace the directory path */
+
+    if (res == FR_OK) {                     /* Trace completed */
+        if (dir != NULL) {                  /* It is not a root dir */
+            if (*(dir+11) & AM_DIR) {       /* The entry is a directory */
+                scan->clust = LD_WORD(dir+26);
+                scan->sect = clust2sect(scan->clust);
+                scan->index = 0;
+            } else {                        /* The entry is not directory */
+                res = FR_NO_FILE;
+            }
+        }
+    }
+    return res;
+}
+
+
+
+/*----------------------------------*/
+/* Read Directory Entry in Sequense */
+
+FRESULT f_readdir (
+    DIR *scan,          /* Pointer to the directory object */
+    FILINFO *finfo      /* Pointer to file information to return */
+)
+{
+    BYTE *dir, c;
+    FATFS *fs = FatFs;
+
+
+    if (!fs) return FR_NOT_ENABLED;
+    finfo->fname[0] = 0;
+    if ((disk_status() & STA_NOINIT) || !fs->fs_type) return FR_NOT_READY;
+
+    while (scan->sect) {
+        if (!move_window(scan->sect)) return FR_RW_ERROR;
+        dir = &(fs->win[(scan->index & 15) * 32]);      /* pointer to the directory entry */
+        c = *dir;
+        if (c == 0) break;                              /* Has it reached to end of dir? */
+        if ((c != 0xE5) && (c != '.') && !(*(dir+11) & AM_VOL)) /* Is it a valid entry? */
+            get_fileinfo(finfo, dir);
+        if (!next_dir_entry(scan)) scan->sect = 0;      /* Next entry */
+        if (finfo->fname[0]) break;                     /* Found valid entry */
+    }
+
+    return FR_OK;
+}
+
+
+
+#if _FS_MINIMIZE == 0
+/*-----------------*/
+/* Get File Status */
+
+FRESULT f_stat (
+    const char *path,   /* Pointer to the file path */
+    FILINFO *finfo      /* Pointer to file information to return */
+)
+{
+    FRESULT res;
+    BYTE *dir;
+    DIR dirscan;
+    char fn[8+3+1];
+
+
+    if ((res = check_mounted()) != FR_OK) return res;
+
+    res = trace_path(&dirscan, fn, path, &dir); /* Trace the file path */
+
+    if (res == FR_OK)                           /* Trace completed */
+        get_fileinfo(finfo, dir);
+
+    return res;
+}
+
+
 
 #ifndef _FS_READONLY
+/*-----------------------------*/
+/* Get Number of Free Clusters */
+
+FRESULT f_getfree (
+    DWORD *nclust       /* Pointer to the double word to return number of free clusters */
+)
+{
+    DWORD n, sect;
+    WORD clust;
+    BYTE f, *p;
+    FRESULT res;
+    FATFS *fs = FatFs;
+
+
+    if ((res = check_mounted()) != FR_OK) return res;
+
+    /* Count number of free clusters */
+    n = 0;
+    if (fs->fs_type == FS_FAT12) {
+        clust = 2;
+        do {
+            if (get_cluster(clust) == 0) n++;
+        } while (++clust < fs->max_clust);
+    } else {
+        clust = fs->max_clust;
+        sect = fs->fatbase;
+        f = 0; p = 0;
+        do {
+            if (!f) {
+                if (!move_window(sect++)) return FR_RW_ERROR;
+                p = fs->win;
+            }
+            if (LD_WORD(p) == 0) n++;
+            p += 2; f += 1;
+        } while (--clust);
+    }
+
+    *nclust = n;
+    return FR_OK;
+}
+
+
+
+/*------------------------------*/
+/* Delete a File or a Directory */
+
 FRESULT f_unlink (
     const char *path            /* Pointer to the file or directory path */
 )
@@ -975,20 +1075,19 @@ FRESULT f_unlink (
     }
 
     if (!move_window(dsect)) return FR_RW_ERROR;    /* Mark the directory entry 'deleted' */
-    *dir = 0xE5; fs->winflag = 1;
+    *dir = 0xE5;
+    fs->winflag = 1;
     if (!remove_chain(dclust)) return FR_RW_ERROR;  /* Remove the cluster chain */
     if (!move_window(0)) return FR_RW_ERROR;
 
     return FR_OK;
 }
-#endif /* _FS_READONLY */
 
 
 
 /*--------------------*/
 /* Create a Directory */
 
-#ifndef _FS_READONLY
 FRESULT f_mkdir (
     const char *path        /* Pointer to the directory path */
 )
@@ -1047,105 +1146,12 @@ FRESULT f_mkdir (
 
     return FR_OK;
 }
-#endif /* _FS_READONLY */
-
-
-
-/*---------------------------*/
-/* Initialize directroy scan */
-
-FRESULT f_opendir (
-    DIR *scan,              /* Pointer to directory object to initialize */
-    const char *path        /* Pointer to the directory path, null str means the root */
-)
-{
-    FRESULT res;
-    BYTE *dir;
-    char fn[8+3+1];
-
-
-    if ((res = check_mounted()) != FR_OK) return res;
-
-    res = trace_path(scan, fn, path, &dir); /* Trace the directory path */
-
-    if (res == FR_OK) {                     /* Trace completed */
-        if (dir != NULL) {                  /* It is not a root dir */
-            if (*(dir+11) & AM_DIR) {       /* The entry is a directory */
-                scan->clust = LD_WORD(dir+26);
-                scan->sect = clust2sect(scan->clust);
-                scan->index = 0;
-            } else {                        /* The entry is a file */
-                res = FR_NO_PATH;
-            }
-        }
-    }
-    return res;
-}
-
-
-
-/*----------------------------------*/
-/* Read Directory Entry in Sequense */
-
-FRESULT f_readdir (
-    DIR *scan,          /* Pointer to the directory object */
-    FILINFO *finfo      /* Pointer to file information to return */
-)
-{
-    BYTE *dir, c;
-    FATFS *fs = FatFs;
-
-
-    if (!fs) return FR_NOT_ENABLED;
-    finfo->fname[0] = 0;
-    if ((disk_status() & STA_NOINIT) || !fs->fs_type) return FR_NOT_READY;
-
-    while (scan->sect) {
-        if (!move_window(scan->sect)) return FR_RW_ERROR;
-        dir = &(fs->win[(scan->index & 15) * 32]);      /* pointer to the directory entry */
-        c = *dir;
-        if (c == 0) break;                              /* Has it reached to end of dir? */
-        if ((c != 0xE5) && (c != '.') && !(*(dir+11) & AM_VOL)) /* Is it a valid entry? */
-            get_fileinfo(finfo, dir);
-        if (!next_dir_entry(scan)) scan->sect = 0;      /* Next entry */
-        if (finfo->fname[0]) break;                     /* Found valid entry */
-    }
-
-    return FR_OK;
-}
-
-
-
-/*-----------------*/
-/* Get File Status */
-
-FRESULT f_stat (
-    const char *path,   /* Pointer to the file path */
-    FILINFO *finfo      /* Pointer to file information to return */
-)
-{
-    FRESULT res;
-    BYTE *dir;
-    DIR dirscan;
-    char fn[8+3+1];
-
-
-    if ((res = check_mounted()) != FR_OK) return res;
-
-    res = trace_path(&dirscan, fn, path, &dir); /* Trace the file path */
-
-    if (res == FR_OK)                           /* Trace completed */
-        get_fileinfo(finfo, dir);
-
-    return res;
-}
 
 
 
 /*-----------------------*/
 /* Change File Attribute */
 
-#ifndef _FS_READONLY
 FRESULT f_chmod (
     const char *path,   /* Pointer to the file path */
     BYTE value,         /* Attribute bits */
@@ -1164,19 +1170,65 @@ FRESULT f_chmod (
 
     res = trace_path(&dirscan, fn, path, &dir); /* Trace the file path */
 
-    if (res == FR_OK) {                     /* Trace completed */
+    if (res == FR_OK) {         /* Trace completed */
         if (dir == NULL) {
             res = FR_NO_FILE;
         } else {
             mask &= AM_RDO|AM_HID|AM_SYS|AM_ARC;    /* Valid attribute mask */
             *(dir+11) = (value & mask) | (*(dir+11) & ~mask);   /* Apply attribute change */
             fs->winflag = 1;
-            if(!move_window(0)) res = FR_RW_ERROR;
+            if (!move_window(0)) res = FR_RW_ERROR;
         }
     }
     return res;
 }
-#endif /* _FS_READONLY */
 
-#endif /* _FS_MINIMUM */
+
+
+/*-----------------------*/
+/* Rename File/Directory */
+
+FRESULT f_rename (
+    const char *path_old,   /* Pointer to the old name */
+    const char *path_new    /* Pointer to the new name */
+)
+{
+    FRESULT res;
+    DWORD sect_old;
+    BYTE *dir_old, *dir_new, direntry[32-11];
+    DIR dirscan;
+    char fn[8+3+1];
+    FATFS *fs = FatFs;
+
+
+    if ((res = check_mounted()) != FR_OK) return res;
+    if (disk_status() & STA_PROTECT) return FR_WRITE_PROTECTED;
+
+    res = trace_path(&dirscan, fn, path_old, &dir_old); /* Check old object */
+    if (res != FR_OK) return res;           /* The old object is not found */
+    if (!dir_old) return FR_NO_FILE;
+    sect_old = fs->winsect;                 /* Save the object information */
+    memcpy(direntry, dir_old+11, 32-11);
+
+    res = trace_path(&dirscan, fn, path_new, &dir_new); /* Check new object */
+    if (res == FR_OK) return FR_DENIED;     /* The new object name is already existing */
+    if (res != FR_NO_FILE) return res;
+
+    dir_new = reserve_direntry(&dirscan);   /* Reserve a directory entry */
+    if (dir_new == NULL) return FR_DENIED;
+    memcpy(dir_new+11, direntry, 32-11);    /* Create new entry */
+    memcpy(dir_new, fn, 8+3);
+    *(dir_new+12) = fn[11];
+    fs->winflag = 1;
+
+    if (!move_window(sect_old)) return FR_RW_ERROR; /* Remove old entry */
+    *dir_old = 0xE5;
+    fs->winflag = 1;
+    if (!move_window(0)) return FR_RW_ERROR;
+
+    return FR_OK;
+}
+#endif /* _FS_READONLY */
+#endif /* _FS_MINIMIZE == 0 */
+#endif /* _FS_MINIMIZE <= 1 */
 
