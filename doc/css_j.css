@@ -2,7 +2,7 @@
 /* Common style sheet for Tech Notes */
 
 * {margin: 0; padding: 0; border-width: 0;}
-body {margin: 8px; background-color: #e0ffff; font-color: black; line-height: 133%; letter-spacing: 1px; max-width: 1024px;}
+body {margin: 8px; background-color: #e0ffff; font-color: black; line-height: 150%; letter-spacing: 1px; max-width: 1024px;}
 a:link {color: blue;}
 a:visited {color: darkmagenta;}
 a:hover {background-color: #a0ffff;}
@@ -41,8 +41,8 @@ p.hdd {float: right; text-align: right; margin-top: 0.5em;}
 hr.hds {clear: both; margin-bottom: 1em;}
 
 h2 {font-size: 1.5em; font-family: sans-serif; margin: 0 0 0.5em;}
-h3 {font-size: 1.5em; font-family: sans-serif; margin: 2em 0 0.5em;}
-h4 {font-size: 1.2em; font-family: sans-serif; margin: 1.5em 0 0.2em;}
+h3 {font-size: 1.5em; font-family: sans-serif; margin: 1.5em 0 0.5em;}
+h4 {font-size: 1.2em; font-family: sans-serif; margin: 1em 0 0.2em;}
 h5 {font-size: 1em; font-family: sans-serif; margin: 0.5em 0 0em;}
 small {font-size: 80%;}
 .indent {margin-left: 2em;}

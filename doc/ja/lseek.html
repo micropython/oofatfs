@@ -63,16 +63,16 @@ FRESULT f_lseek (
 <h4>使用例</h4>
 <pre>
     // ファイル・オフセット5000へ移動
-    res = f_lseek(&file, 5000);
+    res = f_lseek(&amp;file, 5000);
 
     // 3000バイト進める
-    res = f_lseek(&file, file.fptr + 3000);
+    res = f_lseek(&amp;file, file.fptr + 3000);
 
     // 2000バイト戻す(オーバーフローに注意)
-    res = f_lseek(&file, file.fptr - 2000);
+    res = f_lseek(&amp;file, file.fptr - 2000);
 
     // ファイル追記の準備(ファイル終端へ移動)
-    res = f_lseek(&file, file.fsize);
+    res = f_lseek(&amp;file, file.fsize);
 </pre>
 </div>
 

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  FatFs - FAT file system module include file  R0.05a       (C)ChaN, 2008
+/  FatFs - FAT file system module include file  R0.06        (C)ChaN, 2008
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -9,7 +9,7 @@
 /
 / * The FatFs module is a free software and there is no warranty.
 / * You can use, modify and/or redistribute it for personal, non-profit or
-/   profit use without any restriction under your responsibility.
+/   commercial use without any restriction under your responsibility.
 / * Redistributions of source code must retain the above copyright notice.
 /
 /---------------------------------------------------------------------------*/
@@ -36,12 +36,15 @@
 /  2: f_opendir and f_readdir are removed in addition to level 1.
 /  3: f_lseek is removed in addition to level 2. */
 
-#define _DRIVES     2
-/* Number of logical drives to be used. This affects the size of internal table. */
+#define _USE_STRFUNC    0
+/* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 #define _USE_MKFS   0
 /* When _USE_MKFS is set to 1 and _FS_READONLY is set to 0, f_mkfs function is
 /  enabled. */
+
+#define _DRIVES     2
+/* Number of logical drives to be used. This affects the size of internal table. */
 
 #define _MULTI_PARTITION    0
 /* When _MULTI_PARTITION is set to 0, each logical drive is bound to same
@@ -65,11 +68,11 @@
 
 
 /* Definitions corresponds to multiple sector size (not tested) */
-#define S_MAX_SIZ   512         /* Do not change */
-#if S_MAX_SIZ > 512
+#define S_MAX_SIZ   512U            /* Do not change */
+#if S_MAX_SIZ > 512U
 #define SS(fs)  ((fs)->s_size)
 #else
-#define SS(fs)  512
+#define SS(fs)  512U
 #endif
 
 
@@ -93,8 +96,8 @@ typedef struct _FATFS {
 #endif
 #endif
     BYTE    fs_type;        /* FAT sub type */
-    BYTE    sects_clust;    /* Sectors per cluster */
-#if S_MAX_SIZ > 512
+    BYTE    csize;          /* Number of sectors per cluster */
+#if S_MAX_SIZ > 512U
     WORD    s_size;         /* Sector size */
 #endif
     BYTE    n_fats;         /* Number of FAT copies */
@@ -120,7 +123,7 @@ typedef struct _DIR {
 typedef struct _FIL {
     WORD    id;             /* Owner file system mount ID */
     BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
+    BYTE    csect;          /* Sector address in the cluster */
     FATFS*  fs;             /* Pointer to the owner file system object */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
@@ -209,7 +212,14 @@ FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file/dir attriburt
 FRESULT f_utime (const char*, const FILINFO*);      /* Change file/dir timestamp */
 FRESULT f_rename (const char*, const char*);        /* Rename/Move a file or directory */
 FRESULT f_mkfs (BYTE, BYTE, WORD);                  /* Create a file system on the drive */
-
+#if _USE_STRFUNC
+#define feof(fp) ((fp)->fptr == (fp)->fsize)
+#define EOF -1
+int fputc (int, FIL*);                              /* Put a character to the file */
+int fputs (const char*, FIL*);                      /* Put a string to the file */
+int fprintf (FIL*, const char*, ...);               /* Put a formatted string to the file */
+char* fgets (char*, int, FIL*);                     /* Get a string from the file */
+#endif
 
 /* User defined function to give a current time to fatfs module */
 

@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------/
-/  Tiny-FatFs - FAT file system module include file  R0.05a   (C)ChaN, 2008
+/  Tiny-FatFs - FAT file system module include file  R0.06    (C)ChaN, 2008
 /---------------------------------------------------------------------------/
 / FatFs module is an experimenal project to implement FAT file system to
 / cheap microcontrollers. This is a free software and is opened for education,
@@ -9,7 +9,7 @@
 /
 / * The FatFs module is a free software and there is no warranty.
 / * You can use, modify and/or redistribute it for personal, non-profit or
-/   profit use without any restriction under your responsibility.
+/   commercial use without any restriction under your responsibility.
 / * Redistributions of source code must retain the above copyright notice.
 /
 /---------------------------------------------------------------------------*/
@@ -35,6 +35,12 @@
 /  1: f_stat, f_getfree, f_unlink, f_mkdir, f_chmod, f_truncate and f_rename are removed.
 /  2: f_opendir and f_readdir are removed in addition to level 1.
 /  3: f_lseek is removed in addition to level 2. */
+
+#define _USE_STRFUNC    0
+/* To enable string functions, set _USE_STRFUNC to 1 or 2. */
+
+#define _USE_FORWARD    0
+/* To enable f_forward function, set _USE_FORWARD to 1. */
 
 #define _FAT32  0
 /* To enable FAT32 support in addition of FAT12/16, set _FAT32 to 1. */
@@ -84,7 +90,7 @@ typedef struct _FATFS {
 #endif
 #endif
     BYTE    fs_type;        /* FAT sub type */
-    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    csize;          /* Number of sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    win[512];       /* Disk access window for Directory/FAT/File */
@@ -106,7 +112,7 @@ typedef struct _DIR {
 typedef struct _FIL {
     WORD    id;             /* Owner file system mount ID */
     BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
+    BYTE    csect;          /* Sector address in the cluster */
     FATFS*  fs;             /* Pointer to owner file system */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
@@ -145,13 +151,14 @@ typedef enum {
     FR_WRITE_PROTECTED, /* 9 */
     FR_NOT_ENABLED,     /* 10 */
     FR_NO_FILESYSTEM,   /* 11 */
-    FR_INVALID_OBJECT   /* 12 */
+    FR_INVALID_OBJECT,  /* 12 */
+    FR_MKFS_ABORTED     /* 13 (not used) */
 } FRESULT;
 
 
 
 /*-----------------------------------------------------*/
-/* FatFs module application interface                  */
+/* Tiny-FatFs module application interface             */
 
 FRESULT f_mount (BYTE, FATFS*);                     /* Mount/Unmount a logical drive */
 FRESULT f_open (FIL*, const char*, BYTE);           /* Open or create a file */
@@ -170,6 +177,15 @@ FRESULT f_mkdir (const char*);                      /* Create a new directory */
 FRESULT f_chmod (const char*, BYTE, BYTE);          /* Change file/dir attriburte */
 FRESULT f_utime (const char*, const FILINFO*);      /* Change file/dir timestamp */
 FRESULT f_rename (const char*, const char*);        /* Rename/Move a file or directory */
+FRESULT f_forward (FIL*, UINT(*)(const BYTE*,UINT), UINT, UINT*);   /* Forward data to the stream */
+#if _USE_STRFUNC
+#define feof(fp) ((fp)->fptr == (fp)->fsize)
+#define EOF -1
+int fputc (int, FIL*);                              /* Put a character to the file */
+int fputs (const char*, FIL*);                      /* Put a string to the file */
+int fprintf (FIL*, const char*, ...);               /* Put a formatted string to the file */
+char* fgets (char*, int, FIL*);                     /* Get a string from the file */
+#endif
 
 
 /* User defined function to give a current time to fatfs module */

@@ -30,7 +30,7 @@ DRESULT disk_write (
 <dd>Specifies the physical drive number.</dd>
 <dt>Buffer</dt>
 <dd>Pointer to the data to be written.</dd>
-<dt>SectorNumber</dd>
+<dt>SectorNumber</dt>
 <dd>Specifies the start sector number in logical block address (LBA).</dd>
 <dt>SectorCount</dt>
 <dd>Specifies the number of sectors to write. The value can be 1 to 255.</dd>
@@ -44,7 +44,7 @@ DRESULT disk_write (
 <dt>RES_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>RES_ERROR</dt>
-<dd>Any error occured during the write operation.</dd>
+<dd>Any hard error occured during the write operation and could not recover it.</dd>
 <dt>RES_WRPRT</dt>
 <dd>The disk is write protected.</dd>
 <dt>RES_PARERR</dt>

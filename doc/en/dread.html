@@ -17,7 +17,7 @@
 DRESULT disk_read (
   BYTE <em>Drive</em>,          /* Physical drive number */
   BYTE* <em>Buffer</em>,        /* Pointer to the read data buffer */
-  DWORD <em>SectorNumber</em>,  /* Sector number to read from */
+  DWORD <em>SectorNumber</em>,  /* Start sector number */
   BYTE <em>SectorCount</em>     /* Number of sectros to read */
 );
 </pre>
@@ -44,7 +44,7 @@ DRESULT disk_read (
 <dt>RES_OK (0)</dt>
 <dd>The function succeeded.</dd>
 <dt>RES_ERROR</dt>
-<dd>Any error occured during the read operation.</dd>
+<dd>Any hard error occured during the read operation and could not recover it.</dd>
 <dt>RES_PARERR</dt>
 <dd>Invalid parameter.</dd>
 <dt>RES_NOTRDY</dt>

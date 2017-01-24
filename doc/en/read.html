@@ -34,7 +34,7 @@ FRESULT f_read (
 <dd>Number of bytes to read in range of UINT.</dd>
 <dt>ByteRead</dt>
 <dd>Pointer to the UINT variable to return number of bytes read.</dd>
-</dt>
+</dl>
 </div>
 
 
@@ -57,13 +57,13 @@ FRESULT f_read (
 
 <div class="para">
 <h4>Description</h4>
-<p>The file pointer in the file object increases in number of bytes read. The <tt>ByteRead</tt> will become less than <tt>ByteToRead</tt> when the read pointer reached to end of the file or any error occured during the read operation.</p>
+<p>The file pointer of the file object increases in number of bytes read. After the function succeeded, <tt>*ByteRead</tt> should be checked to detect end of file. In case of <tt>*ByteRead &lt; ByteToRead</tt>, it means the R/W pointer reached end of file during read operation.</p>
 </div>
 
 
 <div class="para">
 <h4>References</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="write.html">f_write</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="gets.html">fgets</a>, <a href="write.html">f_write</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

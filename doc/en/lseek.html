@@ -50,7 +50,7 @@ FRESULT f_lseek (
 
 <div class="para">
 <h4>Description</h4>
-<p>The f_lseek function moves the file R/W pointer of an open file. The offset can be specified in only origin from top of the file. When an offset above the file size is specified in write mode, the file size is extended to the offset and the data in the extended area is undefined. This is suitable to create a large file quickly, for fast write operation without cluster allocation delay. After the f_lseek function succeeded, member fptr in the file object should be checked in order to make sure the R/W pointer has been moved correctry. In case of fptr is less than Offset, any of the followings has been occured.</p>
+<p>The f_lseek function moves the file R/W pointer of an open file. The offset can be specified in only origin from top of the file. When an offset above the file size is specified in write mode, the file size is extended to the offset and the data in the extended area is undefined. This is suitable to create a large file quickly, for fast write operation without cluster allocation delay. After the f_lseek function succeeded, member fptr in the file object should be checked in order to make sure the R/W pointer has been moved correctry. In case of fptr is less than expected value, any of the followings has been occured.</p>
 <ul>
 <li>In read-only mode, the Offset was clipped in file size.</li>
 <li>The drive gets full during the file extending process.</li>
@@ -63,16 +63,16 @@ FRESULT f_lseek (
 <h4>Example</h4>
 <pre>
     // Move to offset of 5000 from top of the file.
-    res = f_lseek(&file, 5000);
+    res = f_lseek(&amp;file, 5000);
 
     // Forward 3000 bytes
-    res = f_lseek(&file, file.fptr + 3000);
+    res = f_lseek(&amp;file, file.fptr + 3000);
 
     // Rewind 2000 bytes (take care on overflow)
-    res = f_lseek(&file, file.fptr - 2000);
+    res = f_lseek(&amp;file, file.fptr - 2000);
 
     // Move to end of the file to append data
-    res = f_lseek(&file, file.fsize);
+    res = f_lseek(&amp;file, file.fsize);
 </pre>
 </div>
 

@@ -32,7 +32,7 @@ FRESULT f_open (
 <dt>ModeFlags</dt>
 <dd>ファイルのアクセス方法やオープン方法を決めるフラグです。このパラメータには次の組み合わせを指定します。<br>
 <table class="lst">
-<tr><th>値</th><th>意味</th></td>
+<tr><th>値</th><th>意味</th></tr>
 <tr><td>FA_READ</td><td>読み出しモードで開きます。読み書きする場合は<tt>FA_WRITE</tt>と共に指定します。</td></tr>
 <tr><td>FA_WRITE</td><td>書き込みモードで開きます。読み書きする場合は<tt>FA_READ</tt>と共に指定します。</td></tr>
 <tr><td>FA_OPEN_EXISTING</td><td>既存のファイルを開きます。ファイルが無いときはエラーになります。(デフォルト)</td></tr>
@@ -78,8 +78,8 @@ FRESULT f_open (
 
 <div class="para">
 <h4>解説</h4>
-<p>作成されたファイル・オブジェクトは、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。書き込みが行われたファイルが閉じられなかった場合、そのファイルは破損します。</p>
-<p>ファイル操作関数を使用する前にまず、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与えなければなりません。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
+<p>作成されたファイル・オブジェクトは、以降そのファイルに対するアクセスに使用します。ファイルを閉じるときは、<a href="close.html">f_close()</a>を使用します。何らかの変更が行われたファイルが正しく閉じられなかった場合、そのファイルが破損する場合があります。</p>
+<p>ファイル・アクセスを開始する前に、<a href="mount.html">f_mount()</a>を使ってそれぞれの論理ドライブにワーク・エリア(ファイル・システム・オブジェクト)を与える必要があります。この初期化の後、その論理ドライブに対して全てのファイル関数が使えるようになります。</p>
 <p>リードオンリー構成では、<tt>FA_WRITE, FA_CREATE_ALWAYS, FA_CREATE_NEW, FA_OPEN_ALWAYS</tt>の各フラグはサポートされません。</p>
 </div>
 
@@ -96,27 +96,27 @@ void main ()
     UINT br, bw;         // File R/W count
 
     // ドライブ0のワーク・エリアを与える
-    f_mount(0, &fs);
+    f_mount(0, &amp;fs);
 
     // ソース・ファイルを開く
-    res = f_open(&fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
+    res = f_open(&amp;fsrc, "srcfile.dat", FA_OPEN_EXISTING | FA_READ);
     if (res) die(res);
 
     // デスティネーション・ファイルを作成する
-    res = f_open(&fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
+    res = f_open(&amp;fdst, "dstfile.dat", FA_CREATE_ALWAYS | FA_WRITE);
     if (res) die(res);
 
     // ソースからデスティネーションにコピーする
     for (;;) {
-        res = f_read(&fsrc, buffer, sizeof(buffer), &br);
+        res = f_read(&amp;fsrc, buffer, sizeof(buffer), &amp;br);
         if (res || br == 0) break;   // error or eof
-        res = f_write(&fdst, buffer, br, &bw);
+        res = f_write(&amp;fdst, buffer, br, &amp;bw);
         if (res || bw &lt; br) break;   // error or disk full
     }
 
     // 全てのファイルを閉じる
-    f_close(&fsrc);
-    f_close(&fdst);
+    f_close(&amp;fsrc);
+    f_close(&amp;fdst);
 
     // ワーク・エリアを開放する
     f_mount(0, NULL);

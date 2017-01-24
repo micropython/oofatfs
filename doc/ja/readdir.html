@@ -62,15 +62,15 @@ void scan_files (char* path)
     DIR dirs;
     int i;
 
-    if (f_opendir(&dirs, path) == FR_OK) {
+    if (f_opendir(&amp;dirs, path) == FR_OK) {
         i = strlen(path);
-        while ((f_readdir(&dirs, &finfo) == FR_OK) && finfo.fname[0]) {
-            if (finfo._attrib & AM_DIR) {
-                sprintf(&path[i], "/%s", &finfo.fname[0]);
+        while ((f_readdir(&amp;dirs, &amp;finfo) == FR_OK) &amp;&amp; finfo.fname[0]) {
+            if (finfo._attrib &amp; AM_DIR) {
+                sprintf(&amp;path[i], "/%s", &amp;finfo.fname[0]);
                 scan_files(path);
                 path[i] = 0;
             } else {
-                printf("%s/%s\n", path, &finfo.fname[0]);
+                printf("%s/%s\n", path, &amp;finfo.fname[0]);
             }
         }
     }

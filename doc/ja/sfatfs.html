@@ -27,7 +27,7 @@ typedef struct _FATFS {
     DWORD   last_clust;     /* Last allocated cluster */
     DWORD   free_clust;     /* Number of free clusters */
     BYTE    fs_type;        /* FAT type (0:Not mounted) */
-    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    csize;          /* Sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
     BYTE    drive;          /* Physical drive number */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
@@ -50,7 +50,7 @@ typedef struct _FATFS {
     CLUST   last_clust;     /* Last allocated cluster */
     CLUST   free_clust;     /* Number of free clusters */
     BYTE    fs_type;        /* FAT type (0:Not mounted) */
-    BYTE    sects_clust;    /* Sectors per cluster */
+    BYTE    csize;          /* Sectors per cluster */
     BYTE    n_fats;         /* Number of FAT copies */
     BYTE    winflag;        /* win[] dirty flag (1:must be written back) */
     BYTE    win[512];       /* Disk access window for Directory/FAT/File */

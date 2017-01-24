@@ -24,7 +24,7 @@ FRESULT f_write (
 </div>
 
 <div class="para">
-<h4>Parameter</h4>
+<h4>Parameters</h4>
 <dl class="par">
 <dt>FileObject</dt>
 <dd>Pointer to the open file object structure.</dd>
@@ -57,13 +57,14 @@ FRESULT f_write (
 
 <div class="para">
 <h4>Description</h4>
-<p>The read/write pointer in the file object is increased in number of bytes written. The <tt>ByteWritten</tt> will become less than <tt>ByteToWrite</tt> when the drive gets full during the write operation. This function is not supported in read-only configuration.</p>
+<p>The read/write pointer in the file object is increased in number of bytes written. After the function succeeded, <tt>*ByteWritten</tt> should be checked to detect disk full. In case of <tt>*ByteWritten &lt; ByteToWrite</tt>, it means the disk got full during write operation.</p>
+<p>This function is not supported in read-only configuration.</p>
 </div>
 
 
 <div class="para">
 <h4>References</h4>
-<p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
+<p><tt><a href="open.html">f_open</a>, <a href="read.html">f_read</a>, <a href="putc.html">fputc</a>, <a href="puts.html">fputs</a>, <a href="printf.html">fprintf</a>, <a href="close.html">f_close</a>, <a href="sfile.html">FIL</a></tt></p>
 </div>
 
 <p class="foot"><a href="../00index_e.html">Return</a></p>

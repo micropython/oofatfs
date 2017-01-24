@@ -56,7 +56,7 @@ FRESULT f_getfree (
 
 <div class="para">
 <h4>解説</h4>
-<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>sects_clust</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいて、_USE_FSINFOが指定されているときは不正確な値を返す可能性があり、指定されていないときは処理に時間がかかります。</p>
+<p>論理ドライブ上の空きクラスタ数を取得します。返されたファイル・システム・オブジェクトの<tt>csize</tt>メンバがクラスタあたりのセクタ数を示しているので、これを元に実際の空きサイズが計算できます。FAT32ボリュームにおいて、_USE_FSINFOが指定されているときは不正確な値を返す可能性があり、指定されていないときは処理に時間がかかります。</p>
 <p>リードオンリー構成および<tt>_FS_MINIMIZE &gt;= 1</tt>ではこの関数はサポートされません。</p>
 </div>
 
@@ -69,14 +69,14 @@ FRESULT f_getfree (
 
 
     // Get free clusters
-    res = f_getfree("", &clust, &fs);
+    res = f_getfree("", &amp;clust, &amp;fs);
     if (res) die(res);
 
     // Get free space
     printf("%lu KB total disk space.\n"
            "%lu KB available on the disk.\n",
-           (DWORD)(fs->max_clust - 2) * fs->sects_clust / 2,
-           clust * fs->sects_clust / 2);
+           (DWORD)(fs->max_clust - 2) * fs->csize / 2,
+           clust * fs->csize / 2);
 </pre>
 </div>
 

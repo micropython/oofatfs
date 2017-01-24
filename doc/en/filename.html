@@ -12,7 +12,7 @@
 
 <div class="para">
 <h2>File and Path name on the FatFs module</h2>
-<p>The format of file and path name on the FatFs module is similer to MS-DOS. However it does not have a concept of current directory, all objects on the drive are specified in full path name from the root directory.</p>
+<p>The format of file and path name on the FatFs module is similer to MS-DOS. However it does not have a concept of current directory like OS oriented file system. All objects on the drive are specified in full path name from the root directory.</p>
 <pre>
 
  "[<em>drive#</em>:][/]<em>directory</em>/<em>file</em>"
@@ -28,7 +28,7 @@
 
 </pre>
 <p>The FatFs module supports only 8.3 format file name and long file name is currentry not supported. For directory separator, a '/' is used, not a '\'. Heading '/' is ignored and can be omitted.</p>
-<p>The logical drive number is specified in a numeral with a colon. When the drive number is omitted, it means the default drive (0). As for the Tiny-FatFs, it has only one logical drive and always works as drive 0. Any drive number cannot be contained in the path name.</p>
+<p>The logical drive number is specified in a numeral with a colon. When the drive number is omitted, it is assumed default drive (0:). As for the Tiny-FatFs, it has only one logical drive and always works as drive 0. Any drive number cannot be contained in the path name.</p>
 </div>
 
 <p><br></p>

@@ -24,24 +24,24 @@ These correspondence are defined in integer.h. This will not be a problem on mos
 </div>
 
 <div class="para">
-<h3>Memory Usage (R0.05a)</h3>
+<h3>Memory Usage (R0.06)</h3>
 <p>These are the memory usage on some target systems. The memory sizes are in unit of byte, D means number of logical drives and F means number of open files. All samples are optimezed in code size.</p>
 <table class="lst2">
-<tr><th></th><th>AVR</th><th>H8/300H</th><th>PIC</th><th>MSP430</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th></tr>
-<tr><td>Compiler</td><td>gcc</td><td>CH38</td><td>C30(gcc)</td><td>CL430</td><td>CC870C</td><td>CA850</td><td>SHC</td></tr>
-<tr><td>_MCU_ENDIAN</td><td>1</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
-<tr class="lst3"><td>FatFs Code<br>(Full, R/W)</td><td>9146</td><td>9218</td><td>9155</td><td></td><td></td><td>6662</td><td>7430</td></tr>
-<tr><td>FatFs Code<br>(Minimum, R/W)</td><td>5824</td><td>5756</td><td>5861</td><td></td><td></td><td>4096</td><td>4710</td></tr>
-<tr><td>FatFs Code<br>(Full, R/O)</td><td>4268</td><td>4116</td><td>4187</td><td></td><td></td><td>2986</td><td>3382</td></tr>
-<tr><td>FatFs Code<br>(Minimum, R/O)</td><td>3076</td><td>3134</td><td>3143</td><td></td><td></td><td>2200</td><td>2610</td></tr>
-<tr><td>FatFs Work (Static)</td><td>D*2+2</td><td>D*4+2</td><td>D*2+2</td><td></td><td></td><td>D*4+2</td><td>D*4+2</td></tr>
-<tr><td>FatFs Work (Dynamic)</td><td>D*554+F*544</td><td>D*554+F*550</td><td>D*554+F*544</td><td></td><td></td><td>D*554+F*550</td><td>D*554+F*550</td></tr>
-<tr class="lst3"><td>Tiny-FatFs Code<br>(Full, R/W)</td><td>7566</td><td>7626</td><td>7371</td><td>6894</td><td>9314</td><td>5926</td><td>6580</td></tr>
-<tr><td>Tiny-FatFs Code<br>(Minimum, R/W)</td><td>4730</td><td>4814</td><td>4683</td><td>4306</td><td>6285</td><td>3670</td><td>4236</td></tr>
-<tr><td>Tiny-FatFs Code<br>(Full, R/O)</td><td>3564</td><td>3532</td><td>3522</td><td>3226</td><td>4389</td><td>2678</td><td>3022</td></tr>
-<tr><td>Tiny-FatFs Code<br>(Minimum, R/O)</td><td>2554</td><td>2674</td><td>2595</td><td>2372</td><td>3376</td><td>1856</td><td>2300</td></tr>
-<tr><td>Tiny-FatFs Wrok (Static)</td><td>4</td><td>6</td><td>4</td><td>4</td><td>4</td><td>6</td><td>6</td></tr>
-<tr><td>Tiny-FatFs Work (Dynamic)</td><td>544+F*28</td><td>544+F*32</td><td>544+F*28</td><td>544+F*28</td><td>544+F*28</td><td>544+F*32</td><td>544+F*32</td></tr>
+<tr><th></th><th>AVR</th><th>H8/300H</th><th>PIC</th><th>MSP430</th><th>TLCS-870/C</th><th>V850ES</th><th>SH2</th><th>ARM7</th></tr>
+<tr><td>Compiler</td><td>gcc(WinAVR)</td><td>CH38</td><td>gcc(C30)</td><td>CL430</td><td>CC870C</td><td>CA850</td><td>SHC</td><td>gcc(WinARM)</td></tr>
+<tr><td>_MCU_ENDIAN</td><td>1</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td></tr>
+<tr class="lst3"><td>FatFs Code (Full, R/W)</td><td>9280</td><td>9348</td><td>9387</td><td></td><td></td><td>6728</td><td>7538</td><td>11820</td></tr>
+<tr><td>FatFs Code (Min, R/W)</td><td>5814</td><td>5798</td><td>5913</td><td></td><td></td><td>4094</td><td>4742</td><td></td></tr>
+<tr><td>FatFs Code (Full, R/O)</td><td>4402</td><td>4236</td><td>4371</td><td></td><td></td><td>3054</td><td>3474</td><td></td></tr>
+<tr><td>FatFs Code (Min, R/O)</td><td>3066</td><td>3158</td><td>3213</td><td></td><td></td><td>2172</td><td>2630</td><td></td></tr>
+<tr><td>FatFs Work (Static)</td><td>D*2+2</td><td>D*4+2</td><td>D*2+2</td><td></td><td></td><td>D*4+2</td><td>D*4+2</td><td></td></tr>
+<tr><td>FatFs Work (Dynamic)</td><td>D*554+F*544</td><td>D*554+F*550</td><td>D*554+F*544</td><td></td><td></td><td>D*554+F*550</td><td>D*554+F*550</td><td>D*554+F*550</td></tr>
+<tr class="lst3"><td>Tiny-FatFs Code (Full, R/W)</td><td>7628</td><td>7668</td><td>7560</td><td>7108</td><td>9501</td><td>5978</td><td>6640</td><td></td></tr>
+<tr><td>Tiny-FatFs Code (Min, R/W)</td><td>4684</td><td>4820</td><td>4698</td><td>4390</td><td>6322</td><td>3678</td><td>4236</td><td></td></tr>
+<tr><td>Tiny-FatFs Code (Full, R/O)</td><td>3634</td><td>3600</td><td>3618</td><td>3382</td><td>4554</td><td>2722</td><td>3072</td><td></td></tr>
+<tr><td>Tiny-FatFs Code (Min, R/O)</td><td>2524</td><td>2700</td><td>2601</td><td>2398</td><td>3390</td><td>1862</td><td>2300</td><td></td></tr>
+<tr><td>Tiny-FatFs Wrok (Static)</td><td>4</td><td>6</td><td>4</td><td>4</td><td>4</td><td>6</td><td>6</td><td></td></tr>
+<tr><td>Tiny-FatFs Work (Dynamic)</td><td>544+F*28</td><td>544+F*32</td><td>544+F*28</td><td>544+F*28</td><td>544+F*28</td><td>544+F*32</td><td>544+F*32</td><td>544+F*32</td></tr>
 </table>
 </div>
 
@@ -111,7 +111,7 @@ Currently the file object structure is held by application layer. This is not a 
 <li>Efficient sector buffer management<br>
 The FatFs module has only one sector buffer per logical drive. There is an ineffciency on random file access with many files simultanesously. When additional memory for the sector buffer is available, the file access performance will able to be improved with an advanced cache mechanism.</li>
 <li>Long file name<br>
-There is an extended feature to handle long file name (LFN) up to 255 characters, in addition to 8.3 format file name, on FAT file system. To support this, 512 byte string buffer for file name and UCS-2 - Shift_JIS mutual conversion table are required. Therefore memory consumption of code and work area will be increased drastically. The FatFs module does not support this feature. The LFN on the FAT file system is a patent of Microsoft. When support it on the commercial products, you have to be licensed.</li>
+There is an extended feature to handle long file name (LFN) up to 255 characters in addition to 8.3 format file name on the FAT file system. To support this feature, 512 byte string buffer for file name and Unicode - Local code mutual conversion table which occupies 256KB is required. Therefore memory consumption of code and work area will be increased drastically. The FatFs module currently does not support this feature. The LFN on the FAT file system is a patent of Microsoft. When use it on the commercial products, you have to be licensed.</li>
 <li>Porting to RTOS<br>
 When use FatFs module from only one task, no consideration is needed. However when make access to a logical drive from two or more tasks simultanesously, any exclusion control will be required. The FatFs module is also ported to a free RTOS based on &mu;ITRON by <a href="http://www.toppers.jp/en/index.html">TOPPERS Project</a>.</li>
 </ul>

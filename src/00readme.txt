@@ -1,4 +1,4 @@
-FatFs/Tiny-FatFs Module Source Files R0.05a   (C)ChaN, 2008
+FatFs/Tiny-FatFs Module Source Files R0.06                  (C)ChaN, 2008
 
 
 FILES
@@ -27,30 +27,37 @@ CONFIGURATION OPTIONS
   _MCU_ENDIAN
 
   This is the most impotant option that depends on the processor architecture.
-  When the target device corresponds to either or both of following terms, the
-  _MCU_ENDIAN must be set to 2 to force FatFs to access FAT structure in
-  byte-by-byte.
+  The value 2 is compatible with all MCUs. It forces FatFs to access FAT
+  structures in byte-by-byte. When the target device corresponds to either or
+  both of following cases, it must always be set 2.
 
   - Muti-byte integers (short, long) are stored in Big-Endian.
   - Address miss-aligned memory access results in an incorrect behavior.
 
-  If not the case, this can also be set to 1 for good code efficiency. The
-  initial value is 0. (must be set to 1 or 2 properly)
+  If not the case, setting 1 is recommended rather than 2 for good code
+  efficiency. The initial value is 0. (Must set 1 or 2 properly)
 
 
   _FS_READONLY
 
-  When application program does not require any write function, _FS_READONLY
-  can be set to 1 to eliminate writing code to reduce the module size. This
+  When application program does not require write functions, _FS_READONLY can
+  be set to 1 to eliminate writing code to reduce the module size. This
   setting should be reflected to configurations of low level disk I/O module
   if available. The initial value is 0. (Read and Write)
 
 
   _FS_MINIMIZE
 
-  When application program requires only file read/write function, _FS_MINIMIZE
-  can be changed to eliminate some functions to reduce the module size. The
-  initial value is 0. (full function)
+  When application program requires only file read/write function and nothing
+  else, _FS_MINIMIZE can be changed to eliminate some functions to reduce the
+  module size. The initial value is 0. (Full function)
+
+
+  _USE_STRFUNC
+
+  When _USE_STRFUNC is set to 1, the string functions, fputc, fputs, fprintf
+  and fgets are enabled. The initial value is 0. (String functions are not
+  available)
 
 
   _DRIVES
@@ -62,7 +69,7 @@ CONFIGURATION OPTIONS
 
   When _FAT32 is set to 1, the FAT32 support is added with an additional
   code size. This option is for only Tiny-FatFs. FatFs always supports all
-  FAT sub-types. The initial value is 0. (no FAT32 support)
+  FAT sub-types. The initial value is 0. (No FAT32 support)
 
 
   _USE_FSINFO
@@ -93,26 +100,31 @@ CONFIGURATION OPTIONS
 
   Following table shows which function is removed by configuration options.
 
-                _FS_MINIMIZE   _FS_READONLY  _USE_MKFS 
-                (1)  (2)  (3)       (1)         (0)    
-   f_mount                                             
-   f_open                                              
-   f_close                                             
-   f_read                                              
-   f_write                           x                 
-   f_sync                            x                 
-   f_lseek                 x                           
-   f_opendir          x    x                           
-   f_readdir          x    x                           
-   f_stat        x    x    x                           
-   f_getfree     x    x    x         x                 
-   f_truncate    x    x    x         x                 
-   f_unlink      x    x    x         x                 
-   f_mkdir       x    x    x         x                 
-   f_chmod       x    x    x         x                 
-   f_utime       x    x    x         x                 
-   f_rename      x    x    x         x                 
-   f_mkfs        x    x    x         x          x      
+                _FS_MINIMIZE  _FS_READONLY _USE_STRFUNC _USE_MKFS _USE_FORWARD
+                (1)  (2)  (3)      (1)         (0)         (0)        (0)     
+   f_mount                                                                    
+   f_open                                                                     
+   f_close                                                                    
+   f_read                                                                     
+   f_write                          x                                         
+   f_sync                           x                                         
+   f_lseek                 x                                                  
+   f_opendir          x    x                                                  
+   f_readdir          x    x                                                  
+   f_stat        x    x    x                                                  
+   f_getfree     x    x    x        x                                         
+   f_truncate    x    x    x        x                                         
+   f_unlink      x    x    x        x                                         
+   f_mkdir       x    x    x        x                                         
+   f_chmod       x    x    x        x                                         
+   f_utime       x    x    x        x                                         
+   f_rename      x    x    x        x                                         
+   f_mkfs                           x                       x                 
+   f_forward                                                           x      
+   fputc                            x           x                             
+   fputs                            x           x                             
+   fprintf                          x           x                             
+   fgets                                        x                             
 
 
 
@@ -120,8 +132,8 @@ AGREEMENTS
 
   The FatFs/Tiny-FatFs module is a free software and there is no warranty.
   The FatFs/Tiny-FatFs module is opened for education, reserch and development.
-  You can use and/or modify it for personal, non-profit or commercial use
-  without any restriction under your responsibility.
+  There is no restriction on use. You can use it for personal, non-profit or
+  commercial use under your responsibility.
 
 
 
@@ -171,3 +183,7 @@ REVISION HISTORY
                        Fixed off by one error at FAT sub-type determination.
                        Fixed btr in f_read() can be mistruncated.
                        Fixed cached sector is not flushed when create and close without write.
+
+  Apr 01, 2008  R0.06  Added f_forward(). (Tiny-FatFs)
+                       Added string functions: fputc(), fputs(), fprintf() and fgets().
+                       Improved performance of f_lseek() on move to the same or following cluster.

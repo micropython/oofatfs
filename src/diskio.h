@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------
-/  Low level disk interface modlue include file  R0.05x  (C)ChaN, 2007
+/  Low level disk interface modlue include file  R0.06   (C)ChaN, 2007
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO
@@ -48,7 +48,7 @@ void    disk_timerproc (void);
 /* Command code for disk_ioctrl() */
 
 /* Generic command */
-#define CTRL_SYNC           0   /* Mandatory for write functions */
+#define CTRL_SYNC           0   /* Mandatory for read/write configuration */
 #define GET_SECTOR_COUNT    1   /* Mandatory for only f_mkfs() */
 #define GET_SECTOR_SIZE     2
 #define GET_BLOCK_SIZE      3   /* Mandatory for only f_mkfs() */

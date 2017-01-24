@@ -18,7 +18,7 @@
 typedef struct _FIL {
     WORD    id;             /* Owner file system mount ID (inverted) */
     BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
+    BYTE    csect;          /* Sector address in the cluster */
     FATFS*  fs;             /* Pointer to the owner file system object */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
@@ -36,7 +36,7 @@ typedef struct _FIL {
 typedef struct _FIL {
     WORD    id;             /* Owner file system mount ID (inverted) */
     BYTE    flag;           /* File status flags */
-    BYTE    sect_clust;     /* Left sectors in cluster */
+    BYTE    csect;          /* Sector address in the cluster */
     FATFS*  fs;             /* Pointer to owner file system */
     DWORD   fptr;           /* File R/W pointer */
     DWORD   fsize;          /* File size */
