@@ -23,6 +23,8 @@
 /----------------------------------------------------------------------------*/
 
 
+#include <string.h>
+
 #include "ff.h"         /* Declarations of FatFs API */
 #include "diskio.h"     /* Declarations of device I/O functions */
 
@@ -647,43 +649,12 @@ static void st_qword (BYTE* ptr, QWORD val) /* Store an 8-byte word in little-en
 /* String functions                                                      */
 /*-----------------------------------------------------------------------*/
 
-/* Copy memory to memory */
-static void mem_cpy (void* dst, const void* src, UINT cnt)
-{
-    BYTE *d = (BYTE*)dst;
-    const BYTE *s = (const BYTE*)src;
-
-    if (cnt != 0) {
-        do {
-            *d++ = *s++;
-        } while (--cnt);
-    }
-}
-
-
-/* Fill memory block */
-static void mem_set (void* dst, int val, UINT cnt)
-{
-    BYTE *d = (BYTE*)dst;
-
-    do {
-        *d++ = (BYTE)val;
-    } while (--cnt);
-}
-
-
-/* Compare memory block */
-static int mem_cmp (const void* dst, const void* src, UINT cnt) /* ZR:same, NZ:different */
-{
-    const BYTE *d = (const BYTE *)dst, *s = (const BYTE *)src;
-    int r = 0;
-
-    do {
-        r = *d++ - *s++;
-    } while (--cnt && r == 0);
-
-    return r;
-}
+// These were originally provided by the FatFs library but we use externally
+// provided versions from C stdlib to (hopefully) reduce code size and use
+// more efficient versions.
+#define mem_cpy memcpy
+#define mem_set memset
+#define mem_cmp memcmp
 
 
 /* Check if chr is contained in the string */
