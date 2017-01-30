@@ -3104,7 +3104,7 @@ FRESULT f_mount (
 
     fs->fs_type = 0;                    /* Clear new fs object */
 #if _FS_REENTRANT                       /* Create sync object for the new volume */
-    if (!ff_cre_syncobj((BYTE)vol, &fs->sobj)) return FR_INT_ERR;
+    if (!ff_cre_syncobj(fs, &fs->sobj)) return FR_INT_ERR;
 #endif
 
     res = find_volume(fs, 0);           /* Force mounted the volume */
