@@ -163,7 +163,7 @@ int main() {
 
     printf("== DIRECTORY LISTING ==\n");
     {
-        DIR dp;
+        FF_DIR dp;
         FRESULT res = f_opendir(&fatfs, &dp, "/");
         printf("opendir res=%d\n", res);
         FILINFO fno;
