@@ -27,6 +27,8 @@
 #include "ff.h"         /* Declarations of FatFs API */
 #include "diskio.h"     /* Declarations of device I/O functions */
 
+// DIR has been renamed FF_DIR in the public API so it doesn't clash with POSIX
+#define DIR FF_DIR
 
 /*--------------------------------------------------------------------------
 
