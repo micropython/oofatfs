@@ -3562,7 +3562,9 @@ FRESULT f_sync (
     FATFS *fs;
     DWORD tm;
     BYTE *dir;
+#if _FS_EXFAT
     DEF_NAMBUF
+#endif
 
 
     res = validate(&fp->obj, &fs);  /* Check validity of the file object */
