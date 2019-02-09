@@ -60,8 +60,9 @@ small {font-size: 80%;}
 table {margin: 0.5em 1em; border-collapse: collapse; border: 2px solid black; }
 th {background-color: white; border-style: solid; border-width: 1px 1px 2px; border-color: black; padding: 0 3px; vertical-align: top; white-space: nowrap;}
 td {background-color: white; border: 1px solid black; padding: 0 3px; vertical-align: top; line-height: 1.3em;}
-table.lst td:first-child {font-size: 0.85em; font-family: "Consolas", "Courier New", monospace;}
-table.lst2 td {font-size: 0.85em; font-family: "Consolas", "Courier New", monospace;}
+table.lst td:first-child {font-size: 0.85em; font-family: "Consolas", "Courier New", monospace; white-space: nowrap;}
+table.lst2 td {font-size: 0.85em; font-family: "Consolas", "Courier New", monospace; white-space: nowrap;}
+table.lst3 td {font-family: "Consolas", "Courier New", monospace; white-space: nowrap;}
 table caption {font-family: sans-serif; font-weight: bold;}
 tr.lst3 td { border-width: 2px 1px 1px; }
 
