@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <link rel="up" title="FatFs" href="../00index_e.html">
 <link rel="alternate" hreflang="ja" title="Japanese" href="../ja/dwrite.html">
@@ -16,7 +16,7 @@
 <p>The disk_write function is called to write data to the sector(s) of storage device.</p>
 <pre>
 DRESULT disk_write (
-  BYTE <span class="arg">drv</span>,         <span class="c">/* [IN] Physical drive number */</span>
+  BYTE <span class="arg">pdrv</span>,        <span class="c">/* [IN] Physical drive number */</span>
   const BYTE* <span class="arg">buff</span>, <span class="c">/* [IN] Pointer to the data to be written */</span>
   DWORD <span class="arg">sector</span>,     <span class="c">/* [IN] Sector number to write from */</span>
   UINT <span class="arg">count</span>        <span class="c">/* [IN] Number of sectors to write */</span>
@@ -67,7 +67,7 @@ DRESULT disk_write (
 
 <div class="para comp">
 <h4>QuickInfo</h4>
-<p>This function is not needed when <tt>FF_FS_READONLY == 1</tt>.</p>
+<p>This function is not needed when <tt><a href="config.html#fs_readonly">FF_FS_READONLY</a> == 1</tt>.</p>
 </div>
 
 
