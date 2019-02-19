@@ -172,7 +172,7 @@ int main() {
             if (res != FR_OK || fno.fname[0] == 0) {
                 break;
             }
-            #if _USE_LFN
+            #if FF_USE_LFN
             // note: lfname is empty string if it fits in 12 chars in fname
             printf("readdir res=%d size=%u name=/%s/ lname=/%s/\n", res, fno.fsize, fno.altname, fno.fname);
             #else
