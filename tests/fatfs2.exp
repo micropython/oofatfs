@@ -1,0 +1,220 @@
+======== BDEV nsec=49 sec_size=512 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+mkfs res=14
+======== BDEV nsec=50 sec_size=512 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+get_fattime()
+disk_write(0, 1, 0xba3b6c44)
+disk_write(1, 1, 0xd21511dd)
+disk_write(2, 8, 0x016a1505)
+disk_write(10, 8, 0x016a1505)
+disk_write(18, 8, 0x016a1505)
+disk_write(26, 8, 0x016a1505)
+disk_ioctl(0)
+mkfs res=0
+== MOUNT ==
+disk_ioctl(5)
+disk_ioctl(2)
+disk_read(0, 1)
+mount res=0
+== FILE CREATION ==
+disk_ioctl(6)
+disk_read(2, 1)
+get_fattime()
+open res=0
+disk_ioctl(6)
+disk_write(2, 1, 0x89186453)
+disk_read(1, 1)
+write res=0 n=10
+disk_ioctl(6)
+disk_write(34, 1, 0xe20a18df)
+get_fattime()
+disk_write(1, 1, 0x42bbc4cd)
+disk_read(2, 1)
+disk_write(2, 1, 0x15ad6edb)
+disk_ioctl(0)
+disk_ioctl(6)
+close res=0
+== FILE READ ==
+disk_ioctl(6)
+open res=0
+disk_ioctl(6)
+disk_read(34, 1)
+read res=0 n=10
+0000 74 65 73 74 20 66 69 6c 65 0a                   test file.
+disk_ioctl(6)
+disk_ioctl(6)
+close res=0
+======== BDEV nsec=33 sec_size=1024 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+mkfs res=14
+======== BDEV nsec=34 sec_size=1024 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+get_fattime()
+disk_write(0, 1, 0x902ad392)
+disk_write(1, 1, 0x6e1851dd)
+disk_write(2, 4, 0x016a1505)
+disk_write(6, 4, 0x016a1505)
+disk_write(10, 4, 0x016a1505)
+disk_write(14, 4, 0x016a1505)
+disk_ioctl(0)
+mkfs res=0
+== MOUNT ==
+disk_ioctl(5)
+disk_ioctl(2)
+disk_read(0, 1)
+mount res=0
+== FILE CREATION ==
+disk_ioctl(6)
+disk_read(2, 1)
+get_fattime()
+open res=0
+disk_ioctl(6)
+disk_write(2, 1, 0x81e12453)
+disk_read(1, 1)
+write res=0 n=10
+disk_ioctl(6)
+disk_write(18, 1, 0xf9c5d8df)
+get_fattime()
+disk_write(1, 1, 0x0fbb04cd)
+disk_read(2, 1)
+disk_write(2, 1, 0xfef82edb)
+disk_ioctl(0)
+disk_ioctl(6)
+close res=0
+== FILE READ ==
+disk_ioctl(6)
+open res=0
+disk_ioctl(6)
+disk_read(18, 1)
+read res=0 n=10
+0000 74 65 73 74 20 66 69 6c 65 0a                   test file.
+disk_ioctl(6)
+disk_ioctl(6)
+close res=0
+======== BDEV nsec=25 sec_size=2048 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+mkfs res=14
+======== BDEV nsec=26 sec_size=2048 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+get_fattime()
+disk_write(0, 1, 0xee6e7fe6)
+disk_write(1, 1, 0x161ed1dd)
+disk_write(2, 2, 0x016a1505)
+disk_write(4, 2, 0x016a1505)
+disk_write(6, 2, 0x016a1505)
+disk_write(8, 2, 0x016a1505)
+disk_ioctl(0)
+mkfs res=0
+== MOUNT ==
+disk_ioctl(5)
+disk_ioctl(2)
+disk_read(0, 1)
+mount res=0
+== FILE CREATION ==
+disk_ioctl(6)
+disk_read(2, 1)
+get_fattime()
+open res=0
+disk_ioctl(6)
+disk_write(2, 1, 0x0372a453)
+disk_read(1, 1)
+write res=0 n=10
+disk_ioctl(6)
+disk_write(10, 1, 0xf93d58df)
+get_fattime()
+disk_write(1, 1, 0x19b984cd)
+disk_read(2, 1)
+disk_write(2, 1, 0xe18daedb)
+disk_ioctl(0)
+disk_ioctl(6)
+close res=0
+== FILE READ ==
+disk_ioctl(6)
+open res=0
+disk_ioctl(6)
+disk_read(10, 1)
+read res=0 n=10
+0000 74 65 73 74 20 66 69 6c 65 0a                   test file.
+disk_ioctl(6)
+disk_ioctl(6)
+close res=0
+======== BDEV nsec=21 sec_size=4096 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+mkfs res=14
+======== BDEV nsec=22 sec_size=4096 ========
+== MKFS ==
+disk_ioctl(5)
+disk_ioctl(3)
+disk_ioctl(2)
+disk_ioctl(1)
+get_fattime()
+disk_write(0, 1, 0xa88c80f2)
+disk_write(1, 1, 0x262bd1dd)
+disk_write(2, 1, 0x016a1505)
+disk_write(3, 1, 0x016a1505)
+disk_write(4, 1, 0x016a1505)
+disk_write(5, 1, 0x016a1505)
+disk_ioctl(0)
+mkfs res=0
+== MOUNT ==
+disk_ioctl(5)
+disk_ioctl(2)
+disk_read(0, 1)
+mount res=0
+== FILE CREATION ==
+disk_ioctl(6)
+disk_read(2, 1)
+get_fattime()
+open res=0
+disk_ioctl(6)
+disk_write(2, 1, 0x4695a453)
+disk_read(1, 1)
+write res=0 n=10
+disk_ioctl(6)
+disk_write(6, 1, 0x382c58df)
+get_fattime()
+disk_write(1, 1, 0xedb684cd)
+disk_read(2, 1)
+disk_write(2, 1, 0xe6b8aedb)
+disk_ioctl(0)
+disk_ioctl(6)
+close res=0
+== FILE READ ==
+disk_ioctl(6)
+open res=0
+disk_ioctl(6)
+disk_read(6, 1)
+read res=0 n=10
+0000 74 65 73 74 20 66 69 6c 65 0a                   test file.
+disk_ioctl(6)
+disk_ioctl(6)
+close res=0
