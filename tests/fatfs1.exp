@@ -144,8 +144,9 @@ close res=0
 disk_ioctl(0, 6)
 disk_read(0, 2, 1)
 disk_read(0, 1, 1)
-disk_write(0, 1, 1, 0x867a0372)
 get_fattime()
+disk_write(0, 1, 1, 0x867a0372)
+disk_write(0, 37, 1, 0x082d5505)
 disk_write(0, 37, 1, 0x2953772e)
 disk_read(0, 2, 1)
 disk_write(0, 2, 1, 0x55944b21)
@@ -178,14 +179,14 @@ unlink res=0
 == RENAME DIR ==
 disk_ioctl(0, 6)
 disk_read(0, 2, 1)
-disk_write(0, 2, 1, 0x2b759c33)
+disk_write(0, 2, 1, 0x2c8e8693)
 disk_ioctl(0, 0)
 unlink res=0
 == UNLINK DIR ==
 disk_ioctl(0, 6)
 disk_read(0, 37, 1)
 disk_read(0, 2, 1)
-disk_write(0, 2, 1, 0x09922d72)
+disk_write(0, 2, 1, 0x1ab013d2)
 disk_read(0, 1, 1)
 disk_write(0, 1, 1, 0x5535694d)
 disk_ioctl(0, 0)
