@@ -309,6 +309,7 @@ FRESULT f_umount (FATFS* fs);                                       /* Unmount a
 FRESULT f_mkfs (FATFS *fs, BYTE opt, DWORD au, void* work, UINT len); /* Create a FAT volume */
 FRESULT f_fdisk (void *pdrv, const DWORD* szt, void* work);         /* Divide a physical drive into some partitions */
 FRESULT f_setcp (WORD cp);                                          /* Set current code page */
+FRESULT f_repair (FATFS* fs, void* work, UINT len);                 /* Free unreferenced clusters from the FAT */
 
 #define f_eof(fp) ((int)((fp)->fptr == (fp)->obj.objsize))
 #define f_error(fp) ((fp)->err)

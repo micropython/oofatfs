@@ -68,6 +68,10 @@
 /* This option switches f_forward() function. (0:Disable or 1:Enable) */
 
 
+#define FF_USE_REPAIR   0
+/* This option switches f_repair() function. (0:Disable or 1:Enable) */
+
+
 /*---------------------------------------------------------------------------/
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
