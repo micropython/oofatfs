@@ -5915,6 +5915,207 @@ FRESULT f_fdisk (
 #endif /* FF_USE_MKFS && !FF_FS_READONLY */
 
 
+#if FF_USE_REPAIR && !FF_FS_READONLY
+/*-----------------------------------------------------------------------*/
+/* Repair an FAT/exFAT volume by reclaiming unreferenced clusters.       */
+/*-----------------------------------------------------------------------*/
+
+/* Marks all clusters in this object's chain as "referenced" in the bitmap. */
+static FRESULT repair_mark_chain (BYTE* bitmap, UINT lcpb, FFOBJID* obj, int* fixed) {
+    DWORD clst = obj->sclust;
+    DWORD nclst = 0;
+    *fixed = 0;
+
+    /* Follow the chain. */
+    while (clst >= 2 && clst < obj->fs->n_fatent) {
+        ++nclst;
+        DWORD idx = clst >> lcpb;  /* Adjust precision based on how big the bitmap is (lcpb = log2(clusters per bit). */
+        bitmap[idx / 8] |= 1 << (idx % 8);
+
+        DWORD next = get_fat(obj, clst);
+        if (!(obj->attr & AM_DIR) && (next >= 2 && next < obj->fs->n_fatent) && nclst * obj->fs->csize * SS(obj->fs) >= obj->objsize) {
+            /* More clusters than expected for this file's size, truncate the chain. */
+            put_fat(obj->fs, clst, 0xFFFFFFFF);
+            *fixed = 1;
+            break;
+        }
+
+        if (next == 0xFFFFFFFF) return FR_DISK_ERR;
+        clst = next;
+    }
+
+    /* Truncate file size to the size of the cluster chain. */
+    DWORD cb = nclst * obj->fs->csize * SS(obj->fs);
+    if (cb < obj->objsize) {
+        obj->objsize = cb;
+        *fixed = 1;
+    }
+
+    return FR_OK;
+}
+
+/* Recursively mark all objects in this directory in the bitmap. */
+static FRESULT repair_mark_dir (BYTE* bitmap, UINT lcpb, DIR* dp) {
+    FRESULT res = FR_OK;
+
+    for (;;) {
+        /* Advance to the next file/directory (i.e. the SFN entry). */
+        res = DIR_READ_FILE(dp);
+        if (res == FR_NO_FILE) {
+            /* End of directory. */
+            res = FR_OK;
+            break;
+        }
+
+        if (res != FR_OK) break;
+
+        FFOBJID obj;
+        obj.fs = dp->obj.fs;
+        obj.sclust = ld_clust(dp->obj.fs, dp->dir);
+        obj.objsize = ld_dword(dp->dir + DIR_FileSize);
+        obj.attr = dp->obj.attr;
+        if (!(dp->obj.attr & AM_DIR) && obj.objsize == 0) {
+            /* Note: Directories always have their size set to zero,
+               so can't apply this check. */
+            if (obj.sclust != 0) {
+                /* File is zero-length, shouldn't have a cluster chain. */
+                obj.sclust = 0;
+                st_clust(dp->obj.fs, dp->dir, 0);
+                dp->obj.fs->wflag = 1;
+            }
+        } else {
+            /* Mark this child file (or directory)'s' clusters,
+               then move the window back to the parent. */
+            int fixed;
+            repair_mark_chain(bitmap, lcpb, &obj, &fixed);
+            res = move_window(dp->obj.fs, dp->sect);
+            if (res != FR_OK) break;
+
+            if (fixed) {
+                /* Chain was shorter than expected.
+                   Update the directory entry with truncated file size. */
+                st_dword(dp->dir + DIR_FileSize, obj.objsize);
+                dp->obj.fs->wflag = 1;
+            }
+        }
+
+        /* If the child is a directory, recurse into it.
+           Note: Confusingly, obj.attr represents the current file, not the directory
+           represented by dp itself! */
+        if (dp->obj.attr & AM_DIR) {
+            /* dptr and obj.sclust can be used to resume the directory scan. */
+            DWORD ofs = dp->dptr;
+            DWORD clst = dp->obj.sclust;
+
+            /* Move dp to the start of the child directory and scan it. */
+            dp->obj.sclust = ld_clust(dp->obj.fs, dp->obj.fs->win + dp->dptr % SS(dp->obj.fs));
+            res = dir_sdi(dp, 0);
+            if (res != FR_OK) break;
+            res = repair_mark_dir(bitmap, lcpb, dp);
+            if (res != FR_OK) break;
+
+            /* Restore the state of the parent scan. */
+            dp->obj.sclust = clst;
+            res = dir_sdi(dp, ofs);
+            if (res != FR_OK)  break;
+        }
+
+        res = dir_next(dp, 0);
+        if (res == FR_NO_FILE) {
+            res = FR_OK;
+            break;
+        }
+    }
+
+    return res;
+}
+
+FRESULT f_repair (FATFS* fs, void* work, UINT len) {
+    if (FF_FS_EXFAT && fs->fs_type == FS_EXFAT) {
+        /* f_repair is unsupported on EXFAT. */
+        return FR_INVALID_PARAMETER;
+    }
+
+    /* Figure out how many clusters can be represented by each bit in the bitmap (log2 for faster division later).
+       Ideally this is 0 (i.e. 1 bit per cluster), but it might not be possible to provide a bitmap big enough. */
+    UINT lcpb = 0;
+    while (fs->n_fatent >> lcpb >= len * 8) {
+        lcpb += 1;
+    }
+
+    /* Initialize bitmap. */
+    BYTE* bitmap = work;
+    mem_set(bitmap, 0, len);
+
+    /* Open the root directory and mark all referenced clusters. */
+    DIR dir;
+    dir.obj.fs = fs;
+    dir.obj.sclust = 0;  /* Root directory. */
+    dir_sdi(&dir, 0);
+    FRESULT res = repair_mark_dir(bitmap, lcpb, &dir);
+    if (res != FR_OK) return res;
+
+    /* Don't count bad clusters as "used". */
+    DWORD badclst = 0;
+    if (fs->fs_type == FS_FAT12) {
+        badclst = 0xFF7;
+    } else if (fs->fs_type == FS_FAT16) {
+        badclst = 0xFFF7;
+    } else if (fs->fs_type == FS_FAT32) {
+        badclst = 0xFFFFFFF7;
+    }
+
+    /* Clear any FAT entries that aren't referenced in the bitmap. */
+    DWORD free = 0;
+    DWORD modified = 0;
+    for (DWORD clst = 2; clst < fs->n_fatent; ++clst) {
+        DWORD actual = get_fat(&dir.obj, clst);
+
+        DWORD idx = clst >> lcpb;  /* Adjust precision. */
+        if (actual == badclst) {
+            continue;
+        } else if (actual == 0) {
+            ++free;
+        } else if (((bitmap[idx / 8] >> (idx % 8)) & 1) == 0) {
+            res = put_fat(fs, clst, 0);
+            if (res != FR_OK) return res;
+
+            modified = 1;
+            ++free;
+        }
+    }
+
+    /* Update free_clst (used by f_getfree, and stored in FSINFO for FAT32). */
+    if (fs->free_clst != free) {
+        fs->free_clst = free;
+        fs->fsi_flag |= 1;
+        fs->wflag = 1;
+        modified = 1;
+    }
+
+    /* Check if the volume was not cleanly unmounted (and clear flag if necessary). */
+    res = move_window(fs, fs->volbase);
+    if (res != FR_OK) return res;
+    if (fs->fs_type < FS_FAT32 && fs->win[BS_NTres]) {
+        fs->win[BS_NTres] = 0;
+        fs->wflag = 1;
+        modified = 1;
+    } else if (fs->fs_type == FS_FAT32 && fs->win[BS_NTres32]) {
+        fs->win[BS_NTres32] = 0;
+        fs->wflag = 1;
+        modified = 1;
+    }
+
+    /* Write out changes to the bootsector. */
+    if (modified) {
+        res = sync_fs(fs);
+        if (res != FR_OK) return res;
+    }
+
+    return FR_OK;
+}
+#endif /* FF_USE_REPAIR && !FF_FS_READONLY */
+
 
 #if FF_CODE_PAGE == 0
 /*-----------------------------------------------------------------------*/
