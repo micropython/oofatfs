@@ -1,1 +1,4 @@
 fatfs[1-2]
+fatfs_repair
+fatfs_repair_img
+test.*.img
