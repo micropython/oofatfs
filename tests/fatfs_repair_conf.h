@@ -9,7 +9,7 @@
 #define FF_USE_CHMOD        1
 #define FF_USE_LABEL        1
 #define FF_USE_FORWARD      0
-#define FF_USE_REPAIR       0
+#define FF_USE_REPAIR       1
 #define FF_CODE_PAGE        437
 #define FF_USE_LFN          1
 #define FF_MAX_LFN          255
