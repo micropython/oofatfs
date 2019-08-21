@@ -31,21 +31,21 @@ DSTATUS disk_status (
     case DEV_RAM :
         result = RAM_disk_status();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
 
     case DEV_MMC :
         result = MMC_disk_status();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
 
     case DEV_USB :
         result = USB_disk_status();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
     }
@@ -69,21 +69,21 @@ DSTATUS disk_initialize (
     case DEV_RAM :
         result = RAM_disk_initialize();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
 
     case DEV_MMC :
         result = MMC_disk_initialize();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
 
     case DEV_USB :
         result = USB_disk_initialize();
 
-        // translate the reslut code here
+        // translate the result code here
 
         return stat;
     }
@@ -112,7 +112,7 @@ DRESULT disk_read (
 
         result = RAM_disk_read(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
 
@@ -121,7 +121,7 @@ DRESULT disk_read (
 
         result = MMC_disk_read(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
 
@@ -130,7 +130,7 @@ DRESULT disk_read (
 
         result = USB_disk_read(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
     }
@@ -162,7 +162,7 @@ DRESULT disk_write (
 
         result = RAM_disk_write(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
 
@@ -171,7 +171,7 @@ DRESULT disk_write (
 
         result = MMC_disk_write(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
 
@@ -180,7 +180,7 @@ DRESULT disk_write (
 
         result = USB_disk_write(buff, sector, count);
 
-        // translate the reslut code here
+        // translate the result code here
 
         return res;
     }
