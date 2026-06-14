@@ -57,6 +57,15 @@ DWORD get_fattime(void) {
     return 0;
 }
 
+static void print_filinfo(const char *msg, FRESULT res, FILINFO *fno) {
+    #if FF_USE_LFN
+    // note: lfname is empty string if it fits in 12 chars in fname
+    printf("%s res=%d size=%u name=/%s/ lname=/%s/\n", msg, res, fno->fsize, fno->altname, fno->fname);
+    #else
+    printf("%s res=%d size=%u name=/%s/\n", msg, res, fno->fsize, fno->fname);
+    #endif
+}
+
 int main() {
     struct _bdev_t bdev = {0};
     FATFS fatfs;
@@ -172,12 +181,23 @@ int main() {
             if (res != FR_OK || fno.fname[0] == 0) {
                 break;
             }
-            #if FF_USE_LFN
-            // note: lfname is empty string if it fits in 12 chars in fname
-            printf("readdir res=%d size=%u name=/%s/ lname=/%s/\n", res, fno.fsize, fno.altname, fno.fname);
-            #else
-            printf("readdir res=%d size=%u name=/%s/\n", res, fno.fsize, fno.fname);
-            #endif
+            print_filinfo("readdir", res, &fno);
+        }
+        res = f_closedir(&dp);
+        printf("closedir res=%d\n", res);
+    }
+
+    printf("== FIND FIRST ==\n");
+    {
+        FF_DIR dp;
+        FILINFO fno;
+        FRESULT res = f_findfirst(&fatfs, &dp, &fno, "/", "*.txt");
+        for (;;) {
+            if (res != FR_OK || fno.fname[0] == 0) {
+                break;
+            }
+            print_filinfo("findfirst", res, &fno);
+            res = f_findnext(&dp, &fno);
         }
         res = f_closedir(&dp);
         printf("closedir res=%d\n", res);

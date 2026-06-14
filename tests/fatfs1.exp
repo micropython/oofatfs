@@ -164,6 +164,16 @@ readdir res=0 size=0 name=/DIR/ lname=/dir/
 disk_ioctl(0, 6)
 disk_ioctl(0, 6)
 closedir res=0
+== FIND FIRST ==
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+findfirst res=0 size=10 name=/TEST.TXT/ lname=/test.txt/
+disk_ioctl(0, 6)
+findfirst res=0 size=1000 name=/FILENA~1.TXT/ lname=/filename-that-is-long.txt/
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+disk_ioctl(0, 6)
+closedir res=0
 == RENAME FILE ==
 disk_ioctl(0, 6)
 disk_write(0, 2, 1, 0xcdb1e73c)

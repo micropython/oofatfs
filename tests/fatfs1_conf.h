@@ -2,7 +2,7 @@
 #define FF_FS_READONLY      0
 #define FF_FS_MINIMIZE      0
 #define FF_USE_STRFUNC      0
-#define FF_USE_FIND         0
+#define FF_USE_FIND         1
 #define FF_USE_MKFS         1
 #define FF_USE_FASTSEEK     0
 #define FF_USE_EXPAND       0
