@@ -4429,6 +4429,7 @@ FRESULT f_findnext (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_findfirst (
+    FATFS *fatfs,
     DIR* dp,                /* Pointer to the blank directory object */
     FILINFO* fno,           /* Pointer to the file information structure */
     const TCHAR* path,      /* Pointer to the directory to open */
@@ -4439,7 +4440,7 @@ FRESULT f_findfirst (
 
 
     dp->pat = pattern;      /* Save pointer to pattern string */
-    res = f_opendir(dp, path);      /* Open the target directory */
+    res = f_opendir(fatfs, dp, path);      /* Open the target directory */
     if (res == FR_OK) {
         res = f_findnext(dp, fno);  /* Find the first item */
     }
